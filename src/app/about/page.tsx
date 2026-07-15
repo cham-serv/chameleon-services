@@ -1,13 +1,13 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowRight, Eye, Shuffle, TrendingUp, Users, Award, Target } from 'lucide-react'
+import { ArrowRight, Eye, Shuffle, TrendingUp, Target } from 'lucide-react'
 import styles from './about.module.css'
 
 export const metadata: Metadata = {
   title: 'About Us',
   description:
-    'Learn about Chameleon Solutions — our story, our values, and why we believe AI should adapt to your business, not the other way around.',
+    'Learn about Chameleon Solutions: our story, our values, and why we believe AI should adapt to your business, not the other way around.',
 }
 
 const values = [
@@ -24,40 +24,10 @@ const values = [
   {
     icon: Eye,
     title: 'Vision',
-    desc: 'Just as a chameleon\'s eyes can see in multiple directions simultaneously, our AI solutions analyse your operations from every angle — finding efficiencies you didn\'t know existed.',
+    desc: 'Just as a chameleon\'s eyes can see in multiple directions simultaneously, our AI solutions analyse your operations from every angle, finding efficiencies you didn\'t know existed.',
   },
 ]
 
-const team = [
-  {
-    name: 'The Chameleon Team',
-    role: 'AI & Process Consultants',
-    desc: 'A lean team of technologists and business strategists united by a passion for practical AI that actually works.',
-  },
-]
-
-const timeline = [
-  {
-    year: '2018',
-    title: 'Founded as Chameleon Image Consultants',
-    desc: 'Started as a boutique consultancy helping businesses present themselves more effectively.',
-  },
-  {
-    year: '2021',
-    title: 'Discovered the Power of Automation',
-    desc: 'Working with clients exposed us to the enormous cost of manual processes — and we started building solutions.',
-  },
-  {
-    year: '2023',
-    title: 'Full Pivot to AI & Process Solutions',
-    desc: 'With AI capabilities maturing rapidly, we evolved our entire offering to focus on intelligent automation for SMEs.',
-  },
-  {
-    year: '2024',
-    title: 'Chameleon.services is Born',
-    desc: 'Rebranded and relaunched with a focused mission: make enterprise-grade AI accessible to every growing business.',
-  },
-]
 
 export default function AboutPage() {
   const jsonLd = {
@@ -97,7 +67,7 @@ export default function AboutPage() {
             </h1>
             <p className={styles.heroSubtitle}>
               Chameleon Solutions was built on a simple conviction: small and medium enterprises 
-              deserve access to the same intelligent tools that are transforming the enterprise world — 
+              deserve access to the same intelligent tools that are transforming the enterprise world,
               without the complexity, cost, or disruption.
             </p>
           </div>
@@ -113,7 +83,7 @@ export default function AboutPage() {
               <div className="divider-teal" />
               <h2 className={styles.storyTitle}>The Brand Shift</h2>
               <p>
-                We started life as Chameleon Image Consultants — helping businesses communicate and present 
+                We started life as Chameleon Image Consultants, helping businesses communicate and present 
                 themselves more effectively. But as we worked closely with our clients, we saw something 
                 that kept coming up: enormous amounts of time and money being lost to manual, repetitive 
                 processes that technology could handle in seconds.
@@ -125,7 +95,7 @@ export default function AboutPage() {
               </p>
               <p>
                 The chameleon remained the perfect metaphor. Not because we change who we are, but because 
-                we adapt — meeting each client in their environment, their processes, their tools — and 
+                we adapt, meeting each client in their environment, their processes and their tools, 
                 making AI work there.
               </p>
             </div>
@@ -139,30 +109,6 @@ export default function AboutPage() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Timeline */}
-      <section className={`section ${styles.timelineSection}`}>
-        <div className={styles.timelineBg} />
-        <div className="container">
-          <div style={{ textAlign: 'center', maxWidth: 560, margin: '0 auto var(--space-16)' }}>
-            <span className="badge badge-teal">Our Journey</span>
-            <div className="divider-teal" style={{ margin: '1.5rem auto' }} />
-            <h2 style={{ color: '#ffffff', fontSize: 'var(--text-3xl)' }}>How we got here</h2>
-          </div>
-
-          <div className={styles.timeline}>
-            {timeline.map((item, idx) => (
-              <div key={item.year} className={`${styles.timelineItem} ${idx % 2 === 0 ? styles.left : styles.right}`}>
-                <div className={styles.timelineYear}>{item.year}</div>
-                <div className={styles.timelineCard}>
-                  <h3 className={styles.timelineTitle}>{item.title}</h3>
-                  <p className={styles.timelineDesc}>{item.desc}</p>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
@@ -198,7 +144,7 @@ export default function AboutPage() {
             <h2 className={styles.philosophyTitle}>Our Mission</h2>
             <p className={styles.philosophyText}>
               To make enterprise-grade AI practical, accessible, and genuinely valuable for every growing 
-              business — regardless of size, sector, or technical maturity.
+              business, regardless of size, sector or technical maturity.
             </p>
           </div>
         </div>

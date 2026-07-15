@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
-import { Inter, Space_Grotesk } from 'next/font/google'
+import { Figtree, Space_Grotesk } from 'next/font/google'
 import './globals.css'
 import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
 
-const inter = Inter({
+const figtree = Figtree({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-sans',
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
         url: '/logo.png',
         width: 800,
         height: 800,
-        alt: 'Chameleon Solutions — AI & Process Automation for SMEs',
+        alt: 'Chameleon Solutions: AI & Process Automation for SMEs',
       },
     ],
   },
@@ -77,7 +77,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en-GB" className={`${inter.variable} ${spaceGrotesk.variable}`}>
+    <html lang="en-GB" className={`${figtree.variable} ${spaceGrotesk.variable}`}>
       <head>
         <script
           defer

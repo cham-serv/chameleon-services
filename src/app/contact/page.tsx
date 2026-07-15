@@ -47,7 +47,7 @@ export default function ContactPage() {
             </h1>
             <p className={styles.heroSubtitle}>
               Whether you&apos;re ready to build or just exploring what&apos;s possible, 
-              we&apos;d love to hear about your business. No obligation, no pressure — just an honest conversation.
+              we'd love to hear about your business. No obligation, no pressure. Just an honest conversation.
             </p>
           </div>
         </div>
@@ -109,7 +109,7 @@ export default function ContactPage() {
                 <p className={styles.commitmentText}>
                   &ldquo;No long-term contracts. No jargon. No pressure. Just honest advice and practical solutions that work for your business.&rdquo;
                 </p>
-                <span className={styles.commitmentAuthor}>— The Chameleon Team</span>
+                <span className={styles.commitmentAuthor}>The Chameleon Team</span>
               </div>
             </div>
           </div>

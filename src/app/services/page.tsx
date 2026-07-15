@@ -6,7 +6,7 @@ import styles from './services.module.css'
 export const metadata: Metadata = {
   title: 'Our Services',
   description:
-    'AI workflow automation, custom integrations, process audits, custom software modules, and AI chatbots & agents — built specifically for SMEs.',
+    'AI workflow automation, custom integrations, process audits, custom software modules and AI chatbots and agents built specifically for SMEs.',
 }
 
 const services = [
@@ -15,9 +15,9 @@ const services = [
     icon: Zap,
     title: 'AI Workflow Automation',
     tagline: 'Eliminate the manual. Accelerate the essential.',
-    desc: `Manual, repetitive tasks are the silent killers of SME productivity. Every hour your team spends on data entry, report generation, or routing information between systems is an hour they're not spending on work that drives growth.
+    desc: `Manual, repetitive tasks are the silent killers of SME productivity. Every hour your team spends on data entry, report generation or routing information between systems is an hour they're not spending on work that drives growth.
 
-We design and build intelligent automation pipelines that handle these processes seamlessly — triggered by real-world events, powered by AI decision-making, and integrated directly into your existing tools.`,
+We design and build intelligent automation pipelines that handle these processes seamlessly, triggered by real-world events, powered by AI decision-making and integrated directly into your existing tools.`,
     useCases: [
       'Automated invoice processing and approval workflows',
       'AI-powered lead scoring and CRM updates',
@@ -36,7 +36,7 @@ We design and build intelligent automation pipelines that handle these processes
     icon: GitMerge,
     title: 'Custom AI Integrations',
     tagline: 'Your existing tools, made intelligent.',
-    desc: `You don't need to replace your CRM, ERP, or business tools to benefit from AI. In most cases, you just need intelligent connections between them — and the right AI capabilities plugged in at the right points.
+    desc: `You don't need to replace your CRM, ERP or business tools to benefit from AI. In most cases, you just need intelligent connections between them and the right AI capabilities plugged in at the right points.
 
 We specialise in building custom integrations that add AI capabilities to your existing technology stack. No rip-and-replace. No retraining your entire team. Just seamless enhancement of the systems you already rely on.`,
     useCases: [
@@ -57,7 +57,7 @@ We specialise in building custom integrations that add AI capabilities to your e
     icon: BarChart3,
     title: 'Process Audits & Optimisation',
     tagline: 'See your business through fresh eyes.',
-    desc: `Before you automate anything, you need to understand where the real friction is. Many businesses automate the wrong processes — digitising inefficiency rather than eliminating it.
+    desc: `Before you automate anything, you need to understand where the real friction is. Many businesses automate the wrong processes, digitising inefficiency rather than eliminating it.
 
 Our Process Audit service takes a systematic, holistic look at how your business actually operates. We map your workflows, identify the bottlenecks and waste, and deliver a prioritised roadmap of exactly where technology and AI can deliver the most value.`,
     useCases: [
@@ -78,9 +78,9 @@ Our Process Audit service takes a systematic, holistic look at how your business
     icon: Puzzle,
     title: 'Custom Software Modules & Components',
     tagline: 'Built for your business. Not the average business.',
-    desc: `Off-the-shelf software is designed for the average business. But your business isn't average — it has unique processes, unique data, and unique needs that generic tools simply can't accommodate without compromise.
+    desc: `Off-the-shelf software is designed for the average business. But your business isn't average. It has unique processes, unique data and unique needs that generic tools simply can't accommodate without compromise.
 
-We build bespoke software modules and components that integrate directly into your existing systems or stand alone as purpose-built tools. From custom dashboards to specialised data processing engines to proprietary business logic — if you need it, we build it.`,
+We build bespoke software modules and components that integrate directly into your existing systems or stand alone as purpose-built tools. From custom dashboards to specialised data processing engines to proprietary business logic: if you need it, we build it.`,
     useCases: [
       'Custom reporting and analytics dashboards',
       'Bespoke data processing and transformation pipelines',
@@ -89,7 +89,7 @@ We build bespoke software modules and components that integrate directly into yo
       'Internal tools and portals for team efficiency',
     ],
     outcomes: [
-      { icon: Clock, text: 'Exact fit for your processes — no workarounds required' },
+      { icon: Clock, text: 'Exact fit for your processes with no workarounds required' },
       { icon: CheckCircle, text: 'Full ownership of your technology' },
       { icon: Users, text: 'Competitive advantage through proprietary capability' },
     ],
@@ -99,9 +99,9 @@ We build bespoke software modules and components that integrate directly into yo
     icon: Bot,
     title: 'AI Chatbots & Agents',
     tagline: 'Intelligent conversations that work for you 24/7.',
-    desc: `Modern AI chatbots and agents are a world apart from the frustrating rule-based bots of the past. Today's large language model-powered agents can understand context, handle complex queries, retrieve relevant information, and take actions — all in natural, human-like conversation.
+    desc: `Modern AI chatbots and agents are a world apart from the frustrating rule-based bots of the past. Today's large language model-powered agents can understand context, handle complex queries, retrieve relevant information and take actions, all in natural, human-like conversation.
 
-We design and deploy AI conversational agents for customer-facing support, internal knowledge management, lead qualification, and more. Every agent is trained on your specific data and calibrated to reflect your brand voice.`,
+We design and deploy AI conversational agents for customer-facing support, internal knowledge management, lead qualification and more. Every agent is trained on your specific data and calibrated to reflect your brand voice.`,
     useCases: [
       'Customer support agents with full product/service knowledge',
       'Internal HR and policy Q&A bots for your team',
@@ -157,8 +157,8 @@ export default function ServicesPage() {
               Five ways we <span className="text-gradient">transform</span> your operations
             </h1>
             <p className={styles.heroSubtitle}>
-              Every service we offer is designed for one purpose: making your business more efficient, 
-              more intelligent, and more competitive — without complexity or disruption.
+              Every service we offer is designed for one purpose: making your business more efficient,
+              more intelligent and more competitive without complexity or disruption.
             </p>
             <div className={styles.heroNav}>
               {services.map((service) => (
@@ -239,9 +239,9 @@ export default function ServicesPage() {
             <div>
               <h2 className={styles.smeTitle}>Built for SMEs, not enterprises</h2>
               <p className={styles.smeDesc}>
-                Enterprise AI implementations take months, cost hundreds of thousands, and require dedicated 
-                internal teams to maintain. We do things differently. Our solutions are scoped for SME 
-                budgets, SME teams, and SME timelines — without compromising on quality or capability.
+                Enterprise AI implementations take months, cost hundreds of thousands and require dedicated
+                internal teams to maintain. We do things differently. Our solutions are scoped for SME
+                budgets, SME teams and SME timelines without compromising on quality or capability.
               </p>
             </div>
             <div className={styles.smeCtas}>

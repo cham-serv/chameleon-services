@@ -22,7 +22,7 @@ const services = [
     id: 'custom-ai-integrations',
     icon: GitMerge,
     title: 'Custom AI Integrations',
-    desc: 'Connect AI capabilities directly into your CRM, ERP, or existing tools — no rip-and-replace required, just seamless enhancement.',
+    desc: 'Connect AI capabilities directly into your CRM, ERP, or existing tools with no rip-and-replace required, just seamless enhancement.',
   },
   {
     id: 'process-audits',
@@ -34,28 +34,22 @@ const services = [
     id: 'custom-software',
     icon: Puzzle,
     title: 'Custom Software Modules',
-    desc: 'Bespoke components and modules built around your exact needs — not off-the-shelf compromises that never quite fit.',
+    desc: 'Bespoke components and modules built around your exact needs, not off-the-shelf compromises that never quite fit.',
   },
   {
     id: 'ai-chatbots',
     icon: Bot,
     title: 'AI Chatbots & Agents',
-    desc: 'Deploy intelligent conversational agents for customer support, internal knowledge management, or lead qualification — 24/7.',
+    desc: 'Deploy intelligent conversational agents for customer support, internal knowledge management or lead qualification. Available 24/7.',
   },
 ]
 
-const stats = [
-  { value: '50+', label: 'Processes Automated' },
-  { value: '30+', label: 'SME Clients Served' },
-  { value: '60%', label: 'Average Time Saved' },
-  { value: '4.9★', label: 'Client Satisfaction' },
-]
 
 const steps = [
   {
     step: '01',
     title: 'Assess',
-    desc: 'We start by deeply understanding your business — your goals, your team, and where the friction lives.',
+    desc: 'We start by deeply understanding your business: your goals, your team, and where the friction lives.',
   },
   {
     step: '02',
@@ -99,8 +93,8 @@ export default async function HomePage() {
           </h1>
 
           <p className={styles.heroSubtitle}>
-            We help small and medium enterprises eliminate manual bottlenecks, integrate intelligent automation, 
-            and build custom AI solutions — all without disrupting the way your team works.
+            We help small and medium enterprises eliminate manual bottlenecks, integrate intelligent automation
+            and build custom AI solutions without disrupting the way your team works.
           </p>
 
           <div className={styles.heroCtas}>
@@ -128,20 +122,6 @@ export default async function HomePage() {
             className={styles.floatingLogo}
             priority
           />
-        </div>
-      </section>
-
-      {/* Stats Bar */}
-      <section className={styles.statsBar}>
-        <div className="container">
-          <div className={styles.statsGrid}>
-            {stats.map((stat) => (
-              <div key={stat.label} className={styles.statItem}>
-                <span className={styles.statValue}>{stat.value}</span>
-                <span className={styles.statLabel}>{stat.label}</span>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -275,13 +255,13 @@ export default async function HomePage() {
                 Adapt. Transform. Thrive.
               </h2>
               <p className={styles.philosophyDesc}>
-                A chameleon doesn&apos;t change what it is — it adapts to its environment while remaining perfectly 
+                A chameleon doesn&apos;t change what it is; it adapts to its environment while remaining perfectly 
                 itself. That&apos;s our philosophy for AI adoption: we integrate intelligence seamlessly into 
                 your existing world, without disruption, without friction.
               </p>
               <p className={styles.philosophyDesc}>
                 Just like a chameleon&apos;s eyes can see in multiple directions simultaneously, our AI solutions 
-                analyse your processes from every angle — finding efficiencies you never knew existed.
+                analyse your processes from every angle, finding efficiencies you never knew existed.
               </p>
               <Link href="/about" className="btn btn-primary" id="philosophy-about-link">
                 Our Story
