@@ -1,0 +1,172 @@
+.hero {
+  position: relative;
+  padding: calc(var(--navbar-height) + var(--space-16)) 0 var(--space-16);
+  background: var(--gradient-hero);
+  overflow: hidden;
+}
+
+.heroBg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 30% 70%, rgba(0,229,255,0.08) 0%, transparent 60%);
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+}
+
+.heroTitle {
+  font-size: clamp(var(--text-3xl), 4vw, var(--text-5xl));
+  color: #ffffff;
+  margin-bottom: var(--space-6);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.heroSubtitle {
+  font-size: var(--text-xl);
+  color: rgba(255,255,255,0.6);
+  line-height: 1.7;
+}
+
+/* Articles Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+}
+
+.articleCard {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-6);
+  background: white;
+  border: 1px solid rgba(141,153,174,0.15);
+  border-radius: var(--radius-xl);
+  text-decoration: none;
+  transition: all var(--transition-base);
+}
+
+.articleCard:hover {
+  border-color: rgba(0,229,255,0.3);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+
+.articleCard.featured {
+  grid-column: span 3;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  border-color: rgba(0,229,255,0.2);
+}
+
+.featured .cardTitle {
+  color: #ffffff;
+  font-size: var(--text-2xl);
+}
+
+.featured .cardDesc {
+  color: rgba(255,255,255,0.6);
+}
+
+.featured .metaItem {
+  color: rgba(255,255,255,0.4);
+}
+
+.featured .readMore {
+  color: var(--color-secondary);
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.cardTitle {
+  font-size: var(--text-lg);
+  color: var(--color-primary);
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: var(--space-3);
+  flex: 1;
+}
+
+.cardDesc {
+  font-size: var(--text-sm);
+  color: var(--color-neutral);
+  line-height: 1.7;
+  flex: 1;
+  margin-bottom: var(--space-4);
+}
+
+.cardMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-xs);
+  color: var(--color-neutral-light);
+}
+
+.readMore {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-secondary-dark);
+}
+
+/* Empty State */
+.empty {
+  text-align: center;
+  padding: var(--space-20);
+  color: var(--color-neutral);
+}
+
+/* GEO Banner */
+.geoBanner {
+  padding: var(--space-16) 0;
+  background: rgba(11,19,43,0.04);
+  border-top: 1px solid rgba(0,229,255,0.08);
+}
+
+.geoInner {
+  text-align: center;
+  max-width: 560px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.geoTitle {
+  font-size: var(--text-2xl);
+  color: var(--color-primary);
+}
+
+.geoDesc {
+  color: var(--color-neutral);
+  line-height: 1.7;
+}
+
+@media (max-width: 1024px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+  .articleCard.featured { grid-column: span 2; }
+}
+
+@media (max-width: 640px) {
+  .grid { grid-template-columns: 1fr; }
+  .articleCard.featured { grid-column: span 1; }
+}
