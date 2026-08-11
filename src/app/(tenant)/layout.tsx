@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 import '@/app/globals.css';
@@ -19,6 +20,31 @@ import { getFontEmbedUrl } from '@/lib/fonts';
  * unstyled content (FOUC) — the correct brand colours are in the HTML
  * from the very first byte.
  */
+
+/**
+ * Dynamic metadata — uses Next.js's native metadata system so child
+ * pages can override the title via their own generateMetadata/metadata
+ * exports. The getTenantConfig call is automatically deduped by React's
+ * fetch cache, so this does NOT cause a double API call.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const headersList = await headers();
+  const tenantDomain = headersList.get('x-tenant-domain') ?? 'unknown';
+  const config = await getTenantConfig(tenantDomain);
+
+  const siteName =
+    config?.settings?.siteName ?? config?.tenant.name ?? 'Store';
+  const tagline = config?.settings?.tagline ?? undefined;
+
+  return {
+    title: {
+      default: siteName,
+      template: `%s | ${siteName}`,
+    },
+    description: tagline,
+  };
+}
+
 export default async function TenantLayout({
   children,
 }: {
@@ -44,9 +70,6 @@ export default async function TenantLayout({
   const fontBody = config.settings?.fontBody ?? 'Inter';
   const fontUrl = getFontEmbedUrl(fontHeading, fontBody);
 
-  // Dynamic metadata from tenant settings
-  const siteName = config.settings?.siteName ?? config.tenant.name;
-
   return (
     <html lang="en" style={tokenStyle} data-tenant={tenantDomain}>
       <head>
@@ -58,7 +81,6 @@ export default async function TenantLayout({
           crossOrigin="anonymous"
         />
         <link rel="stylesheet" href={fontUrl} />
-        <title>{siteName}</title>
       </head>
       <body
         style={{

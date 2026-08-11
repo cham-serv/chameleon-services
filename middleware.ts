@@ -58,9 +58,16 @@ export function middleware(req: NextRequest) {
   const originalPath = url.pathname; // e.g. '/shop' or '/'
   url.pathname = `/${hostname}${originalPath === '/' ? '' : originalPath}`;
 
-  const res = addSecurityHeaders(NextResponse.rewrite(url));
-  // Also pass as a header so Server Components can read it via headers()
-  res.headers.set('x-tenant-domain', hostname);
+  // Pass the resolved hostname as a REQUEST header so Server Components
+  // read it via headers(). Using request.headers (not response.headers)
+  // ensures the middleware's resolved value overrides any spoofed
+  // x-tenant-domain header sent by the client.
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set('x-tenant-domain', hostname);
+
+  const res = addSecurityHeaders(
+    NextResponse.rewrite(url, { request: { headers: requestHeaders } }),
+  );
   return res;
 }
 
