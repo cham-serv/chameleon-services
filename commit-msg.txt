@@ -1,20 +1,34 @@
-feat: multi-tenant routing (batch 2b)
+feat: shared infrastructure (batch 3)
 
-This commit restructures chameleon-services to support dynamic multi-tenancy, introducing a middleware-driven routing system and a robust template resolution pipeline. 
+Adds the data layer, SEO, and plumbing that every template page needs:
 
-### 1. Architecture & Routing Restructure
-- **Route Groups:** Segregated the application into `(marketing)` and `(tenant)` route groups.
-- **Root Layout:** Stripped `src/app/layout.tsx` to a thin pass-through, delegating HTML shell responsibilities to route group layouts.
-- **Marketing Migration:** Moved all existing company site pages (about, services, articles, contact, etc.) and API routes into the `(marketing)` group to isolate them from tenant routes.
-- **Middleware:** Implemented `src/middleware.ts` for domain-based routing. It intercepts requests, extracts the tenant slug, and rewrites them to the `(tenant)/[tenant]` catch-all route.
+### API Client (src/lib/api.ts)
+- Typed fetch functions for all engine endpoints: products, articles,
+  services, FAQs, legal docs, page-seo, categories, topics
+- ISR cache tags for targeted on-demand revalidation
+- Single/list endpoints for products, articles, services
+- Paginated response type matching Payload's shape
 
-### 2. Multi-Tenant Pipeline & Types
-- **Core Types (`src/lib/types.ts`):** Defined the data contracts for the rendering pipeline.
-- **Tenant Resolver (`src/lib/tenant.ts`):** Implemented the core engine for fetching tenant configuration via the ISR-cached API and resolving pages.
-- **Platform Font Registry (`src/lib/fonts.ts`):** Created a curated registry of 15 self-hosted Google Fonts.
+### SEO (src/lib/seo.ts)
+- generatePageMetadata() — fetches PageSEO record from engine,
+  falls back to tenant config defaults
+- generateItemMetadata() — for detail pages (products, articles)
+- OpenGraph and Twitter card generation
 
-### 3. Template Stubs (Atlas & Meridian)
-- **Catch-All Page:** Created `(tenant)/[tenant]/[[...slug]]/page.tsx`.
-- **Tenant Layout:** Implemented `(tenant)/[tenant]/layout.tsx`.
-- **Atlas Template:** Scaffolded 9 page stubs and definition.
-- **Meridian Template:** Scaffolded 11 page stubs and definition.
+### JSON-LD (src/lib/jsonld.ts + src/components/JsonLd.tsx)
+- Builders: Product, Article, FAQPage, Service, Organization,
+  BreadcrumbList, LocalBusiness
+- JsonLd component renders script tags with XSS escaping
+
+### Currency (src/lib/currency.ts)
+- formatCurrency() — converts cents to display strings (ZAR, USD, EUR, GBP)
+- getCurrencySymbol() and formatPriceValue() helpers
+
+### ISR Revalidation (src/app/api/revalidate/route.ts)
+- HMAC-SHA256 authenticated endpoint
+- Replay protection (5-minute window)
+- Tag sanitization and rate limiting (max 20 tags per request)
+
+### Dynamic SEO Files
+- robots.ts — blocks demo tenant indexing, allows production
+- sitemap.ts — queries engine for all published content per tenant
