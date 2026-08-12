@@ -1,4 +1,14 @@
 # Git Usage Restrictions
 <!-- BEGIN:git-restriction-rule -->
-**CRITICAL RULE:** Do not execute ANY `git` commands (e.g., `git add`, `git commit`, `git push`, `git fetch`) via terminal commands under any circumstances. Do not modify, read, or interact with the `.git` directory or `.git/config` files. The user has explicitly revoked the agent's permission to interact with version control. All Git operations and deployments MUST be left entirely to the user to perform manually via their own UI tools (like GitHub Desktop).
+**ABSOLUTE RULE — NO EXCEPTIONS:** Never run ANY git command via the terminal. This includes but is not limited to: `git add`, `git commit`, `git push`, `git pull`, `git fetch`, `git checkout`, `git rebase`, `git merge`, `git branch`, `git stash`.
+
+This rule has been violated multiple times. The following specific patterns are also forbidden:
+- Writing a commit message to a file (e.g. `commit-msg.txt`) and then using `git commit -F` to bypass the UI
+- Using GitHub Desktop's bundled `git.exe` directly via PowerShell
+- Running git commands "to help" after a UI failure
+
+**The ONLY permitted git-related action is:** Writing commit message text in the chat for the user to copy and paste themselves.
+
+The user manages ALL version control operations manually via GitHub Desktop. Do not attempt to help by running git commands under any circumstances, even if the user is having trouble with the UI.
 <!-- END:git-restriction-rule -->
+
