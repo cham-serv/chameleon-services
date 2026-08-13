@@ -1,120 +1,330 @@
-import type { Metadata } from 'next'
-import { Mail, MessageSquare } from 'lucide-react'
-import { ContactForm } from '@/components/ContactForm'
-import styles from './contact.module.css'
+'use client';
 
-export const metadata: Metadata = {
-  title: 'Contact Us',
-  description:
-    'Get in touch with the Chameleon Solutions team. Book a free discovery call or send us a message about your AI and process automation needs.',
-}
+import { useState } from 'react';
+import { Turnstile } from '@/components/Turnstile';
+import { Send, CheckCircle, Mail, MapPin } from 'lucide-react';
 
 export default function ContactPage() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'ContactPage',
-    name: 'Contact Chameleon Solutions',
-    url: 'https://chameleon.services/contact',
-    description:
-      'Get in touch with Chameleon Solutions to discuss AI and process automation for your business.',
-    mainEntity: {
-      '@type': 'Organization',
-      name: 'Chameleon Solutions',
-      email: 'hello@chameleon.services',
-      url: 'https://chameleon.services',
-    },
+  const [form, setForm] = useState({
+    name: '',
+    company: '',
+    email: '',
+    phone: '',
+    message: '',
+    source: '',
+  });
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  function handleChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+  ) {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (status === 'submitting') return;
+
+    setStatus('submitting');
+    setErrorMessage('');
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...form, turnstileToken }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setErrorMessage(data.error ?? 'Something went wrong. Please try again.');
+        setStatus('error');
+        return;
+      }
+
+      setStatus('success');
+    } catch {
+      setErrorMessage('Network error. Please check your connection and try again.');
+      setStatus('error');
+    }
+  }
+
+  if (status === 'success') {
+    return (
+      <div
+        style={{
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '24px',
+        }}
+      >
+        <div style={{ textAlign: 'center', maxWidth: '480px' }}>
+          <div
+            style={{
+              width: '72px',
+              height: '72px',
+              borderRadius: '50%',
+              background: 'rgba(34,197,94,0.12)',
+              border: '1px solid rgba(34,197,94,0.3)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 24px',
+              color: '#22c55e',
+            }}
+          >
+            <CheckCircle size={32} />
+          </div>
+          <h2
+            style={{
+              fontFamily: 'var(--m-font-display)',
+              fontSize: '1.8rem',
+              fontWeight: 700,
+              color: 'var(--m-text)',
+              margin: '0 0 12px',
+            }}
+          >
+            Message sent!
+          </h2>
+          <p style={{ fontSize: '0.95rem', color: 'var(--m-text-muted)', lineHeight: 1.7 }}>
+            Thanks for reaching out. We&apos;ll be in touch within one business day.
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
-      />
-
-      {/* Hero */}
-      <section className={styles.hero}>
-        <div className={styles.heroBg} />
-        <div className="container">
-          <div className={styles.heroContent}>
-            <span className="badge badge-teal">
-              <MessageSquare size={10} />
-              Let&apos;s Talk
-            </span>
-            <div className="divider-teal" style={{ margin: '1.5rem 0' }} />
-            <h1 className={styles.heroTitle}>
-              Start your <span className="text-gradient">transformation</span> today
-            </h1>
-            <p className={styles.heroSubtitle}>
-              Whether you&apos;re ready to build or just exploring what&apos;s possible, 
-              we'd love to hear about your business. No obligation, no pressure. Just an honest conversation.
-            </p>
-          </div>
+      {/* Header */}
+      <section
+        style={{
+          paddingTop: '120px',
+          paddingBottom: '48px',
+          borderBottom: '1px solid rgba(255,255,255,0.06)',
+        }}
+      >
+        <div className="m-container">
+          <span className="m-label">Contact</span>
+          <div className="m-divider" style={{ marginBlock: '16px' }} />
+          <h1
+            style={{
+              fontFamily: 'var(--m-font-display)',
+              fontSize: 'clamp(2rem, 5vw, 3rem)',
+              fontWeight: 700,
+              letterSpacing: '-0.02em',
+              color: 'var(--m-text)',
+              margin: '0 0 12px',
+            }}
+          >
+            Let&apos;s talk.
+          </h1>
+          <p style={{ fontSize: '1rem', color: 'var(--m-text-muted)', lineHeight: 1.6, maxWidth: '480px' }}>
+            Whether you&apos;re ready to get started or just have questions — we&apos;d love to hear from you.
+          </p>
         </div>
       </section>
 
-      {/* Form & Info */}
-      <section className="section">
-        <div className="container">
-          <div className={styles.grid}>
+      {/* Form + Info */}
+      <section className="m-section">
+        <div className="m-container">
+          <div className="m-grid-2" style={{ gap: '64px', alignItems: 'flex-start' }}>
             {/* Form */}
-            <div>
-              <h2 className={styles.formTitle}>Send us a message</h2>
-              <p className={styles.formSubtitle}>
-                We typically respond within one business day.
-              </p>
-              <ContactForm />
-            </div>
-
-            {/* Info */}
-            <div className={styles.info}>
-              <div className={styles.infoCard}>
-                <div className={styles.infoIcon}>
-                  <Mail size={20} />
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              {/* Name + Company */}
+              <div className="m-grid-2" style={{ gap: '16px' }}>
+                <div className="m-form-group">
+                  <label htmlFor="contact-name" className="m-label-text">Name *</label>
+                  <input
+                    id="contact-name"
+                    name="name"
+                    type="text"
+                    required
+                    value={form.name}
+                    onChange={handleChange}
+                    className="m-input"
+                    placeholder="Your full name"
+                    autoComplete="name"
+                  />
                 </div>
-                <h3 className={styles.infoTitle}>Email us directly</h3>
-                <a href="mailto:hello@chameleon.services" className={styles.infoLink} id="contact-email-link">
-                  hello@chameleon.services
-                </a>
-              </div>
-
-              <div className={styles.expectCard}>
-                <h3 className={styles.expectTitle}>What to expect</h3>
-                <div className={styles.expectSteps}>
-                  <div className={styles.expectStep}>
-                    <span className={styles.expectNum}>01</span>
-                    <div>
-                      <strong>We read your message carefully</strong>
-                      <p>We take time to understand your specific context before responding.</p>
-                    </div>
-                  </div>
-                  <div className={styles.expectStep}>
-                    <span className={styles.expectNum}>02</span>
-                    <div>
-                      <strong>We schedule a discovery call</strong>
-                      <p>A 30-minute conversation to explore your goals and challenges in depth.</p>
-                    </div>
-                  </div>
-                  <div className={styles.expectStep}>
-                    <span className={styles.expectNum}>03</span>
-                    <div>
-                      <strong>We propose a tailored approach</strong>
-                      <p>No templates. A solution designed specifically for your business.</p>
-                    </div>
-                  </div>
+                <div className="m-form-group">
+                  <label htmlFor="contact-company" className="m-label-text">Company</label>
+                  <input
+                    id="contact-company"
+                    name="company"
+                    type="text"
+                    value={form.company}
+                    onChange={handleChange}
+                    className="m-input"
+                    placeholder="Your company name"
+                    autoComplete="organization"
+                  />
                 </div>
               </div>
 
-              <div className={styles.commitmentCard}>
-                <p className={styles.commitmentText}>
-                  &ldquo;No long-term contracts. No jargon. No pressure. Just honest advice and practical solutions that work for your business.&rdquo;
+              {/* Email + Phone */}
+              <div className="m-grid-2" style={{ gap: '16px' }}>
+                <div className="m-form-group">
+                  <label htmlFor="contact-email" className="m-label-text">Email *</label>
+                  <input
+                    id="contact-email"
+                    name="email"
+                    type="email"
+                    required
+                    value={form.email}
+                    onChange={handleChange}
+                    className="m-input"
+                    placeholder="you@company.com"
+                    autoComplete="email"
+                  />
+                </div>
+                <div className="m-form-group">
+                  <label htmlFor="contact-phone" className="m-label-text">Phone</label>
+                  <input
+                    id="contact-phone"
+                    name="phone"
+                    type="tel"
+                    value={form.phone}
+                    onChange={handleChange}
+                    className="m-input"
+                    placeholder="+27 00 000 0000"
+                    autoComplete="tel"
+                  />
+                </div>
+              </div>
+
+              {/* Message */}
+              <div className="m-form-group">
+                <label htmlFor="contact-message" className="m-label-text">Message *</label>
+                <textarea
+                  id="contact-message"
+                  name="message"
+                  required
+                  value={form.message}
+                  onChange={handleChange}
+                  className="m-textarea"
+                  placeholder="Tell us about your business and what you're looking for..."
+                />
+              </div>
+
+              {/* Source */}
+              <div className="m-form-group">
+                <label htmlFor="contact-source" className="m-label-text">How did you hear about us?</label>
+                <select
+                  id="contact-source"
+                  name="source"
+                  value={form.source}
+                  onChange={handleChange}
+                  className="m-input m-select"
+                  style={{ appearance: 'none' }}
+                >
+                  <option value="">Select an option</option>
+                  <option value="google">Google search</option>
+                  <option value="social">Social media</option>
+                  <option value="referral">Referral from someone</option>
+                  <option value="agency">Through an agency</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              {/* Turnstile */}
+              <Turnstile onVerify={setTurnstileToken} />
+
+              {/* Error */}
+              {status === 'error' && (
+                <p style={{ color: '#ef4444', fontSize: '0.875rem', margin: 0 }}>
+                  {errorMessage}
                 </p>
-                <span className={styles.commitmentAuthor}>The Chameleon Team</span>
+              )}
+
+              {/* Submit */}
+              <button
+                type="submit"
+                disabled={status === 'submitting'}
+                className="m-btn m-btn-primary m-btn-lg"
+                id="contact-submit"
+                style={{ alignSelf: 'flex-start', opacity: status === 'submitting' ? 0.7 : 1 }}
+              >
+                {status === 'submitting' ? 'Sending...' : 'Send Message'}
+                <Send size={16} />
+              </button>
+            </form>
+
+            {/* Info Panel */}
+            <div>
+              <h2
+                style={{
+                  fontFamily: 'var(--m-font-display)',
+                  fontSize: '1.3rem',
+                  fontWeight: 700,
+                  color: 'var(--m-text)',
+                  margin: '0 0 8px',
+                }}
+              >
+                Why Chameleon?
+              </h2>
+              <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 48px' }}>
+                {[
+                  'AI-ready and GEO-optimised from day one',
+                  'No developers or agencies needed',
+                  'South Africa-first platform and support',
+                  'Cancel anytime — no long-term contracts',
+                  'Built for businesses that refuse to fall behind',
+                ].map((point) => (
+                  <li
+                    key={point}
+                    style={{
+                      display: 'flex',
+                      gap: '12px',
+                      alignItems: 'flex-start',
+                      fontSize: '0.9rem',
+                      color: 'var(--m-text-muted)',
+                      marginBottom: '12px',
+                    }}
+                  >
+                    <span style={{ color: '#22c55e', marginTop: '2px', flexShrink: 0 }}>✓</span>
+                    {point}
+                  </li>
+                ))}
+              </ul>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <a
+                  href="mailto:chris@chameleon.services"
+                  style={{
+                    display: 'flex',
+                    gap: '12px',
+                    alignItems: 'center',
+                    fontSize: '0.875rem',
+                    color: 'var(--m-text-muted)',
+                    textDecoration: 'none',
+                  }}
+                  id="contact-email-link"
+                >
+                  <Mail size={16} style={{ color: '#60a5fa' }} />
+                  chris@chameleon.services
+                </a>
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: '12px',
+                    alignItems: 'center',
+                    fontSize: '0.875rem',
+                    color: 'var(--m-text-muted)',
+                  }}
+                >
+                  <MapPin size={16} style={{ color: '#60a5fa' }} />
+                  South Africa 🇿🇦
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
     </>
-  )
+  );
 }

@@ -44,7 +44,8 @@ export function middleware(request: NextRequest) {
   }
 
   // ── Root domain detection ──────────────────────────────────────────────
-  if (ROOT_DOMAINS.includes(hostname)) {
+  // Also treat Vercel preview deployments (*.vercel.app) as marketing/root
+  if (ROOT_DOMAINS.includes(hostname) || hostname.endsWith('.vercel.app') || hostname === 'vercel.app') {
     return NextResponse.next();
   }
 

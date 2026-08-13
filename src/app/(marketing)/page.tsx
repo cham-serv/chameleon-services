@@ -1,286 +1,741 @@
-import type { Metadata } from 'next'
-import Link from 'next/link'
-import Image from 'next/image'
-import { ArrowRight, Zap, GitMerge, BarChart3, Bot, Puzzle, CheckCircle, ChevronRight } from 'lucide-react'
-import styles from './page.module.css'
-import { getAllArticles } from '@/lib/articles'
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { HeroTextCycler } from '@/components/marketing/HeroTextCycler';
+import { ArrowRight, Zap, Brain, RefreshCw, Palette, Search, TrendingUp, Clock, Globe } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Chameleon Solutions | AI & Process Automation for SMEs',
+  title: 'Chameleon — AI-Ready Websites for South African Businesses',
   description:
-    'Custom AI solutions and process automation for small and medium enterprises. Workflow automation, AI integrations, chatbots and more.',
-}
+    'Search has changed. Chameleon builds AI-ready, GEO-optimised websites and ecommerce stores that adapt to the new era of AI-powered search.',
+};
 
-const services = [
+const features = [
   {
-    id: 'ai-workflow-automation',
+    id: 'geo-optimised',
+    icon: Brain,
+    title: 'GEO Optimised',
+    desc: 'Every page is structured for Generative Engine Optimisation — so AI search engines like ChatGPT, Perplexity, and Google SGE can find, understand, and quote your business.',
+  },
+  {
+    id: 'ai-content',
     icon: Zap,
-    title: 'AI Workflow Automation',
-    desc: 'Eliminate repetitive manual tasks. We design intelligent automation pipelines that free your team to focus on work that truly matters.',
+    title: 'AI-Powered Content',
+    desc: 'Product listings, articles, and meta content built with structured intelligence from day one. Not retrofitted — native.',
   },
   {
-    id: 'custom-ai-integrations',
-    icon: GitMerge,
-    title: 'Custom AI Integrations',
-    desc: 'Connect AI capabilities directly into your CRM, ERP, or existing tools with no rip-and-replace required, just seamless enhancement.',
+    id: 'beautiful-templates',
+    icon: Palette,
+    title: 'Beautiful Templates',
+    desc: 'Professionally designed storefronts and business sites that look premium on day one, branded to your business, ready to launch.',
   },
   {
-    id: 'process-audits',
-    icon: BarChart3,
-    title: 'Process Audits & Optimisation',
-    desc: 'We map your current workflows, identify the friction points, and design leaner, smarter systems built for scale.',
+    id: 'always-updating',
+    icon: RefreshCw,
+    title: 'Always Updating',
+    desc: 'AI and GEO move fast. Legacy platforms struggle to keep up. Chameleon evolves continuously — your site stays ahead without the costly upgrades.',
   },
-  {
-    id: 'custom-software',
-    icon: Puzzle,
-    title: 'Custom Software Modules',
-    desc: 'Bespoke components and modules built around your exact needs, not off-the-shelf compromises that never quite fit.',
-  },
-  {
-    id: 'ai-chatbots',
-    icon: Bot,
-    title: 'AI Chatbots & Agents',
-    desc: 'Deploy intelligent conversational agents for customer support, internal knowledge management or lead qualification. Available 24/7.',
-  },
-]
+];
 
-
-const steps = [
+const howItWorksSteps = [
   {
     step: '01',
-    title: 'Assess',
-    desc: 'We start by deeply understanding your business: your goals, your team, and where the friction lives.',
+    title: 'Choose a Template',
+    desc: 'Browse our library of professionally designed templates. Each one is AI-ready, GEO-optimised, and built for your industry.',
   },
   {
     step: '02',
-    title: 'Design',
-    desc: 'We craft a tailored solution architecture: the right AI tools, integrations, and workflows for your context.',
+    title: 'Customise Your Brand',
+    desc: 'Add your logo, brand colours, fonts, products, and content through a clean, intuitive admin panel. No code required.',
   },
   {
     step: '03',
-    title: 'Deploy',
-    desc: 'We implement, test, and train your team. Then we stay on hand to refine and scale as you grow.',
+    title: 'Go Live Today',
+    desc: 'Connect your domain and launch. Your site is live, fast, and already speaking the language of modern AI search engines.',
   },
-]
+];
 
-export default async function HomePage() {
-  const articles = await getAllArticles()
-  const latestArticles = articles.slice(0, 3)
+const templates = [
+  {
+    id: 'atlas',
+    name: 'Atlas',
+    tagline: 'Premium ecommerce, beautifully crafted.',
+    features: ['Ecommerce', 'Articles', 'FAQ', 'Cart & Checkout'],
+    demoHref: 'https://atlas-demo.chameleon.services',
+    gradient: 'linear-gradient(135deg, #1e3a5f 0%, #0d1117 100%)',
+  },
+  {
+    id: 'meridian',
+    name: 'Meridian',
+    tagline: 'Services & consulting, built to convert.',
+    features: ['Services', 'Articles', 'Contact', 'Legal'],
+    demoHref: 'https://meridian-demo.chameleon.services',
+    gradient: 'linear-gradient(135deg, #1a1f2e 0%, #0d1117 100%)',
+  },
+];
 
+const whyNowPoints = [
+  {
+    icon: Search,
+    stat: '40%',
+    label: 'of searches now return AI-generated answers',
+    desc: 'Google SGE, ChatGPT, and Perplexity are changing where your customers find you.',
+  },
+  {
+    icon: TrendingUp,
+    stat: '62%',
+    label: 'of users trust AI answers over organic results',
+    desc: 'If the AI doesn\'t know about you, neither does your next customer.',
+  },
+  {
+    icon: Clock,
+    stat: '18 months',
+    label: 'behind — the average legacy CMS platform',
+    desc: 'GEO requires structured data, semantic markup, and AI-friendly content architecture that old platforms weren\'t built for.',
+  },
+  {
+    icon: Globe,
+    stat: 'R0',
+    label: 'in additional ad spend required',
+    desc: 'GEO is organic visibility in AI answers — earned through content structure, not paid media.',
+  },
+];
+
+export default function HomePage() {
   return (
     <>
-      {/* Hero Section */}
-      <section className={styles.hero}>
-        <div className={styles.heroBg}>
-          <div className={styles.heroMesh1} />
-          <div className={styles.heroMesh2} />
-          <div className={styles.heroMesh3} />
-          <div className={styles.heroGrid} />
-        </div>
+      {/* ── Hero ──────────────────────────────────────────────────────────── */}
+      <section
+        style={{
+          position: 'relative',
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          paddingTop: '96px',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Background glows */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            top: '10%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '800px',
+            height: '600px',
+            borderRadius: '50%',
+            background: 'radial-gradient(ellipse, rgba(59,130,246,0.12) 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }}
+        />
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            bottom: '15%',
+            right: '10%',
+            width: '400px',
+            height: '400px',
+            borderRadius: '50%',
+            background: 'radial-gradient(ellipse, rgba(129,140,248,0.08) 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }}
+        />
 
-        <div className={`container ${styles.heroContent}`}>
-          <div className={styles.heroBadge}>
-            <span className="badge badge-teal">
-              <Zap size={10} />
-              AI &amp; Process Solutions for SMEs
+        {/* Hex grid pattern */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='52' viewBox='0 0 60 52'%3E%3Cpath d='M30 1 L59 17.5 L59 34.5 L30 51 L1 34.5 L1 17.5 Z' fill='none' stroke='rgba(255,255,255,0.025)' stroke-width='1'/%3E%3C/svg%3E")`,
+            backgroundSize: '60px 52px',
+            opacity: 0.8,
+            pointerEvents: 'none',
+          }}
+        />
+
+        <div className="m-container" style={{ position: 'relative', zIndex: 1, textAlign: 'center', paddingBlock: '80px' }}>
+          {/* Badge */}
+          <div className="m-animate-fade-up" style={{ marginBottom: '24px' }}>
+            <span className="m-badge">
+              <Zap size={11} />
+              AI-ready websites for South Africa
             </span>
           </div>
 
-          <h1 className={styles.heroTitle}>
-            Your business,{' '}
-            <span className="text-gradient">supercharged</span>{' '}
-            by AI.
+          {/* Headline */}
+          <h1
+            className="m-animate-fade-up m-animate-delay-1"
+            style={{
+              fontFamily: 'var(--m-font-display)',
+              fontSize: 'clamp(2.8rem, 7vw, 5rem)',
+              fontWeight: 700,
+              lineHeight: 1.1,
+              letterSpacing: '-0.03em',
+              color: 'var(--m-text)',
+              margin: '0 0 20px',
+            }}
+          >
+            Search has changed.
+            <br />
+            <span className="m-gradient-text">Your website needs to be</span>
           </h1>
 
-          <p className={styles.heroSubtitle}>
-            We help small and medium enterprises eliminate manual bottlenecks, integrate intelligent automation
-            and build custom AI solutions without disrupting the way your team works.
+          {/* Cycling text */}
+          <div
+            className="m-animate-fade-up m-animate-delay-2"
+            style={{
+              fontFamily: 'var(--m-font-display)',
+              fontSize: 'clamp(2.2rem, 5vw, 3.8rem)',
+              fontWeight: 700,
+              letterSpacing: '-0.03em',
+              color: '#60a5fa',
+              minHeight: '1.2em',
+              marginBottom: '32px',
+            }}
+          >
+            <HeroTextCycler />
+          </div>
+
+          {/* Subtext */}
+          <p
+            className="m-animate-fade-up m-animate-delay-2"
+            style={{
+              fontSize: 'clamp(1rem, 2vw, 1.15rem)',
+              color: 'var(--m-text-muted)',
+              maxWidth: '560px',
+              margin: '0 auto 40px',
+              lineHeight: 1.7,
+            }}
+          >
+            Chameleon builds AI-ready, GEO-optimised websites and ecommerce stores
+            that adapt to the new era of search — so your business stays visible
+            wherever customers are looking.
           </p>
 
-          <div className={styles.heroCtas}>
-            <Link href="/services" className="btn btn-primary btn-lg" id="hero-cta-services">
-              Explore Our Services
+          {/* CTAs */}
+          <div
+            className="m-animate-fade-up m-animate-delay-3"
+            style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}
+          >
+            <Link
+              href="/contact"
+              className="m-btn m-btn-primary m-btn-lg"
+              id="hero-cta-get-started"
+            >
+              Get Started
               <ArrowRight size={18} />
             </Link>
-            <Link href="/contact" className="btn btn-outline btn-lg" id="hero-cta-contact">
-              Book a Discovery Call
+            <Link
+              href="/templates"
+              className="m-btn m-btn-ghost m-btn-lg"
+              id="hero-cta-templates"
+            >
+              View Templates
             </Link>
           </div>
 
-          <div className={styles.heroTrust}>
-            <CheckCircle size={14} className={styles.trustIcon} />
-            <span>No long-term contracts. No jargon. Just results.</span>
-          </div>
-        </div>
-
-        <div className={styles.heroLogoFloat}>
-          <Image
-            src="/logo.png"
-            alt="Chameleon Solutions"
-            width={220}
-            height={220}
-            className={styles.floatingLogo}
-            priority
-          />
+          {/* Trust line */}
+          <p
+            className="m-animate-fade-up m-animate-delay-4"
+            style={{ marginTop: '24px', fontSize: '0.8rem', color: 'var(--m-text-faint)' }}
+          >
+            South Africa-first platform. No lock-in. Cancel anytime.
+          </p>
         </div>
       </section>
 
-      {/* Services Section */}
-      <section className="section" id="services">
-        <div className="container">
-          <div className={styles.sectionHeader}>
-            <span className="badge badge-navy">What We Do</span>
-            <div className="divider-teal" />
-            <h2 className={styles.sectionTitle}>
-              Intelligence built around your business
-            </h2>
-            <p className={styles.sectionSubtitle}>
-              We don&apos;t believe in one-size-fits-all. Every solution we build is designed around your specific 
-              processes, team, and growth goals.
-            </p>
-          </div>
-
-          <div className={styles.servicesGrid}>
-            {services.map((service) => (
-              <Link
-                key={service.id}
-                href={`/services#${service.id}`}
-                className={styles.serviceCard}
-                id={`service-card-${service.id}`}
+      {/* ── Feature Pillars ───────────────────────────────────────────────── */}
+      <section className="m-section-sm" id="features">
+        <div className="m-container">
+          <div className="m-grid-4">
+            {features.map((f) => (
+              <div
+                key={f.id}
+                className="m-card"
+                id={`feature-${f.id}`}
+                style={{ padding: '28px 24px' }}
               >
-                <div className={styles.serviceIcon}>
-                  <service.icon size={22} />
+                <div
+                  style={{
+                    width: '44px',
+                    height: '44px',
+                    borderRadius: '10px',
+                    background: 'rgba(59,130,246,0.1)',
+                    border: '1px solid rgba(59,130,246,0.2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '16px',
+                    color: '#60a5fa',
+                  }}
+                >
+                  <f.icon size={20} />
                 </div>
-                <h3 className={styles.serviceTitle}>{service.title}</h3>
-                <p className={styles.serviceDesc}>{service.desc}</p>
-                <span className={styles.serviceArrow}>
-                  Learn more <ChevronRight size={14} />
-                </span>
-              </Link>
-            ))}
-          </div>
-
-          <div className={styles.servicesCta}>
-            <Link href="/services" className="btn btn-primary" id="services-view-all">
-              View All Services
-              <ArrowRight size={16} />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* How We Work */}
-      <section className={`section section-dark ${styles.howSection}`}>
-        <div className={styles.howBg} />
-        <div className="container">
-          <div className={styles.sectionHeader}>
-            <span className="badge badge-teal">Our Process</span>
-            <div className="divider-teal" />
-            <h2 className={`${styles.sectionTitle} text-white`}>
-              Simple process. Lasting impact.
-            </h2>
-            <p className={`${styles.sectionSubtitle} text-muted`}>
-              From first conversation to live system, we keep things transparent, 
-              collaborative, and focused on your outcomes.
-            </p>
-          </div>
-
-          <div className={styles.stepsGrid}>
-            {steps.map((step, idx) => (
-              <div key={step.step} className={styles.stepCard}>
-                <div className={styles.stepNumber}>{step.step}</div>
-                {idx < steps.length - 1 && <div className={styles.stepConnector} />}
-                <h3 className={styles.stepTitle}>{step.title}</h3>
-                <p className={styles.stepDesc}>{step.desc}</p>
+                <h3
+                  style={{
+                    fontFamily: 'var(--m-font-display)',
+                    fontSize: '1rem',
+                    fontWeight: 700,
+                    color: 'var(--m-text)',
+                    margin: '0 0 8px',
+                  }}
+                >
+                  {f.title}
+                </h3>
+                <p
+                  style={{
+                    fontSize: '0.85rem',
+                    color: 'var(--m-text-muted)',
+                    margin: 0,
+                    lineHeight: 1.6,
+                  }}
+                >
+                  {f.desc}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Articles Section */}
-      {latestArticles.length > 0 && (
-        <section className="section" id="articles">
-          <div className="container">
-            <div className={styles.sectionHeader}>
-              <span className="badge badge-navy">Knowledge Hub</span>
-              <div className="divider-teal" />
-              <h2 className={styles.sectionTitle}>
-                Insights to help your business grow
-              </h2>
-              <p className={styles.sectionSubtitle}>
-                Practical guides, case studies, and explainers on AI and process transformation for SMEs.
-              </p>
-            </div>
-
-            <div className="grid-3">
-              {latestArticles.map((article) => (
-                <Link
-                  key={article.slug}
-                  href={`/articles/${article.slug}`}
-                  className={styles.articleCard}
-                  id={`home-article-${article.slug}`}
-                >
-                  <div className={styles.articleMeta}>
-                    <span className="badge badge-teal">{article.category}</span>
-                    <span className={styles.articleReadTime}>{article.readTime} min read</span>
-                  </div>
-                  <h3 className={styles.articleTitle}>{article.title}</h3>
-                  <p className={styles.articleDesc}>{article.description}</p>
-                  <span className={styles.articleLink}>
-                    Read article <ChevronRight size={14} />
-                  </span>
-                </Link>
-              ))}
-            </div>
-
-            <div className={styles.servicesCta}>
-              <Link href="/articles" className="btn btn-outline" id="articles-view-all">
-                Browse All Articles
-                <ArrowRight size={16} />
-              </Link>
-            </div>
+      {/* ── Why Now? AI & SEO Explained ───────────────────────────────────── */}
+      <section className="m-section" id="why-now">
+        <div className="m-container">
+          <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto 64px' }}>
+            <span className="m-label">Why this matters</span>
+            <div className="m-divider" style={{ margin: '16px auto' }} />
+            <h2
+              style={{
+                fontFamily: 'var(--m-font-display)',
+                fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
+                fontWeight: 700,
+                letterSpacing: '-0.02em',
+                color: 'var(--m-text)',
+                margin: '0 0 16px',
+              }}
+            >
+              Legacy platforms{' '}
+              <span className="m-gradient-text">can&apos;t keep up.</span>
+            </h2>
+            <p style={{ fontSize: '1rem', color: 'var(--m-text-muted)', lineHeight: 1.7, margin: 0 }}>
+              AI-powered search has fundamentally changed how customers find businesses.
+              Shopify, Wix, and WordPress weren&apos;t designed for this. Updating them for GEO
+              is expensive, slow, and often impossible without breaking everything else.
+              Chameleon was built for this moment.
+            </p>
           </div>
-        </section>
-      )}
 
-      {/* Chameleon Philosophy */}
-      <section className={`section ${styles.philosophySection}`}>
-        <div className="container">
-          <div className={styles.philosophyInner}>
-            <div className={styles.philosophyText}>
-              <span className="badge badge-teal">Why Chameleon?</span>
-              <div className="divider-teal" />
-              <h2 className={styles.sectionTitle} style={{ color: '#ffffff' }}>
-                Adapt. Transform. Thrive.
-              </h2>
-              <p className={styles.philosophyDesc}>
-                A chameleon doesn&apos;t change what it is; it adapts to its environment while remaining perfectly 
-                itself. That&apos;s our philosophy for AI adoption: we integrate intelligence seamlessly into 
-                your existing world, without disruption, without friction.
-              </p>
-              <p className={styles.philosophyDesc}>
-                Just like a chameleon&apos;s eyes can see in multiple directions simultaneously, our AI solutions 
-                analyse your processes from every angle, finding efficiencies you never knew existed.
-              </p>
-              <Link href="/about" className="btn btn-primary" id="philosophy-about-link">
-                Our Story
-                <ArrowRight size={16} />
-              </Link>
-            </div>
-            <div className={styles.philosophyLogo}>
-              <div className={styles.philosophyGlow} />
-              <Image
-                src="/logo.png"
-                alt="Chameleon Solutions"
-                width={300}
-                height={300}
-                className={styles.philosophyImg}
-              />
-            </div>
+          <div className="m-grid-2" style={{ gap: '16px' }}>
+            {whyNowPoints.map((point) => (
+              <div
+                key={point.stat}
+                style={{
+                  display: 'flex',
+                  gap: '20px',
+                  padding: '24px',
+                  borderRadius: '12px',
+                  border: '1px solid rgba(255,255,255,0.06)',
+                  background: 'rgba(255,255,255,0.02)',
+                }}
+              >
+                <div
+                  style={{
+                    flexShrink: 0,
+                    width: '48px',
+                    height: '48px',
+                    borderRadius: '10px',
+                    background: 'rgba(59,130,246,0.08)',
+                    border: '1px solid rgba(59,130,246,0.15)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#60a5fa',
+                  }}
+                >
+                  <point.icon size={22} />
+                </div>
+                <div>
+                  <div
+                    style={{
+                      fontFamily: 'var(--m-font-display)',
+                      fontSize: '1.6rem',
+                      fontWeight: 700,
+                      color: '#60a5fa',
+                      lineHeight: 1.1,
+                      marginBottom: '4px',
+                    }}
+                  >
+                    {point.stat}
+                  </div>
+                  <div style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--m-text)', marginBottom: '4px' }}>
+                    {point.label}
+                  </div>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--m-text-muted)', lineHeight: 1.5 }}>
+                    {point.desc}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── How It Works ─────────────────────────────────────────────────── */}
+      <section
+        className="m-section"
+        id="how-it-works"
+        style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}
+      >
+        <div className="m-container">
+          <div style={{ textAlign: 'center', maxWidth: '580px', margin: '0 auto 64px' }}>
+            <span className="m-label">How it works</span>
+            <div className="m-divider" style={{ margin: '16px auto' }} />
+            <h2
+              style={{
+                fontFamily: 'var(--m-font-display)',
+                fontSize: 'clamp(1.8rem, 4vw, 2.5rem)',
+                fontWeight: 700,
+                letterSpacing: '-0.02em',
+                color: 'var(--m-text)',
+                margin: '0 0 16px',
+              }}
+            >
+              From zero to live in a day.
+            </h2>
+            <p style={{ fontSize: '0.95rem', color: 'var(--m-text-muted)', lineHeight: 1.7, margin: 0 }}>
+              No developers. No agencies. No 6-month projects.
+            </p>
+          </div>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: '0',
+              position: 'relative',
+            }}
+          >
+            {/* Connector lines */}
+            <div
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                top: '32px',
+                left: 'calc(33.333% - 1px)',
+                right: 'calc(33.333% - 1px)',
+                height: '1px',
+                background: 'linear-gradient(90deg, rgba(59,130,246,0.4), rgba(59,130,246,0.4))',
+                pointerEvents: 'none',
+              }}
+            />
+
+            {howItWorksSteps.map((step, idx) => (
+              <div
+                key={step.step}
+                id={`step-${idx + 1}`}
+                style={{ padding: '0 32px 0', textAlign: 'center', position: 'relative' }}
+              >
+                {/* Step number circle */}
+                <div
+                  style={{
+                    width: '64px',
+                    height: '64px',
+                    borderRadius: '50%',
+                    border: '1px solid rgba(59,130,246,0.4)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    margin: '0 auto 24px',
+                    fontFamily: 'var(--m-font-display)',
+                    fontSize: '1.2rem',
+                    fontWeight: 700,
+                    color: '#60a5fa',
+                    position: 'relative',
+                    zIndex: 1,
+                    background: 'var(--m-bg)',
+                  }}
+                >
+                  {step.step}
+                </div>
+                <h3
+                  style={{
+                    fontFamily: 'var(--m-font-display)',
+                    fontSize: '1.1rem',
+                    fontWeight: 700,
+                    color: 'var(--m-text)',
+                    margin: '0 0 10px',
+                  }}
+                >
+                  {step.title}
+                </h3>
+                <p style={{ fontSize: '0.875rem', color: 'var(--m-text-muted)', lineHeight: 1.6, margin: 0 }}>
+                  {step.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Template Gallery ──────────────────────────────────────────────── */}
+      <section
+        className="m-section"
+        id="templates"
+        style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}
+      >
+        <div className="m-container">
+          <div style={{ textAlign: 'center', maxWidth: '560px', margin: '0 auto 56px' }}>
+            <span className="m-label">Templates</span>
+            <div className="m-divider" style={{ margin: '16px auto' }} />
+            <h2
+              style={{
+                fontFamily: 'var(--m-font-display)',
+                fontSize: 'clamp(1.8rem, 4vw, 2.5rem)',
+                fontWeight: 700,
+                letterSpacing: '-0.02em',
+                color: 'var(--m-text)',
+                margin: '0 0 16px',
+              }}
+            >
+              Every store, perfectly crafted.
+            </h2>
+            <p style={{ fontSize: '0.95rem', color: 'var(--m-text-muted)', lineHeight: 1.7, margin: 0 }}>
+              Each template is AI-ready from day one — not retrofitted. Pick one,
+              brand it to your business, and launch.
+            </p>
+          </div>
+
+          <div className="m-grid-2" style={{ gap: '24px' }}>
+            {templates.map((template) => (
+              <div
+                key={template.id}
+                className="m-card"
+                id={`template-card-${template.id}`}
+                style={{ overflow: 'hidden' }}
+              >
+                {/* Preview area */}
+                <div
+                  style={{
+                    height: '220px',
+                    background: template.gradient,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderBottom: '1px solid rgba(255,255,255,0.06)',
+                    fontSize: '2rem',
+                    fontFamily: 'var(--m-font-display)',
+                    fontWeight: 700,
+                    color: 'rgba(255,255,255,0.15)',
+                    letterSpacing: '-0.02em',
+                  }}
+                >
+                  {template.name}
+                </div>
+
+                {/* Info */}
+                <div style={{ padding: '24px' }}>
+                  <h3
+                    style={{
+                      fontFamily: 'var(--m-font-display)',
+                      fontSize: '1.2rem',
+                      fontWeight: 700,
+                      color: 'var(--m-text)',
+                      margin: '0 0 6px',
+                    }}
+                  >
+                    {template.name}
+                  </h3>
+                  <p style={{ fontSize: '0.875rem', color: 'var(--m-text-muted)', margin: '0 0 16px' }}>
+                    {template.tagline}
+                  </p>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '20px' }}>
+                    {template.features.map((f) => (
+                      <span
+                        key={f}
+                        style={{
+                          fontSize: '0.7rem',
+                          fontWeight: 600,
+                          padding: '3px 10px',
+                          borderRadius: '999px',
+                          background: 'rgba(255,255,255,0.06)',
+                          border: '1px solid rgba(255,255,255,0.08)',
+                          color: 'var(--m-text-muted)',
+                        }}
+                      >
+                        {f}
+                      </span>
+                    ))}
+                  </div>
+                  <a
+                    href={template.demoHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="m-btn m-btn-ghost"
+                    style={{ width: '100%', justifyContent: 'center' }}
+                    id={`template-demo-${template.id}`}
+                  >
+                    View Live Demo
+                    <ArrowRight size={15} />
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ textAlign: 'center', marginTop: '32px' }}>
+            <Link href="/templates" className="m-btn m-btn-ghost" id="home-view-all-templates">
+              Browse all templates
+              <ArrowRight size={15} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Pricing Teaser ────────────────────────────────────────────────── */}
+      <section
+        className="m-section"
+        id="pricing-teaser"
+        style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}
+      >
+        <div className="m-container" style={{ textAlign: 'center' }}>
+          <span className="m-label">Pricing</span>
+          <div className="m-divider" style={{ margin: '16px auto' }} />
+          <h2
+            style={{
+              fontFamily: 'var(--m-font-display)',
+              fontSize: 'clamp(1.8rem, 4vw, 2.5rem)',
+              fontWeight: 700,
+              letterSpacing: '-0.02em',
+              color: 'var(--m-text)',
+              margin: '0 0 16px',
+            }}
+          >
+            Simple, transparent pricing.
+          </h2>
+          <p
+            style={{
+              fontSize: '0.95rem',
+              color: 'var(--m-text-muted)',
+              maxWidth: '480px',
+              margin: '0 auto 40px',
+              lineHeight: 1.7,
+            }}
+          >
+            Three tiers to match where your business is today.
+            Start small, scale as you grow. No hidden fees.
+          </p>
+
+          <div
+            style={{
+              display: 'flex',
+              gap: '16px',
+              justifyContent: 'center',
+              flexWrap: 'wrap',
+              marginBottom: '32px',
+            }}
+          >
+            {[
+              { name: 'Starter', price: 'R1,199', desc: '1 store' },
+              { name: 'Growth', price: 'R3,499', desc: 'Up to 5 stores', popular: true },
+              { name: 'Agency', price: 'Custom', desc: 'Unlimited stores' },
+            ].map((tier) => (
+              <div
+                key={tier.name}
+                style={{
+                  padding: '24px 32px',
+                  borderRadius: '12px',
+                  border: tier.popular
+                    ? '1px solid rgba(59,130,246,0.4)'
+                    : '1px solid rgba(255,255,255,0.08)',
+                  background: tier.popular ? 'rgba(59,130,246,0.06)' : 'rgba(255,255,255,0.03)',
+                  minWidth: '180px',
+                  textAlign: 'center',
+                  backdropFilter: 'blur(8px)',
+                }}
+              >
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: tier.popular ? '#60a5fa' : 'var(--m-text-muted)', marginBottom: '8px' }}>
+                  {tier.name}
+                </div>
+                <div style={{ fontSize: '1.6rem', fontWeight: 700, color: 'var(--m-text)', marginBottom: '4px' }}>
+                  {tier.price}
+                  {tier.price !== 'Custom' && <span style={{ fontSize: '0.85rem', fontWeight: 400, color: 'var(--m-text-muted)' }}>/mo</span>}
+                </div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--m-text-muted)' }}>{tier.desc}</div>
+              </div>
+            ))}
+          </div>
+
+          <Link href="/pricing" className="m-btn m-btn-primary m-btn-lg" id="home-see-pricing">
+            See full pricing
+            <ArrowRight size={18} />
+          </Link>
+        </div>
+      </section>
+
+      {/* ── Final CTA ─────────────────────────────────────────────────────── */}
+      <section className="m-section" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div
+          className="m-container-sm"
+          style={{
+            textAlign: 'center',
+            padding: '64px 24px',
+            borderRadius: '20px',
+            background: 'linear-gradient(135deg, rgba(59,130,246,0.1) 0%, rgba(129,140,248,0.06) 100%)',
+            border: '1px solid rgba(59,130,246,0.2)',
+            position: 'relative',
+            overflow: 'hidden',
+          }}
+        >
+          {/* Glow */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '500px',
+              height: '300px',
+              borderRadius: '50%',
+              background: 'radial-gradient(ellipse, rgba(59,130,246,0.15) 0%, transparent 70%)',
+              pointerEvents: 'none',
+            }}
+          />
+          <div style={{ position: 'relative' }}>
+            <h2
+              style={{
+                fontFamily: 'var(--m-font-display)',
+                fontSize: 'clamp(1.8rem, 4vw, 2.5rem)',
+                fontWeight: 700,
+                letterSpacing: '-0.02em',
+                color: 'var(--m-text)',
+                margin: '0 0 16px',
+              }}
+            >
+              Ready to adapt?
+            </h2>
+            <p
+              style={{
+                fontSize: '1rem',
+                color: 'var(--m-text-muted)',
+                maxWidth: '400px',
+                margin: '0 auto 32px',
+                lineHeight: 1.7,
+              }}
+            >
+              Join South African businesses already using Chameleon to stay visible
+              in the AI era.
+            </p>
+            <Link href="/contact" className="m-btn m-btn-primary m-btn-lg" id="final-cta-get-started">
+              Get Started
+              <ArrowRight size={18} />
+            </Link>
           </div>
         </div>
       </section>
     </>
-  )
+  );
 }

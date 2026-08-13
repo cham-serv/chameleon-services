@@ -1,0 +1,324 @@
+/* ============================================================
+   Chameleon Marketing Site — Design System
+   chameleon.services — Premium dark navy / electric blue theme
+   ============================================================ */
+
+/* ── Fonts ─────────────────────────────────────────────────── */
+/* Loaded via next/font in layout.tsx — variables injected here */
+
+/* ── Design Tokens ─────────────────────────────────────────── */
+:root {
+  /* Color palette */
+  --m-bg:             #0d1117;
+  --m-bg-elevated:    #161b22;
+  --m-bg-card:        rgba(22, 27, 34, 0.8);
+  --m-bg-glass:       rgba(255, 255, 255, 0.04);
+  --m-border:         rgba(255, 255, 255, 0.08);
+  --m-border-strong:  rgba(255, 255, 255, 0.15);
+
+  /* Text */
+  --m-text:           #f0f6fc;
+  --m-text-muted:     #8b949e;
+  --m-text-faint:     #484f58;
+
+  /* Accent — electric blue */
+  --m-accent:         #3b82f6;
+  --m-accent-light:   #60a5fa;
+  --m-accent-dark:    #2563eb;
+  --m-accent-glow:    rgba(59, 130, 246, 0.25);
+  --m-accent-glow-lg: rgba(59, 130, 246, 0.12);
+
+  /* Semantic */
+  --m-success:        #22c55e;
+  --m-warning:        #f59e0b;
+  --m-error:          #ef4444;
+
+  /* Typography */
+  --m-font-display:   var(--font-syne), 'Syne', system-ui, sans-serif;
+  --m-font-body:      var(--font-inter), 'Inter', system-ui, sans-serif;
+
+  /* Spacing */
+  --m-section-py:     96px;
+  --m-section-py-sm:  64px;
+  --m-container:      1200px;
+  --m-container-sm:   800px;
+
+  /* Borders */
+  --m-radius-sm:      6px;
+  --m-radius:         10px;
+  --m-radius-lg:      16px;
+  --m-radius-xl:      24px;
+
+  /* Shadows */
+  --m-shadow-glow:    0 0 40px var(--m-accent-glow);
+  --m-shadow-card:    0 1px 0 var(--m-border), 0 4px 24px rgba(0,0,0,0.3);
+  --m-shadow-btn:     0 4px 16px rgba(59, 130, 246, 0.35);
+}
+
+/* ── Reset & Base ────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+.marketing-root {
+  background-color: var(--m-bg);
+  color: var(--m-text);
+  font-family: var(--m-font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* ── Container ───────────────────────────────────────────────── */
+.m-container {
+  width: 100%;
+  max-width: var(--m-container);
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+.m-container-sm {
+  width: 100%;
+  max-width: var(--m-container-sm);
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+/* ── Section ─────────────────────────────────────────────────── */
+.m-section {
+  padding-block: var(--m-section-py);
+}
+
+.m-section-sm {
+  padding-block: var(--m-section-py-sm);
+}
+
+/* ── Buttons ─────────────────────────────────────────────────── */
+.m-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 24px;
+  border-radius: var(--m-radius-sm);
+  font-family: var(--m-font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.m-btn-primary {
+  background: var(--m-accent);
+  color: #fff;
+  box-shadow: var(--m-shadow-btn);
+}
+.m-btn-primary:hover {
+  background: var(--m-accent-light);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.45);
+}
+
+.m-btn-ghost {
+  background: transparent;
+  color: var(--m-text);
+  border: 1px solid var(--m-border-strong);
+}
+.m-btn-ghost:hover {
+  border-color: var(--m-accent);
+  color: var(--m-accent-light);
+  background: var(--m-accent-glow);
+}
+
+.m-btn-lg {
+  padding: 13px 32px;
+  font-size: 1rem;
+}
+
+/* ── Badge ───────────────────────────────────────────────────── */
+.m-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--m-accent-light);
+}
+
+/* ── Section label ───────────────────────────────────────────── */
+.m-label {
+  font-family: var(--m-font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--m-accent-light);
+}
+
+/* ── Glass card ──────────────────────────────────────────────── */
+.m-card {
+  background: var(--m-bg-glass);
+  border: 1px solid var(--m-border);
+  border-radius: var(--m-radius-lg);
+  backdrop-filter: blur(12px);
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.m-card:hover {
+  border-color: rgba(59, 130, 246, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(59, 130, 246, 0.1);
+}
+
+/* ── Gradient text ───────────────────────────────────────────── */
+.m-gradient-text {
+  background: linear-gradient(135deg, var(--m-accent-light) 0%, #818cf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Divider ─────────────────────────────────────────────────── */
+.m-divider {
+  width: 40px;
+  height: 2px;
+  background: var(--m-accent);
+  border-radius: 2px;
+  margin-block: 16px;
+}
+
+/* ── Grid layouts ────────────────────────────────────────────── */
+.m-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.m-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.m-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* ── Template card ───────────────────────────────────────────── */
+.m-template-card {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+}
+@media (max-width: 768px) {
+  .m-template-card { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 1024px) {
+  .m-grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .m-grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .m-desktop-nav { display: none !important; }
+  .m-desktop-cta { display: none !important; }
+  .m-mobile-toggle { display: flex !important; }
+}
+@media (min-width: 769px) {
+  .m-mobile-toggle { display: none !important; }
+}
+
+@media (max-width: 640px) {
+  .m-grid-4,
+  .m-grid-3,
+  .m-grid-2 { grid-template-columns: 1fr; }
+  :root {
+    --m-section-py: 64px;
+    --m-section-py-sm: 48px;
+  }
+}
+
+/* ── Skip link ───────────────────────────────────────────────── */
+.m-skip-link {
+  position: absolute;
+  top: -40px;
+  left: 16px;
+  padding: 8px 16px;
+  background: var(--m-accent);
+  color: #fff;
+  border-radius: var(--m-radius-sm);
+  font-weight: 600;
+  text-decoration: none;
+  z-index: 9999;
+  transition: top 0.2s;
+}
+.m-skip-link:focus { top: 16px; }
+
+/* ── Form elements ───────────────────────────────────────────── */
+.m-input,
+.m-textarea,
+.m-select {
+  width: 100%;
+  padding: 11px 16px;
+  background: var(--m-bg-glass);
+  border: 1px solid var(--m-border);
+  border-radius: var(--m-radius-sm);
+  color: var(--m-text);
+  font-family: var(--m-font-body);
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+  backdrop-filter: blur(8px);
+}
+.m-input::placeholder,
+.m-textarea::placeholder {
+  color: var(--m-text-faint);
+}
+.m-input:focus,
+.m-textarea:focus,
+.m-select:focus {
+  border-color: var(--m-accent);
+  box-shadow: 0 0 0 3px var(--m-accent-glow);
+}
+.m-textarea { resize: vertical; min-height: 120px; }
+
+.m-label-text {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--m-text-muted);
+  margin-bottom: 6px;
+}
+
+.m-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ── Animations ──────────────────────────────────────────────── */
+@keyframes m-fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes m-glow-pulse {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1; }
+}
+
+.m-animate-fade-up {
+  animation: m-fade-up 0.6s ease both;
+}
+.m-animate-delay-1 { animation-delay: 0.1s; }
+.m-animate-delay-2 { animation-delay: 0.2s; }
+.m-animate-delay-3 { animation-delay: 0.3s; }
+.m-animate-delay-4 { animation-delay: 0.4s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .m-animate-fade-up { animation: none; }
+}
