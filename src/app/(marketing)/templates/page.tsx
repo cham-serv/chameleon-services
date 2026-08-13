@@ -115,11 +115,9 @@ export default function TemplatesPage() {
             {templates.map((template) => (
               <div
                 key={template.id}
-                className="m-card"
+                className="m-card m-template-card"
                 id={`template-${template.id}`}
                 style={{
-                  display: 'grid',
-                  gridTemplateColumns: '320px 1fr',
                   overflow: 'hidden',
                   opacity: template.status === 'coming-soon' ? 0.6 : 1,
                 }}

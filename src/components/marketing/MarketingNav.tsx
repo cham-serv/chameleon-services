@@ -68,7 +68,7 @@ export function MarketingNav() {
         </Link>
 
         {/* Desktop Nav */}
-        <nav aria-label="Main navigation" style={{ display: 'flex', gap: '4px' }}>
+        <nav className="m-desktop-nav" aria-label="Main navigation" style={{ display: 'flex', gap: '4px' }}>
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -94,19 +94,11 @@ export function MarketingNav() {
           ))}
         </nav>
 
-        {/* CTA */}
+        {/* CTA + Mobile toggle */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <Link
             href="/contact"
-            className="m-btn m-btn-primary"
-            id="navbar-cta-get-started"
-            style={{ display: 'none' }}
-          >
-            Get Started
-          </Link>
-          <Link
-            href="/contact"
-            className="m-btn m-btn-primary"
+            className="m-btn m-btn-primary m-desktop-cta"
             id="navbar-cta-desktop"
           >
             Get Started
@@ -118,8 +110,8 @@ export function MarketingNav() {
             aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={mobileOpen}
             id="mobile-menu-toggle"
+            className="m-mobile-toggle"
             style={{
-              display: 'none',
               padding: '8px',
               background: 'transparent',
               border: '1px solid rgba(255,255,255,0.12)',

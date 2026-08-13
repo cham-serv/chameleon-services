@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { PricingCards } from '@/components/marketing/PricingToggle';
-import { Check } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Pricing — Simple, Transparent Plans',
