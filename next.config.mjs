@@ -3,6 +3,16 @@ import createMDX from '@next/mdx'
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
+  images: {
+    remotePatterns: [
+      // Cloudflare R2 public bucket (production media storage)
+      { protocol: 'https', hostname: '*.r2.dev' },
+      // Railway engine (serves media directly in some configurations)
+      { protocol: 'https', hostname: '*.up.railway.app' },
+      // Local development (Payload serves media from localhost)
+      { protocol: 'http', hostname: 'localhost' },
+    ],
+  },
 }
 
 const withMDX = createMDX({
