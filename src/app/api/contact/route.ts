@@ -8,8 +8,6 @@
 import { Resend } from 'resend';
 import { NextRequest, NextResponse } from 'next/server';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 const CONTACT_EMAIL = 'chris@chameleon.services';
 const FROM_EMAIL = 'noreply@chameleon.services';
 
@@ -59,6 +57,8 @@ export async function POST(req: NextRequest) {
       console.log('[Contact Form] Would send email:', { name, email, company, message });
       return NextResponse.json({ success: true });
     }
+
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
     await resend.emails.send({
       from: FROM_EMAIL,
