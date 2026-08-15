@@ -269,7 +269,8 @@ export async function getServiceBySlug(tenant: string, slug: string): Promise<Se
 export type FAQ = {
   id: number;
   question: string;
-  answer: unknown; // Lexical JSON rich text
+  answer: string; // plain text or Lexical JSON
+  category?: string;
   linkedTopic?: { id: number; name: string; slug: string } | number | null;
   order?: number;
   published: boolean;
@@ -291,9 +292,11 @@ export async function getFaqs(tenant: string, category?: string): Promise<Pagina
 
 export type LegalDocs = {
   id: number;
-  termsOfService?: unknown; // Lexical JSON
   privacyPolicy?: unknown; // Lexical JSON
+  termsAndConditions?: unknown; // Lexical JSON
+  termsOfService?: unknown; // Lexical JSON (legacy alias)
   refundPolicy?: unknown; // Lexical JSON
+  shippingPolicy?: unknown; // Lexical JSON
   cookiePolicy?: unknown; // Lexical JSON
   lastReviewedAt?: string;
   termsEffectiveDate?: string;
@@ -334,8 +337,10 @@ export type Topic = {
   id: number;
   name: string;
   slug: string;
-  description?: string;
   type: string;
+  description?: string;
+  icon?: string;
+  articleCount?: number;
   order?: number;
 };
 
