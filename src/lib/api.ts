@@ -188,13 +188,17 @@ export type Article = {
   id: number;
   title: string;
   slug: string;
+  section?: 'resources' | 'blog' | 'news';
   excerpt?: string;
-  content?: unknown; // Lexical JSON — only on single article
+  content?: unknown; // Lexical blocks array — only on single article
   heroImage?: MediaItem | number | null;
   topic?: { id: number; name: string; slug: string } | number | null;
   author?: string;
   featured?: boolean;
   readTime?: number;
+  contentStyle?: 'guide' | 'explainer' | 'concept';
+  aiSummary?: string;
+  primaryEntity?: string;
   publishedAt?: string;
   createdAt: string;
   updatedAt: string;
@@ -203,6 +207,7 @@ export type Article = {
 type GetArticlesParams = {
   tenant: string;
   topic?: string;
+  section?: string;
   featured?: boolean;
   limit?: number;
   page?: number;
@@ -211,6 +216,7 @@ type GetArticlesParams = {
 export async function getArticles(params: GetArticlesParams): Promise<PaginatedResponse<Article> | null> {
   const queryParams: Record<string, string> = { tenant: params.tenant };
   if (params.topic) queryParams.topic = params.topic;
+  if (params.section) queryParams.section = params.section;
   if (params.featured) queryParams.featured = 'true';
   if (params.limit) queryParams.limit = String(params.limit);
   if (params.page) queryParams.page = String(params.page);
@@ -263,8 +269,7 @@ export async function getServiceBySlug(tenant: string, slug: string): Promise<Se
 export type FAQ = {
   id: number;
   question: string;
-  answer: string; // or Lexical JSON
-  category?: string;
+  answer: unknown; // Lexical JSON rich text
   linkedTopic?: { id: number; name: string; slug: string } | number | null;
   order?: number;
   published: boolean;
@@ -286,11 +291,13 @@ export async function getFaqs(tenant: string, category?: string): Promise<Pagina
 
 export type LegalDocs = {
   id: number;
+  termsOfService?: unknown; // Lexical JSON
   privacyPolicy?: unknown; // Lexical JSON
-  termsAndConditions?: unknown; // Lexical JSON
   refundPolicy?: unknown; // Lexical JSON
-  shippingPolicy?: unknown; // Lexical JSON
   cookiePolicy?: unknown; // Lexical JSON
+  lastReviewedAt?: string;
+  termsEffectiveDate?: string;
+  privacyEffectiveDate?: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -327,7 +334,9 @@ export type Topic = {
   id: number;
   name: string;
   slug: string;
+  description?: string;
   type: string;
+  order?: number;
 };
 
 export async function getTopics(tenant: string): Promise<PaginatedResponse<Topic> | null> {
