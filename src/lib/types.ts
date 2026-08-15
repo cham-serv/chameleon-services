@@ -48,6 +48,10 @@ export type SiteSettings = {
   fontHeading?: string;
   fontBody?: string;
   logo?: { url: string } | null;
+  currency?: string;
+  paymentGateway?: string;
+  flatShippingRate?: number;
+  freeShippingThreshold?: number;
   socialLinks?: {
     facebook?: string;
     instagram?: string;
