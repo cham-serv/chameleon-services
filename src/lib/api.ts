@@ -336,7 +336,13 @@ export type Topic = {
   slug: string;
   description?: string;
   type: string;
+<<<<<<< Updated upstream
   order?: number;
+=======
+  description?: string;
+  icon?: string;
+  articleCount?: number;
+>>>>>>> Stashed changes
 };
 
 export async function getTopics(tenant: string): Promise<PaginatedResponse<Topic> | null> {
