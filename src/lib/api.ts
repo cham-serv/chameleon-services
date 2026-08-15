@@ -88,7 +88,51 @@ export type Product = {
   stockLevel?: number | null;
   trackInventory?: boolean;
   weight?: number | null;
-  // Intelligence tab fields (only on single product)
+  highlights?: Array<{ highlight: string }>;
+
+  // Tab 2: Pricing
+  quantityDiscounts?: Array<{
+    minQty: number;
+    discountType: 'percentage' | 'fixed';
+    discountValue: number;
+  }>;
+  isSubscription?: boolean;
+  subscriptionInterval?: 'weekly' | 'monthly' | 'quarterly' | 'annually';
+  subscriptionPrice?: number | null;
+
+  // Tab 3: Inventory
+  gtin?: string;
+  condition?: 'new' | 'refurbished' | 'used' | 'damaged';
+  availabilityStatus?: 'inStock' | 'outOfStock' | 'preOrder' | 'backOrder' | 'discontinued';
+  availableFrom?: string;
+  availableUntil?: string;
+  variants?: Array<{
+    label: string;
+    variantSku?: string;
+    color?: string;
+    size?: string;
+    priceModifier?: number;
+    variantStock?: number;
+  }>;
+  productType?: 'physical' | 'digital' | 'service';
+
+  // Tab 4: Shipping & Identity
+  brand?: string;
+  brandUrl?: string;
+  manufacturer?: string;
+  countryOfOrigin?: string;
+  material?: string;
+  color?: string;
+  weightUnit?: 'g' | 'kg' | 'ml' | 'l';
+  deliveryRegions?: Array<{ region: string }>;
+  deliveryMethod?: 'ship' | 'pickup' | 'both';
+  deliveryLeadTime?: string;
+  shippingCost?: number | null;
+  returnDays?: number | null;
+  returnMethod?: 'mail' | 'in-store' | 'both';
+  returnFees?: 'free' | 'buyer-pays';
+
+  // Tab 5: Intelligence
   aiSummary?: string;
   expertPros?: Array<{ point: string }>;
   expertCons?: Array<{ point: string }>;
@@ -98,6 +142,39 @@ export type Product = {
   idealFor?: string[];
   keyAttributes?: Array<{ attribute: string; value: string }>;
   voiceSearchPhrase?: string;
+  comparedTo?: Array<{
+    competitorProduct: string;
+    advantage: string;
+    disadvantage?: string;
+  }>;
+  worksWith?: Array<{ item: string }>;
+  isAccessoryFor?: string;
+  requiredAccessories?: Array<{ accessory: string }>;
+  relatedProducts?: Product[] | number[];
+  bundleProducts?: Product[] | number[];
+  certifications?: Array<{
+    certName: string;
+    issuedBy?: string;
+    certId?: string;
+    certUrl?: string;
+  }>;
+  awards?: Array<{ award: string }>;
+  featuredIn?: Array<{
+    publicationName: string;
+    articleUrl?: string;
+    featureDate?: string;
+  }>;
+  carbonFootprint?: string;
+  recyclable?: boolean;
+  sustainablySourced?: boolean;
+  madeLocally?: boolean;
+  demoVideo?: string;
+  demoVideoTitle?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  llmCitationPreference?: string;
+  geoScore?: number;
+
   createdAt: string;
   updatedAt: string;
 };
