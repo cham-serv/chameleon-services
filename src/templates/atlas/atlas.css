@@ -872,3 +872,16 @@
   white-space: nowrap;
   border-width: 0;
 }
+
+/* ── Product Detail Page ─────────────────────────────────────────────────── */
+
+@media (min-width: 768px) {
+  .atlas-pdp-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .atlas-pdp-below {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+

@@ -15,6 +15,7 @@
 
 import { notFound } from 'next/navigation';
 import { fetchTenantConfig, getTemplateDefinition, resolvePage } from '@/lib/tenant';
+import { getPageSEO, getProductBySlug, getArticleBySlug } from '@/lib/api';
 import type { Metadata } from 'next';
 
 type Props = {
@@ -23,17 +24,53 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { tenant } = await params;
+  const { tenant, slug = [] } = await params;
   const config = await fetchTenantConfig(tenant);
 
   const siteName = config?.settings?.siteName ?? config?.tenant?.name ?? 'Site';
 
+  // Default metadata
+  let title: string = siteName;
+  let description: string = config?.settings?.tagline ?? `Welcome to ${siteName}`;
+
+  try {
+    // Product detail pages: /shop/{slug}
+    if (slug.length === 2 && slug[0] === 'shop') {
+      const product = await getProductBySlug(tenant, slug[1]);
+      if (product) {
+        title = product.metaTitle || product.name;
+        description = product.metaDescription || product.aiSummary || product.shortDescription || description;
+      }
+    }
+    // Article detail pages: /resources/{topic}/{slug} or /resources/{slug}
+    else if (slug.length >= 2 && slug[0] === 'resources') {
+      const articleSlug = slug[slug.length - 1];
+      const article = await getArticleBySlug(tenant, articleSlug);
+      if (article) {
+        title = article.title;
+        description = article.excerpt || description;
+      }
+    }
+    // Static pages with PageSEO
+    else if (slug.length <= 1) {
+      const pageSlug = slug[0] || 'home';
+      const seo = await getPageSEO(tenant, pageSlug);
+      if (seo) {
+        if (seo.metaTitle) title = seo.metaTitle;
+        if (seo.metaDescription) description = seo.metaDescription;
+      }
+    }
+  } catch (e) {
+    // Silently fall back to defaults — metadata should never break rendering
+    console.warn('[generateMetadata] Error fetching page SEO:', e);
+  }
+
   return {
     title: {
-      default: siteName,
+      default: title,
       template: `%s | ${siteName}`,
     },
-    description: config?.settings?.tagline ?? `Welcome to ${siteName}`,
+    description,
   };
 }
 

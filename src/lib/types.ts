@@ -60,6 +60,11 @@ export type SiteSettings = {
     youtube?: string;
     tiktok?: string;
   };
+  // Commerce fields
+  currency?: string;
+  paymentGateway?: string;
+  flatShippingRate?: number;
+  freeShippingThreshold?: number;
 };
 
 // ── Page Component Props ────────────────────────────────────────────────────
