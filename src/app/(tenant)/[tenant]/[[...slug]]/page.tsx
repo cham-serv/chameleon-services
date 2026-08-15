@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       const article = await getArticleBySlug(tenant, articleSlug);
       if (article) {
         title = article.title;
-        description = article.excerpt || article.aiSummary || description;
+        description = article.excerpt || description;
       }
     }
     // Static pages with PageSEO

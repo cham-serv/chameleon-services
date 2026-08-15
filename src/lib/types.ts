@@ -54,7 +54,13 @@ export type SiteSettings = {
     twitter?: string;
     linkedin?: string;
     youtube?: string;
+    tiktok?: string;
   };
+  // Commerce fields
+  currency?: string;
+  paymentGateway?: string;
+  flatShippingRate?: number;
+  freeShippingThreshold?: number;
 };
 
 // ── Page Component Props ────────────────────────────────────────────────────

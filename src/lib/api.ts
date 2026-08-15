@@ -280,6 +280,7 @@ export type Article = {
 type GetArticlesParams = {
   tenant: string;
   topic?: string;
+  section?: string;
   featured?: boolean;
   limit?: number;
   page?: number;
@@ -288,6 +289,7 @@ type GetArticlesParams = {
 export async function getArticles(params: GetArticlesParams): Promise<PaginatedResponse<Article> | null> {
   const queryParams: Record<string, string> = { tenant: params.tenant };
   if (params.topic) queryParams.topic = params.topic;
+  if (params.section) queryParams.section = params.section;
   if (params.featured) queryParams.featured = 'true';
   if (params.limit) queryParams.limit = String(params.limit);
   if (params.page) queryParams.page = String(params.page);
