@@ -20,6 +20,10 @@ export default async function LegalPage({ config, searchParams }: PageProps) {
   const tenant = config.tenant.slug;
   const siteName = config.settings?.siteName ?? config.tenant.name;
   const siteUrl = `https://${tenant}.chameleon.services`;
+  const pc = config.pageConfig;
+
+  // Content from pageConfig with fallback
+  const headline = pc?.legalHeadline ?? 'Legal';
 
   const docs = await getLegalDocs(tenant);
 
@@ -48,7 +52,7 @@ export default async function LegalPage({ config, searchParams }: PageProps) {
       <Breadcrumbs items={breadcrumbs} baseUrl={siteUrl} />
 
       <h1 className="atlas-h1" style={{ marginTop: 'var(--atlas-spacing-lg)' }}>
-        Legal
+        {headline}
       </h1>
       <p className="atlas-body-lg" style={{ marginTop: 'var(--atlas-spacing-sm)', opacity: 0.7 }}>
         Important legal information for {siteName}.

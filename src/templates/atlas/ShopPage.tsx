@@ -28,6 +28,11 @@ export default async function ShopPage({ config, variant, searchParams }: PagePr
   const sort = resolveSort(searchParams.sort);
   const page = Number(resolveStr(searchParams.page) ?? '1');
   const isDense = variant === 'dense';
+  const pc = config.pageConfig;
+
+  // Content from pageConfig with fallbacks
+  const shopHeadline = pc?.shopHeadline ?? 'Shop';
+  const shopSubheadline = pc?.shopSubheadline ?? null;
 
   const [productsRes, categoriesRes] = await Promise.all([
     getProducts({
@@ -90,8 +95,13 @@ export default async function ShopPage({ config, variant, searchParams }: PagePr
         {/* Page Header */}
         <div className="atlas-shop-header">
           <h1 className="atlas-page-title">
-            {activeCategoryObj ? activeCategoryObj.name : 'Shop'}
+            {activeCategoryObj ? activeCategoryObj.name : shopHeadline}
           </h1>
+          {!activeCategoryObj && shopSubheadline && (
+            <p className="atlas-body-lg" style={{ marginTop: 'var(--atlas-spacing-xs)', opacity: 0.7, maxWidth: 600 }}>
+              {shopSubheadline}
+            </p>
+          )}
           <p className="atlas-shop-count">
             {totalDocs} product{totalDocs !== 1 ? 's' : ''}
           </p>

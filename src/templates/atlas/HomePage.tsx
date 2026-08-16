@@ -11,6 +11,16 @@ export default async function HomePage({ config, variant }: PageProps) {
   const tagline = config.settings?.tagline ?? '';
   const currency = config.settings?.currency ?? 'ZAR';
   const siteUrl = `https://${tenant}.chameleon.services`;
+  const pc = config.pageConfig;
+
+  // Hero content — prefer pageConfig, fall back to existing behaviour
+  const heroHeadline = pc?.homeHeroHeadline ?? (tagline || `Welcome to ${siteName}`);
+  const heroSubheadline = pc?.homeHeroSubheadline ?? 'Discover our curated collection of products — crafted with quality and delivered with care.';
+  const cta1Text = pc?.homeCta1Text ?? 'Shop Now';
+  const cta1Link = pc?.homeCta1Link ?? '/shop';
+  const cta2Text = pc?.homeCta2Text ?? 'Browse Resources';
+  const cta2Link = pc?.homeCta2Link ?? '/resources';
+  const heroImageUrl = pc?.homeHeroImage?.url ?? null;
 
   if (variant !== 'hero-static') {
     console.warn(
@@ -46,21 +56,28 @@ export default async function HomePage({ config, variant }: PageProps) {
       <JsonLd data={websiteSchema} />
 
       {/* Hero Section */}
-      <section className="atlas-hero">
+      <section
+        className="atlas-hero"
+        style={heroImageUrl ? {
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url(${heroImageUrl})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        } : undefined}
+      >
         <div className="atlas-hero-inner atlas-container">
           <p className="atlas-hero-eyebrow">{siteName}</p>
           <h1 className="atlas-hero-headline">
-            {tagline || `Welcome to ${siteName}`}
+            {heroHeadline}
           </h1>
           <p className="atlas-hero-sub">
-            Discover our curated collection of products -- crafted with quality and delivered with care.
+            {heroSubheadline}
           </p>
           <div className="atlas-hero-cta-row">
-            <Link href="/shop" className="atlas-btn atlas-btn-primary atlas-btn-lg">
-              Shop Now
+            <Link href={cta1Link} className="atlas-btn atlas-btn-primary atlas-btn-lg">
+              {cta1Text}
             </Link>
-            <Link href="/resources" className="atlas-btn atlas-btn-outline atlas-btn-lg">
-              Browse Resources
+            <Link href={cta2Link} className="atlas-btn atlas-btn-outline atlas-btn-lg">
+              {cta2Text}
             </Link>
           </div>
         </div>

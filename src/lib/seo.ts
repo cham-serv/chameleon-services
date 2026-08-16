@@ -20,11 +20,21 @@ type GeneratePageMetadataParams = {
   fallbackTitle?: string;
   /** Fallback description */
   fallbackDescription?: string;
+  /** Per-page SEO from atlas-site-config (highest priority) */
+  pageConfigSeo?: {
+    title?: string | null;
+    description?: string | null;
+    ogImage?: { url: string; alt?: string; width?: number; height?: number } | null;
+  };
 };
 
 /**
- * Generates Next.js Metadata for a page by fetching the engine's PageSEO record
- * and falling back to tenant config / hardcoded defaults.
+ * Generates Next.js Metadata for a page.
+ *
+ * Priority chain:
+ *   1. pageConfigSeo (from atlas-site-config — tenant-editable)
+ *   2. PageSEO collection record (legacy, being deprecated)
+ *   3. Fallback title/description (hardcoded in template)
  */
 export async function generatePageMetadata({
   tenantSlug,
@@ -32,18 +42,26 @@ export async function generatePageMetadata({
   config,
   fallbackTitle,
   fallbackDescription,
+  pageConfigSeo,
 }: GeneratePageMetadataParams): Promise<Metadata> {
   const seo = await getPageSEO(tenantSlug, pageSlug);
   const siteName = config.settings?.siteName ?? config.tenant.name;
 
-  const title = seo?.metaTitle ?? fallbackTitle ?? siteName;
+  // Priority: pageConfig → PageSEO → fallback → default
+  const title =
+    pageConfigSeo?.title ??
+    seo?.metaTitle ??
+    fallbackTitle ??
+    siteName;
   const description =
+    pageConfigSeo?.description ??
     seo?.metaDescription ??
     fallbackDescription ??
     config.settings?.tagline ??
     `Welcome to ${siteName}`;
 
-  const ogImage = resolveOgImage(seo);
+  // OG image: prefer pageConfig, then PageSEO, then null
+  const ogImage = pageConfigSeo?.ogImage ?? resolveOgImage(seo);
 
   return {
     title,

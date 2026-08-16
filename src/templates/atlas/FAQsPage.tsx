@@ -15,6 +15,11 @@ export default async function FAQsPage({ config }: PageProps) {
   const tenant = config.tenant.slug;
   const siteName = config.settings?.siteName ?? config.tenant.name;
   const siteUrl = `https://${tenant}.chameleon.services`;
+  const pc = config.pageConfig;
+
+  // Content from pageConfig with fallbacks
+  const headline = pc?.faqsHeadline ?? 'Frequently Asked Questions';
+  const subheadline = pc?.faqsSubheadline ?? `Find answers to common questions about ${siteName} and our services.`;
 
   const res = await getFaqs(tenant);
   const faqs: FAQ[] = res?.docs ?? [];
@@ -57,10 +62,10 @@ export default async function FAQsPage({ config }: PageProps) {
         <Breadcrumbs items={breadcrumbs} baseUrl={siteUrl} />
 
         <h1 className="atlas-h1" style={{ marginTop: 'var(--atlas-spacing-lg)' }}>
-          Frequently Asked Questions
+          {headline}
         </h1>
         <p className="atlas-body-lg" style={{ marginTop: 'var(--atlas-spacing-sm)', opacity: 0.7, maxWidth: 600 }}>
-          Find answers to common questions about {siteName} and our services.
+          {subheadline}
         </p>
 
         {faqs.length === 0 ? (

@@ -18,6 +18,13 @@ export default function AboutPage({ config, variant }: PageProps) {
   const tagline = config.settings?.tagline ?? '';
   const siteUrl = `https://${tenant}.chameleon.services`;
   const contactEmail = config.settings?.contactEmail;
+  const pc = config.pageConfig;
+
+  // Content from pageConfig with fallbacks
+  const headline = pc?.aboutHeadline ?? `About ${siteName}`;
+  const intro = pc?.aboutIntro ?? tagline;
+  const teamMembers = pc?.aboutTeamMembers && pc.aboutTeamMembers.length > 0 ? pc.aboutTeamMembers : null;
+  const splitImageUrl = pc?.aboutSplitImage?.url ?? null;
 
   const breadcrumbs = [
     { label: 'Home', href: '/' },
@@ -52,8 +59,13 @@ export default function AboutPage({ config, variant }: PageProps) {
         <div className="atlas-container">
           <Breadcrumbs items={breadcrumbs} baseUrl={siteUrl} />
           <h1 className="atlas-h1" style={{ marginTop: 'var(--atlas-spacing-lg)' }}>
-            About {siteName}
+            {headline}
           </h1>
+          {intro && (
+            <p className="atlas-body-lg" style={{ marginTop: 'var(--atlas-spacing-md)', maxWidth: 600, marginLeft: 'auto', marginRight: 'auto', opacity: 0.8 }}>
+              {intro}
+            </p>
+          )}
           {tagline && (
             <p className="atlas-body-lg" style={{ marginTop: 'var(--atlas-spacing-md)', maxWidth: 600, marginLeft: 'auto', marginRight: 'auto', opacity: 0.8 }}>
               {tagline}
@@ -71,35 +83,29 @@ export default function AboutPage({ config, variant }: PageProps) {
               <div>
                 <h2 className="atlas-h3">Our Story</h2>
                 <p className="atlas-body" style={{ marginTop: 'var(--atlas-spacing-md)', lineHeight: 1.8 }}>
-                  {siteName} was built on the belief that every business deserves a powerful digital presence.
-                  We combine cutting-edge technology with deep industry expertise to help brands
-                  establish true authority in their market.
+                  {pc?.aboutIntro ?? `${siteName} was built on the belief that every business deserves a powerful digital presence. We combine cutting-edge technology with deep industry expertise to help brands establish true authority in their market.`}
                 </p>
               </div>
-              <div
-                style={{
-                  aspectRatio: '16/9',
-                  borderRadius: 'var(--atlas-radius-lg)',
-                  background: 'linear-gradient(135deg, color-mix(in srgb, var(--brand-primary, #2d6a4f) 20%, transparent), color-mix(in srgb, var(--brand-secondary, #00E5FF) 20%, transparent))',
-                }}
-              />
-            </div>
-            <div className="atlas-zigzag-row atlas-zigzag-reverse" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 'var(--atlas-spacing-xl)', alignItems: 'center' }}>
-              <div>
-                <h2 className="atlas-h3">Our Mission</h2>
-                <p className="atlas-body" style={{ marginTop: 'var(--atlas-spacing-md)', lineHeight: 1.8 }}>
-                  We exist to empower businesses with the tools and content strategy they need to become
-                  the go-to authority in their space. Through intelligent content, optimised commerce,
-                  and data-driven insights, we help our clients win.
-                </p>
-              </div>
-              <div
-                style={{
-                  aspectRatio: '16/9',
-                  borderRadius: 'var(--atlas-radius-lg)',
-                  background: 'linear-gradient(135deg, color-mix(in srgb, var(--brand-secondary, #00E5FF) 20%, transparent), color-mix(in srgb, var(--brand-primary, #2d6a4f) 20%, transparent))',
-                }}
-              />
+              {splitImageUrl ? (
+                <img
+                  src={splitImageUrl}
+                  alt={`About ${siteName}`}
+                  style={{
+                    width: '100%',
+                    aspectRatio: '16/9',
+                    objectFit: 'cover',
+                    borderRadius: 'var(--atlas-radius-lg)',
+                  }}
+                />
+              ) : (
+                <div
+                  style={{
+                    aspectRatio: '16/9',
+                    borderRadius: 'var(--atlas-radius-lg)',
+                    background: 'linear-gradient(135deg, color-mix(in srgb, var(--brand-primary, #2d6a4f) 20%, transparent), color-mix(in srgb, var(--brand-secondary, #00E5FF) 20%, transparent))',
+                  }}
+                />
+              )}
             </div>
           </div>
         ) : (
@@ -138,30 +144,66 @@ export default function AboutPage({ config, variant }: PageProps) {
       </section>
 
       {/* ── Team Section ──────────────────────────────────────── */}
-      {/* Renders a grid placeholder — ready for future teamMembers data field */}
       <section className="atlas-container atlas-section">
         <h2 className="atlas-h3" style={{ textAlign: 'center', marginBottom: 'var(--atlas-spacing-2xl)' }}>
           Our Team
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 'var(--atlas-spacing-xl)' }}>
-          {PLACEHOLDER_TEAM.map((member, i) => (
-            <div key={i} style={{ textAlign: 'center' }}>
-              <div
-                style={{
-                  width: 120, height: 120,
-                  borderRadius: '50%',
-                  margin: '0 auto',
-                  background: `linear-gradient(135deg, color-mix(in srgb, var(--brand-primary, #2d6a4f) ${20 + i * 10}%, transparent), color-mix(in srgb, var(--brand-secondary, #00E5FF) ${20 + i * 5}%, transparent))`,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '2rem',
-                }}
-              >
-                {member.initials}
+          {teamMembers ? (
+            teamMembers.map((member, i) => (
+              <div key={i} style={{ textAlign: 'center' }}>
+                {member.photo?.url ? (
+                  <img
+                    src={member.photo.url}
+                    alt={member.name}
+                    style={{
+                      width: 120, height: 120,
+                      borderRadius: '50%',
+                      margin: '0 auto',
+                      objectFit: 'cover',
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      width: 120, height: 120,
+                      borderRadius: '50%',
+                      margin: '0 auto',
+                      background: `linear-gradient(135deg, color-mix(in srgb, var(--brand-primary, #2d6a4f) ${20 + i * 10}%, transparent), color-mix(in srgb, var(--brand-secondary, #00E5FF) ${20 + i * 5}%, transparent))`,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: '2rem',
+                    }}
+                  >
+                    {member.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
+                  </div>
+                )}
+                <h3 className="atlas-h6" style={{ marginTop: 'var(--atlas-spacing-md)' }}>{member.name}</h3>
+                <p className="atlas-caption" style={{ opacity: 0.7 }}>{member.role ?? ''}</p>
+                {member.bio && (
+                  <p className="atlas-body" style={{ fontSize: '0.8rem', marginTop: 'var(--atlas-spacing-xs)', opacity: 0.6 }}>{member.bio}</p>
+                )}
               </div>
-              <h3 className="atlas-h6" style={{ marginTop: 'var(--atlas-spacing-md)' }}>{member.name}</h3>
-              <p className="atlas-caption" style={{ opacity: 0.7 }}>{member.role}</p>
-            </div>
-          ))}
+            ))
+          ) : (
+            PLACEHOLDER_TEAM.map((member, i) => (
+              <div key={i} style={{ textAlign: 'center' }}>
+                <div
+                  style={{
+                    width: 120, height: 120,
+                    borderRadius: '50%',
+                    margin: '0 auto',
+                    background: `linear-gradient(135deg, color-mix(in srgb, var(--brand-primary, #2d6a4f) ${20 + i * 10}%, transparent), color-mix(in srgb, var(--brand-secondary, #00E5FF) ${20 + i * 5}%, transparent))`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '2rem',
+                  }}
+                >
+                  {member.initials}
+                </div>
+                <h3 className="atlas-h6" style={{ marginTop: 'var(--atlas-spacing-md)' }}>{member.name}</h3>
+                <p className="atlas-caption" style={{ opacity: 0.7 }}>{member.role}</p>
+              </div>
+            ))
+          )}
         </div>
       </section>
 
