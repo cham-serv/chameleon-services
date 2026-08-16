@@ -17,6 +17,11 @@ export default async function ResourcesPage({ config, variant }: PageProps) {
   const tenant = config.tenant.slug;
   const siteName = config.settings?.siteName ?? config.tenant.name;
   const siteUrl = `https://${tenant}.chameleon.services`;
+  const pc = config.pageConfig;
+
+  // Content from pageConfig with fallbacks
+  const headline = pc?.resourcesHeadline ?? 'Resource Directory';
+  const subheadline = pc?.resourcesSubheadline ?? 'Explore our knowledge base — guides, insights, and expert analysis organised by topic.';
 
   const res = await getTopics(tenant);
   const topics: Topic[] = res?.docs ?? [];
@@ -59,9 +64,9 @@ export default async function ResourcesPage({ config, variant }: PageProps) {
 
         {/* Header */}
         <div className="geo-speakable" style={{ marginTop: 'var(--atlas-spacing-lg)' }}>
-          <h1 className="atlas-h1">Resource Directory</h1>
+          <h1 className="atlas-h1">{headline}</h1>
           <p className="atlas-body-lg" style={{ marginTop: 'var(--atlas-spacing-sm)', opacity: 0.7, maxWidth: 600 }}>
-            Explore our knowledge base — guides, insights, and expert analysis organised by topic.
+            {subheadline}
           </p>
         </div>
 
