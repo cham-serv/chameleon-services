@@ -959,3 +959,744 @@
   margin: 1rem 0;
 }
 
+/* -- Hero Section -- */
+
+.atlas-hero {
+  background: var(--brand-primary, #2d6a4f);
+  color: #ffffff;
+  padding: 5rem 0 4rem;
+  text-align: center;
+}
+
+.atlas-hero-inner {
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.atlas-hero-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.75;
+  margin: 0 0 1rem;
+}
+
+.atlas-hero-headline {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin: 0 0 1.25rem;
+  font-family: var(--font-heading, inherit);
+}
+
+.atlas-hero-sub {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  opacity: 0.85;
+  margin: 0 0 2rem;
+}
+
+.atlas-hero-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.atlas-hero-cta-row .atlas-btn-outline {
+  border-color: rgba(255, 255, 255, 0.7);
+  color: #ffffff;
+}
+
+.atlas-hero-cta-row .atlas-btn-outline:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #ffffff;
+}
+
+/* -- Section Helpers -- */
+
+.atlas-section-alt {
+  background: color-mix(in srgb, var(--brand-primary, #2d6a4f) 5%, var(--brand-background, #ffffff));
+}
+
+.atlas-section-heading {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 1.5rem;
+  font-family: var(--font-heading, inherit);
+  color: var(--brand-text, #1b1b1b);
+}
+
+.atlas-section-header-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.atlas-section-header-row .atlas-section-heading {
+  margin-bottom: 0;
+}
+
+.atlas-link-arrow {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--brand-primary, #2d6a4f);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity var(--atlas-transition);
+}
+
+.atlas-link-arrow:hover {
+  opacity: 0.75;
+}
+
+/* -- Category Cards (HomePage) -- */
+
+.atlas-category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--atlas-spacing-md);
+}
+
+@media (min-width: 640px) {
+  .atlas-category-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .atlas-category-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.atlas-category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 1rem;
+  border-radius: var(--atlas-radius-lg);
+  border: 1px solid color-mix(in srgb, var(--brand-text, #1b1b1b) 10%, transparent);
+  text-decoration: none;
+  color: var(--brand-text, #1b1b1b);
+  text-align: center;
+  transition:
+    border-color var(--atlas-transition),
+    box-shadow var(--atlas-transition),
+    transform var(--atlas-transition);
+}
+
+.atlas-category-card:hover {
+  border-color: var(--brand-primary, #2d6a4f);
+  box-shadow: var(--atlas-shadow-md);
+  transform: translateY(-2px);
+}
+
+.atlas-category-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.atlas-category-name {
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.atlas-category-desc {
+  font-size: 0.8125rem;
+  color: color-mix(in srgb, var(--brand-text, #1b1b1b) 60%, transparent);
+  line-height: 1.4;
+}
+
+/* -- CTA Banner (HomePage) -- */
+
+.atlas-cta-banner {
+  background: var(--brand-secondary, #52b788);
+  color: #ffffff;
+  text-align: center;
+  padding: 4rem 0;
+}
+
+.atlas-cta-heading {
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+  font-family: var(--font-heading, inherit);
+}
+
+.atlas-cta-sub {
+  font-size: 1.0625rem;
+  opacity: 0.9;
+  margin: 0 0 1.75rem;
+}
+
+.atlas-cta-banner .atlas-btn-primary {
+  background: #ffffff;
+  color: var(--brand-secondary, #52b788);
+  border-color: #ffffff;
+}
+
+.atlas-cta-banner .atlas-btn-primary:hover {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.9);
+}
+
+/* -- Shop Page -- */
+
+.atlas-shop-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin: 1.5rem 0 1rem;
+}
+
+.atlas-page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  font-family: var(--font-heading, inherit);
+  color: var(--brand-text, #1b1b1b);
+}
+
+.atlas-shop-count {
+  font-size: 0.875rem;
+  color: color-mix(in srgb, var(--brand-text, #1b1b1b) 55%, transparent);
+  margin: 0;
+}
+
+/* -- Category Filter Pills -- */
+
+.atlas-category-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.atlas-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.875rem;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--brand-text, #1b1b1b);
+  background: color-mix(in srgb, var(--brand-text, #1b1b1b) 7%, transparent);
+  border: 1px solid transparent;
+  transition:
+    background var(--atlas-transition),
+    color var(--atlas-transition),
+    border-color var(--atlas-transition);
+}
+
+.atlas-pill:hover {
+  background: color-mix(in srgb, var(--brand-primary, #2d6a4f) 12%, transparent);
+  border-color: var(--brand-primary, #2d6a4f);
+  color: var(--brand-primary, #2d6a4f);
+}
+
+.atlas-pill-active {
+  background: var(--brand-primary, #2d6a4f);
+  color: #ffffff;
+  border-color: var(--brand-primary, #2d6a4f);
+}
+
+.atlas-pill-active:hover {
+  background: color-mix(in srgb, var(--brand-primary, #2d6a4f) 85%, #000);
+  border-color: color-mix(in srgb, var(--brand-primary, #2d6a4f) 85%, #000);
+  color: #ffffff;
+}
+
+.atlas-pill-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.125rem;
+  height: 1.125rem;
+  padding: 0 0.25rem;
+  border-radius: 9999px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.atlas-pill-active .atlas-pill-count {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* -- Sort Toolbar -- */
+
+.atlas-shop-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.25rem;
+}
+
+.atlas-sort-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.atlas-sort-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: color-mix(in srgb, var(--brand-text, #1b1b1b) 65%, transparent);
+  white-space: nowrap;
+}
+
+.atlas-sort-select {
+  min-width: 180px;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+/* -- Dense Grid Variant -- */
+
+@media (min-width: 640px) {
+  .atlas-product-grid-dense {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .atlas-product-grid-dense {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .atlas-product-grid-dense {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* -- Pagination -- */
+
+.atlas-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  justify-content: center;
+  margin-top: 3rem;
+}
+
+.atlas-page-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.25rem;
+  height: 2.25rem;
+  padding: 0 0.5rem;
+  border-radius: var(--atlas-radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--brand-text, #1b1b1b);
+  border: 1px solid color-mix(in srgb, var(--brand-text, #1b1b1b) 15%, transparent);
+  transition:
+    background var(--atlas-transition),
+    border-color var(--atlas-transition),
+    color var(--atlas-transition);
+}
+
+.atlas-page-link:hover {
+  background: color-mix(in srgb, var(--brand-primary, #2d6a4f) 8%, transparent);
+  border-color: var(--brand-primary, #2d6a4f);
+  color: var(--brand-primary, #2d6a4f);
+}
+
+.atlas-page-link-active {
+  background: var(--brand-primary, #2d6a4f);
+  border-color: var(--brand-primary, #2d6a4f);
+  color: #ffffff;
+}
+
+.atlas-page-link-active:hover {
+  background: color-mix(in srgb, var(--brand-primary, #2d6a4f) 85%, #000);
+  border-color: color-mix(in srgb, var(--brand-primary, #2d6a4f) 85%, #000);
+  color: #ffffff;
+}
+
+/* -- Empty State -- */
+
+.atlas-empty-state {
+  text-align: center;
+  padding: 5rem 1rem;
+}
+
+.atlas-empty-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  color: var(--brand-text, #1b1b1b);
+}
+
+.atlas-empty-sub {
+  font-size: 0.9375rem;
+  color: color-mix(in srgb, var(--brand-text, #1b1b1b) 55%, transparent);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* -- Product Detail Page (PDP) -- */
+
+.atlas-pdp-gallery {
+  position: relative;
+}
+
+.atlas-pdp-main-image {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--atlas-radius-lg);
+  overflow: hidden;
+  background: #f5f5f5;
+}
+
+.atlas-pdp-image-empty {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #f5f5f5;
+  border-radius: var(--atlas-radius-lg);
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+.atlas-pdp-thumbnail-strip {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+}
+
+.atlas-pdp-thumbnail {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  border-radius: var(--atlas-radius-sm);
+  overflow: hidden;
+  border: 2px solid transparent;
+  cursor: pointer;
+  background: none;
+  padding: 0;
+  transition: border-color var(--atlas-transition), opacity var(--atlas-transition);
+}
+
+.atlas-pdp-thumbnail:hover {
+  border-color: color-mix(in srgb, var(--brand-primary, #2d6a4f) 50%, transparent);
+}
+
+.atlas-pdp-thumbnail-active {
+  border-color: var(--brand-primary, #2d6a4f);
+}
+
+/* PDP Info */
+
+.atlas-pdp-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.atlas-pdp-category-badge {
+  display: inline-block;
+  width: fit-content;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--brand-primary, #2d6a4f);
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+  transition: opacity var(--atlas-transition);
+}
+
+.atlas-pdp-category-badge:hover {
+  opacity: 0.7;
+}
+
+.atlas-pdp-name {
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 0.75rem;
+  font-family: var(--font-heading, inherit);
+  color: var(--brand-text, #1b1b1b);
+}
+
+.atlas-pdp-price-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.atlas-pdp-price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--brand-text, #1b1b1b);
+}
+
+.atlas-pdp-price-sale {
+  color: #c53030;
+}
+
+.atlas-pdp-compare-price {
+  font-size: 1.125rem;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.atlas-pdp-stock-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+}
+
+.atlas-pdp-out-of-stock {
+  background: #fed7d7;
+  color: #c53030;
+}
+
+.atlas-pdp-short-desc {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: color-mix(in srgb, var(--brand-text, #1b1b1b) 75%, transparent);
+  margin: 0 0 0.75rem;
+}
+
+.atlas-pdp-sku {
+  font-size: 0.8125rem;
+  color: color-mix(in srgb, var(--brand-text, #1b1b1b) 45%, transparent);
+  margin: 0;
+}
+
+/* PDP Section Titles */
+
+.atlas-pdp-section-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem;
+  color: var(--brand-text, #1b1b1b);
+  font-family: var(--font-heading, inherit);
+}
+
+/* Key Attributes */
+
+.atlas-pdp-attr-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.atlas-pdp-attr-list li {
+  padding: 0.375rem 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  border-bottom: 1px solid color-mix(in srgb, var(--brand-text, #1b1b1b) 8%, transparent);
+}
+
+.atlas-pdp-attr-list li:last-child {
+  border-bottom: none;
+}
+
+/* Spec Table */
+
+.atlas-spec-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.atlas-spec-table th,
+.atlas-spec-table td {
+  padding: 0.625rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid color-mix(in srgb, var(--brand-text, #1b1b1b) 8%, transparent);
+}
+
+.atlas-spec-table th {
+  font-weight: 600;
+  color: var(--brand-text, #1b1b1b);
+  width: 40%;
+}
+
+.atlas-spec-table td {
+  color: color-mix(in srgb, var(--brand-text, #1b1b1b) 75%, transparent);
+}
+
+.atlas-spec-table tr:nth-child(even) {
+  background: color-mix(in srgb, var(--brand-text, #1b1b1b) 3%, transparent);
+}
+
+/* Product FAQs */
+
+.atlas-pdp-faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.atlas-pdp-faq-item {
+  border-bottom: 1px solid color-mix(in srgb, var(--brand-text, #1b1b1b) 10%, transparent);
+}
+
+.atlas-pdp-faq-item:first-child {
+  border-top: 1px solid color-mix(in srgb, var(--brand-text, #1b1b1b) 10%, transparent);
+}
+
+.atlas-pdp-faq-question {
+  padding: 0.875rem 0;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  color: var(--brand-text, #1b1b1b);
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.atlas-pdp-faq-question::-webkit-details-marker {
+  display: none;
+}
+
+.atlas-pdp-faq-question::after {
+  content: '+';
+  font-size: 1.25rem;
+  font-weight: 300;
+  color: color-mix(in srgb, var(--brand-text, #1b1b1b) 45%, transparent);
+  transition: transform var(--atlas-transition);
+}
+
+.atlas-pdp-faq-item[open] .atlas-pdp-faq-question::after {
+  content: '-';
+}
+
+.atlas-pdp-faq-answer {
+  padding: 0 0 1rem;
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: color-mix(in srgb, var(--brand-text, #1b1b1b) 70%, transparent);
+}
+
+/* Sidebar Callout */
+
+.atlas-sidebar-callout {
+  background: color-mix(in srgb, var(--brand-primary, #2d6a4f) 6%, var(--brand-background, #ffffff));
+  border: 1px solid color-mix(in srgb, var(--brand-primary, #2d6a4f) 18%, transparent);
+  border-radius: var(--atlas-radius-lg);
+  padding: 1.25rem;
+  margin-bottom: var(--atlas-spacing-lg);
+}
+
+.atlas-sidebar-callout-title {
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--brand-primary, #2d6a4f);
+  margin: 0 0 0.625rem;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.atlas-sidebar-callout-text {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  margin: 0;
+  color: color-mix(in srgb, var(--brand-text, #1b1b1b) 80%, transparent);
+}
+
+/* Pros & Cons */
+
+.atlas-pros-cons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-spacing-md);
+  margin-bottom: var(--atlas-spacing-lg);
+}
+
+.atlas-pros-title,
+.atlas-cons-title {
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 0.5rem;
+}
+
+.atlas-pros-title {
+  color: #276749;
+}
+
+.atlas-cons-title {
+  color: #c05621;
+}
+
+.atlas-pros-list,
+.atlas-cons-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.9375rem;
+}
+
+.atlas-pros-list li,
+.atlas-cons-list li {
+  padding: 0.25rem 0;
+  padding-left: 1.375rem;
+  position: relative;
+  line-height: 1.5;
+}
+
+.atlas-pros-list li::before {
+  content: '\2713';
+  position: absolute;
+  left: 0;
+  color: #38a169;
+  font-weight: 700;
+}
+
+.atlas-cons-list li::before {
+  content: '\2717';
+  position: absolute;
+  left: 0;
+  color: #dd6b20;
+  font-weight: 700;
+}
+
+/* Tag Pills */
+
+.atlas-tag-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.atlas-tag-pill {
+  display: inline-block;
+  padding: 0.3rem 0.7rem;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  background: color-mix(in srgb, var(--brand-secondary, #52b788) 12%, var(--brand-background, #ffffff));
+  color: color-mix(in srgb, var(--brand-text, #1b1b1b) 80%, transparent);
+  border: 1px solid color-mix(in srgb, var(--brand-secondary, #52b788) 25%, transparent);
+}
