@@ -66,11 +66,19 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // ── Rewrite to tenant catch-all ────────────────────────────────────────
+  // ── Staging detection ────────────────────────────────────────────────
+  // Platform subdomains are staging (build mode) — always serve fresh.
+  // Custom domains are production — full ISR caching.
+  // Header is set explicitly in both cases to prevent spoofing.
+  const isStaging = hostname.endsWith(PLATFORM_SUFFIX);
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set('x-is-staging', isStaging ? 'true' : 'false');
+
+  // ── Rewrite to tenant catch-all ────────────────────────────────────
   const url = request.nextUrl.clone();
   url.pathname = `/${tenantSlug}${url.pathname}`;
 
-  return NextResponse.rewrite(url);
+  return NextResponse.rewrite(url, { request: { headers: requestHeaders } });
 }
 
 export const config = {

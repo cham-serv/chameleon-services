@@ -143,16 +143,27 @@ const ENGINE_API_URL = process.env.CHAMELEON_API_URL ?? 'https://chameleon-engin
 
 /**
  * Fetches tenant configuration from the engine API.
- * Uses ISR — cached for 1 hour, revalidated on-demand.
+ *
+ * Cache strategy:
+ * - Staging (noCache: true): cache: 'no-store' — always fresh for build mode
+ * - Production (noCache: false/default): ISR with tags — cached for 1 hour,
+ *   revalidated on-demand when the engine fires a tag bust
  *
  * The tenant slug is extracted from the domain by the middleware
  * (e.g. "atlas-demo.chameleon.services" → "atlas-demo").
  */
-export async function fetchTenantConfig(tenantSlug: string): Promise<TenantConfig | null> {
+export async function fetchTenantConfig(
+  tenantSlug: string,
+  options?: { noCache?: boolean },
+): Promise<TenantConfig | null> {
+  const cacheOptions = options?.noCache
+    ? { cache: 'no-store' as const }
+    : { next: { revalidate: 3600, tags: [`tenant:${tenantSlug}`] } };
+
   try {
     const res = await fetch(
       `${ENGINE_API_URL}/api/public/tenant-config?tenant=${encodeURIComponent(tenantSlug)}`,
-      { next: { revalidate: 3600 } }, // ISR: re-fetch every hour
+      cacheOptions,
     );
 
     if (!res.ok) {

@@ -14,6 +14,7 @@
  */
 
 import { notFound } from 'next/navigation';
+import { headers } from 'next/headers';
 import { fetchTenantConfig, getTemplateDefinition, resolvePage } from '@/lib/tenant';
 import type { Metadata } from 'next';
 
@@ -24,7 +25,8 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { tenant } = await params;
-  const config = await fetchTenantConfig(tenant);
+  const isStaging = (await headers()).get('x-is-staging') === 'true';
+  const config = await fetchTenantConfig(tenant, { noCache: isStaging });
 
   const siteName = config?.settings?.siteName ?? config?.tenant?.name ?? 'Site';
 
@@ -41,8 +43,9 @@ export default async function TenantPage({ params, searchParams }: Props) {
   const { tenant, slug = [] } = await params;
   const search = await searchParams;
 
-  // 1. Fetch tenant config
-  const config = await fetchTenantConfig(tenant);
+  // 1. Fetch tenant config (no-cache on staging for instant feedback)
+  const isStaging = (await headers()).get('x-is-staging') === 'true';
+  const config = await fetchTenantConfig(tenant, { noCache: isStaging });
   if (!config) notFound();
 
   // 2. Check template assignment
