@@ -20,7 +20,7 @@ import { AddToCartButton } from '@/components/AddToCartButton';
 import { RichTextRenderer } from '@/components/RichTextRenderer';
 import { AtlasImageGallery, resolveImages } from './AtlasImageGallery';
 
-export default async function ProductPage({ config, path }: PageProps) {
+export default async function ProductPage({ config, path, noCache }: PageProps) {
   const tenant = config.tenant.slug;
   const productSlug = path[1];
   const siteUrl = `https://${tenant}.chameleon.services`;
@@ -34,7 +34,7 @@ export default async function ProductPage({ config, path }: PageProps) {
     );
   }
 
-  const product = await getProductBySlug(tenant, productSlug);
+  const product = await getProductBySlug(tenant, productSlug, noCache);
 
   if (!product) {
     return (

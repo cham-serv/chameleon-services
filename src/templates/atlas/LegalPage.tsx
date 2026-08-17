@@ -16,7 +16,7 @@ type LegalTab = {
   content: unknown;
 };
 
-export default async function LegalPage({ config, searchParams }: PageProps) {
+export default async function LegalPage({ config, searchParams, noCache }: PageProps) {
   const tenant = config.tenant.slug;
   const siteName = config.settings?.siteName ?? config.tenant.name;
   const siteUrl = `https://${tenant}.chameleon.services`;
@@ -25,7 +25,7 @@ export default async function LegalPage({ config, searchParams }: PageProps) {
   // Content from pageConfig with fallback
   const headline = pc?.legalHeadline ?? 'Legal';
 
-  const docs = await getLegalDocs(tenant);
+  const docs = await getLegalDocs(tenant, noCache);
 
   const breadcrumbs = [
     { label: 'Home', href: '/' },

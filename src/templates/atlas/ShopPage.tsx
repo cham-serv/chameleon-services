@@ -19,7 +19,7 @@ function resolveStr(raw: string | string[] | undefined): string | undefined {
   return Array.isArray(raw) ? raw[0] : raw;
 }
 
-export default async function ShopPage({ config, variant, searchParams }: PageProps) {
+export default async function ShopPage({ config, variant, searchParams, noCache }: PageProps) {
   const tenant = config.tenant.slug;
   const currency = config.settings?.currency ?? 'ZAR';
   const siteUrl = `https://${tenant}.chameleon.services`;
@@ -41,8 +41,8 @@ export default async function ShopPage({ config, variant, searchParams }: PagePr
       sort,
       page,
       limit: isDense ? 16 : 12,
-    }),
-    getCategories({ tenant, includeCount: true }),
+    }, noCache),
+    getCategories({ tenant, includeCount: true }, noCache),
   ]);
 
   const products = productsRes?.docs ?? [];

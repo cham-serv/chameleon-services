@@ -13,7 +13,7 @@ import { getTopics, type Topic } from '@/lib/api';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { JsonLd } from '@/components/JsonLd';
 
-export default async function ResourcesPage({ config, variant }: PageProps) {
+export default async function ResourcesPage({ config, variant, noCache }: PageProps) {
   const tenant = config.tenant.slug;
   const siteName = config.settings?.siteName ?? config.tenant.name;
   const siteUrl = `https://${tenant}.chameleon.services`;
@@ -23,7 +23,7 @@ export default async function ResourcesPage({ config, variant }: PageProps) {
   const headline = pc?.resourcesHeadline ?? 'Resource Directory';
   const subheadline = pc?.resourcesSubheadline ?? 'Explore our knowledge base — guides, insights, and expert analysis organised by topic.';
 
-  const res = await getTopics(tenant);
+  const res = await getTopics(tenant, noCache);
   const topics: Topic[] = res?.docs ?? [];
 
   const breadcrumbs = [

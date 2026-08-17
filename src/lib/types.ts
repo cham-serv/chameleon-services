@@ -171,6 +171,8 @@ export type PageProps = {
   path: string[];
   variant: string;
   searchParams: Record<string, string | string[] | undefined>;
+  /** True on *.chameleon.services staging subdomains — disables ISR cache for instant feedback */
+  noCache: boolean;
 };
 
 /** Props passed to every template layout component. */

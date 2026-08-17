@@ -20,7 +20,7 @@ import { RichTextRenderer } from '@/components/RichTextRenderer';
 import { JsonLd } from '@/components/JsonLd';
 import { notFound } from 'next/navigation';
 
-export default async function ResourcePage({ config, path }: PageProps) {
+export default async function ResourcePage({ config, path, noCache }: PageProps) {
   const tenant = config.tenant.slug;
   const siteUrl = `https://${tenant}.chameleon.services`;
   const siteName = config.settings?.siteName ?? config.tenant.name;
@@ -32,16 +32,16 @@ export default async function ResourcePage({ config, path }: PageProps) {
   if (!topicSlug) notFound();
 
   // Resolve topic name from the topics list
-  const topicsRes = await getTopics(tenant);
+  const topicsRes = await getTopics(tenant, noCache);
   const topics = topicsRes?.docs ?? [];
   const topic = topics.find((t) => t.slug === topicSlug) ?? null;
   const topicName = topic?.name ?? topicSlug;
 
   if (articleSlug) {
-    return renderArticle({ tenant, siteUrl, siteName, topicSlug, topicName, articleSlug, topics, config });
+    return renderArticle({ tenant, siteUrl, siteName, topicSlug, topicName, articleSlug, topics, config, noCache });
   }
 
-  return renderTopicHub({ tenant, siteUrl, siteName, topicSlug, topicName, topic });
+  return renderTopicHub({ tenant, siteUrl, siteName, topicSlug, topicName, topic, noCache });
 }
 
 // ── Topic Hub View ──────────────────────────────────────────────────────────
@@ -53,10 +53,11 @@ type TopicHubProps = {
   topicSlug: string;
   topicName: string;
   topic: Topic | null;
+  noCache: boolean;
 };
 
-async function renderTopicHub({ tenant, siteUrl, siteName, topicSlug, topicName, topic }: TopicHubProps) {
-  const res = await getArticles({ tenant, topic: topicSlug, limit: 50 });
+async function renderTopicHub({ tenant, siteUrl, siteName, topicSlug, topicName, topic, noCache }: TopicHubProps) {
+  const res = await getArticles({ tenant, topic: topicSlug, limit: 50 }, noCache);
   const articles: Article[] = res?.docs ?? [];
 
   const breadcrumbs = [
@@ -213,10 +214,11 @@ type ArticleViewProps = {
   articleSlug: string;
   topics: Topic[];
   config: PageProps['config'];
+  noCache: boolean;
 };
 
-async function renderArticle({ tenant, siteUrl, siteName, topicSlug, topicName, articleSlug, topics, config }: ArticleViewProps) {
-  const article = await getArticleBySlug(tenant, articleSlug);
+async function renderArticle({ tenant, siteUrl, siteName, topicSlug, topicName, articleSlug, topics, config, noCache }: ArticleViewProps) {
+  const article = await getArticleBySlug(tenant, articleSlug, noCache);
   if (!article) notFound();
 
   const heroImage = resolveMedia(article.heroImage);
@@ -230,7 +232,7 @@ async function renderArticle({ tenant, siteUrl, siteName, topicSlug, topicName, 
   ];
 
   // Related articles — same topic, exclude current
-  const relatedRes = await getArticles({ tenant, topic: topicSlug, limit: 6 });
+  const relatedRes = await getArticles({ tenant, topic: topicSlug, limit: 6 }, noCache);
   const relatedArticles = (relatedRes?.docs ?? []).filter((a) => a.id !== article.id).slice(0, 5);
 
   // Extract headings for Table of Contents (best effort from Lexical JSON)
