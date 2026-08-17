@@ -90,6 +90,7 @@ export default async function TenantPage({ params, searchParams }: Props) {
         path={slug}
         variant={variant}
         searchParams={search}
+        noCache={isStaging}
       />
     </TemplateLayout>
   );

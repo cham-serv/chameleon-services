@@ -11,7 +11,7 @@ import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { JsonLd } from '@/components/JsonLd';
 import { AtlasFaqAccordion } from './AtlasFaqAccordion';
 
-export default async function FAQsPage({ config }: PageProps) {
+export default async function FAQsPage({ config, noCache }: PageProps) {
   const tenant = config.tenant.slug;
   const siteName = config.settings?.siteName ?? config.tenant.name;
   const siteUrl = `https://${tenant}.chameleon.services`;
@@ -21,7 +21,7 @@ export default async function FAQsPage({ config }: PageProps) {
   const headline = pc?.faqsHeadline ?? 'Frequently Asked Questions';
   const subheadline = pc?.faqsSubheadline ?? `Find answers to common questions about ${siteName} and our services.`;
 
-  const res = await getFaqs(tenant);
+  const res = await getFaqs(tenant, undefined, noCache);
   const faqs: FAQ[] = res?.docs ?? [];
 
   const breadcrumbs = [

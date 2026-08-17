@@ -30,16 +30,16 @@ function apiUrl(path: string, params?: Record<string, string>): string {
 type FetchOptions = {
   tags?: string[];
   revalidate?: number;
+  noCache?: boolean;
 };
 
 async function apiFetch<T>(url: string, opts: FetchOptions = {}): Promise<T | null> {
   try {
-    const res = await fetch(url, {
-      next: {
-        revalidate: opts.revalidate ?? 3600,
-        tags: opts.tags,
-      },
-    });
+    const fetchInit: RequestInit = opts.noCache
+      ? { cache: 'no-store' }
+      : { next: { revalidate: opts.revalidate ?? 3600, tags: opts.tags } };
+
+    const res = await fetch(url, fetchInit);
 
     if (!res.ok) {
       if (res.status !== 404) {
@@ -140,7 +140,7 @@ type GetProductsParams = {
   page?: number;
 };
 
-export async function getProducts(params: GetProductsParams): Promise<PaginatedResponse<Product> | null> {
+export async function getProducts(params: GetProductsParams, noCache = false): Promise<PaginatedResponse<Product> | null> {
   const queryParams: Record<string, string> = { tenant: params.tenant };
   if (params.category) queryParams.category = params.category;
   if (params.featured) queryParams.featured = 'true';
@@ -152,14 +152,18 @@ export async function getProducts(params: GetProductsParams): Promise<PaginatedR
 
   return apiFetch<PaginatedResponse<Product>>(
     apiUrl('/api/public/products', queryParams),
-    { tags: [`tenant:${params.tenant}`, `products:${params.tenant}`] },
+    noCache
+      ? { noCache: true }
+      : { tags: [`tenant:${params.tenant}`, `products:${params.tenant}`] },
   );
 }
 
-export async function getProductBySlug(tenant: string, slug: string): Promise<Product | null> {
+export async function getProductBySlug(tenant: string, slug: string, noCache = false): Promise<Product | null> {
   return apiFetch<Product>(
     apiUrl(`/api/public/products/${encodeURIComponent(slug)}`, { tenant }),
-    { tags: [`tenant:${tenant}`, `products:${tenant}`, `product:${slug}`] },
+    noCache
+      ? { noCache: true }
+      : { tags: [`tenant:${tenant}`, `products:${tenant}`, `product:${slug}`] },
   );
 }
 
@@ -171,14 +175,16 @@ type GetCategoriesParams = {
   includeCount?: boolean;
 };
 
-export async function getCategories(params: GetCategoriesParams): Promise<PaginatedResponse<ProductCategory> | null> {
+export async function getCategories(params: GetCategoriesParams, noCache = false): Promise<PaginatedResponse<ProductCategory> | null> {
   const queryParams: Record<string, string> = { tenant: params.tenant };
   if (params.featured) queryParams.featured = 'true';
   if (params.includeCount) queryParams.includeCount = 'true';
 
   return apiFetch<PaginatedResponse<ProductCategory>>(
     apiUrl('/api/public/product-categories', queryParams),
-    { tags: [`tenant:${params.tenant}`, `categories:${params.tenant}`] },
+    noCache
+      ? { noCache: true }
+      : { tags: [`tenant:${params.tenant}`, `categories:${params.tenant}`] },
   );
 }
 
@@ -213,7 +219,7 @@ type GetArticlesParams = {
   page?: number;
 };
 
-export async function getArticles(params: GetArticlesParams): Promise<PaginatedResponse<Article> | null> {
+export async function getArticles(params: GetArticlesParams, noCache = false): Promise<PaginatedResponse<Article> | null> {
   const queryParams: Record<string, string> = { tenant: params.tenant };
   if (params.topic) queryParams.topic = params.topic;
   if (params.section) queryParams.section = params.section;
@@ -223,14 +229,18 @@ export async function getArticles(params: GetArticlesParams): Promise<PaginatedR
 
   return apiFetch<PaginatedResponse<Article>>(
     apiUrl('/api/public/articles', queryParams),
-    { tags: [`tenant:${params.tenant}`, `articles:${params.tenant}`] },
+    noCache
+      ? { noCache: true }
+      : { tags: [`tenant:${params.tenant}`, `articles:${params.tenant}`] },
   );
 }
 
-export async function getArticleBySlug(tenant: string, slug: string): Promise<Article | null> {
+export async function getArticleBySlug(tenant: string, slug: string, noCache = false): Promise<Article | null> {
   return apiFetch<Article>(
     apiUrl(`/api/public/articles/${encodeURIComponent(slug)}`, { tenant }),
-    { tags: [`tenant:${tenant}`, `articles:${tenant}`, `article:${slug}`] },
+    noCache
+      ? { noCache: true }
+      : { tags: [`tenant:${tenant}`, `articles:${tenant}`, `article:${slug}`] },
   );
 }
 
@@ -250,17 +260,21 @@ export type Service = {
   updatedAt: string;
 };
 
-export async function getServices(tenant: string): Promise<PaginatedResponse<Service> | null> {
+export async function getServices(tenant: string, noCache = false): Promise<PaginatedResponse<Service> | null> {
   return apiFetch<PaginatedResponse<Service>>(
     apiUrl('/api/public/services', { tenant }),
-    { tags: [`tenant:${tenant}`, `services:${tenant}`] },
+    noCache
+      ? { noCache: true }
+      : { tags: [`tenant:${tenant}`, `services:${tenant}`] },
   );
 }
 
-export async function getServiceBySlug(tenant: string, slug: string): Promise<Service | null> {
+export async function getServiceBySlug(tenant: string, slug: string, noCache = false): Promise<Service | null> {
   return apiFetch<Service>(
     apiUrl(`/api/public/services/${encodeURIComponent(slug)}`, { tenant }),
-    { tags: [`tenant:${tenant}`, `services:${tenant}`, `service:${slug}`] },
+    noCache
+      ? { noCache: true }
+      : { tags: [`tenant:${tenant}`, `services:${tenant}`, `service:${slug}`] },
   );
 }
 
@@ -278,13 +292,15 @@ export type FAQ = {
   updatedAt: string;
 };
 
-export async function getFaqs(tenant: string, category?: string): Promise<PaginatedResponse<FAQ> | null> {
+export async function getFaqs(tenant: string, category?: string, noCache = false): Promise<PaginatedResponse<FAQ> | null> {
   const params: Record<string, string> = { tenant };
   if (category) params.category = category;
 
   return apiFetch<PaginatedResponse<FAQ>>(
     apiUrl('/api/public/faqs', params),
-    { tags: [`tenant:${tenant}`, `faqs:${tenant}`] },
+    noCache
+      ? { noCache: true }
+      : { tags: [`tenant:${tenant}`, `faqs:${tenant}`] },
   );
 }
 
@@ -305,10 +321,12 @@ export type LegalDocs = {
   updatedAt: string;
 };
 
-export async function getLegalDocs(tenant: string): Promise<LegalDocs | null> {
+export async function getLegalDocs(tenant: string, noCache = false): Promise<LegalDocs | null> {
   return apiFetch<LegalDocs>(
     apiUrl('/api/public/legal', { tenant }),
-    { tags: [`tenant:${tenant}`, `legal:${tenant}`] },
+    noCache
+      ? { noCache: true }
+      : { tags: [`tenant:${tenant}`, `legal:${tenant}`] },
   );
 }
 
@@ -324,10 +342,12 @@ export type PageSEO = {
   ogImage?: MediaItem | number | null;
 };
 
-export async function getPageSEO(tenant: string, pageSlug: string): Promise<PageSEO | null> {
+export async function getPageSEO(tenant: string, pageSlug: string, noCache = false): Promise<PageSEO | null> {
   return apiFetch<PageSEO>(
     apiUrl('/api/public/page-seo', { tenant, slug: pageSlug }),
-    { tags: [`tenant:${tenant}`, `seo:${tenant}`] },
+    noCache
+      ? { noCache: true }
+      : { tags: [`tenant:${tenant}`, `seo:${tenant}`] },
   );
 }
 
@@ -344,9 +364,11 @@ export type Topic = {
   order?: number;
 };
 
-export async function getTopics(tenant: string): Promise<PaginatedResponse<Topic> | null> {
+export async function getTopics(tenant: string, noCache = false): Promise<PaginatedResponse<Topic> | null> {
   return apiFetch<PaginatedResponse<Topic>>(
     apiUrl('/api/public/topics', { tenant }),
-    { tags: [`tenant:${tenant}`, `topics:${tenant}`] },
+    noCache
+      ? { noCache: true }
+      : { tags: [`tenant:${tenant}`, `topics:${tenant}`] },
   );
 }

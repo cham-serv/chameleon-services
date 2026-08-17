@@ -5,7 +5,7 @@ import { ProductCard } from '@/components/ProductCard';
 import { ArticleCard } from '@/components/ArticleCard';
 import { JsonLd } from '@/components/JsonLd';
 
-export default async function HomePage({ config, variant }: PageProps) {
+export default async function HomePage({ config, variant, noCache }: PageProps) {
   const tenant = config.tenant.slug;
   const siteName = config.settings?.siteName ?? config.tenant.name;
   const tagline = config.settings?.tagline ?? '';
@@ -30,9 +30,9 @@ export default async function HomePage({ config, variant }: PageProps) {
 
   // Parallel data fetching — all sections are conditional on data existing
   const [productsRes, categoriesRes, articlesRes] = await Promise.all([
-    getProducts({ tenant, featured: true, limit: 8 }),
-    getCategories({ tenant, featured: true }),
-    getArticles({ tenant, featured: true, limit: 3 }),
+    getProducts({ tenant, featured: true, limit: 8 }, noCache),
+    getCategories({ tenant, featured: true }, noCache),
+    getArticles({ tenant, featured: true, limit: 3 }, noCache),
   ]);
 
   const featuredProducts = productsRes?.docs ?? [];
