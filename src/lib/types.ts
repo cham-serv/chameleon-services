@@ -186,6 +186,8 @@ export type LayoutProps = {
 export type PageVariant = {
   /** Human-readable name shown in DemoExplorer (e.g. "Split Image") */
   label: string;
+  /** Short description shown in DemoExplorer (e.g. "Product-first layout with featured items") */
+  description?: string;
   /** Lazy loader for the page component */
   component: () => Promise<{ default: ComponentType<PageProps> }>;
 };
