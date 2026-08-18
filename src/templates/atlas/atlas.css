@@ -1934,3 +1934,70 @@
   );
 }
 
+/* ============================================================
+   4.0.2 BRAND THEMING SYSTEM
+   ============================================================ */
+
+/* -- Button style variants via data-btn-style on <body> -------------- */
+/*
+  Four shape variants controlled by a single attribute on <body>.
+  Colour always comes from --brand-* tokens, shape is the only change.
+*/
+
+/* filled (default) — already the base .atlas-btn-primary style */
+
+/* outline */
+[data-btn-style="outline"] .atlas-btn-primary {
+  background: transparent;
+  color: var(--brand-primary, #2d6a4f);
+  border-color: var(--brand-primary, #2d6a4f);
+}
+
+[data-btn-style="outline"] .atlas-btn-primary:hover {
+  background: var(--brand-primary, #2d6a4f);
+  color: #ffffff;
+}
+
+/* pill — fully rounded, otherwise identical to filled */
+[data-btn-style="pill"] .atlas-btn-primary,
+[data-btn-style="pill"] .atlas-btn-secondary,
+[data-btn-style="pill"] .atlas-btn-outline,
+[data-btn-style="pill"] .atlas-btn {
+  border-radius: 9999px;
+}
+
+/* soft — light tinted background, no hard border */
+[data-btn-style="soft"] .atlas-btn-primary {
+  background: color-mix(in srgb, var(--brand-primary, #2d6a4f) 12%, transparent);
+  color: var(--brand-primary, #2d6a4f);
+  border-color: transparent;
+}
+
+[data-btn-style="soft"] .atlas-btn-primary:hover {
+  background: color-mix(in srgb, var(--brand-primary, #2d6a4f) 22%, transparent);
+}
+
+/* -- Accent token usage ----------------------------------------------- */
+/* Stat numbers, badge highlights, secondary hover states */
+
+.atlas-stat-number {
+  color: var(--brand-accent, #f59e0b);
+}
+
+.atlas-accent-text {
+  color: var(--brand-accent, #f59e0b);
+}
+
+.atlas-btn-accent {
+  background: var(--brand-accent, #f59e0b);
+  color: #ffffff;
+  border-color: var(--brand-accent, #f59e0b);
+}
+
+.atlas-btn-accent:hover {
+  background: color-mix(in srgb, var(--brand-accent, #f59e0b) 85%, #000);
+  border-color: color-mix(in srgb, var(--brand-accent, #f59e0b) 85%, #000);
+  box-shadow: var(--atlas-shadow-md);
+}
+
+

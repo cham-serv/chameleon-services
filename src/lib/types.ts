@@ -44,8 +44,11 @@ export type SiteSettings = {
   contactEmail?: string;
   colourPrimary?: string;
   colourSecondary?: string;
+  colourAccent?: string;
   colourBackground?: string;
   colourText?: string;
+  /** Controls button shape. CSS applied via data-btn-style on <body>. */
+  buttonStyle?: 'filled' | 'outline' | 'pill' | 'soft';
   fontHeading?: string;
   fontBody?: string;
   logo?: { url: string } | null;
@@ -101,6 +104,7 @@ export type PageConfig = {
   colourSecondary?: string | null;
   colourAccent?: string | null;
   colourBackground?: string | null;
+  buttonStyle?: 'filled' | 'outline' | 'pill' | 'soft' | null;
   fontHeading?: string | null;
   fontBody?: string | null;
 
