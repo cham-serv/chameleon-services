@@ -55,12 +55,17 @@ export const definition: TemplateDefinition = {
       variants: {
         'team-grid': {
           label: 'Team Grid',
-          description: 'Structured layout with team member cards in a responsive grid.',
+          description: 'Professional layout with mission, values, and team member cards in a responsive grid.',
           component: () => import('./AboutPage'),
         },
         'story-split': {
           label: 'Story Split',
-          description: 'Narrative-driven split layout — brand story on one side, imagery on the other.',
+          description: 'Narrative-driven — full-width hero image, zigzag journey sections, founder quote, and a scrolling team strip.',
+          component: () => import('./AboutPage'),
+        },
+        'manifesto': {
+          label: 'Manifesto',
+          description: 'Bold, typography-driven — the page IS the brand statement. Full-viewport opening, pull-quote values, minimal team list.',
           component: () => import('./AboutPage'),
         },
       },
