@@ -74,16 +74,21 @@ export const definition: TemplateDefinition = {
     '/shop': {
       label: 'Shop',
       feature: 'shop',
-      defaultVariant: 'editorial',
+      defaultVariant: 'catalog',
       variants: {
-        'editorial': {
-          label: 'Editorial',
-          description: 'Spacious product grid with large cards and breathing room.',
+        'catalog': {
+          label: 'Catalog',
+          description: 'Traditional sidebar layout with category navigation and dense product grid — built for large inventories.',
           component: () => import('./ShopPage'),
         },
-        'dense': {
-          label: 'Dense Grid',
-          description: 'Compact product grid — more items visible per page.',
+        'modern': {
+          label: 'Modern',
+          description: 'Full-width grid with sticky filter bar and image-swap on hover — the standard modern DTC storefront.',
+          component: () => import('./ShopPage'),
+        },
+        'lookbook': {
+          label: 'Lookbook',
+          description: 'Visual discovery with asymmetric grid, large portrait imagery, and minimal text — boutique and high-end.',
           component: () => import('./ShopPage'),
         },
       },

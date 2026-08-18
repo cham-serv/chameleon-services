@@ -18,6 +18,8 @@ type ProductCardProps = {
   className?: string;
   /** Set to true for above-the-fold images to disable lazy loading */
   priority?: boolean;
+  /** Optional secondary image URL for CSS hover-swap (modern variant) */
+  secondaryImageUrl?: string | null;
 };
 
 export function ProductCard({
@@ -26,6 +28,7 @@ export function ProductCard({
   basePath = '/shop',
   className,
   priority = false,
+  secondaryImageUrl,
 }: ProductCardProps) {
   const image = resolveFirstImage(product.images);
   const productCurrency = product.currency ?? currency;
@@ -58,14 +61,28 @@ export function ProductCard({
         }}
       >
         {image ? (
-          <Image
-            src={image.url}
-            alt={image.alt ?? product.name}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            style={{ objectFit: 'cover' }}
-            priority={priority}
-          />
+          <>
+            <Image
+              src={image.url}
+              alt={image.alt ?? product.name}
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              style={{ objectFit: 'cover' }}
+              priority={priority}
+              className="atlas-product-img-primary"
+            />
+            {secondaryImageUrl && (
+              <Image
+                src={secondaryImageUrl}
+                alt={`${product.name} — alternate view`}
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                style={{ objectFit: 'cover' }}
+                className="atlas-product-img-secondary"
+                aria-hidden="true"
+              />
+            )}
+          </>
         ) : (
           <div
             style={{
