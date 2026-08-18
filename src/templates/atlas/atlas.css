@@ -2678,3 +2678,319 @@
   }
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   SHOP PAGE — VARIANT STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Shared: secondary image for hover-swap ──────────────────────────────── */
+
+.atlas-product-img-primary,
+.atlas-product-img-secondary {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.atlas-product-img-secondary {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .atlas-product-img-secondary {
+    transition: opacity 0.4s ease;
+  }
+}
+
+/* ── Catalog variant ─────────────────────────────────────────────────────── */
+
+/* Layout: single column on mobile, 2-col (sidebar + content) on desktop */
+[data-variant="catalog"] .atlas-catalog-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--atlas-spacing-xl);
+  margin-top: var(--atlas-spacing-lg);
+}
+
+@media (min-width: 768px) {
+  [data-variant="catalog"] .atlas-catalog-layout {
+    grid-template-columns: 220px 1fr;
+    align-items: start;
+  }
+}
+
+@media (min-width: 1024px) {
+  [data-variant="catalog"] .atlas-catalog-layout {
+    grid-template-columns: 240px 1fr;
+  }
+}
+
+/* Sidebar: sticky on desktop */
+[data-variant="catalog"] .atlas-catalog-sidebar {
+  display: none; /* hidden on mobile */
+}
+
+@media (min-width: 768px) {
+  [data-variant="catalog"] .atlas-catalog-sidebar {
+    display: block;
+    position: sticky;
+    top: calc(var(--atlas-header-h, 64px) + 1rem);
+  }
+}
+
+/* Category link list in sidebar */
+[data-variant="catalog"] .atlas-catalog-cat-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--atlas-radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--brand-text, #1b1b1b);
+  border-left: 2px solid transparent;
+  transition: background var(--atlas-transition), border-color var(--atlas-transition);
+}
+
+[data-variant="catalog"] .atlas-catalog-cat-link:hover {
+  background: color-mix(in srgb, var(--brand-primary, #2d6a4f) 8%, transparent);
+  border-left-color: var(--brand-primary, #2d6a4f);
+}
+
+[data-variant="catalog"] .atlas-catalog-cat-link--active {
+  background: color-mix(in srgb, var(--brand-primary, #2d6a4f) 10%, transparent);
+  border-left-color: var(--brand-primary, #2d6a4f);
+  color: var(--brand-primary, #2d6a4f);
+  font-weight: 600;
+}
+
+[data-variant="catalog"] .atlas-catalog-cat-count {
+  font-size: 0.75rem;
+  font-weight: 400;
+  opacity: 0.6;
+}
+
+/* Mobile: hide sidebar pills, show them instead */
+[data-variant="catalog"] .atlas-catalog-pills-mobile {
+  display: flex; /* show on mobile */
+}
+
+@media (min-width: 768px) {
+  [data-variant="catalog"] .atlas-catalog-pills-mobile {
+    display: none; /* hide on desktop — sidebar takes over */
+  }
+}
+
+/* ── Modern variant ──────────────────────────────────────────────────────── */
+
+/* Sticky filter bar */
+[data-variant="modern"] .atlas-modern-filter-bar {
+  position: sticky;
+  top: var(--atlas-header-h, 64px);
+  z-index: 10;
+  background: var(--brand-bg, #ffffff);
+  border-bottom: 1px solid color-mix(in srgb, var(--brand-text, #1b1b1b) 10%, transparent);
+  padding: var(--atlas-spacing-sm) 0;
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  [data-variant="modern"] .atlas-modern-filter-bar {
+    background: color-mix(in srgb, var(--brand-bg, #ffffff) 85%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+[data-variant="modern"] .atlas-modern-filter-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--atlas-spacing-md);
+  flex-wrap: wrap;
+}
+
+[data-variant="modern"] .atlas-modern-filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  flex: 1;
+}
+
+[data-variant="modern"] .atlas-modern-filter-sort {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* Image swap on hover */
+@media (prefers-reduced-motion: no-preference) {
+  [data-variant="modern"] .atlas-modern-card:hover .atlas-product-img-secondary {
+    opacity: 1;
+  }
+}
+
+/* ── Lookbook variant ────────────────────────────────────────────────────── */
+
+/* Editorial hero */
+[data-variant="lookbook"] .atlas-lookbook-hero {
+  padding: var(--atlas-spacing-2xl) 0 var(--atlas-spacing-lg);
+}
+
+[data-variant="lookbook"] .atlas-lookbook-headline {
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  margin: var(--atlas-spacing-md) 0 var(--atlas-spacing-sm);
+}
+
+[data-variant="lookbook"] .atlas-lookbook-subheadline {
+  font-size: 1.0625rem;
+  opacity: 0.7;
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+[data-variant="lookbook"] .atlas-lookbook-count {
+  font-size: 0.8125rem;
+  opacity: 0.5;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-top: var(--atlas-spacing-sm);
+}
+
+/* Horizontal scroll filter bar */
+[data-variant="lookbook"] .atlas-lookbook-filter-bar {
+  border-top: 1px solid color-mix(in srgb, var(--brand-text, #1b1b1b) 8%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--brand-text, #1b1b1b) 8%, transparent);
+  padding: var(--atlas-spacing-sm) 0;
+}
+
+[data-variant="lookbook"] .atlas-lookbook-filter-pills {
+  display: flex;
+  gap: 0.375rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 2px; /* prevent clipping */
+}
+
+[data-variant="lookbook"] .atlas-lookbook-filter-pills::-webkit-scrollbar {
+  display: none;
+}
+
+[data-variant="lookbook"] .atlas-lookbook-filter-pills .atlas-pill {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+/* Asymmetric grid
+   Pattern: every 3rd+1 item (1st, 4th, 7th…) spans full width.
+   Items 2-3, 5-6, 8-9 share a row in 2 columns.
+   Uses nth-child on the direct Link children.
+*/
+[data-variant="lookbook"] .atlas-lookbook-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--atlas-spacing-md);
+}
+
+@media (min-width: 640px) {
+  [data-variant="lookbook"] .atlas-lookbook-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Every 3rd item starting from item 1: full-width */
+  [data-variant="lookbook"] .atlas-lookbook-grid > .atlas-lookbook-card:nth-child(3n+1) {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Product card */
+[data-variant="lookbook"] .atlas-lookbook-card {
+  display: block;
+}
+
+[data-variant="lookbook"] .atlas-lookbook-img-wrap {
+  position: relative;
+  aspect-ratio: 3 / 4; /* portrait */
+  overflow: hidden;
+  background: color-mix(in srgb, var(--brand-text, #1b1b1b) 5%, transparent);
+}
+
+[data-variant="lookbook"] .atlas-lookbook-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+[data-variant="lookbook"] .atlas-lookbook-img-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hover overlay — pure CSS */
+[data-variant="lookbook"] .atlas-lookbook-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-variant="lookbook"] .atlas-lookbook-overlay {
+    transition: opacity 0.3s ease;
+  }
+
+  [data-variant="lookbook"] .atlas-lookbook-card:hover .atlas-lookbook-overlay {
+    opacity: 1;
+  }
+}
+
+[data-variant="lookbook"] .atlas-lookbook-overlay-label {
+  color: #fff;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+/* Sale badge */
+[data-variant="lookbook"] .atlas-lookbook-badge {
+  position: absolute;
+  top: var(--atlas-spacing-sm);
+  left: var(--atlas-spacing-sm);
+  padding: 4px 8px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--brand-primary, #2d6a4f);
+  color: #fff;
+  border-radius: var(--atlas-radius-sm);
+}
+
+/* Minimal text below the image */
+[data-variant="lookbook"] .atlas-lookbook-info {
+  padding: var(--atlas-spacing-sm) 0;
+}
+
+[data-variant="lookbook"] .atlas-lookbook-name {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.3;
+  margin: 0;
+}
+
+[data-variant="lookbook"] .atlas-lookbook-price {
+  font-size: 0.875rem;
+  opacity: 0.6;
+  margin: 0.25rem 0 0;
+}
