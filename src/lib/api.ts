@@ -198,13 +198,24 @@ export type Article = {
   excerpt?: string;
   content?: unknown; // Lexical blocks array — only on single article
   heroImage?: MediaItem | number | null;
+  socialImage?: MediaItem | number | null;
   topic?: { id: number; name: string; slug: string } | number | null;
+  tags?: Array<{ id: number; name: string; slug: string }> | number[];
   author?: string;
   featured?: boolean;
   readTime?: number;
   contentStyle?: 'guide' | 'explainer' | 'concept';
+  // GEO/SEO fields
   aiSummary?: string;
+  metaTitle?: string;
+  metaDescription?: string;
   primaryEntity?: string;
+  primaryEntityUrl?: string;
+  speakableText?: string;
+  keyTakeaways?: Array<{ point: string }>;
+  additionalSources?: Array<{ label: string; url: string }>;
+  /** Virtual field injected by the engine's generateLdSchema afterRead hook */
+  __jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   publishedAt?: string;
   createdAt: string;
   updatedAt: string;
@@ -359,7 +370,11 @@ export type Topic = {
   slug: string;
   type: string;
   description?: string;
+  shortDescription?: string;
+  speakableText?: string;
   icon?: string;
+  headerImage?: MediaItem | number | null;
+  curatedArticles?: Article[] | number[];
   articleCount?: number;
   order?: number;
 };
@@ -370,5 +385,23 @@ export async function getTopics(tenant: string, noCache = false): Promise<Pagina
     noCache
       ? { noCache: true }
       : { tags: [`tenant:${tenant}`, `topics:${tenant}`] },
+  );
+}
+
+/**
+ * Fetches a single topic + its articles in one round-trip.
+ * Uses the engine's GET /api/public/topics/[slug] endpoint which returns:
+ *   { topic: Topic, articles: PaginatedResponse<Article> }
+ */
+export async function getTopicWithArticles(
+  tenant: string,
+  topicSlug: string,
+  noCache = false,
+): Promise<{ topic: Topic; articles: PaginatedResponse<Article> } | null> {
+  return apiFetch<{ topic: Topic; articles: PaginatedResponse<Article> }>(
+    apiUrl(`/api/public/topics/${encodeURIComponent(topicSlug)}`, { tenant }),
+    noCache
+      ? { noCache: true }
+      : { tags: [`tenant:${tenant}`, `topics:${tenant}`, `topic:${topicSlug}`] },
   );
 }

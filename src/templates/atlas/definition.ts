@@ -133,16 +133,21 @@ export const definition: TemplateDefinition = {
     '/resources': {
       label: 'Resources',
       feature: 'resources',
-      defaultVariant: 'grid',
+      defaultVariant: 'directory',
       variants: {
+        'directory': {
+          label: 'Directory',
+          description: 'Structured documentation index — topic list with descriptions, article counts, and sidebar tools.',
+          component: () => import('./ResourcesPage'),
+        },
         'grid': {
           label: 'Grid',
-          description: 'Topic cards in a responsive grid — visual and scannable.',
+          description: 'Topic cards in a responsive grid with icons and article counts — visual and scannable.',
           component: () => import('./ResourcesPage'),
         },
         'magazine': {
           label: 'Magazine',
-          description: 'Text-heavy list layout — editorial feel with article previews.',
+          description: 'Editorial layout with a featured topic hero and a cross-topic article feed below.',
           component: () => import('./ResourcesPage'),
         },
       },
