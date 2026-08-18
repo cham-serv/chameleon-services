@@ -12,7 +12,6 @@
  */
 
 import './atlas.css';
-import './atlas-animations.css';
 import './demo-explorer.css';
 import type { LayoutProps } from '@/lib/types';
 import AtlasFooter from './AtlasFooter';
