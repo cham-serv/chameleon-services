@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import type { PageProps } from '@/lib/types';
+import type { PageProps, PageConfig } from '@/lib/types';
 import { getProducts, getCategories, getArticles } from '@/lib/api';
 import type { Product, ProductCategory, Article, MediaItem } from '@/lib/api';
 import { ProductCard } from '@/components/ProductCard';
@@ -29,14 +29,48 @@ export default async function HomePage({ config, variant, noCache }: PageProps) 
   const siteUrl = `https://${tenant}.chameleon.services`;
   const pc = config.pageConfig;
 
-  // Hero content — prefer pageConfig, fall back to existing behaviour
-  const heroHeadline = pc?.homeHeroHeadline ?? (tagline || `Welcome to ${siteName}`);
-  const heroSubheadline = pc?.homeHeroSubheadline ?? 'Discover our curated collection of products — crafted with quality and delivered with care.';
+  // Shared CTA content
   const cta1Text = pc?.homeCta1Text ?? 'Shop Now';
   const cta1Link = pc?.homeCta1Link ?? '/shop';
   const cta2Text = pc?.homeCta2Text ?? 'Browse Resources';
   const cta2Link = pc?.homeCta2Link ?? '/resources';
-  const heroImageUrl = pc?.homeHeroImage?.url ?? null;
+
+  // Variant-specific hero content — each variant reads its own CMS fields
+  const defaultHeadline = tagline || `Welcome to ${siteName}`;
+  const defaultSubheadline = 'Discover our curated collection of products — crafted with quality and delivered with care.';
+
+  let heroHeadline: string;
+  let heroSubheadline: string;
+  let heroImageUrl: string | null;
+
+  switch (variant) {
+    case 'editorial':
+      heroHeadline = pc?.homeEditorialHeadline ?? defaultHeadline;
+      heroSubheadline = pc?.homeEditorialSubheadline ?? defaultSubheadline;
+      heroImageUrl = pc?.homeEditorialHeroImage?.url ?? null;
+      break;
+    case 'modern':
+      heroHeadline = pc?.homeModernHeadline ?? defaultHeadline;
+      heroSubheadline = pc?.homeModernSubheadline ?? defaultSubheadline;
+      heroImageUrl = pc?.homeModernHeroImage?.url ?? null;
+      break;
+    case 'bold':
+      heroHeadline = pc?.homeBoldHeadline ?? defaultHeadline;
+      heroSubheadline = pc?.homeBoldSubheadline ?? defaultSubheadline;
+      heroImageUrl = pc?.homeBoldHeroImage?.url ?? null;
+      break;
+    case 'minimalist':
+      heroHeadline = pc?.homeMinimalistHeadline ?? defaultHeadline;
+      heroSubheadline = pc?.homeMinimalistSubheadline ?? defaultSubheadline;
+      heroImageUrl = pc?.homeMinimalistHeroImage?.url ?? null;
+      break;
+    case 'storefront':
+    default:
+      heroHeadline = pc?.homeStorefrontHeadline ?? defaultHeadline;
+      heroSubheadline = pc?.homeStorefrontSubheadline ?? defaultSubheadline;
+      heroImageUrl = pc?.homeStorefrontHeroImage?.url ?? null;
+      break;
+  }
 
   // JSON-LD — shared by all variants
   const websiteSchema = {
@@ -118,6 +152,7 @@ export default async function HomePage({ config, variant, noCache }: PageProps) 
       </div>
     </>
   );
+
 }
 
 // ── Type Helpers ────────────────────────────────────────────────────────────
@@ -284,9 +319,9 @@ function renderEditorial(
   products: Product[],
   articles: Article[],
   currency: string,
-  pc: Record<string, unknown> | undefined,
+  pc: PageConfig | undefined,
 ) {
-  const brandStory = (pc?.homeEditorialExcerpt as string) ??
+  const brandStory = pc?.homeEditorialExcerpt ??
     'We believe in quality craftsmanship and thoughtful design. Every product tells a story — and we\u2019re here to share ours with you.';
 
   return (
