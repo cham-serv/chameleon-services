@@ -111,12 +111,25 @@ export type PageConfig = {
   // Page enablement & variants
   pages?: PageConfigPages | null;
 
-  // Home page content
-  homeHeroHeadline?: string | null;
-  homeHeroSubheadline?: string | null;
-  homeHeroImage?: PageConfigMedia;
-  homeHeroVideoUrl?: string | null;
-  homeHeroVideoFallback?: PageConfigMedia;
+  // Home page — variant-specific content
+  homeStorefrontHeadline?: string | null;
+  homeStorefrontSubheadline?: string | null;
+  homeStorefrontHeroImage?: PageConfigMedia;
+  homeEditorialHeadline?: string | null;
+  homeEditorialSubheadline?: string | null;
+  homeEditorialHeroImage?: PageConfigMedia;
+  homeEditorialExcerpt?: string | null;
+  homeModernHeadline?: string | null;
+  homeModernSubheadline?: string | null;
+  homeModernHeroImage?: PageConfigMedia;
+  homeBoldHeadline?: string | null;
+  homeBoldSubheadline?: string | null;
+  homeBoldHeroImage?: PageConfigMedia;
+  homeMinimalistHeadline?: string | null;
+  homeMinimalistSubheadline?: string | null;
+  homeMinimalistHeroImage?: PageConfigMedia;
+
+  // Home page — shared content
   homeCta1Text?: string | null;
   homeCta1Link?: string | null;
   homeCta2Text?: string | null;
@@ -124,6 +137,7 @@ export type PageConfig = {
   homeSeoTitle?: string | null;
   homeSeoDescription?: string | null;
   homeSeoOgImage?: PageConfigMedia;
+
 
   // About page content
   aboutHeadline?: string | null;
