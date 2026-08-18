@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 /**
  * DemoExplorer — Client Component
@@ -113,7 +113,7 @@ export function DemoExplorer({ routes }: DemoExplorerProps) {
       if (colonIdx > 0) {
         const overrideRoute = currentDv.slice(0, colonIdx);
         const overrideVariant = currentDv.slice(colonIdx + 1);
-        const normalizedRouteKey = currentRoute.routeKey.replace(/^\//, '');
+        const normalizedRouteKey = currentRoute.routeKey === '/' ? 'home' : currentRoute.routeKey.replace(/^\//, '');
         if (overrideRoute === normalizedRouteKey) {
           return overrideVariant;
         }

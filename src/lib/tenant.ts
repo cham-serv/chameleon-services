@@ -86,7 +86,7 @@ export async function resolvePage(
     if (colonIndex > 0) {
       const overrideRoute = devOverride.slice(0, colonIndex);
       const overrideVariant = devOverride.slice(colonIndex + 1);
-      const normalizedRouteKey = routeKey.replace(/^\//, '').replace(/\/\*$/, '');
+      const normalizedRouteKey = routeKey === '/' ? 'home' : routeKey.replace(/^\//, '').replace(/\/\*$/, '');
       if (overrideRoute === normalizedRouteKey && overrideVariant && page.variants[overrideVariant]) {
         variant = overrideVariant;
       }
