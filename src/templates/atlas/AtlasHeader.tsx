@@ -16,9 +16,12 @@ type Props = {
   config: TenantConfig;
   onOpenMobileNav: () => void;
   onOpenCart: () => void;
+  /** When true, header starts transparent (for full-bleed hero variants) and
+   *  transitions to solid once the user scrolls past the hero fold. */
+  transparent?: boolean;
 };
 
-export default function AtlasHeader({ config, onOpenMobileNav, onOpenCart }: Props) {
+export default function AtlasHeader({ config, onOpenMobileNav, onOpenCart, transparent = false }: Props) {
   const siteName = config.settings?.siteName ?? config.tenant.name;
   const fc = config.tenant.featureConfig;
   const totalItems = useCartStore((s) => s.totalItems());
@@ -44,7 +47,7 @@ export default function AtlasHeader({ config, onOpenMobileNav, onOpenCart }: Pro
   if (fc.contact?.enabled) navLinks.push({ href: '/contact', label: 'Contact' });
 
   return (
-    <header className="atlas-header" data-scrolled={scrolled}>
+    <header className="atlas-header" data-scrolled={scrolled} data-transparent={transparent || undefined}>
       <div className="atlas-header-inner">
         {/* Logo */}
         <Link href="/" className="atlas-header-logo">

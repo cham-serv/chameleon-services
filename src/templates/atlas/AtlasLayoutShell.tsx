@@ -18,9 +18,11 @@ import AtlasCartDrawer from './AtlasCartDrawer';
 type Props = {
   config: TenantConfig;
   children: React.ReactNode;
+  /** When true, renders the header transparent until user scrolls (for hero variants) */
+  transparentHeader?: boolean;
 };
 
-export default function AtlasLayoutShell({ config, children }: Props) {
+export default function AtlasLayoutShell({ config, children, transparentHeader = false }: Props) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
 
@@ -48,6 +50,7 @@ export default function AtlasLayoutShell({ config, children }: Props) {
         config={config}
         onOpenMobileNav={openMobileNav}
         onOpenCart={openCart}
+        transparent={transparentHeader}
       />
 
       <AtlasMobileNav
