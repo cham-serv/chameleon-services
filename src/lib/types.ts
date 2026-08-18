@@ -145,6 +145,15 @@ export type PageConfig = {
   aboutStory?: unknown; // richText JSON
   aboutSplitImage?: PageConfigMedia;
   aboutTeamMembers?: PageConfigTeamMember[] | null;
+  // About page — variant-specific content
+  aboutTeamGridHeadline?: string | null;
+  aboutTeamGridIntro?: string | null;
+  aboutTeamGridImage?: PageConfigMedia;
+  aboutStorySplitHeadline?: string | null;
+  aboutStorySplitIntro?: string | null;
+  aboutStorySplitImage?: PageConfigMedia;
+  aboutManifestoHeadline?: string | null;
+  aboutManifestoSubheadline?: string | null;
   aboutSeoTitle?: string | null;
   aboutSeoDescription?: string | null;
 

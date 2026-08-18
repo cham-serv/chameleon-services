@@ -2608,3 +2608,73 @@
   letter-spacing: 0.06em;
   color: color-mix(in srgb, var(--brand-text, #1b1b1b) 55%, transparent);
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ABOUT PAGE — VARIANT STYLES
+   Scoped via data-variant attribute set on the page wrapper div.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Shared responsive fixes for the mission grid (team-grid variant) ───── */
+
+[data-variant="team-grid"] .atlas-about-mission-grid {
+  grid-template-columns: 1fr; /* single column on mobile */
+}
+
+@media (min-width: 768px) {
+  [data-variant="team-grid"] .atlas-about-mission-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ── story-split: zigzag responsive (collapse to single column on mobile) ── */
+
+[data-variant="story-split"] .atlas-about-zigzag-row {
+  grid-template-columns: 1fr;
+  direction: ltr; /* always ltr on mobile */
+}
+
+@media (min-width: 768px) {
+  [data-variant="story-split"] .atlas-about-zigzag-row--reverse {
+    direction: rtl;
+  }
+}
+
+/* ── story-split: hide scrollbar on the team horizontal strip ─────────────── */
+
+[data-variant="story-split"] .atlas-about-team-scroll {
+  scrollbar-width: none; /* Firefox */
+}
+
+[data-variant="story-split"] .atlas-about-team-scroll::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Edge */
+}
+
+/* ── team-grid: team card hover effect ─────────────────────────────────────── */
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-variant="team-grid"] .atlas-team-card {
+    transition: transform 0.2s ease;
+  }
+
+  [data-variant="team-grid"] .atlas-team-card:hover {
+    transform: translateY(-4px);
+  }
+}
+
+/* ── manifesto: pull-quote font sizing ─────────────────────────────────────── */
+
+[data-variant="manifesto"] .atlas-about--manifesto h1 {
+  font-size: clamp(2rem, 6vw, 4rem);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+
+/* ── About page: general mobile improvements ──────────────────────────────── */
+
+@media (max-width: 767px) {
+  /* story-split zigzag: image placeholder hidden on mobile, text only */
+  [data-variant="story-split"] .atlas-about-zigzag-row > div:last-child {
+    display: none;
+  }
+}
+
