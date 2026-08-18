@@ -1,0 +1,177 @@
+﻿/**
+ * atlas-animations.css
+ *
+ * Shared animation primitives for the Atlas template.
+ * Imported once in AtlasLayout — available to all pages.
+ *
+ * Rules:
+ * - Only animates transform + opacity (no layout-triggering properties)
+ * - All animations gated behind @media (prefers-reduced-motion: no-preference)
+ * - IntersectionObserver triggers via data-reveal attribute (see AtlasReveal)
+ */
+
+/* ── Keyframes ───────────────────────────────────────────────────────────── */
+
+@keyframes atlas-reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes atlas-reveal-left {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes atlas-reveal-right {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes atlas-reveal-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes atlas-marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    /* translateX is set by JS as negative half the track width.
+       Fallback: use a percentage. Works for 2x duplicated items. */
+    transform: translateX(-50%);
+  }
+}
+
+/* ── Scroll Reveal — data-reveal attribute ───────────────────────────────── */
+
+/*
+  Usage in JSX:
+    <section data-reveal="up">...</section>
+    <div data-reveal="left" data-reveal-delay="200">...</div>
+
+  The JS observer in AtlasReveal adds data-revealed="true" when in view.
+  Without JS, elements stay visible (no hidden state before JS loads).
+*/
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal] {
+    opacity: 0;
+  }
+
+  [data-reveal="up"][data-revealed="true"] {
+    animation: atlas-reveal-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  [data-reveal="left"][data-revealed="true"] {
+    animation: atlas-reveal-left 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  [data-reveal="right"][data-revealed="true"] {
+    animation: atlas-reveal-right 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  [data-reveal="scale"][data-revealed="true"] {
+    animation: atlas-reveal-scale 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  /* Staggered delay via data-reveal-delay (value in ms) */
+  [data-reveal-delay="100"][data-revealed="true"] { animation-delay: 100ms; }
+  [data-reveal-delay="200"][data-revealed="true"] { animation-delay: 200ms; }
+  [data-reveal-delay="300"][data-revealed="true"] { animation-delay: 300ms; }
+  [data-reveal-delay="400"][data-revealed="true"] { animation-delay: 400ms; }
+  [data-reveal-delay="500"][data-revealed="true"] { animation-delay: 500ms; }
+}
+
+/* ── Marquee ─────────────────────────────────────────────────────────────── */
+
+.atlas-marquee {
+  overflow: hidden;
+  width: 100%;
+  padding: var(--atlas-spacing-sm) 0;
+}
+
+.atlas-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: atlas-marquee-scroll linear infinite;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .atlas-marquee:hover .atlas-marquee-track {
+    animation-play-state: paused;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .atlas-marquee-track {
+    animation: none;
+  }
+}
+
+.atlas-marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--atlas-spacing-md);
+  padding: 0 var(--atlas-spacing-md);
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--brand-text, #1b1b1b);
+}
+
+.atlas-marquee-sep {
+  opacity: 0.4;
+  font-size: 1rem;
+}
+
+/* ── Counter ─────────────────────────────────────────────────────────────── */
+
+.atlas-counter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  text-align: center;
+}
+
+.atlas-counter-value {
+  font-family: var(--font-heading, inherit);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--brand-accent, var(--brand-primary, #2d6a4f));
+  letter-spacing: -0.02em;
+}
+
+.atlas-counter-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: color-mix(in srgb, var(--brand-text, #1b1b1b) 55%, transparent);
+}

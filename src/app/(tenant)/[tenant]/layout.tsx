@@ -24,13 +24,27 @@ export default async function TenantLayout({ children, params }: Props) {
   const { tenant } = await params;
   const config = await fetchTenantConfig(tenant);
 
-  // Fonts — fall back to defaults if no config
-  const fontHeading = config?.settings?.fontHeading ?? null;
-  const fontBody = config?.settings?.fontBody ?? null;
+  // Brand config coalesces from two sources:
+  // 1. settings (from SiteSettings collection — generic, any template)
+  // 2. pageConfig (from atlas-site-config — Atlas-specific, richer)
+  // settings takes priority; pageConfig fills in what's missing.
+  const pc = config?.pageConfig;
+  const s = config?.settings;
+
+  const fontHeading = s?.fontHeading ?? pc?.fontHeading ?? null;
+  const fontBody = s?.fontBody ?? pc?.fontBody ?? null;
   const fontClasses = getFontClasses(fontHeading, fontBody);
 
   // Brand tokens — inject as CSS custom properties
-  const brandTokens = buildBrandTokens(config?.settings);
+  const brandTokens = buildBrandTokens({
+    colourPrimary:    s?.colourPrimary    ?? pc?.colourPrimary    ?? undefined,
+    colourSecondary:  s?.colourSecondary  ?? pc?.colourSecondary  ?? undefined,
+    colourAccent:     s?.colourAccent     ?? pc?.colourAccent     ?? undefined,
+    colourBackground: s?.colourBackground ?? pc?.colourBackground ?? undefined,
+    colourText:       s?.colourText       ?? undefined,
+  });
+
+  const buttonStyle = s?.buttonStyle ?? pc?.buttonStyle ?? 'filled';
 
   return (
     <html lang="en" className={fontClasses}>
@@ -41,12 +55,15 @@ export default async function TenantLayout({ children, params }: Props) {
           }}
         />
       </head>
-      <body style={{
-        fontFamily: 'var(--font-body, inherit)',
-        color: 'var(--brand-text, #333)',
-        background: 'var(--brand-background, #ffffff)',
-        margin: 0,
-      }}>
+      <body
+        data-btn-style={buttonStyle}
+        style={{
+          fontFamily: 'var(--font-body, inherit)',
+          color: 'var(--brand-text, #333)',
+          background: 'var(--brand-background, #ffffff)',
+          margin: 0,
+        }}
+      >
         {children}
       </body>
     </html>
@@ -60,17 +77,20 @@ export default async function TenantLayout({ children, params }: Props) {
 function buildBrandTokens(settings: {
   colourPrimary?: string;
   colourSecondary?: string;
+  colourAccent?: string;
   colourBackground?: string;
   colourText?: string;
 } | null | undefined): string {
   const p = settings?.colourPrimary ?? '#0B132B';
   const s = settings?.colourSecondary ?? '#00E5FF';
+  const a = settings?.colourAccent ?? '#f59e0b';
   const bg = settings?.colourBackground ?? '#ffffff';
   const text = settings?.colourText ?? '#333333';
 
   return [
     `--brand-primary: ${p}`,
     `--brand-secondary: ${s}`,
+    `--brand-accent: ${a}`,
     `--brand-background: ${bg}`,
     `--brand-text: ${text}`,
     `--brand-surface: color-mix(in oklch, ${bg} 95%, ${p} 5%)`,
