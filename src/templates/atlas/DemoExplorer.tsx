@@ -21,6 +21,8 @@ import type { ExplorerRoute } from '@/lib/demo-explorer-types';
 
 type DemoExplorerProps = {
   routes: ExplorerRoute[];
+  /** The URL prefix for this tenant (e.g. '' for domain-based, '/atlas-demo' for path-based). */
+  basePath: string;
 };
 
 type BrandPreview = {
@@ -69,7 +71,7 @@ type ExplorerTab = 'pages' | 'brand';
 
 // ── Component ─────────────────────────────────────────────────────────────
 
-export function DemoExplorer({ routes }: DemoExplorerProps) {
+export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<ExplorerTab>('pages');
   const pathname = usePathname();
@@ -89,10 +91,12 @@ export function DemoExplorer({ routes }: DemoExplorerProps) {
   // ── Derive current state from URL ─────────────────────────────────
 
   const tenantPath = useMemo(() => {
-    const parts = pathname.split('/').filter(Boolean);
-    if (parts.length <= 1) return '/';
-    return '/' + parts.slice(1).join('/');
-  }, [pathname]);
+    // Strip the basePath prefix (e.g. '' or '/atlas-demo') to get the page path
+    if (basePath && pathname.startsWith(basePath)) {
+      return pathname.slice(basePath.length) || '/';
+    }
+    return pathname || '/';
+  }, [pathname, basePath]);
 
   const currentRoute = useMemo(() => {
     const exact = routes.find((r) => r.routeKey === tenantPath);
@@ -175,10 +179,9 @@ export function DemoExplorer({ routes }: DemoExplorerProps) {
   const navigateToPage = useCallback(
     (routeKey: string) => {
       const path = routeKey === '/' ? '' : routeKey;
-      const tenantSlug = pathname.split('/').filter(Boolean)[0] ?? '';
-      router.push(`/${tenantSlug}${path}`);
+      router.push(`${basePath}${path}`);
     },
-    [pathname, router],
+    [basePath, router],
   );
 
   const selectVariant = useCallback(

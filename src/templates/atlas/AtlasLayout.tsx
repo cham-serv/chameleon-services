@@ -34,7 +34,7 @@ export default function AtlasLayout({ config, children }: LayoutProps) {
         </main>
       </AtlasLayoutShell>
       <AtlasFooter config={config} />
-      {explorerRoutes && <DemoExplorer routes={explorerRoutes} />}
+      {explorerRoutes && <DemoExplorer routes={explorerRoutes} basePath="" />}
     </>
   );
 }
