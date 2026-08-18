@@ -18,21 +18,31 @@ export const definition: TemplateDefinition = {
     '/': {
       label: 'Home',
       feature: null, // always available
-      defaultVariant: 'hero-static',
+      defaultVariant: 'storefront',
       variants: {
-        'hero-static': {
-          label: 'Hero Static',
-          description: 'Clean hero with a static image — versatile and conversion-focused.',
+        'storefront': {
+          label: 'Storefront',
+          description: 'Product-forward and conversion-focused — visitors immediately see what\'s for sale.',
           component: () => import('./HomePage'),
         },
-        'hero-video': {
-          label: 'Hero Video',
-          description: 'Full-width background video hero for immersive brand storytelling.',
+        'editorial': {
+          label: 'Editorial',
+          description: 'Brand-first, typography-driven — feels like a premium magazine landing page.',
           component: () => import('./HomePage'),
         },
-        'hero-carousel': {
-          label: 'Hero Carousel',
-          description: 'Rotating hero images — ideal for showcasing multiple products or campaigns.',
+        'modern': {
+          label: 'Modern',
+          description: 'Atmospheric, premium — dark mode with glowing gradients and micro-interactions.',
+          component: () => import('./HomePage'),
+        },
+        'bold': {
+          label: 'Bold',
+          description: 'Dark, dramatic, high-contrast — photographic impact with hard edges.',
+          component: () => import('./HomePage'),
+        },
+        'minimalist': {
+          label: 'Minimalist',
+          description: 'Immersive and ultra-minimal — experiential, proving value through feel.',
           component: () => import('./HomePage'),
         },
       },
