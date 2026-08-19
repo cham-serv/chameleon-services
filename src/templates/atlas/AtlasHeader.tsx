@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 /**
  * AtlasHeader  Client Component
@@ -46,12 +46,27 @@ export default function AtlasHeader({ config, onOpenMobileNav, onOpenCart, trans
   if (fc.faqs?.enabled) navLinks.push({ href: '/faqs', label: 'FAQs' });
   if (fc.contact?.enabled) navLinks.push({ href: '/contact', label: 'Contact' });
 
+  // Logo: prefer AtlasSiteConfig logo, fall back to SiteSettings logo, then text
+  const logoUrl = config.pageConfig?.logo?.url ?? config.settings?.logo?.url ?? null;
+  const logoAlt = config.pageConfig?.logo?.alt ?? siteName;
+
   return (
     <header className="atlas-header" data-scrolled={scrolled} data-transparent={transparent || undefined}>
       <div className="atlas-header-inner">
         {/* Logo */}
         <Link href="/" className="atlas-header-logo">
-          {siteName}
+          {logoUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={logoUrl}
+              alt={logoAlt}
+              className="atlas-header-logo-img"
+              height={36}
+              style={{ height: '36px', width: 'auto', display: 'block' }}
+            />
+          ) : (
+            siteName
+          )}
         </Link>
 
         {/* Desktop nav */}
