@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, Check } from 'lucide-react';
 
@@ -59,7 +59,7 @@ const businessTiers = [
 const agencyTiers = [
   {
     name: 'Bronze',
-    clients: '12 client sites',
+    clients: '1-2 client sites',
     monthly: 2500,
     features: [
       'Agency Dashboard',
@@ -68,7 +68,7 @@ const agencyTiers = [
   },
   {
     name: 'Silver',
-    clients: '39 client sites',
+    clients: '3-9 client sites',
     monthly: 4500,
     features: [
       'Agency Dashboard',

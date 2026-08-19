@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, Settings, BarChart3, Database, Workflow, ShieldCheck, Zap } from 'lucide-react';
 
@@ -34,19 +34,19 @@ const agencyBenefits = [
 const tiers = [
   {
     name: 'Bronze',
-    clients: '12 client sites',
+    clients: '1-2 client sites',
     price: 'R2,500/mo',
     features: ['Agency Dashboard', 'Multi-tenant management'],
   },
   {
     name: 'Silver',
-    clients: '39 client sites',
+    clients: '3-9 client sites',
     price: 'R4,500/mo',
     features: ['Agency Dashboard', 'Multi-tenant management', 'Priority support'],
   },
   {
     name: 'Gold',
-    clients: '10+ client sites',
+    clients: '10+ client sites (unlimited)',
     price: 'R6,000/mo flat cap',
     features: ['Agency Dashboard', 'Dedicated account manager', 'Early feature access'],
   },
@@ -152,7 +152,7 @@ export default function AgenciesPage() {
                 Client pays Chameleon
               </h3>
               <p style={{ color: 'var(--m-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
-                The client pays the R3,500R4,500/mo platform infrastructure fee directly to us.
+                The client pays the R3,500-R4,500/mo platform infrastructure fee directly to us.
               </p>
             </div>
             
@@ -164,7 +164,7 @@ export default function AgenciesPage() {
                 Client pays Agency
               </h3>
               <p style={{ color: 'var(--m-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
-                The client pays you your R15kR20k/mo retainer for strategy, content, and management.
+                The client pays you your R15k-R20k/mo retainer for strategy, content, and management.
               </p>
             </div>
 
@@ -176,7 +176,7 @@ export default function AgenciesPage() {
                 Agency pays Chameleon
               </h3>
               <p style={{ color: 'var(--m-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
-                You pay a flat R2,500R6,000/mo fee for the multi-tenant God Mode dashboard.
+                You pay a flat R2,500-R6,000/mo fee for the multi-tenant God Mode dashboard.
               </p>
             </div>
           </div>
@@ -198,9 +198,9 @@ export default function AgenciesPage() {
             <div style={{ fontSize: '1.1rem', color: 'var(--m-text)', lineHeight: 1.8, maxWidth: '500px', margin: '0 auto' }}>
               <p><strong>5 clients</strong> on your books.</p>
               <p><strong>R75,000/mo</strong> in combined retainer revenue.</p>
-              <p>Your dashboard costs: <strong>R4,500/mo</strong>.</p>
+              <p>Your dashboard costs: <strong>R2,500/mo</strong>.</p>
               <div style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.1)', color: '#60a5fa', fontWeight: 600 }}>
-                That's a 6% overhead for unlimited scale.
+                That&apos;s a 3.3% overhead. Whether you have 2 clients or 20.
               </div>
             </div>
           </div>
@@ -329,13 +329,16 @@ export default function AgenciesPage() {
           >
             Ready to partner?
           </h2>
-          <p style={{ fontSize: '0.95rem', color: 'var(--m-text-muted)', maxWidth: '400px', margin: '0 auto 28px', lineHeight: 1.7 }}>
+          <p style={{ fontSize: '0.95rem', color: 'var(--m-text-muted)', maxWidth: '420px', margin: '0 auto 28px', lineHeight: 1.7 }}>
             Let&apos;s have a conversation about how Chameleon can fit into your agency&apos;s offering.
           </p>
           <Link href="/contact" className="m-btn m-btn-primary m-btn-lg">
             Talk to us
             <ArrowRight size={18} />
           </Link>
+          <p style={{ marginTop: '20px', fontSize: '0.8rem', color: 'var(--m-text-faint)' }}>
+            Revenue share for high-volume partners &mdash; talk to us.
+          </p>
         </div>
       </section>
     </>
