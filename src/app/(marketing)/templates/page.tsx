@@ -18,9 +18,8 @@ const templates = [
     features: ['Ecommerce & Cart', 'AI Product Listings', 'Articles & Blog', 'FAQ', 'Contact', 'Legal Pages'],
     industries: ['Industrial Supply', 'Heavy Retail', 'B2B Products', 'DTC Brands'],
     demoHref: 'https://atlas-demo.chameleon.services',
-    previewImage: 'https://chameleon-engine-production.up.railway.app/api/media/file/atlas-demo-landing.webp',
-    gradient: 'linear-gradient(135deg, #1e3a5f 0%, #162032 50%, #0d1117 100%)',
-    accentColor: '#3b82f6',
+    gradient: 'linear-gradient(135deg, #7f1d1d 0%, #450a0a 60%, #1a0505 100%)',
+    accentColor: '#f87171',
     status: 'available',
   },
   {
@@ -134,35 +133,47 @@ export default function TemplatesPage() {
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
+                    gap: '12px',
+                    padding: '48px 32px',
                   }}
                 >
-                  {'previewImage' in template && template.previewImage ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={template.previewImage}
-                      alt={`${template.name} template preview`}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        objectPosition: 'top',
-                        position: 'absolute',
-                        inset: 0,
-                      }}
-                    />
-                  ) : (
-                    <div
-                      style={{
-                        fontFamily: 'var(--m-font-display)',
-                        fontSize: '3rem',
-                        fontWeight: 700,
-                        color: 'rgba(255,255,255,0.12)',
-                        letterSpacing: '-0.03em',
-                      }}
-                    >
-                      {template.name}
-                    </div>
-                  )}
+                  {/* Radial glow */}
+                  <div
+                    aria-hidden="true"
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      background: `radial-gradient(ellipse at 50% 40%, ${template.accentColor}22 0%, transparent 70%)`,
+                      pointerEvents: 'none',
+                    }}
+                  />
+                  {/* Template name */}
+                  <div
+                    style={{
+                      fontFamily: 'var(--m-font-display)',
+                      fontSize: 'clamp(3rem, 6vw, 5rem)',
+                      fontWeight: 800,
+                      color: 'rgba(255,255,255,0.08)',
+                      letterSpacing: '-0.04em',
+                      lineHeight: 1,
+                      userSelect: 'none',
+                    }}
+                  >
+                    {template.name}
+                  </div>
+                  {/* Accent label */}
+                  <div
+                    style={{
+                      fontSize: '0.7rem',
+                      fontWeight: 700,
+                      letterSpacing: '0.12em',
+                      textTransform: 'uppercase',
+                      color: template.accentColor,
+                      opacity: 0.85,
+                    }}
+                  >
+                    {template.tagline}
+                  </div>
                   {template.status === 'coming-soon' && (
                     <div
                       style={{
