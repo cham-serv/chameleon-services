@@ -173,7 +173,12 @@ export const definition: TemplateDefinition = {
       variants: {
         'accordion': {
           label: 'Accordion',
-          description: 'Expandable FAQ sections — clean and easy to navigate.',
+          description: 'Expandable FAQ sections grouped by category — clean, utilitarian, easy to navigate.',
+          component: () => import('./FAQsPage'),
+        },
+        'search': {
+          label: 'Search',
+          description: 'Help-center style — prominent search bar as hero with instant filtering and category cards.',
           component: () => import('./FAQsPage'),
         },
       },

@@ -27,9 +27,16 @@ export default function AtlasFooter({ config }: Props) {
   if (fc.contact?.enabled) navLinks.push({ href: '/contact', label: 'Contact' });
   if (fc.legal?.enabled) navLinks.push({ href: '/legal', label: 'Legal' });
 
-  // Social links — only render icons for populated links
-  const social = config.settings?.socialLinks ?? {};
-  const socialEntries = Object.entries(social).filter(([, url]) => url);
+  // Social links — flat fields as exposed by engine (NOT nested socialLinks)
+  const s = config.settings;
+  const socialEntries: Array<{ platform: string; url: string }> = [
+    s?.socialFacebook  && { platform: 'facebook',  url: s.socialFacebook },
+    s?.socialInstagram && { platform: 'instagram', url: s.socialInstagram },
+    s?.socialLinkedIn  && { platform: 'linkedin',  url: s.socialLinkedIn },
+    s?.socialTwitter   && { platform: 'twitter',   url: s.socialTwitter },
+    s?.socialYoutube   && { platform: 'youtube',   url: s.socialYoutube },
+    s?.socialGoogle    && { platform: 'google',    url: s.socialGoogle },
+  ].filter(Boolean) as Array<{ platform: string; url: string }>;
 
   return (
     <footer className="atlas-footer">
@@ -87,10 +94,10 @@ export default function AtlasFooter({ config }: Props) {
             <div>
               <div className="atlas-footer-heading">Follow Us</div>
               <div className="atlas-footer-social">
-                {socialEntries.map(([platform, url]) => (
+              {socialEntries.map(({ platform, url }) => (
                   <a
                     key={platform}
-                    href={url as string}
+                    href={url}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={platform}

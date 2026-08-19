@@ -123,7 +123,12 @@ export function AtlasFaqAccordion({ categories }: AtlasFaqAccordionProps) {
                       }}
                     >
                       <div style={{ padding: '0 var(--atlas-spacing-md) var(--atlas-spacing-md)' }}>
-                        <p className="atlas-body" style={{ margin: 0, lineHeight: 1.7 }}>
+                        <p
+                          className="atlas-body"
+                          style={{ margin: 0, lineHeight: 1.7 }}
+                          data-speakable="true"
+                          id={`faq-answer-${faq.id}`}
+                        >
                           {typeof faq.answer === 'string' ? faq.answer : 'Answer available on the full page.'}
                         </p>
                       </div>
