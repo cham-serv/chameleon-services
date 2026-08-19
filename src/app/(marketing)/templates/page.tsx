@@ -18,7 +18,7 @@ const templates = [
     features: ['Ecommerce & Cart', 'AI Product Listings', 'Articles & Blog', 'FAQ', 'Contact', 'Legal Pages'],
     industries: ['Industrial Supply', 'Heavy Retail', 'B2B Products', 'DTC Brands'],
     demoHref: 'https://atlas-demo.chameleon.services',
-    previewImage: null as string | null, // TODO: replace with CMS media URL once confirmed
+    previewImage: 'https://chameleon-engine-production.up.railway.app/api/media/file/atlas-demo-landing.webp',
     gradient: 'linear-gradient(135deg, #1e3a5f 0%, #162032 50%, #0d1117 100%)',
     accentColor: '#3b82f6',
     status: 'available',
