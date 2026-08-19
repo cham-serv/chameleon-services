@@ -61,7 +61,7 @@ const templates = [
     tagline: 'For heavy retail, industrial supply, and mid-market B2B.',
     features: ['Ecommerce', 'Articles', 'FAQ', 'Cart & Checkout'],
     demoHref: 'https://atlas-demo.chameleon.services',
-    gradient: 'linear-gradient(135deg, #1e3a5f 0%, #0d1117 100%)',
+    gradient: 'linear-gradient(135deg, #7f1d1d 0%, #450a0a 60%, #1a0505 100%)',
   },
   {
     id: 'meridian',
