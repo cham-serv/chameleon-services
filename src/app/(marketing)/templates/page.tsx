@@ -18,6 +18,7 @@ const templates = [
     features: ['Ecommerce & Cart', 'AI Product Listings', 'Articles & Blog', 'FAQ', 'Contact', 'Legal Pages'],
     industries: ['Industrial Supply', 'Heavy Retail', 'B2B Products', 'DTC Brands'],
     demoHref: 'https://atlas-demo.chameleon.services',
+    previewImage: null as string | null, // TODO: replace with CMS media URL once confirmed
     gradient: 'linear-gradient(135deg, #1e3a5f 0%, #162032 50%, #0d1117 100%)',
     accentColor: '#3b82f6',
     status: 'available',
@@ -126,15 +127,42 @@ export default function TemplatesPage() {
                 <div
                   style={{
                     background: template.gradient,
+                    minHeight: '280px',
+                    position: 'relative',
+                    overflow: 'hidden',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    padding: '48px 32px',
-                    minHeight: '280px',
-                    position: 'relative',
                   }}
                 >
+                  {'previewImage' in template && template.previewImage ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={template.previewImage}
+                      alt={`${template.name} template preview`}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        objectPosition: 'top',
+                        position: 'absolute',
+                        inset: 0,
+                      }}
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        fontFamily: 'var(--m-font-display)',
+                        fontSize: '3rem',
+                        fontWeight: 700,
+                        color: 'rgba(255,255,255,0.12)',
+                        letterSpacing: '-0.03em',
+                      }}
+                    >
+                      {template.name}
+                    </div>
+                  )}
                   {template.status === 'coming-soon' && (
                     <div
                       style={{
@@ -155,17 +183,6 @@ export default function TemplatesPage() {
                       Coming Soon
                     </div>
                   )}
-                  <div
-                    style={{
-                      fontFamily: 'var(--m-font-display)',
-                      fontSize: '3rem',
-                      fontWeight: 700,
-                      color: 'rgba(255,255,255,0.12)',
-                      letterSpacing: '-0.03em',
-                    }}
-                  >
-                    {template.name}
-                  </div>
                 </div>
 
                 {/* Info */}
