@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     siteName: 'Chameleon',
     title: 'Chameleon — AI-Ready Websites for South African Businesses',
     description:
-      'Search has changed. Chameleon adapts your business to the new era of AI-powered search — so you\'re never left behind.',
+      'Search has changed. Chameleon adapts your business to the new era of AI-powered search with authority-engine architecture — so you\'re never left behind.',
   },
   twitter: {
     card: 'summary_large_image',
@@ -58,7 +58,7 @@ const orgJsonLd = {
   name: 'Chameleon',
   url: 'https://chameleon.services',
   description:
-    'Chameleon builds AI-ready, GEO-optimised websites and ecommerce stores for South African businesses.',
+    'Chameleon builds AI-ready, GEO-optimised authority engines and ecommerce stores for South African businesses and agencies.',
   areaServed: 'ZA',
   contactPoint: {
     '@type': 'ContactPoint',

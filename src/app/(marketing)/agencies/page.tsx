@@ -1,51 +1,54 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, Users, Layers, BarChart3, Headphones } from 'lucide-react';
+import { ArrowRight, Settings, BarChart3, Database, Workflow, ShieldCheck, Zap } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Agency Programme — Build Client Sites at Scale',
+  title: 'Agency Programme — The Chameleon Partner Model',
   description:
-    'Chameleon for agencies. Build, manage, and white-label AI-ready websites for your clients. Revenue share programme, unlimited stores, dedicated support.',
+    'Chameleon for agencies. You own the retainer, we own the infrastructure. Build and manage AI-ready websites for your clients at scale.',
 };
 
 const agencyBenefits = [
   {
-    icon: Layers,
-    title: 'Unlimited Client Sites',
-    desc: 'One Agency plan. Unlimited stores and websites. Manage every client from a single dashboard with full isolation between accounts.',
+    icon: Database,
+    title: 'You own the retainer. We own the infrastructure.',
+    desc: 'If a client fires your agency, their site stays on Chameleon. You keep your relationship and your retainer, but their infrastructure is our problem. No more white-label lock-in risks.',
   },
   {
-    icon: Users,
-    title: 'White-Label Branding',
-    desc: 'Remove Chameleon branding. Present the platform as your own product. Your clients see your brand, not ours.',
+    icon: Settings,
+    title: 'God Mode Dashboard',
+    desc: 'See every client site, manage configurations, and monitor analytics from a single multi-tenant screen. No switching accounts.',
   },
   {
-    icon: BarChart3,
-    title: 'Revenue Share',
-    desc: "Earn recurring revenue on every client you bring to the platform. The more you grow your book of business, the more you earn.",
+    icon: Zap,
+    title: 'Built-in GEO/AEO',
+    desc: "Walk into the next pitch already ahead of the WordPress agency down the road. Every site speaks natively to AI search engines.",
   },
   {
-    icon: Headphones,
-    title: 'Dedicated Support',
-    desc: 'Skip the queue. Agency partners get a dedicated account manager and SLA-backed technical support.',
+    icon: Workflow,
+    title: 'Faster Delivery',
+    desc: 'Spin up a client site in days, not months. Atlas, Meridian, or future templates — configured and live before traditional agencies even wireframe.',
   },
 ];
 
-const agencyWorkflow = [
+const tiers = [
   {
-    step: '01',
-    title: 'You win the client',
-    desc: "You do what you're already good at — selling, strategising, building relationships.",
+    name: 'Bronze',
+    clients: '1–2 client sites',
+    price: 'R2,500/mo',
+    features: ['Agency Dashboard', 'Multi-tenant management'],
   },
   {
-    step: '02',
-    title: 'We power the site',
-    desc: 'Spin up a branded, AI-ready website for your client in hours. Configure, customise, and launch.',
+    name: 'Silver',
+    clients: '3–9 client sites',
+    price: 'R4,500/mo',
+    features: ['Agency Dashboard', 'Multi-tenant management', 'Priority support'],
   },
   {
-    step: '03',
-    title: 'Recurring revenue',
-    desc: "Your client pays monthly. You earn your share — every month, for as long as they're active.",
+    name: 'Gold',
+    clients: '10+ client sites',
+    price: 'R6,000/mo flat cap',
+    features: ['Agency Dashboard', 'Dedicated account manager', 'Early feature access'],
   },
 ];
 
@@ -86,30 +89,153 @@ export default function AgenciesPage() {
               letterSpacing: '-0.02em',
               color: 'var(--m-text)',
               margin: '0 0 20px',
-              maxWidth: '700px',
+              maxWidth: '800px',
               marginInline: 'auto',
             }}
           >
-            Build client sites in days,{' '}
-            <span className="m-gradient-text">not months.</span>
+            Your clients pay us. You keep your retainer.{' '}
+            <span className="m-gradient-text">Everyone wins.</span>
           </h1>
           <p
             style={{
               fontSize: '1.05rem',
               color: 'var(--m-text-muted)',
-              maxWidth: '520px',
+              maxWidth: '600px',
               margin: '0 auto 40px',
               lineHeight: 1.7,
             }}
           >
-            Chameleon gives your agency a platform to deliver AI-ready, GEO-optimised
-            websites to clients faster and more profitably than ever before.
+            Chameleon gives your agency a platform to deliver AI-ready websites 
+            faster and more profitably. The modern partner model for ambitious agencies.
           </p>
           <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link href="/contact" className="m-btn m-btn-primary m-btn-lg" id="agency-hero-cta">
-              Talk to us about Agency pricing
+            <Link href="/contact" className="m-btn m-btn-primary m-btn-lg">
+              Become an Agency Partner
               <ArrowRight size={18} />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* The Model Explained */}
+      <section className="m-section" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="m-container">
+          <div style={{ textAlign: 'center', marginBottom: '56px' }}>
+            <h2
+              style={{
+                fontFamily: 'var(--m-font-display)',
+                fontSize: 'clamp(1.8rem, 3vw, 2.4rem)',
+                fontWeight: 700,
+                color: 'var(--m-text)',
+                margin: '0 0 12px',
+              }}
+            >
+              The Chameleon Model
+            </h2>
+            <p style={{ fontSize: '1rem', color: 'var(--m-text-muted)' }}>
+              Transparent billing. No white-label lock-in risks.
+            </p>
+          </div>
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '24px',
+            maxWidth: '900px',
+            margin: '0 auto'
+          }}>
+            <div className="m-card" style={{ padding: '32px', textAlign: 'center', background: 'rgba(255,255,255,0.02)' }}>
+              <div style={{ color: '#60a5fa', fontWeight: 700, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '16px' }}>
+                Step 1
+              </div>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 600, color: 'white', marginBottom: '16px' }}>
+                Client pays Chameleon
+              </h3>
+              <p style={{ color: 'var(--m-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+                The client pays the R3,500–R4,500/mo platform infrastructure fee directly to us.
+              </p>
+            </div>
+            
+            <div className="m-card" style={{ padding: '32px', textAlign: 'center', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(59,130,246,0.3)' }}>
+              <div style={{ color: '#60a5fa', fontWeight: 700, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '16px' }}>
+                Step 2
+              </div>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 600, color: 'white', marginBottom: '16px' }}>
+                Client pays Agency
+              </h3>
+              <p style={{ color: 'var(--m-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+                The client pays you your R15k–R20k/mo retainer for strategy, content, and management.
+              </p>
+            </div>
+
+            <div className="m-card" style={{ padding: '32px', textAlign: 'center', background: 'rgba(255,255,255,0.02)' }}>
+              <div style={{ color: '#60a5fa', fontWeight: 700, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '16px' }}>
+                Step 3
+              </div>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 600, color: 'white', marginBottom: '16px' }}>
+                Agency pays Chameleon
+              </h3>
+              <p style={{ color: 'var(--m-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+                You pay a flat R2,500–R6,000/mo fee for the multi-tenant God Mode dashboard.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* The Math */}
+      <section className="m-section" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="m-container-sm">
+          <div className="m-card" style={{ 
+            padding: '48px', 
+            background: 'linear-gradient(135deg, rgba(59,130,246,0.05) 0%, rgba(13,17,23,1) 100%)',
+            border: '1px solid rgba(59,130,246,0.2)',
+            textAlign: 'center'
+          }}>
+            <h2 style={{ fontFamily: 'var(--m-font-display)', fontSize: '2rem', fontWeight: 700, color: 'white', margin: '0 0 24px' }}>
+              The Math at Scale
+            </h2>
+            <div style={{ fontSize: '1.1rem', color: 'var(--m-text)', lineHeight: 1.8, maxWidth: '500px', margin: '0 auto' }}>
+              <p><strong>5 clients</strong> on your books.</p>
+              <p><strong>R75,000/mo</strong> in combined retainer revenue.</p>
+              <p>Your dashboard costs: <strong>R4,500/mo</strong>.</p>
+              <div style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.1)', color: '#60a5fa', fontWeight: 600 }}>
+                That's a 6% overhead for unlimited scale.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Partner Tiers */}
+      <section className="m-section" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="m-container">
+          <div style={{ textAlign: 'center', marginBottom: '56px' }}>
+            <h2 style={{ fontFamily: 'var(--m-font-display)', fontSize: 'clamp(1.8rem, 3vw, 2.4rem)', fontWeight: 700, color: 'var(--m-text)' }}>
+              Partner Tiers
+            </h2>
+          </div>
+
+          <div className="m-grid-3">
+            {tiers.map((tier) => (
+              <div key={tier.name} className="m-card" style={{ padding: '32px' }}>
+                <div style={{ color: '#60a5fa', fontSize: '0.85rem', fontWeight: 700, marginBottom: '8px' }}>
+                  {tier.clients}
+                </div>
+                <h3 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'white', margin: '0 0 16px' }}>{tier.name}</h3>
+                <div style={{ fontSize: '1.5rem', fontWeight: 600, color: 'white', marginBottom: '24px' }}>
+                  {tier.price}
+                </div>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                  {tier.features.map(f => (
+                    <li key={f} style={{ display: 'flex', gap: '8px', marginBottom: '12px', fontSize: '0.9rem', color: 'var(--m-text-muted)' }}>
+                      <ShieldCheck size={16} color="#60a5fa" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -127,16 +253,12 @@ export default function AgenciesPage() {
                 fontFamily: 'var(--m-font-display)',
                 fontSize: 'clamp(1.8rem, 3vw, 2.4rem)',
                 fontWeight: 700,
-                letterSpacing: '-0.02em',
                 color: 'var(--m-text)',
                 margin: '0 0 12px',
               }}
             >
-              Everything your agency needs.
+              The Agency Advantage
             </h2>
-            <p style={{ fontSize: '0.95rem', color: 'var(--m-text-muted)', lineHeight: 1.7 }}>
-              Designed for agencies who want to deliver more — without growing their team.
-            </p>
           </div>
 
           <div className="m-grid-2" style={{ gap: '20px' }}>
@@ -145,7 +267,6 @@ export default function AgenciesPage() {
                 key={benefit.title}
                 className="m-card"
                 style={{ padding: '32px', display: 'flex', gap: '20px', alignItems: 'flex-start' }}
-                id={`agency-benefit-${benefit.title.toLowerCase().replace(/\s+/g, '-')}`}
               >
                 <div
                   style={{
@@ -185,89 +306,6 @@ export default function AgenciesPage() {
         </div>
       </section>
 
-      {/* How it works for agencies */}
-      <section
-        className="m-section"
-        style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}
-      >
-        <div className="m-container">
-          <h2
-            style={{
-              fontFamily: 'var(--m-font-display)',
-              fontSize: 'clamp(1.8rem, 3vw, 2.4rem)',
-              fontWeight: 700,
-              letterSpacing: '-0.02em',
-              color: 'var(--m-text)',
-              margin: '0 0 48px',
-              textAlign: 'center',
-            }}
-          >
-            How the agency model works.
-          </h2>
-
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: '0',
-              position: 'relative',
-            }}
-          >
-            <div
-              aria-hidden="true"
-              style={{
-                position: 'absolute',
-                top: '32px',
-                left: 'calc(33.333% - 1px)',
-                right: 'calc(33.333% - 1px)',
-                height: '1px',
-                background: 'rgba(59,130,246,0.3)',
-                pointerEvents: 'none',
-              }}
-            />
-            {agencyWorkflow.map((step) => (
-              <div key={step.step} style={{ padding: '0 32px', textAlign: 'center' }}>
-                <div
-                  style={{
-                    width: '64px',
-                    height: '64px',
-                    borderRadius: '50%',
-                    background: 'var(--m-bg)',
-                    border: '1px solid rgba(59,130,246,0.4)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '0 auto 24px',
-                    fontFamily: 'var(--m-font-display)',
-                    fontSize: '1.2rem',
-                    fontWeight: 700,
-                    color: '#60a5fa',
-                    position: 'relative',
-                    zIndex: 1,
-                  }}
-                >
-                  {step.step}
-                </div>
-                <h3
-                  style={{
-                    fontFamily: 'var(--m-font-display)',
-                    fontSize: '1.05rem',
-                    fontWeight: 700,
-                    color: 'var(--m-text)',
-                    margin: '0 0 8px',
-                  }}
-                >
-                  {step.title}
-                </h3>
-                <p style={{ fontSize: '0.875rem', color: 'var(--m-text-muted)', lineHeight: 1.6, margin: 0 }}>
-                  {step.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* CTA */}
       <section className="m-section" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
         <div
@@ -289,13 +327,13 @@ export default function AgenciesPage() {
               margin: '0 0 16px',
             }}
           >
-            Interested in the Agency programme?
+            Ready to partner?
           </h2>
           <p style={{ fontSize: '0.95rem', color: 'var(--m-text-muted)', maxWidth: '400px', margin: '0 auto 28px', lineHeight: 1.7 }}>
             Let&apos;s have a conversation about how Chameleon can fit into your agency&apos;s offering.
           </p>
-          <Link href="/contact" className="m-btn m-btn-primary m-btn-lg" id="agency-footer-cta">
-            Get in Touch
+          <Link href="/contact" className="m-btn m-btn-primary m-btn-lg">
+            Talk to us
             <ArrowRight size={18} />
           </Link>
         </div>
