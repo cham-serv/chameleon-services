@@ -1,4 +1,4 @@
-﻿/**
+/**
  * AtlasFooter  Server Component
  *
  * Multi-column footer driven by tenant config. Shows brand info,
@@ -17,6 +17,10 @@ export default function AtlasFooter({ config }: Props) {
   const tagline = config.settings?.tagline ?? '';
   const contactEmail = config.settings?.contactEmail ?? '';
   const fc = config.tenant.featureConfig;
+
+  // Logo: prefer AtlasSiteConfig logo, fall back to SiteSettings logo, then text
+  const logoUrl = config.pageConfig?.logo?.url ?? config.settings?.logo?.url ?? null;
+  const logoAlt = config.pageConfig?.logo?.alt ?? siteName;
 
   // Build nav links from feature config
   const navLinks: { href: string; label: string }[] = [];
@@ -44,7 +48,18 @@ export default function AtlasFooter({ config }: Props) {
         <div className="atlas-footer-grid">
           {/* Column 1: Brand */}
           <div>
-            <div className="atlas-footer-brand">{siteName}</div>
+            <div className="atlas-footer-brand">
+              {logoUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={logoUrl}
+                  alt={logoAlt}
+                  style={{ height: '32px', width: 'auto', display: 'block' }}
+                />
+              ) : (
+                siteName
+              )}
+            </div>
             {tagline && (
               <p className="atlas-footer-tagline">{tagline}</p>
             )}
