@@ -120,7 +120,7 @@ function MarketingFooter() {
           {/* Brand */}
           <div>
             <Link href="/" aria-label="Chameleon home">
-              <ChameleonLogo size={28} />
+              <ChameleonLogo size={32} />
             </Link>
             <p
               style={{

@@ -2,8 +2,7 @@ import Image from 'next/image';
 
 type ChameleonLogoProps = {
   size?: number;
-  variant?: 'full' | 'icon' | 'wordmark';
-  color?: 'default' | 'dark';
+  variant?: 'full' | 'icon';
   className?: string;
 };
 
@@ -12,16 +11,15 @@ export function ChameleonLogo({
   variant = 'full',
   className,
 }: ChameleonLogoProps) {
-  // logo-full.webp is 400x100 (aspect ratio 4:1)
-  // logo-icon.webp is 300x280 (aspect ratio 1.07:1)
+  // logo-full.webp (chamelon_logo_with_text2.webp) — approx 3.5:1 wide lockup
+  // logo-icon.webp — icon only, approx 1:1
 
   if (variant === 'icon') {
-    const iconWidth = Math.round(size * (300 / 280));
     return (
       <Image
         src="/logo-icon.webp"
         alt="Chameleon"
-        width={iconWidth}
+        width={size}
         height={size}
         className={className}
         style={{ objectFit: 'contain' }}
@@ -30,9 +28,7 @@ export function ChameleonLogo({
     );
   }
 
-  // Wordmark only is no longer directly supported with an image, 
-  // but if requested, we fall back to full.
-  const fullWidth = size * 4;
+  const fullWidth = Math.round(size * 3.5);
   return (
     <Image
       src="/logo-full.webp"
