@@ -613,59 +613,98 @@ export default function HomePage() {
               margin: '0 0 16px',
             }}
           >
-            Simple, transparent pricing.
+            Two tracks. One platform.
           </h2>
           <p
             style={{
               fontSize: '0.95rem',
               color: 'var(--m-text-muted)',
-              maxWidth: '480px',
-              margin: '0 auto 40px',
+              maxWidth: '500px',
+              margin: '0 auto 48px',
               lineHeight: 1.7,
             }}
           >
-            Three tiers to match where your business is today.
-            Start small, scale as you grow. No hidden fees.
+            Direct plans for businesses, flat monthly scaling for agencies. No hidden fees.
           </p>
 
-          <div
-            style={{
-              display: 'flex',
-              gap: '16px',
-              justifyContent: 'center',
-              flexWrap: 'wrap',
-              marginBottom: '32px',
-            }}
-          >
-            {[
-              { name: 'Starter', price: 'R1,199', desc: '1 store' },
-              { name: 'Growth', price: 'R3,499', desc: 'Up to 5 stores', popular: true },
-              { name: 'Agency', price: 'Custom', desc: 'Unlimited stores' },
-            ].map((tier) => (
-              <div
-                key={tier.name}
-                style={{
-                  padding: '24px 32px',
-                  borderRadius: '12px',
-                  border: tier.popular
-                    ? '1px solid rgba(59,130,246,0.4)'
-                    : '1px solid rgba(255,255,255,0.08)',
-                  background: tier.popular ? 'rgba(59,130,246,0.06)' : 'rgba(255,255,255,0.03)',
-                  minWidth: '180px',
-                  textAlign: 'center',
-                  backdropFilter: 'blur(8px)',
-                }}
-              >
-                <div style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: tier.popular ? '#60a5fa' : 'var(--m-text-muted)', marginBottom: '8px' }}>
-                  {tier.name}
-                </div>
-                <div style={{ fontSize: '1.6rem', fontWeight: 700, color: 'var(--m-text)', marginBottom: '4px' }}>
-                  {tier.price}
-                  {tier.price !== 'Custom' && <span style={{ fontSize: '0.85rem', fontWeight: 400, color: 'var(--m-text-muted)' }}>/mo</span>}
-                </div>
-                <div style={{ fontSize: '0.8rem', color: 'var(--m-text-muted)' }}>{tier.desc}</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: '32px', maxWidth: '900px', margin: '0 auto 40px', alignItems: 'start' }}>
+            {/* Track 1 */}
+            <div>
+              <div style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--m-text-muted)', marginBottom: '16px' }}>
+                For Businesses
               </div>
-            ))}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {[
+                  { name: 'Launch', price: 'from R999' },
+                  { name: 'Grow', price: 'from R2,500', popular: true },
+                  { name: 'Commerce', price: 'from R3,500' },
+                ].map((tier) => (
+                  <div
+                    key={tier.name}
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      padding: '12px 20px',
+                      borderRadius: '8px',
+                      border: tier.popular ? '1px solid rgba(59,130,246,0.35)' : '1px solid rgba(255,255,255,0.07)',
+                      background: tier.popular ? 'rgba(59,130,246,0.06)' : 'rgba(255,255,255,0.02)',
+                    }}
+                  >
+                    <span style={{ fontSize: '0.9rem', fontWeight: tier.popular ? 600 : 400, color: tier.popular ? 'var(--m-text)' : 'var(--m-text-muted)' }}>
+                      {tier.name}
+                    </span>
+                    <span style={{ fontSize: '0.875rem', fontWeight: 600, color: tier.popular ? '#60a5fa' : 'var(--m-text-muted)' }}>
+                      {tier.price}<span style={{ fontWeight: 400, fontSize: '0.75rem' }}>/mo</span>
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '28px', gap: '8px' }}>
+              <div style={{ width: '1px', height: '40px', background: 'rgba(255,255,255,0.08)' }} />
+              <span style={{ fontSize: '0.7rem', color: 'var(--m-text-faint)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>or</span>
+              <div style={{ width: '1px', height: '40px', background: 'rgba(255,255,255,0.08)' }} />
+            </div>
+
+            {/* Track 2 */}
+            <div>
+              <div style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--m-text-muted)', marginBottom: '16px' }}>
+                For Agencies
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {[
+                  { name: 'Bronze', clients: '1-2 clients', price: 'R2,500' },
+                  { name: 'Silver', clients: '3-9 clients', price: 'R4,500', popular: true },
+                  { name: 'Gold', clients: '10+ clients', price: 'R6,000' },
+                ].map((tier) => (
+                  <div
+                    key={tier.name}
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      padding: '12px 20px',
+                      borderRadius: '8px',
+                      border: tier.popular ? '1px solid rgba(59,130,246,0.35)' : '1px solid rgba(255,255,255,0.07)',
+                      background: tier.popular ? 'rgba(59,130,246,0.06)' : 'rgba(255,255,255,0.02)',
+                    }}
+                  >
+                    <div style={{ textAlign: 'left' }}>
+                      <span style={{ fontSize: '0.9rem', fontWeight: tier.popular ? 600 : 400, color: tier.popular ? 'var(--m-text)' : 'var(--m-text-muted)', display: 'block' }}>
+                        {tier.name}
+                      </span>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--m-text-faint)' }}>{tier.clients}</span>
+                    </div>
+                    <span style={{ fontSize: '0.875rem', fontWeight: 600, color: tier.popular ? '#60a5fa' : 'var(--m-text-muted)' }}>
+                      {tier.price}<span style={{ fontWeight: 400, fontSize: '0.75rem' }}>/mo</span>
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           <Link href="/pricing" className="m-btn m-btn-primary m-btn-lg" id="home-see-pricing">
@@ -674,6 +713,7 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
+
 
       {/* - Final CTA - */}
       <section className="m-section" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
