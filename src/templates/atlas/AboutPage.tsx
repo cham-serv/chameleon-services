@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Atlas AboutPage Ã¢â‚¬â€ Server Component
  *
  * Variant dispatch pattern (same as HomePage):
@@ -90,9 +90,14 @@ export default function AboutPage({ config, variant }: PageProps) {
     url: siteUrl,
     ...(config.settings?.logo && { logo: config.settings.logo.url }),
     ...(contactEmail && { email: contactEmail }),
-    ...(config.settings?.socialLinks && {
-      sameAs: Object.values(config.settings.socialLinks).filter(Boolean),
-    }),
+    ...(() => {
+      const s = config.settings;
+      const sameAs = [
+        s?.socialFacebook, s?.socialInstagram, s?.socialLinkedIn,
+        s?.socialTwitter,  s?.socialYoutube,   s?.socialGoogle,
+      ].filter((v): v is string => Boolean(v));
+      return sameAs.length > 0 ? { sameAs } : {};
+    })(),
   };
 
   // Ã¢â€â‚¬Ã¢â€â‚¬ Variant-specific content resolution Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬

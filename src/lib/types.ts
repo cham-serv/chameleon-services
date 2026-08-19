@@ -41,7 +41,34 @@ export type FeatureConfig = Record<string, {
 export type SiteSettings = {
   siteName?: string;
   tagline?: string;
+  logo?: { url: string } | null;
+  logoMark?: { url: string } | null;
+  // Contact
   contactEmail?: string;
+  contactPhone?: string;
+  // Structured address (for LocalBusiness schema)
+  addressStreet?: string;
+  addressCity?: string;
+  addressProvince?: string;
+  addressPostalCode?: string;
+  addressCountry?: string;
+  geoLat?: number;
+  geoLng?: number;
+  // Opening hours (OpeningHoursSpecification)
+  openingHours?: Array<{
+    dayOfWeek: string[];
+    isClosed?: boolean;
+    opens?: string;
+    closes?: string;
+  }>;
+  // Social links — flat fields as exposed by engine (NOT nested socialLinks)
+  socialFacebook?: string;
+  socialInstagram?: string;
+  socialLinkedIn?: string;
+  socialTwitter?: string;
+  socialYoutube?: string;
+  socialGoogle?: string;
+  // Brand tokens
   colourPrimary?: string;
   colourSecondary?: string;
   colourAccent?: string;
@@ -51,19 +78,29 @@ export type SiteSettings = {
   buttonStyle?: 'filled' | 'outline' | 'pill' | 'soft';
   fontHeading?: string;
   fontBody?: string;
-  logo?: { url: string } | null;
+  // Ecommerce
   currency?: string;
+  currencySymbol?: string;
   paymentGateway?: string;
   flatShippingRate?: number;
   freeShippingThreshold?: number;
-  socialLinks?: {
-    facebook?: string;
-    instagram?: string;
-    twitter?: string;
-    linkedin?: string;
-    youtube?: string;
-    tiktok?: string;
-  };
+  // Feature flags
+  enableReviews?: boolean;
+  enableSubscriptions?: boolean;
+  enableWishlist?: boolean;
+  enableStockUrgency?: boolean;
+  enableQuickView?: boolean;
+  enableProductComparison?: boolean;
+  enableReorderLinks?: boolean;
+  // Global schema defaults (fallbacks when product fields are blank)
+  defaultReturnDays?: number;
+  defaultReturnMethod?: string;
+  defaultReturnFees?: string;
+  defaultDeliveryLeadTime?: string;
+  defaultHandlingTimeDays?: number;
+  defaultDeliveryRegions?: Array<{ region: string }>;
+  // Turnstile (safe public-side key)
+  turnstileSiteKey?: string;
 };
 
 // ── Page Config (from atlas-site-config via tenant-config API) ───────────────
