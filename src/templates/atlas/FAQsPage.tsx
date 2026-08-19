@@ -1,13 +1,13 @@
-/**
- * Atlas FAQsPage — Server Component
+﻿/**
+ * Atlas FAQsPage  Server Component
  *
  * Variants:
  *   - accordion (default): Category-grouped expand/collapse with search filter.
- *   - search:              Help-center style — prominent search hero + category cards.
+ *   - search:              Help-center style  prominent search hero + category cards.
  *
  * Schema injected (multi-schema, matches Resources/Shop GEO standard):
  *   1. BreadcrumbList
- *   2. FAQPage — all published FAQs as Question/Answer structured data
+ *   2. FAQPage  all published FAQs as Question/Answer structured data
  *
  * Data: server-fetches all FAQs, groups by category, passes pre-built
  * categories array to client components (no client-side API calls).
@@ -62,7 +62,7 @@ export default async function FAQsPage({ config, variant, noCache }: PageProps) 
     </>
   );
 
-  // Empty state — shared across variants
+  // Empty state  shared across variants
   const emptyState = (
     <div className="atlas-card-flat" style={{ padding: 'var(--atlas-spacing-2xl)', textAlign: 'center', marginTop: 'var(--atlas-spacing-2xl)' }}>
       <p className="atlas-body" style={{ opacity: 0.6 }}>
@@ -71,7 +71,7 @@ export default async function FAQsPage({ config, variant, noCache }: PageProps) 
     </div>
   );
 
-  // Variant: search — help-center layout with prominent search hero
+  // Variant: search  help-center layout with prominent search hero
   if (variant === 'search') {
     return (
       <>

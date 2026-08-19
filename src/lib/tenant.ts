@@ -1,10 +1,10 @@
-/**
+﻿/**
  * Tenant Resolution Library
  *
  * Core functions:
- * - fetchTenantConfig()     — Fetches tenant config from the engine API (ISR cached)
- * - getTemplateDefinition() — Loads a template's route map by slug
- * - resolvePage()           — Matches a URL path to a page component + variant
+ * - fetchTenantConfig()     - Fetches tenant config from the engine API (ISR cached)
+ * - getTemplateDefinition() - Loads a template's route map by slug
+ * - resolvePage()           - Matches a URL path to a page component + variant
  */
 
 import type {
@@ -15,7 +15,7 @@ import type {
   ResolvedPage,
 } from './types';
 
-// ── Template Registry ───────────────────────────────────────────────────────
+// - Template Registry -
 // Maps template slugs to lazy loaders. Adding a new template = one line here.
 
 const TEMPLATE_REGISTRY: Record<string, () => Promise<{ definition: TemplateDefinition }>> = {
@@ -25,7 +25,7 @@ const TEMPLATE_REGISTRY: Record<string, () => Promise<{ definition: TemplateDefi
 
 /**
  * Loads a template's route map and metadata by slug.
- * Returns null for unknown template slugs (→ 404 in catch-all).
+ * Returns null for unknown template slugs ( 404 in catch-all).
  */
 export async function getTemplateDefinition(slug: string): Promise<TemplateDefinition | null> {
   const loader = TEMPLATE_REGISTRY[slug];
@@ -37,7 +37,7 @@ export async function getTemplateDefinition(slug: string): Promise<TemplateDefin
   return mod.definition;
 }
 
-// ── Page Resolution ─────────────────────────────────────────────────────────
+// - Page Resolution -
 
 /**
  * Resolves a URL path to a page component and variant.
@@ -70,7 +70,7 @@ export async function resolvePage(
     if (!featureEntry?.enabled) return null;
   }
 
-  // 3. Resolve variant (default → featureConfig → dev override)
+  // 3. Resolve variant (default  featureConfig  dev override)
   let variant = page.defaultVariant;
 
   // Check featureConfig for tenant's preferred variant
@@ -111,9 +111,9 @@ export async function resolvePage(
  * Matches URL path segments to a route key in the template's route map.
  *
  * Strategy:
- * 1. Home page: segments=[] → matches "/"
- * 2. Exact match: segments=["shop"] → matches "/shop"
- * 3. Wildcard: segments=["shop","my-product"] → matches "/shop/*"
+ * 1. Home page: segments=[]  matches "/"
+ * 2. Exact match: segments=["shop"]  matches "/shop"
+ * 3. Wildcard: segments=["shop","my-product"]  matches "/shop/*"
  */
 function matchRoute(
   segments: string[],
@@ -137,7 +137,7 @@ function matchRoute(
   return null;
 }
 
-// ── Tenant Config Fetching ──────────────────────────────────────────────────
+// - Tenant Config Fetching -
 
 const ENGINE_API_URL = process.env.CHAMELEON_API_URL ?? 'https://chameleon-engine-production.up.railway.app';
 
@@ -145,12 +145,12 @@ const ENGINE_API_URL = process.env.CHAMELEON_API_URL ?? 'https://chameleon-engin
  * Fetches tenant configuration from the engine API.
  *
  * Cache strategy:
- * - Staging (noCache: true): cache: 'no-store' — always fresh for build mode
- * - Production (noCache: false/default): ISR with tags — cached for 1 hour,
+ * - Staging (noCache: true): cache: 'no-store' - always fresh for build mode
+ * - Production (noCache: false/default): ISR with tags - cached for 1 hour,
  *   revalidated on-demand when the engine fires a tag bust
  *
  * The tenant slug is extracted from the domain by the middleware
- * (e.g. "atlas-demo.chameleon.services" → "atlas-demo").
+ * (e.g. "atlas-demo.chameleon.services"  "atlas-demo").
  */
 export async function fetchTenantConfig(
   tenantSlug: string,

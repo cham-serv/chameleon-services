@@ -1,5 +1,5 @@
 ﻿/**
- * AtlasMarquee — Server Component
+ * AtlasMarquee  Server Component
  *
  * Pure-CSS infinite horizontal scroll ticker. No JavaScript. Driven entirely
  * by a CSS @keyframes animation defined in atlas-animations.css.
@@ -8,7 +8,7 @@
  *
  * Usage:
  *   <AtlasMarquee items={['Free Shipping', 'Easy Returns', 'Secure Payment']} />
- *   <AtlasMarquee items={trustSignals} speed="slow" separator="·" />
+ *   <AtlasMarquee items={trustSignals} speed="slow" separator="" />
  */
 
 type Props = {
@@ -29,7 +29,7 @@ const SPEED_MAP = {
 export function AtlasMarquee({
   items,
   speed = 'medium',
-  separator = '·',
+  separator = '',
   className = '',
 }: Props) {
   if (!items || items.length === 0) return null;

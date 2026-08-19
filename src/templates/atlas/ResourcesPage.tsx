@@ -1,12 +1,12 @@
 ﻿/**
- * Atlas ResourcesPage — Server Component
+ * Atlas ResourcesPage - Server Component
  *
- * Topic Directory page — the knowledge graph entry point.
+ * Topic Directory page - the knowledge graph entry point.
  * Fetches all topics and renders them in one of three variants:
  *
- *   directory — Split layout: sidebar tools + vertical topic list (F&T-inspired)
- *   grid      — Responsive card grid with icons and article counts
- *   magazine  — Featured topic hero + cross-topic article feed
+ *   directory - Split layout: sidebar tools + vertical topic list (F&T-inspired)
+ *   grid      - Responsive card grid with icons and article counts
+ *   magazine  - Featured topic hero + cross-topic article feed
  *
  * Injects CollectionPage JSON-LD with ItemList of topics.
  * speakable cssSelector targets .geo-speakable for voice assistants.
@@ -20,7 +20,7 @@ import { getTopics, getArticles, type Topic, type Article, type MediaItem } from
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
+// - Helpers -
 
 function resolveMedia(m: MediaItem | number | null | undefined): MediaItem | null {
   if (!m || typeof m === "number") return null;
@@ -33,17 +33,17 @@ function formatDate(iso: string): string {
 
 function getTopicEmoji(type?: string): string {
   switch (type) {
-    case "guide": return "📖";
-    case "news": return "📰";
-    case "research": return "🔬";
-    case "tutorial": return "🎓";
-    case "review": return "⭐";
-    case "opinion": return "💡";
-    default: return "📚";
+    case "guide": return "";
+    case "news": return "";
+    case "research": return "";
+    case "tutorial": return "";
+    case "review": return "";
+    case "opinion": return "";
+    default: return "";
   }
 }
 
-// ── Main Component ────────────────────────────────────────────────────────────
+// - Main Component -
 
 export default async function ResourcesPage({ config, variant, noCache }: PageProps) {
   const tenant = config.tenant.slug;
@@ -52,7 +52,7 @@ export default async function ResourcesPage({ config, variant, noCache }: PagePr
   const pc = config.pageConfig;
 
   const headline = pc?.resourcesHeadline ?? "Resource Directory";
-  const subheadline = pc?.resourcesSubheadline ?? "Explore our knowledge base — guides, insights, and expert analysis organised by topic.";
+  const subheadline = pc?.resourcesSubheadline ?? "Explore our knowledge base - guides, insights, and expert analysis organised by topic.";
 
   const topicsRes = await getTopics(tenant, noCache);
   const topics: Topic[] = topicsRes?.docs ?? [];
@@ -66,11 +66,11 @@ export default async function ResourcesPage({ config, variant, noCache }: PagePr
 
   const breadcrumbs = [{ label: "Home", href: "/" }, { label: "Resources" }];
 
-  // CollectionPage JSON-LD — all three variants share this schema
+  // CollectionPage JSON-LD - all three variants share this schema
   const collectionSchema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: `Resource Directory — ${siteName}`,
+    name: `Resource Directory - ${siteName}`,
     description: subheadline,
     url: `${siteUrl}/resources`,
     speakable: {
@@ -107,7 +107,7 @@ export default async function ResourcesPage({ config, variant, noCache }: PagePr
   }
 }
 
-// ── Shared render props ───────────────────────────────────────────────────────
+// - Shared render props -
 
 type RenderProps = {
   topics: Topic[];
@@ -119,7 +119,7 @@ type RenderProps = {
   collectionSchema: Record<string, unknown>;
 };
 
-// ── Render: Directory (F&T-inspired split layout) ─────────────────────────────
+// - Render: Directory (F&T-inspired split layout) -
 
 function renderDirectory({ topics, headline, subheadline, breadcrumbs, siteUrl, collectionSchema }: RenderProps) {
   return (
@@ -196,7 +196,7 @@ function renderDirectory({ topics, headline, subheadline, breadcrumbs, siteUrl, 
                         {topic.articleCount != null && (
                           <span className="atlas-badge">{topic.articleCount}</span>
                         )}
-                        <span className="atlas-directory-topic-arrow">Browse →</span>
+                        <span className="atlas-directory-topic-arrow">Browse </span>
                       </div>
                     </Link>
                   );
@@ -210,7 +210,7 @@ function renderDirectory({ topics, headline, subheadline, breadcrumbs, siteUrl, 
   );
 }
 
-// ── Render: Grid (Card grid) ──────────────────────────────────────────────────
+// - Render: Grid (Card grid) -
 
 function renderGrid({ topics, headline, subheadline, breadcrumbs, siteUrl, collectionSchema }: RenderProps) {
   return (
@@ -254,7 +254,7 @@ function renderGrid({ topics, headline, subheadline, breadcrumbs, siteUrl, colle
                   </span>
                 )}
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 4, marginTop: "var(--atlas-spacing-md)", color: "var(--brand-primary, #2d6a4f)", fontWeight: 600, fontSize: "0.8125rem" }}>
-                  Explore →
+                  Explore 
                 </span>
               </Link>
             ))}
@@ -265,7 +265,7 @@ function renderGrid({ topics, headline, subheadline, breadcrumbs, siteUrl, colle
   );
 }
 
-// ── Render: Magazine (Featured hero + article feed) ───────────────────────────
+// - Render: Magazine (Featured hero + article feed) -
 
 function renderMagazine({ topics, recentArticles, headline, subheadline, breadcrumbs, siteUrl, collectionSchema }: RenderProps) {
   const featuredTopic = topics[0] ?? null;
@@ -308,7 +308,7 @@ function renderMagazine({ topics, recentArticles, headline, subheadline, breadcr
                   </p>
                 )}
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 4, marginTop: "var(--atlas-spacing-lg)", color: "var(--brand-primary, #2d6a4f)", fontWeight: 600 }}>
-                  Browse Collection →
+                  Browse Collection 
                 </span>
               </div>
             </Link>
@@ -334,7 +334,7 @@ function renderMagazine({ topics, recentArticles, headline, subheadline, breadcr
                     {topic.articleCount != null && (
                       <span className="atlas-badge" style={{ flexShrink: 0 }}>{topic.articleCount}</span>
                     )}
-                    <span style={{ color: "var(--brand-primary, #2d6a4f)", fontSize: "1rem", flexShrink: 0 }}>→</span>
+                    <span style={{ color: "var(--brand-primary, #2d6a4f)", fontSize: "1rem", flexShrink: 0 }}></span>
                   </Link>
                 ))}
               </div>
@@ -368,7 +368,7 @@ function renderMagazine({ topics, recentArticles, headline, subheadline, breadcr
                       )}
                       <div className="atlas-caption" style={{ marginTop: "var(--atlas-spacing-sm)", opacity: 0.5 }}>
                         {article.readTime && `${article.readTime} min read`}
-                        {article.readTime && article.publishedAt && " · "}
+                        {article.readTime && article.publishedAt && "  "}
                         {article.publishedAt && formatDate(article.publishedAt)}
                       </div>
                     </Link>

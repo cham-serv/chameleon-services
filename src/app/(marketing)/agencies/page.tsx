@@ -1,9 +1,9 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, Settings, BarChart3, Database, Workflow, ShieldCheck, Zap } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Agency Programme — The Chameleon Partner Model',
+  title: 'Agency Programme  The Chameleon Partner Model',
   description:
     'Chameleon for agencies. You own the retainer, we own the infrastructure. Build and manage AI-ready websites for your clients at scale.',
 };
@@ -27,20 +27,20 @@ const agencyBenefits = [
   {
     icon: Workflow,
     title: 'Faster Delivery',
-    desc: 'Spin up a client site in days, not months. Atlas, Meridian, or future templates — configured and live before traditional agencies even wireframe.',
+    desc: 'Spin up a client site in days, not months. Atlas, Meridian, or future templates  configured and live before traditional agencies even wireframe.',
   },
 ];
 
 const tiers = [
   {
     name: 'Bronze',
-    clients: '1–2 client sites',
+    clients: '12 client sites',
     price: 'R2,500/mo',
     features: ['Agency Dashboard', 'Multi-tenant management'],
   },
   {
     name: 'Silver',
-    clients: '3–9 client sites',
+    clients: '39 client sites',
     price: 'R4,500/mo',
     features: ['Agency Dashboard', 'Multi-tenant management', 'Priority support'],
   },
@@ -152,7 +152,7 @@ export default function AgenciesPage() {
                 Client pays Chameleon
               </h3>
               <p style={{ color: 'var(--m-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
-                The client pays the R3,500–R4,500/mo platform infrastructure fee directly to us.
+                The client pays the R3,500R4,500/mo platform infrastructure fee directly to us.
               </p>
             </div>
             
@@ -164,7 +164,7 @@ export default function AgenciesPage() {
                 Client pays Agency
               </h3>
               <p style={{ color: 'var(--m-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
-                The client pays you your R15k–R20k/mo retainer for strategy, content, and management.
+                The client pays you your R15kR20k/mo retainer for strategy, content, and management.
               </p>
             </div>
 
@@ -176,7 +176,7 @@ export default function AgenciesPage() {
                 Agency pays Chameleon
               </h3>
               <p style={{ color: 'var(--m-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
-                You pay a flat R2,500–R6,000/mo fee for the multi-tenant God Mode dashboard.
+                You pay a flat R2,500R6,000/mo fee for the multi-tenant God Mode dashboard.
               </p>
             </div>
           </div>

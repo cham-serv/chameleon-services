@@ -1,7 +1,7 @@
-'use client';
+﻿'use client';
 
 /**
- * AtlasMobileNav — Client Component
+ * AtlasMobileNav  Client Component
  *
  * Slide-out drawer from the left, full viewport height.
  * Focus-trapped for accessibility, closes on backdrop click or Escape.
@@ -51,7 +51,7 @@ export default function AtlasMobileNav({ config, isOpen, onClose }: Props) {
     };
   }, [isOpen, onClose]);
 
-  // Focus trap — keep focus within the drawer
+  // Focus trap  keep focus within the drawer
   useEffect(() => {
     if (!isOpen || !drawerRef.current) return;
 

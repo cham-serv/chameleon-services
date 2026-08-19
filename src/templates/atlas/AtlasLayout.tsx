@@ -1,5 +1,5 @@
-/**
- * Atlas Template Layout — Server/Client Hybrid
+﻿/**
+ * Atlas Template Layout  Server/Client Hybrid
  *
  * Server Component shell that imports atlas.css and renders the
  * interactive chrome components (header, mobile nav, cart drawer, footer).

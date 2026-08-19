@@ -1,9 +1,9 @@
-/**
+﻿/**
  * DemoExplorer Types
  *
  * Serialisable route metadata passed from the server layout
  * to the client-side DemoExplorer drawer. Deliberately excludes
- * component loaders (not serialisable) — only labels and slugs.
+ * component loaders (not serialisable)  only labels and slugs.
  */
 
 export type ExplorerRoute = {

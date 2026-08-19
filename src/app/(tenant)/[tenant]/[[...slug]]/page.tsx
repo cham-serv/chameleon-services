@@ -1,5 +1,5 @@
-/**
- * Catch-All Page — Template Resolution + Rendering
+﻿/**
+ * Catch-All Page  Template Resolution + Rendering
  *
  * This is the heart of the multi-tenant rendering pipeline:
  * 1. Reads tenant slug from the [tenant] param (set by middleware rewrite)
@@ -98,7 +98,7 @@ export default async function TenantPage({ params, searchParams }: Props) {
 
 /**
  * Shown when a tenant exists but hasn't been assigned a template yet.
- * This is NOT a 404 — the tenant is valid, they just need to be configured.
+ * This is NOT a 404  the tenant is valid, they just need to be configured.
  */
 function TemplateNotConfigured({ tenantName }: { tenantName: string }) {
   return (
@@ -116,7 +116,7 @@ function TemplateNotConfigured({ tenantName }: { tenantName: string }) {
           fontSize: '3rem',
           marginBottom: '1rem',
         }}>
-          🦎
+          
         </div>
         <h1 style={{
           fontSize: '1.5rem',

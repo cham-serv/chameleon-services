@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import Image from 'next/image';
 import type { PageProps, PageConfig } from '@/lib/types';
 import { getProducts, getCategories, getArticles } from '@/lib/api';
@@ -10,16 +10,16 @@ import { AtlasBadge } from './AtlasBadge';
 import { AtlasMarquee } from './AtlasMarquee';
 import { AtlasCounter } from './AtlasCounter';
 
-// ── Constants ───────────────────────────────────────────────────────────────
+// - Constants -
 
 const TRUST_SIGNALS = [
-  { icon: '🚚', text: 'Free Shipping' },
-  { icon: '↩️', text: 'Easy Returns' },
-  { icon: '🔒', text: 'Secure Payment' },
-  { icon: '💬', text: '24/7 Support' },
+  { icon: '', text: 'Free Shipping' },
+  { icon: '', text: 'Easy Returns' },
+  { icon: '', text: 'Secure Payment' },
+  { icon: '', text: '24/7 Support' },
 ];
 
-// ── Main Component ──────────────────────────────────────────────────────────
+// - Main Component -
 
 export default async function HomePage({ config, variant, noCache }: PageProps) {
   const tenant = config.tenant.slug;
@@ -35,9 +35,9 @@ export default async function HomePage({ config, variant, noCache }: PageProps) 
   const cta2Text = pc?.homeCta2Text ?? 'Browse Resources';
   const cta2Link = pc?.homeCta2Link ?? '/resources';
 
-  // Variant-specific hero content — each variant reads its own CMS fields
+  // Variant-specific hero content - each variant reads its own CMS fields
   const defaultHeadline = tagline || `Welcome to ${siteName}`;
-  const defaultSubheadline = 'Discover our curated collection of products — crafted with quality and delivered with care.';
+  const defaultSubheadline = 'Discover our curated collection of products - crafted with quality and delivered with care.';
 
   let heroHeadline: string;
   let heroSubheadline: string;
@@ -72,7 +72,7 @@ export default async function HomePage({ config, variant, noCache }: PageProps) 
       break;
   }
 
-  // JSON-LD — shared by all variants
+  // JSON-LD - shared by all variants
   const websiteSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
@@ -85,7 +85,7 @@ export default async function HomePage({ config, variant, noCache }: PageProps) 
     },
   };
 
-  // ── Variant-specific data fetching ────────────────────────────────────────
+  // - Variant-specific data fetching -
 
   let featuredProducts: Product[] = [];
   let featuredCategories: ProductCategory[] = [];
@@ -155,7 +155,7 @@ export default async function HomePage({ config, variant, noCache }: PageProps) 
 
 }
 
-// ── Type Helpers ────────────────────────────────────────────────────────────
+// - Type Helpers -
 
 type HeroProps = {
   headline: string;
@@ -173,9 +173,9 @@ function resolveImage(img: MediaItem | number | null | undefined): string | null
   return img.url;
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  STOREFRONT — Product-forward, conversion-focused
-// ═══════════════════════════════════════════════════════════════════════════
+// -
+//  STOREFRONT - Product-forward, conversion-focused
+// -
 
 function renderStorefront(
   hero: HeroProps,
@@ -185,12 +185,12 @@ function renderStorefront(
 ) {
   return (
     <>
-      {/* Hero — split layout */}
+      {/* Hero - split layout */}
       <section className="atlas-home-hero">
         <div className="atlas-container">
           <div className="atlas-home-hero-split">
             <div className="atlas-home-hero-content">
-              <AtlasBadge variant="accent" icon="✨" size="sm">
+              <AtlasBadge variant="accent" icon="" size="sm">
                 {hero.siteName}
               </AtlasBadge>
               <h1 className="atlas-hero-headline" style={{ textAlign: 'left', marginTop: '1rem' }}>
@@ -227,7 +227,7 @@ function renderStorefront(
                   justifyContent: 'center',
                   background: 'color-mix(in srgb, var(--brand-primary) 10%, transparent)',
                 }}>
-                  <span style={{ fontSize: '4rem', opacity: 0.3 }}>🛍️</span>
+                  <span style={{ fontSize: '4rem', opacity: 0.3 }}></span>
                 </div>
               )}
             </div>
@@ -235,7 +235,7 @@ function renderStorefront(
         </div>
       </section>
 
-      {/* Value Bar — trust signals */}
+      {/* Value Bar - trust signals */}
       <section className="atlas-value-bar">
         <div className="atlas-container">
           <div className="atlas-value-bar-inner">
@@ -249,7 +249,7 @@ function renderStorefront(
         </div>
       </section>
 
-      {/* Featured Categories — pill row */}
+      {/* Featured Categories - pill row */}
       {categories.length > 0 && (
         <section className="atlas-section">
           <div className="atlas-container">
@@ -310,9 +310,9 @@ function renderStorefront(
   );
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  EDITORIAL — Brand-first, typography-driven
-// ═══════════════════════════════════════════════════════════════════════════
+// -
+//  EDITORIAL - Brand-first, typography-driven
+// -
 
 function renderEditorial(
   hero: HeroProps,
@@ -322,11 +322,11 @@ function renderEditorial(
   pc: PageConfig | undefined,
 ) {
   const brandStory = pc?.homeEditorialExcerpt ??
-    'We believe in quality craftsmanship and thoughtful design. Every product tells a story — and we\u2019re here to share ours with you.';
+    'We believe in quality craftsmanship and thoughtful design. Every product tells a story - and we\u2019re here to share ours with you.';
 
   return (
     <>
-      {/* Hero — split-screen editorial */}
+      {/* Hero - split-screen editorial */}
       <section className="atlas-home-hero">
         <div className="atlas-container">
           <div className="atlas-home-hero-split">
@@ -426,7 +426,7 @@ function renderEditorial(
         </section>
       )}
 
-      {/* Product Highlight — editorial style (3 items max) */}
+      {/* Product Highlight - editorial style (3 items max) */}
       {products.length > 0 && (
         <section className="atlas-section">
           <div className="atlas-container">
@@ -455,7 +455,7 @@ function renderEditorial(
         <div className="atlas-container">
           <h2 className="atlas-cta-heading">Stay in the loop</h2>
           <p className="atlas-cta-sub">
-            New stories, curated products, and brand updates — straight to your inbox.
+            New stories, curated products, and brand updates - straight to your inbox.
           </p>
           <Link href="/resources" className="atlas-btn atlas-btn-primary atlas-btn-lg">
             Explore Resources
@@ -466,9 +466,9 @@ function renderEditorial(
   );
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  MODERN — Atmospheric, premium, interactive
-// ═══════════════════════════════════════════════════════════════════════════
+// -
+//  MODERN - Atmospheric, premium, interactive
+// -
 
 function renderModern(
   hero: HeroProps,
@@ -478,7 +478,7 @@ function renderModern(
 ) {
   return (
     <>
-      {/* Hero — atmospheric gradient background */}
+      {/* Hero - atmospheric gradient background */}
       <section className="atlas-home-hero atlas-atmo-bg">
         <div className="atlas-container" style={{ padding: '0 var(--atlas-spacing-lg)' }}>
           <div className="atlas-home-hero-content">
@@ -561,7 +561,7 @@ function renderModern(
         </section>
       )}
 
-      {/* CTA — gradient atmospheric */}
+      {/* CTA - gradient atmospheric */}
       <section className="atlas-cta-banner atlas-atmo-bg" style={{ overflow: 'hidden' }}>
         <div className="atlas-container" style={{ position: 'relative', zIndex: 1 }}>
           <h2 className="atlas-cta-heading" data-reveal="up">Experience the difference</h2>
@@ -582,9 +582,9 @@ function renderModern(
   );
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  BOLD — Dark, dramatic, high-contrast
-// ═══════════════════════════════════════════════════════════════════════════
+// -
+//  BOLD - Dark, dramatic, high-contrast
+// -
 
 function renderBold(
   hero: HeroProps,
@@ -594,7 +594,7 @@ function renderBold(
 ) {
   return (
     <>
-      {/* Hero — full-viewport dark */}
+      {/* Hero - full-viewport dark */}
       <section
         className="atlas-home-hero"
         style={hero.imageUrl ? {
@@ -618,7 +618,7 @@ function renderBold(
         </div>
       </section>
 
-      {/* Category Showcase — sharp cards */}
+      {/* Category Showcase - sharp cards */}
       {categories.length > 0 && (
         <section className="atlas-section-dark atlas-section">
           <div className="atlas-container">
@@ -641,7 +641,7 @@ function renderBold(
         </section>
       )}
 
-      {/* Featured Products — dark grid */}
+      {/* Featured Products - dark grid */}
       {products.length > 0 && (
         <section className="atlas-section-dark atlas-section">
           <div className="atlas-container">
@@ -665,7 +665,7 @@ function renderBold(
         </section>
       )}
 
-      {/* Brand Statement — full-width typographic section */}
+      {/* Brand Statement - full-width typographic section */}
       <section className="atlas-section-dark">
         <div className="atlas-container">
           <div className="atlas-brand-statement">
@@ -676,7 +676,7 @@ function renderBold(
         </div>
       </section>
 
-      {/* CTA — inverted (light on dark) */}
+      {/* CTA - inverted (light on dark) */}
       <section className="atlas-cta-banner" style={{ background: 'var(--brand-background, #ffffff)' }}>
         <div className="atlas-container">
           <h2 className="atlas-cta-heading" style={{ color: 'var(--brand-text, #1b1b1b)' }}>
@@ -702,9 +702,9 @@ function renderBold(
   );
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  MINIMALIST — Experiential, immersive, ultra-minimal
-// ═══════════════════════════════════════════════════════════════════════════
+// -
+//  MINIMALIST - Experiential, immersive, ultra-minimal
+// -
 
 function renderMinimalist(
   hero: HeroProps,
@@ -714,7 +714,7 @@ function renderMinimalist(
 ) {
   return (
     <>
-      {/* Hero — full-viewport, centred, gentle */}
+      {/* Hero - full-viewport, centred, gentle */}
       <section className="atlas-home-hero">
         {hero.imageUrl && (
           <div className="atlas-home-hero-bg">
@@ -775,7 +775,7 @@ function renderMinimalist(
         </section>
       )}
 
-      {/* Products — clean, widely spaced rows */}
+      {/* Products - clean, widely spaced rows */}
       {products.length > 0 && (
         <section className="atlas-section atlas-section-alt">
           <div className="atlas-container">

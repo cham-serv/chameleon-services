@@ -1,10 +1,10 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import { HeroTextCycler } from '@/components/marketing/HeroTextCycler';
 import { ArrowRight, Zap, Brain, RefreshCw, Palette, Search, TrendingUp, Clock, Globe } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Chameleon — The AI Authority Engine for South African Businesses',
+  title: 'Chameleon - The AI Authority Engine for South African Businesses',
   description:
     'Search has changed. Chameleon builds AI-ready, GEO-optimised websites and ecommerce authority engines that adapt to the new era of AI-powered search.',
 };
@@ -14,13 +14,13 @@ const features = [
     id: 'geo-optimised',
     icon: Brain,
     title: 'GEO Optimised',
-    desc: 'Every page is structured for Generative Engine Optimisation — so AI search engines like ChatGPT, Perplexity, and Google SGE can find, understand, and quote your business.',
+    desc: 'Every page is structured for Generative Engine Optimisation - so AI search engines like ChatGPT, Perplexity, and Google SGE can find, understand, and quote your business.',
   },
   {
     id: 'ai-content',
     icon: Zap,
     title: 'AI-Powered Content',
-    desc: 'Product listings, articles, and meta content built with structured intelligence from day one. Not retrofitted — native.',
+    desc: 'Product listings, articles, and meta content built with structured intelligence from day one. Not retrofitted - native.',
   },
   {
     id: 'beautiful-templates',
@@ -32,7 +32,7 @@ const features = [
     id: 'always-updating',
     icon: RefreshCw,
     title: 'Always Updating',
-    desc: 'AI and GEO move fast. Legacy platforms struggle to keep up. Chameleon evolves continuously — your site stays ahead without the costly upgrades.',
+    desc: 'AI and GEO move fast. Legacy platforms struggle to keep up. Chameleon evolves continuously - your site stays ahead without the costly upgrades.',
   },
 ];
 
@@ -89,21 +89,21 @@ const whyNowPoints = [
   {
     icon: Clock,
     stat: '18 months',
-    label: 'behind — the average legacy CMS platform',
+    label: 'behind - the average legacy CMS platform',
     desc: 'GEO requires structured data, semantic markup, and AI-friendly content architecture that old platforms weren\'t built for.',
   },
   {
     icon: Globe,
     stat: 'R0',
     label: 'in additional ad spend required',
-    desc: 'GEO is organic visibility in AI answers — earned through content structure, not paid media.',
+    desc: 'GEO is organic visibility in AI answers - earned through content structure, not paid media.',
   },
 ];
 
 export default function HomePage() {
   return (
     <>
-      {/* ── Hero ──────────────────────────────────────────────────────────── */}
+      {/* - Hero - */}
       <section
         style={{
           position: 'relative',
@@ -211,7 +211,7 @@ export default function HomePage() {
             }}
           >
             Chameleon builds AI-ready, GEO-optimised websites and ecommerce stores
-            that adapt to the new era of search — so your business stays visible
+            that adapt to the new era of search - so your business stays visible
             wherever customers are looking.
           </p>
 
@@ -247,7 +247,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Feature Pillars ───────────────────────────────────────────────── */}
+      {/* - Feature Pillars - */}
       <section className="m-section-sm" id="features">
         <div className="m-container">
           <div className="m-grid-4">
@@ -301,7 +301,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Why Now? AI & SEO Explained ───────────────────────────────────── */}
+      {/* - Why Now? AI & SEO Explained - */}
       <section className="m-section" id="why-now">
         <div className="m-container">
           <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto 64px' }}>
@@ -383,7 +383,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── How It Works ─────────────────────────────────────────────────── */}
+      {/* - How It Works - */}
       <section
         className="m-section"
         id="how-it-works"
@@ -480,7 +480,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Template Gallery ──────────────────────────────────────────────── */}
+      {/* - Template Gallery - */}
       <section
         className="m-section"
         id="templates"
@@ -503,7 +503,7 @@ export default function HomePage() {
               Every store, perfectly crafted.
             </h2>
             <p style={{ fontSize: '0.95rem', color: 'var(--m-text-muted)', lineHeight: 1.7, margin: 0 }}>
-              Each template is AI-ready from day one — not retrofitted. Pick one,
+              Each template is AI-ready from day one - not retrofitted. Pick one,
               brand it to your business, and launch.
             </p>
           </div>
@@ -594,7 +594,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Pricing Teaser ────────────────────────────────────────────────── */}
+      {/* - Pricing Teaser - */}
       <section
         className="m-section"
         id="pricing-teaser"
@@ -675,7 +675,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Final CTA ─────────────────────────────────────────────────────── */}
+      {/* - Final CTA - */}
       <section className="m-section" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
         <div
           className="m-container-sm"

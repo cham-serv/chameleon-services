@@ -1,13 +1,13 @@
 ﻿/**
- * AtlasBadge — Server Component
+ * AtlasBadge  Server Component
  *
  * A lightweight pill badge for eyebrow labels, trust signals, and status
  * indicators. Uses CSS custom properties so it inherits brand colours
  * automatically across any tenant palette.
  *
  * Usage:
- *   <AtlasBadge>✨ New Collection</AtlasBadge>
- *   <AtlasBadge variant="accent" icon="🚚">Free Shipping</AtlasBadge>
+ *   <AtlasBadge> New Collection</AtlasBadge>
+ *   <AtlasBadge variant="accent" icon="">Free Shipping</AtlasBadge>
  *   <AtlasBadge variant="solid" size="sm">Sale</AtlasBadge>
  */
 

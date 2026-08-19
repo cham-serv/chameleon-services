@@ -1,5 +1,5 @@
-/**
- * Atlas LegalPage — Server Component (wraps a client tab navigator)
+﻿/**
+ * Atlas LegalPage  Server Component (wraps a client tab navigator)
  *
  * Fetches legal documents, renders whichever tabs have content.
  * Active tab stored in searchParams.tab for direct-linkability.

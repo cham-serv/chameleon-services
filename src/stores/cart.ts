@@ -1,8 +1,8 @@
-/**
+﻿/**
  * Cart Store
  *
  * Zustand store with localStorage persistence for the shopping cart.
- * Works across all templates — each template styles the cart UI differently
+ * Works across all templates - each template styles the cart UI differently
  * but shares this same state management.
  *
  * SSR-safe: returns empty state on the server; hydrates from localStorage
@@ -43,7 +43,7 @@ type CartStore = {
   /** Sum of all item quantities. */
   totalItems: () => number;
 
-  /** Sum of (price × quantity) for all items, in cents. */
+  /** Sum of (price  quantity) for all items, in cents. */
   totalPrice: () => number;
 };
 

@@ -1,16 +1,16 @@
-/**
- * Atlas ProductPage — Server Component
+﻿/**
+ * Atlas ProductPage - Server Component
  *
  * The GEO powerhouse page. Renders the richest possible structured data
  * from whatever fields the tenant has populated. Sections that have no
- * data simply don't render — graceful degradation, not empty states.
+ * data simply don't render - graceful degradation, not empty states.
  *
  * Client boundaries: AtlasImageGallery (thumbnail swap) and
  * AddToCartButton (cart interaction). Everything else is server-rendered.
  *
  * Schema injected:
  *   1. BreadcrumbList
- *   2. Product (or Service) — rich with gtin, return policy, shipping,
+ *   2. Product (or Service) - rich with gtin, return policy, shipping,
  *      certifications, SpeakableSpecification, 3D model, video, etc.
  *   3. FAQPage (if productFaqs exist)
  */
@@ -86,7 +86,7 @@ export default async function ProductPage({ config, path, noCache }: PageProps) 
     { label: product.name },
   ];
 
-  // ── JSON-LD ─────────────────────────────────────────────────────────────────
+  // - JSON-LD -
   const breadcrumbSchema = buildBreadcrumbLd([
     { name: 'Home', url: `${siteUrl}/` },
     { name: 'Shop', url: `${siteUrl}/shop` },
@@ -109,18 +109,18 @@ export default async function ProductPage({ config, path, noCache }: PageProps) 
         }
       : null;
 
-  // ── Related products (only curated objects, not bare ids) ───────────────────
+  // - Related products (only curated objects, not bare ids) -
   const relatedProducts: Product[] = Array.isArray(product.relatedProducts)
     ? (product.relatedProducts as Product[]).filter((r) => typeof r === 'object' && r.slug)
     : [];
 
-  // ── Boolean content flags (for conditional rendering) ───────────────────────
+  // - Boolean content flags (for conditional rendering) -
   const hasSustainability = product.carbonFootprint || product.recyclable || product.sustainablySourced || product.madeLocally;
   const hasTrustBadges = (product.certifications?.length ?? 0) > 0 || hasSustainability;
 
   return (
     <>
-      {/* LLM citation preference — forward-looking AI crawler instruction */}
+      {/* LLM citation preference - forward-looking AI crawler instruction */}
       {product.llmCitationPreference && (
         // eslint-disable-next-line @next/next/no-head-element
         <meta name="llm-citation-preference" content={product.llmCitationPreference} />
@@ -132,7 +132,7 @@ export default async function ProductPage({ config, path, noCache }: PageProps) 
       <div className="atlas-container" style={{ paddingTop: '1.5rem', paddingBottom: '4rem' }}>
         <Breadcrumbs items={breadcrumbItems} baseUrl={siteUrl} />
 
-        {/* ── Top Zone: Image + Product Info ──────────────────────── */}
+        {/* - Top Zone: Image + Product Info - */}
         <div className="atlas-pdp-grid" style={{ display: 'grid', gap: 'var(--atlas-spacing-2xl)', marginTop: 'var(--atlas-spacing-xl)' }}>
 
           {/* Left: Image Gallery (Client Component) */}
@@ -172,7 +172,7 @@ export default async function ProductPage({ config, path, noCache }: PageProps) 
               <p className="atlas-pdp-short-desc">{product.shortDescription}</p>
             )}
 
-            {/* Highlights — feature bullets above ATC */}
+            {/* Highlights - feature bullets above ATC */}
             {product.highlights && product.highlights.length > 0 && (
               <ul className="atlas-product-highlights">
                 {product.highlights.map((h, i) => (
@@ -225,9 +225,9 @@ export default async function ProductPage({ config, path, noCache }: PageProps) 
                     ? <a key={i} href={cert.certUrl} target="_blank" rel="noopener noreferrer" className="atlas-trust-badge">{cert.certName}</a>
                     : <span key={i} className="atlas-trust-badge">{cert.certName}</span>
                 ))}
-                {product.recyclable && <span className="atlas-trust-badge atlas-trust-badge--eco">♻ Recyclable</span>}
-                {product.sustainablySourced && <span className="atlas-trust-badge atlas-trust-badge--eco">🌿 Sustainably Sourced</span>}
-                {product.madeLocally && <span className="atlas-trust-badge atlas-trust-badge--eco">📍 Made Locally</span>}
+                {product.recyclable && <span className="atlas-trust-badge atlas-trust-badge--eco"> Recyclable</span>}
+                {product.sustainablySourced && <span className="atlas-trust-badge atlas-trust-badge--eco"> Sustainably Sourced</span>}
+                {product.madeLocally && <span className="atlas-trust-badge atlas-trust-badge--eco"> Made Locally</span>}
               </div>
             )}
 
@@ -259,7 +259,7 @@ export default async function ProductPage({ config, path, noCache }: PageProps) 
           </div>
         </div>
 
-        {/* ── Below Zone: Content + Sidebar ───────────────────────── */}
+        {/* - Below Zone: Content + Sidebar - */}
         <div className="atlas-pdp-below" style={{ display: 'grid', gap: 'var(--atlas-spacing-2xl)', marginTop: 'var(--atlas-spacing-3xl)' }}>
 
           {/* Left Column: Content */}
@@ -276,7 +276,7 @@ export default async function ProductPage({ config, path, noCache }: PageProps) 
             {product.demoVideo && (
               <section style={{ marginTop: 'var(--atlas-spacing-2xl)' }}>
                 <h2 className="atlas-pdp-section-title">
-                  {product.demoVideoTitle || `${product.name} — Video`}
+                  {product.demoVideoTitle || `${product.name} - Video`}
                 </h2>
                 <div className="atlas-demo-video">
                   <iframe
@@ -326,7 +326,7 @@ export default async function ProductPage({ config, path, noCache }: PageProps) 
                         <tr key={i}>
                           <td>{c.competitorProduct}</td>
                           <td>{c.advantage}</td>
-                          <td>{c.disadvantage ?? '—'}</td>
+                          <td>{c.disadvantage ?? '-'}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -353,17 +353,17 @@ export default async function ProductPage({ config, path, noCache }: PageProps) 
 
           {/* Right Column: Sidebar */}
           <aside className="atlas-pdp-sidebar">
-            {/* AI Summary — geo-speakable for voice search */}
+            {/* AI Summary - geo-speakable for voice search */}
             {product.aiSummary && (
               <div className="atlas-sidebar-callout">
                 <h3 className="atlas-sidebar-callout-title">
-                  <span aria-hidden="true">✦</span> AI Summary
+                  <span aria-hidden="true"></span> AI Summary
                 </h3>
                 <p className="atlas-sidebar-callout-text" data-speakable>{product.aiSummary}</p>
               </div>
             )}
 
-            {/* Voice search phrase — hidden but speakable */}
+            {/* Voice search phrase - hidden but speakable */}
             {product.voiceSearchPhrase && (
               <span data-speakable style={{ position: 'absolute', left: '-9999px' }} aria-hidden="true">
                 {product.voiceSearchPhrase}
@@ -403,7 +403,7 @@ export default async function ProductPage({ config, path, noCache }: PageProps) 
                 <h3 className="atlas-pdp-section-title">Awards</h3>
                 <ul className="atlas-pdp-attr-list">
                   {product.awards.map((a, i) => (
-                    <li key={i}>🏆 {a.award}</li>
+                    <li key={i}> {a.award}</li>
                   ))}
                 </ul>
               </div>
@@ -472,7 +472,7 @@ export default async function ProductPage({ config, path, noCache }: PageProps) 
                       {relImg?.url ? (
                         <img src={relImg.url} alt={relImg.alt ?? rel.name} loading="lazy" />
                       ) : (
-                        <div className="atlas-related-card-placeholder">📦</div>
+                        <div className="atlas-related-card-placeholder"></div>
                       )}
                     </div>
                     <p className="atlas-related-card-name">{rel.name}</p>

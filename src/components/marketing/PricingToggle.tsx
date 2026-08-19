@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 
@@ -80,7 +80,7 @@ export function PricingToggle({ onChange, value }: PricingToggleProps) {
   );
 }
 
-// ── Pricing page wrapper that manages toggle state ───────────────────────────
+// - Pricing page wrapper that manages toggle state -
 
 type PricingTier = {
   name: string;

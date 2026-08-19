@@ -1,4 +1,4 @@
-/**
+﻿/**
  * RichTextRenderer Component
  *
  * Converts Payload CMS Lexical JSON into React elements.
@@ -17,7 +17,7 @@
 
 import React from 'react';
 
-// ── Types ───────────────────────────────────────────────────────────────────
+// - Types -
 
 type LexicalNode = {
   type: string;
@@ -43,7 +43,7 @@ type RichTextRendererProps = {
   className?: string;
 };
 
-// ── Format Bitmask Constants ────────────────────────────────────────────────
+// - Format Bitmask Constants -
 
 const IS_BOLD = 1;
 const IS_ITALIC = 2;
@@ -53,7 +53,7 @@ const IS_CODE = 16;
 const IS_SUBSCRIPT = 32;
 const IS_SUPERSCRIPT = 64;
 
-// ── Component ───────────────────────────────────────────────────────────────
+// - Component -
 
 export function RichTextRenderer({ content, className }: RichTextRendererProps) {
   if (!content) return null;
@@ -72,7 +72,7 @@ export function RichTextRenderer({ content, className }: RichTextRendererProps) 
   );
 }
 
-// ── Node Renderer ───────────────────────────────────────────────────────────
+// - Node Renderer -
 
 function RenderNode({ node }: { node: LexicalNode }): React.ReactElement | null {
   switch (node.type) {
@@ -138,7 +138,7 @@ function RenderNode({ node }: { node: LexicalNode }): React.ReactElement | null 
       return <RenderText node={node} />;
 
     default: {
-      // Graceful degradation — render children if present, warn in dev
+      // Graceful degradation - render children if present, warn in dev
       if (process.env.NODE_ENV === 'development') {
         console.warn(`[RichTextRenderer] Unknown node type: "${node.type}"`);
       }
@@ -150,7 +150,7 @@ function RenderNode({ node }: { node: LexicalNode }): React.ReactElement | null 
   }
 }
 
-// ── Text Renderer (with format bitmask) ─────────────────────────────────────
+// - Text Renderer (with format bitmask) -
 
 function RenderText({ node }: { node: LexicalNode }): React.ReactElement | null {
   if (node.text == null) return null;
@@ -183,7 +183,7 @@ function RenderText({ node }: { node: LexicalNode }): React.ReactElement | null 
   return element;
 }
 
-// ── Children Renderer ───────────────────────────────────────────────────────
+// - Children Renderer -
 
 function RenderChildren({
   nodes,

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ISR On-Demand Revalidation Endpoint
  *
  * POST /api/revalidate
@@ -38,7 +38,7 @@ type RevalidateBody = {
 };
 
 export async function POST(req: NextRequest) {
-  // ── Auth check ──────────────────────────────────────────────────────────────
+  // - Auth check -
   if (!REVALIDATE_SECRET) {
     console.error('[revalidate] REVALIDATE_SECRET not configured');
     return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 });
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Missing signature' }, { status: 401 });
   }
 
-  // ── Parse body ──────────────────────────────────────────────────────────────
+  // - Parse body -
   let body: RevalidateBody;
   let rawBody: string;
 
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
 
-  // ── Verify HMAC signature ─────────────────────────────────────────────────
+  // - Verify HMAC signature -
   const encoder = new TextEncoder();
   const key = await crypto.subtle.importKey(
     'raw',
@@ -78,12 +78,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
   }
 
-  // ── Replay protection ─────────────────────────────────────────────────────
+  // - Replay protection -
   if (body.timestamp && Date.now() - body.timestamp > MAX_AGE_MS) {
     return NextResponse.json({ error: 'Expired request' }, { status: 400 });
   }
 
-  // ── Validate tags ─────────────────────────────────────────────────────────
+  // - Validate tags -
   if (!Array.isArray(body.tags) || body.tags.length === 0) {
     return NextResponse.json({ error: 'No tags provided' }, { status: 400 });
   }
@@ -92,11 +92,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Too many tags (max 20)' }, { status: 400 });
   }
 
-  // ── Revalidate ────────────────────────────────────────────────────────────
+  // - Revalidate -
   const revalidated: string[] = [];
 
   for (const tag of body.tags) {
-    // Sanitize tag — only allow alphanumeric, hyphens, colons, underscores
+    // Sanitize tag - only allow alphanumeric, hyphens, colons, underscores
     if (!/^[a-zA-Z0-9:_-]+$/.test(tag)) {
       console.warn(`[revalidate] Skipping invalid tag: "${tag}"`);
       continue;

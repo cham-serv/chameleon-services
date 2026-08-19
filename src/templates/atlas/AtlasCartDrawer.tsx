@@ -1,7 +1,7 @@
-'use client';
+﻿'use client';
 
 /**
- * AtlasCartDrawer — Client Component
+ * AtlasCartDrawer  Client Component
  *
  * Slide-out drawer from the right. Shows cart items with quantity
  * controls, subtotal, and CTA buttons. Empty state when cart is empty.
@@ -128,7 +128,7 @@ export default function AtlasCartDrawer({ config, isOpen, onClose }: Props) {
                         fontSize: '1.5rem',
                       }}
                     >
-                      📦
+                      
                     </div>
                   )}
 
@@ -142,7 +142,7 @@ export default function AtlasCartDrawer({ config, isOpen, onClose }: Props) {
                           onClick={() => updateQuantity(item.productId, item.quantity - 1)}
                           aria-label="Decrease quantity"
                         >
-                          −
+                          
                         </button>
                         <span>{item.quantity}</span>
                         <button
@@ -179,7 +179,7 @@ export default function AtlasCartDrawer({ config, isOpen, onClose }: Props) {
           )}
         </div>
 
-        {/* Footer — only show if items exist */}
+        {/* Footer  only show if items exist */}
         {items.length > 0 && (
           <div className="atlas-drawer-footer">
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>

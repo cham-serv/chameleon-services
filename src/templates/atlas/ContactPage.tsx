@@ -1,9 +1,9 @@
 ﻿/**
- * Atlas ContactPage — Server Component (wraps a client form)
+ * Atlas ContactPage  Server Component (wraps a client form)
  *
  * Variants:
  *   - minimal:       Narrow centered form + business info card
- *   - split-image:   True 50/50 viewport split — sticky image left, form right
+ *   - split-image:   True 50/50 viewport split  sticky image left, form right
  *   - map-and-hours: Full-width map top, 3-column content below
  *
  * Schema injected (multi-schema pattern, matches Resources/Shop GEO standard):
@@ -124,7 +124,7 @@ export default function ContactPage({ config, variant }: PageProps) {
             <li key={i}>
               <span>{block.dayOfWeek.join(', ')}</span>
               <span className={block.isClosed ? 'atlas-contact-hours-closed' : ''}>
-                {block.isClosed ? 'Closed' : `${block.opens} – ${block.closes}`}
+                {block.isClosed ? 'Closed' : `${block.opens}  ${block.closes}`}
               </span>
             </li>
           ))}
@@ -142,8 +142,8 @@ export default function ContactPage({ config, variant }: PageProps) {
         </ul>
       ) : (
         <ul className="atlas-contact-hours-list">
-          <li><span>Monday – Friday</span><span>08:00 – 17:00</span></li>
-          <li><span>Saturday</span><span>09:00 – 13:00</span></li>
+          <li><span>Monday  Friday</span><span>08:00  17:00</span></li>
+          <li><span>Saturday</span><span>09:00  13:00</span></li>
           <li><span>Sunday</span><span className="atlas-contact-hours-closed">Closed</span></li>
         </ul>
       )}

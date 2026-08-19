@@ -1,9 +1,9 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, Check } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Pricing — Flexible Plans for Businesses & Agencies',
+  title: 'Pricing  Flexible Plans for Businesses & Agencies',
   description:
     'Chameleon pricing for South African businesses. Feature-based tiers for direct clients, and flat monthly scaling for agency partners. No hidden fees.',
 };
@@ -59,7 +59,7 @@ const businessTiers = [
 const agencyTiers = [
   {
     name: 'Bronze',
-    clients: '1–2 client sites',
+    clients: '12 client sites',
     monthly: 2500,
     features: [
       'Agency Dashboard',
@@ -68,7 +68,7 @@ const agencyTiers = [
   },
   {
     name: 'Silver',
-    clients: '3–9 client sites',
+    clients: '39 client sites',
     monthly: 4500,
     features: [
       'Agency Dashboard',

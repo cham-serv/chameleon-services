@@ -1,5 +1,5 @@
-/**
- * Platform Font Registry — self-hosted via next/font/google.
+﻿/**
+ * Platform Font Registry - self-hosted via next/font/google.
  *
  * All fonts are downloaded at build time and served from the Vercel CDN.
  * Zero external DNS lookups, zero render-blocking requests, GDPR compliant.
@@ -29,7 +29,7 @@ import {
   Space_Grotesk,
 } from 'next/font/google';
 
-// ── Font instances (declared at module level — next/font requirement) ───────
+// - Font instances (declared at module level - next/font requirement) -
 
 const inter = Inter({ subsets: ['latin'], variable: '--nf-inter', display: 'swap' });
 const lato = Lato({ subsets: ['latin'], weight: ['300', '400', '700'], variable: '--nf-lato', display: 'swap' });
@@ -47,22 +47,22 @@ const playfairDisplay = Playfair_Display({ subsets: ['latin'], variable: '--nf-p
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--nf-jetbrains', display: 'swap' });
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--nf-spacegrotesk', display: 'swap' });
 
-// ── Public registry ─────────────────────────────────────────────────────────
+// - Public registry -
 
 export const PLATFORM_FONTS = {
-  // Sans-serif — neutral / versatile
+  // Sans-serif - neutral / versatile
   'Inter': inter,
   'Lato': lato,
   'Open Sans': openSans,
   'DM Sans': dmSans,
-  // Sans-serif — modern / geometric
+  // Sans-serif - modern / geometric
   'Plus Jakarta Sans': plusJakartaSans,
   'Outfit': outfit,
   'Poppins': poppins,
   'Montserrat': montserrat,
   'Figtree': figtree,
   'Raleway': raleway,
-  // Sans-serif — editorial / distinctive
+  // Sans-serif - editorial / distinctive
   'Syne': syne,
   'Space Grotesk': spaceGrotesk,
   // Serif

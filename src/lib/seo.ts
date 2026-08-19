@@ -1,4 +1,4 @@
-/**
+﻿/**
  * SEO Metadata Helpers
  *
  * Generates Next.js Metadata objects from engine data.
@@ -32,7 +32,7 @@ type GeneratePageMetadataParams = {
  * Generates Next.js Metadata for a page.
  *
  * Priority chain:
- *   1. pageConfigSeo (from atlas-site-config — tenant-editable)
+ *   1. pageConfigSeo (from atlas-site-config - tenant-editable)
  *   2. PageSEO collection record (legacy, being deprecated)
  *   3. Fallback title/description (hardcoded in template)
  */
@@ -47,7 +47,7 @@ export async function generatePageMetadata({
   const seo = await getPageSEO(tenantSlug, pageSlug);
   const siteName = config.settings?.siteName ?? config.tenant.name;
 
-  // Priority: pageConfig → PageSEO → fallback → default
+  // Priority: pageConfig  PageSEO  fallback  default
   const title =
     pageConfigSeo?.title ??
     seo?.metaTitle ??
@@ -83,7 +83,7 @@ export async function generatePageMetadata({
 
 /**
  * Generates metadata for a detail page (product, article, service).
- * These don't have a PageSEO record — metadata comes from the item itself.
+ * These don't have a PageSEO record - metadata comes from the item itself.
  */
 export function generateItemMetadata({
   title,
@@ -98,7 +98,7 @@ export function generateItemMetadata({
   siteName: string;
   type?: 'article' | 'product';
 }): Metadata {
-  const desc = description ?? `${title} — ${siteName}`;
+  const desc = description ?? `${title} - ${siteName}`;
 
   return {
     title,
@@ -127,7 +127,7 @@ export function generateItemMetadata({
   };
 }
 
-// ── Helpers ─────────────────────────────────────────────────────────────────
+// - Helpers -
 
 function resolveOgImage(
   seo: PageSEO | null,

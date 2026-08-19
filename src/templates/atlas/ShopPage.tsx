@@ -1,13 +1,13 @@
 ﻿/**
- * Atlas ShopPage â€” Server Component
+ * Atlas ShopPage - Server Component
  *
  * Variant dispatch pattern:
- *   catalog  â€” Traditional 2-col layout: sticky left sidebar (categories + sort) + dense grid
- *   modern   â€” Full-width grid: sticky horizontal filter bar, image-swap on hover
- *   lookbook â€” Visual boutique: asymmetric grid, large portrait images, hover overlay
+ *   catalog  - Traditional 2-col layout: sticky left sidebar (categories + sort) + dense grid
+ *   modern   - Full-width grid: sticky horizontal filter bar, image-swap on hover
+ *   lookbook - Visual boutique: asymmetric grid, large portrait images, hover overlay
  *
  * All variants use the same server-side data fetching and URL-based filtering.
- * No client-side state management â€” category and sort changes navigate to a new URL.
+ * No client-side state management - category and sort changes navigate to a new URL.
  */
 
 import Link from "next/link";
@@ -22,11 +22,11 @@ import { JsonLd } from "@/components/JsonLd";
 import { buildBreadcrumbLd, buildCategoryHubLd } from "@/lib/jsonld";
 import { AtlasSortSelect } from "./AtlasSortSelect";
 
-// â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+//  Types 
 
 type SortOption = "newest" | "price-asc" | "price-desc" | "name";
 
-// â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+//  Helpers 
 
 function resolveSort(raw: string | string[] | undefined): SortOption {
   const val = Array.isArray(raw) ? raw[0] : raw;
@@ -60,7 +60,7 @@ function getSecondaryImage(product: Product): string | null {
   return product.images[1]?.image?.url ?? null;
 }
 
-// â”€â”€ Main Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+//  Main Component 
 
 export default async function ShopPage({ config, variant, searchParams, noCache }: PageProps) {
   const tenant = config.tenant.slug;
@@ -94,16 +94,16 @@ export default async function ShopPage({ config, variant, searchParams, noCache 
     ? await getCategoryBySlug(tenant, activeCategory, noCache)
     : null;
 
-  // â”€â”€ Shared: JSON-LD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  //  Shared: JSON-LD 
 
-  // BreadcrumbList â€” injected on all variants
+  // BreadcrumbList - injected on all variants
   const breadcrumbSchema = buildBreadcrumbLd([
     { name: "Home", url: `${siteUrl}/` },
     { name: "Shop", url: `${siteUrl}/shop` },
     ...(activeCategoryObj ? [{ name: activeCategoryObj.name, url: `${siteUrl}/shop?category=${activeCategoryObj.slug}` }] : []),
   ]);
 
-  // Category hub schemas â€” CollectionPage + optional FAQPage
+  // Category hub schemas - CollectionPage + optional FAQPage
   const categoryHubSchemas = activeCategoryFull
     ? buildCategoryHubLd(activeCategoryFull, products, siteUrl, config.settings?.siteName ?? config.tenant.name)
     : [];
@@ -134,7 +134,7 @@ export default async function ShopPage({ config, variant, searchParams, noCache 
     ...(activeCategoryObj ? [{ label: activeCategoryObj.name }] : []),
   ];
 
-  // â”€â”€ Shared: Pagination â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  //  Shared: Pagination 
 
   const Pagination = totalPages > 1 ? (
     <nav className="atlas-pagination" aria-label="Shop pages">
@@ -161,7 +161,7 @@ export default async function ShopPage({ config, variant, searchParams, noCache 
     </nav>
   ) : null;
 
-  // â”€â”€ Shared: Empty State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  //  Shared: Empty State 
 
   const EmptyState = (
     <div className="atlas-empty-state">
@@ -169,7 +169,7 @@ export default async function ShopPage({ config, variant, searchParams, noCache 
       <p className="atlas-empty-sub">
         {activeCategory
           ? "No products match this category filter."
-          : "Check back soon â€” more products are on the way."}
+          : "Check back soon - more products are on the way."}
       </p>
       {activeCategory && (
         <Link href="/shop" className="atlas-btn atlas-btn-outline" style={{ marginTop: "1rem" }}>
@@ -179,7 +179,7 @@ export default async function ShopPage({ config, variant, searchParams, noCache 
     </div>
   );
 
-  // â”€â”€ Variant Dispatch â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  //  Variant Dispatch 
 
   const renderProps: RenderProps = {
     products, categories, activeCategory, activeCategoryObj, activeCategoryFull,
@@ -196,7 +196,7 @@ export default async function ShopPage({ config, variant, searchParams, noCache 
   }
 }
 
-// â”€â”€ Shared render props type â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+//  Shared render props type 
 
 type RenderProps = {
   products: Product[];
@@ -219,7 +219,7 @@ type RenderProps = {
   EmptyState: React.ReactNode;
 };
 
-// â”€â”€ Render: Catalog (Sidebar Layout) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+//  Render: Catalog (Sidebar Layout) 
 
 function renderCatalog({
   products, categories, activeCategory, activeCategoryObj, activeCategoryFull,
@@ -248,7 +248,7 @@ function renderCatalog({
         </div>
 
         <div className="atlas-catalog-layout">
-          {/* Sidebar â€” hidden on mobile */}
+          {/* Sidebar - hidden on mobile */}
           <aside className="atlas-catalog-sidebar" aria-label="Shop filters">
             {categories.length > 0 && (
               <nav aria-label="Filter by category">
@@ -342,7 +342,7 @@ function renderCatalog({
   );
 }
 
-// â”€â”€ Render: Modern (Full-width + sticky filter bar) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+//  Render: Modern (Full-width + sticky filter bar) 
 
 function renderModern({
   products, categories, activeCategory, activeCategoryObj, activeCategoryFull,
@@ -437,7 +437,7 @@ function renderModern({
   );
 }
 
-// â”€â”€ Render: Lookbook (Asymmetric visual grid) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+//  Render: Lookbook (Asymmetric visual grid) 
 
 function renderLookbook({
   products, categories, activeCategory, activeCategoryObj, activeCategoryFull,
@@ -510,7 +510,7 @@ function renderLookbook({
                         />
                       ) : (
                         <div className="atlas-lookbook-img-placeholder" aria-label="No product image">
-                          <span style={{ fontSize: "3rem", opacity: 0.2 }}>ðŸ“¦</span>
+                          <span style={{ fontSize: "3rem", opacity: 0.2 }}></span>
                         </div>
                       )}
                       <div className="atlas-lookbook-overlay" aria-hidden="true">

@@ -1,7 +1,7 @@
 ﻿'use client';
 
 /**
- * AtlasFaqSearch — Client Component
+ * AtlasFaqSearch - Client Component
  *
  * "Search" variant layout for the FAQs page.
  * Renders FAQs as category cards with a flat question list.
@@ -50,7 +50,7 @@ export function AtlasFaqSearch({ categories }: AtlasFaqSearchProps) {
             <input
               id="faq-search-input"
               type="search"
-              placeholder="Search questions…"
+              placeholder="Search questions"
               value={query}
               onChange={(e) => { setQuery(e.target.value); setOpenId(null); }}
               className="atlas-faq-search-input"
@@ -93,7 +93,7 @@ export function AtlasFaqSearch({ categories }: AtlasFaqSearchProps) {
                       >
                         <span>{faq.question}</span>
                         <span className={`atlas-faq-card-chevron${isOpen ? ' is-open' : ''}`} aria-hidden>
-                          ›
+                          
                         </span>
                       </button>
                       {isOpen && (
