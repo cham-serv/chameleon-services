@@ -4,9 +4,9 @@ import { HeroTextCycler } from '@/components/marketing/HeroTextCycler';
 import { ArrowRight, Zap, Brain, RefreshCw, Palette, Search, TrendingUp, Clock, Globe } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Chameleon — AI-Ready Websites for South African Businesses',
+  title: 'Chameleon — The AI Authority Engine for South African Businesses',
   description:
-    'Search has changed. Chameleon builds AI-ready, GEO-optimised websites and ecommerce stores that adapt to the new era of AI-powered search.',
+    'Search has changed. Chameleon builds AI-ready, GEO-optimised websites and ecommerce authority engines that adapt to the new era of AI-powered search.',
 };
 
 const features = [
@@ -58,7 +58,7 @@ const templates = [
   {
     id: 'atlas',
     name: 'Atlas',
-    tagline: 'Premium ecommerce, beautifully crafted.',
+    tagline: 'For heavy retail, industrial supply, and mid-market B2B.',
     features: ['Ecommerce', 'Articles', 'FAQ', 'Cart & Checkout'],
     demoHref: 'https://atlas-demo.chameleon.services',
     gradient: 'linear-gradient(135deg, #1e3a5f 0%, #0d1117 100%)',

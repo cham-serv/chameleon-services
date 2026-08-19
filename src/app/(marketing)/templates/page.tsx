@@ -12,11 +12,11 @@ const templates = [
   {
     id: 'atlas',
     name: 'Atlas',
-    tagline: 'Premium ecommerce, beautifully crafted.',
+    tagline: 'For heavy retail, industrial supply, and mid-market B2B.',
     description:
-      'Atlas is built for product-first businesses that want a premium online store without the premium price tag. Full ecommerce, AI-powered product listings, a blog, FAQ, and more.',
+      'Atlas is Chameleon\'s Commerce-tier template — built for product-first businesses that need a premium storefront with AI-powered product listings, authority-grade knowledge graphs, multi-variant page design, and full ecommerce. The most capable template in the library.',
     features: ['Ecommerce & Cart', 'AI Product Listings', 'Articles & Blog', 'FAQ', 'Contact', 'Legal Pages'],
-    industries: ['Retail', 'Fashion', 'Health & Beauty', 'Food & Beverage'],
+    industries: ['Industrial Supply', 'Heavy Retail', 'B2B Products', 'DTC Brands'],
     demoHref: 'https://atlas-demo.chameleon.services',
     gradient: 'linear-gradient(135deg, #1e3a5f 0%, #162032 50%, #0d1117 100%)',
     accentColor: '#3b82f6',
