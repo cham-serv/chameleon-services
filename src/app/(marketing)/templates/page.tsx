@@ -1,9 +1,9 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Templates — AI-Ready Storefronts & Business Sites',
+  title: 'Templates  AI-Ready Storefronts & Business Sites',
   description:
     'Browse Chameleon\'s library of AI-ready, GEO-optimised website templates. Every template is beautifully designed and built for modern AI-powered search.',
 };
@@ -14,7 +14,7 @@ const templates = [
     name: 'Atlas',
     tagline: 'For heavy retail, industrial supply, and mid-market B2B.',
     description:
-      'Atlas is Chameleon\'s Commerce-tier template — built for product-first businesses that need a premium storefront with AI-powered product listings, authority-grade knowledge graphs, multi-variant page design, and full ecommerce. The most capable template in the library.',
+      'Atlas is Chameleon\'s Commerce-tier template  built for product-first businesses that need a premium storefront with AI-powered product listings, authority-grade knowledge graphs, multi-variant page design, and full ecommerce. The most capable template in the library.',
     features: ['Ecommerce & Cart', 'AI Product Listings', 'Articles & Blog', 'FAQ', 'Contact', 'Legal Pages'],
     industries: ['Industrial Supply', 'Heavy Retail', 'B2B Products', 'DTC Brands'],
     demoHref: 'https://atlas-demo.chameleon.services',
@@ -27,7 +27,7 @@ const templates = [
     name: 'Meridian',
     tagline: 'Services & consulting, built to convert.',
     description:
-      'Meridian is designed for service-based businesses — consultants, agencies, clinics, and professionals — who need a credibility-first site that generates leads.',
+      'Meridian is designed for service-based businesses  consultants, agencies, clinics, and professionals  who need a credibility-first site that generates leads.',
     features: ['Services Showcase', 'Lead Generation', 'Articles & Blog', 'Contact with Map', 'Legal Pages', 'FAQ'],
     industries: ['Consulting', 'Professional Services', 'Healthcare', 'Agencies'],
     demoHref: 'https://meridian-demo.chameleon.services',
@@ -40,7 +40,7 @@ const templates = [
     name: 'Solstice',
     tagline: 'Hospitality & experiences, warm and inviting.',
     description:
-      'Coming soon — Solstice is being designed for restaurants, lodges, event venues, and experience-based businesses.',
+      'Coming soon  Solstice is being designed for restaurants, lodges, event venues, and experience-based businesses.',
     features: ['Menu / Experience Showcase', 'Booking Integration', 'Gallery', 'Reviews', 'Events'],
     industries: ['Hospitality', 'Restaurants', 'Events', 'Tourism'],
     demoHref: '#',
@@ -102,7 +102,7 @@ export default function TemplatesPage() {
               lineHeight: 1.7,
             }}
           >
-            Each template is AI-ready from day one — structured for GEO, built for performance,
+            Each template is AI-ready from day one  structured for GEO, built for performance,
             and branded to your business in minutes.
           </p>
         </div>
@@ -232,7 +232,7 @@ export default function TemplatesPage() {
                       Best for
                     </div>
                     <div style={{ fontSize: '0.875rem', color: 'var(--m-text-muted)' }}>
-                      {template.industries.join(' · ')}
+                      {template.industries.join('  ')}
                     </div>
                   </div>
 

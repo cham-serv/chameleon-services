@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Chameleon Engine API Client
  *
  * All fetch() calls to the engine, with ISR cache tags for on-demand
@@ -15,7 +15,7 @@ const ENGINE_API_URL =
   process.env.CHAMELEON_API_URL ??
   'https://chameleon-engine-production.up.railway.app';
 
-// ── Helpers ─────────────────────────────────────────────────────────────────
+// - Helpers -
 
 function apiUrl(path: string, params?: Record<string, string>): string {
   const url = new URL(path, ENGINE_API_URL);
@@ -55,7 +55,7 @@ async function apiFetch<T>(url: string, opts: FetchOptions = {}): Promise<T | nu
   }
 }
 
-// ── Paginated Response Shape ────────────────────────────────────────────────
+// - Paginated Response Shape -
 
 export type PaginatedResponse<T> = {
   docs: T[];
@@ -68,7 +68,7 @@ export type PaginatedResponse<T> = {
   pagingCounter: number;
 };
 
-// ── Products ────────────────────────────────────────────────────────────────
+// - Products -
 
 export type Product = {
   id: number;
@@ -77,7 +77,7 @@ export type Product = {
   price: number;
   compareAtPrice?: number | null;
   shortDescription?: string;
-  longDescription?: unknown; // Lexical JSON — only on single product
+  longDescription?: unknown; // Lexical JSON - only on single product
   published: boolean;
   featured?: boolean;
   images?: Array<{ image: MediaItem }>;
@@ -91,7 +91,7 @@ export type Product = {
   weightUnit?: 'g' | 'kg' | 'ml' | 'l';
   // Product identity
   productType?: 'physical' | 'digital' | 'service';
-  gtin?: string;               // EAN/UPC/ISBN — connects to Google Shopping graph
+  gtin?: string;               // EAN/UPC/ISBN - connects to Google Shopping graph
   condition?: 'new' | 'refurbished' | 'used' | 'damaged';
   availabilityStatus?: 'inStock' | 'outOfStock' | 'preOrder' | 'backOrder' | 'discontinued';
   availableFrom?: string;       // ISO date for pre-orders
@@ -135,15 +135,15 @@ export type Product = {
   subscriptionPrice?: number;
   // Intelligence tab fields (only on single product fetch)
   aiSummary?: string;
-  /** Engine stores as { pro: string } — mapped to this shape by the API */
+  /** Engine stores as { pro: string } - mapped to this shape by the API */
   expertPros?: Array<{ pro: string }>;
-  /** Engine stores as { con: string } — mapped to this shape by the API */
+  /** Engine stores as { con: string } - mapped to this shape by the API */
   expertCons?: Array<{ con: string }>;
   technicalSpecs?: Array<{ specName: string; specValue: string; specUnit?: string }>;
   productFaqs?: Array<{ question: string; answer: string }>;
   solvesProblems?: Array<{ problem: string }>;
   idealFor?: Array<{ audience: string }>;
-  /** Engine stores as { attribute: string } — single text, not key-value */
+  /** Engine stores as { attribute: string } - single text, not key-value */
   keyAttributes?: Array<{ attribute: string }>;
   voiceSearchPhrase?: string;
   comparedTo?: Array<{ competitorProduct: string; advantage: string; disadvantage?: string }>;
@@ -191,7 +191,7 @@ export type ProductCategory = {
   name: string;
   slug: string;
   description?: string;
-  longDescription?: unknown;   // Lexical richText — above product grid
+  longDescription?: unknown;   // Lexical richText - above product grid
   image?: MediaItem | number | null;
   icon?: string;
   parent?: ProductCategory | number | null;
@@ -200,7 +200,7 @@ export type ProductCategory = {
   // Intelligence tab (only on getCategoryBySlug)
   aiSummary?: string;
   wikidataUrl?: string;
-  buyersGuide?: unknown;       // Lexical richText — editorial buying guide
+  buyersGuide?: unknown;       // Lexical richText - editorial buying guide
   categoryFaqs?: Array<{ question: string; answer: string }>;
   metaTitle?: string;
   metaDescription?: string;
@@ -245,7 +245,7 @@ export async function getProductBySlug(tenant: string, slug: string, noCache = f
   );
 }
 
-// ── Product Categories ──────────────────────────────────────────────────────
+// - Product Categories -
 
 type GetCategoriesParams = {
   tenant: string;
@@ -279,7 +279,7 @@ export async function getCategoryBySlug(
   );
 }
 
-// ── Articles ────────────────────────────────────────────────────────────────
+// - Articles -
 
 export type Article = {
   id: number;
@@ -287,7 +287,7 @@ export type Article = {
   slug: string;
   section?: 'resources' | 'blog' | 'news';
   excerpt?: string;
-  content?: unknown; // Lexical blocks array — only on single article
+  content?: unknown; // Lexical blocks array - only on single article
   heroImage?: MediaItem | number | null;
   socialImage?: MediaItem | number | null;
   topic?: { id: number; name: string; slug: string } | number | null;
@@ -346,7 +346,7 @@ export async function getArticleBySlug(tenant: string, slug: string, noCache = f
   );
 }
 
-// ── Services ────────────────────────────────────────────────────────────────
+// - Services -
 
 export type Service = {
   id: number;
@@ -380,7 +380,7 @@ export async function getServiceBySlug(tenant: string, slug: string, noCache = f
   );
 }
 
-// ── FAQs ────────────────────────────────────────────────────────────────────
+// - FAQs -
 
 export type FAQ = {
   id: number;
@@ -406,7 +406,7 @@ export async function getFaqs(tenant: string, category?: string, noCache = false
   );
 }
 
-// ── Legal Documents ─────────────────────────────────────────────────────────
+// - Legal Documents -
 
 export type LegalDocs = {
   id: number;
@@ -432,7 +432,7 @@ export async function getLegalDocs(tenant: string, noCache = false): Promise<Leg
   );
 }
 
-// ── Page SEO ────────────────────────────────────────────────────────────────
+// - Page SEO -
 
 export type PageSEO = {
   id: number;
@@ -453,7 +453,7 @@ export async function getPageSEO(tenant: string, pageSlug: string, noCache = fal
   );
 }
 
-// ── Topics ──────────────────────────────────────────────────────────────────
+// - Topics -
 
 export type Topic = {
   id: number;

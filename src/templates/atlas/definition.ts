@@ -1,8 +1,8 @@
-/**
- * Atlas Template — Route Map & Metadata
+﻿/**
+ * Atlas Template  Route Map & Metadata
  *
  * E-commerce focused template with multiple page variants.
- * This file is lightweight (no component imports) — safe to load
+ * This file is lightweight (no component imports)  safe to load
  * in DemoExplorer without pulling in page component code.
  */
 
@@ -22,27 +22,27 @@ export const definition: TemplateDefinition = {
       variants: {
         'storefront': {
           label: 'Storefront',
-          description: 'Product-forward and conversion-focused — visitors immediately see what\'s for sale.',
+          description: 'Product-forward and conversion-focused  visitors immediately see what\'s for sale.',
           component: () => import('./HomePage'),
         },
         'editorial': {
           label: 'Editorial',
-          description: 'Brand-first, typography-driven — feels like a premium magazine landing page.',
+          description: 'Brand-first, typography-driven  feels like a premium magazine landing page.',
           component: () => import('./HomePage'),
         },
         'modern': {
           label: 'Modern',
-          description: 'Atmospheric, premium — dark mode with glowing gradients and micro-interactions.',
+          description: 'Atmospheric, premium  dark mode with glowing gradients and micro-interactions.',
           component: () => import('./HomePage'),
         },
         'bold': {
           label: 'Bold',
-          description: 'Dark, dramatic, high-contrast — photographic impact with hard edges.',
+          description: 'Dark, dramatic, high-contrast  photographic impact with hard edges.',
           component: () => import('./HomePage'),
         },
         'minimalist': {
           label: 'Minimalist',
-          description: 'Immersive and ultra-minimal — experiential, proving value through feel.',
+          description: 'Immersive and ultra-minimal  experiential, proving value through feel.',
           component: () => import('./HomePage'),
         },
       },
@@ -60,12 +60,12 @@ export const definition: TemplateDefinition = {
         },
         'story-split': {
           label: 'Story Split',
-          description: 'Narrative-driven — full-width hero image, zigzag journey sections, founder quote, and a scrolling team strip.',
+          description: 'Narrative-driven  full-width hero image, zigzag journey sections, founder quote, and a scrolling team strip.',
           component: () => import('./AboutPage'),
         },
         'manifesto': {
           label: 'Manifesto',
-          description: 'Bold, typography-driven — the page IS the brand statement. Full-viewport opening, pull-quote values, minimal team list.',
+          description: 'Bold, typography-driven  the page IS the brand statement. Full-viewport opening, pull-quote values, minimal team list.',
           component: () => import('./AboutPage'),
         },
       },
@@ -78,17 +78,17 @@ export const definition: TemplateDefinition = {
       variants: {
         'catalog': {
           label: 'Catalog',
-          description: 'Traditional sidebar layout with category navigation and dense product grid — built for large inventories.',
+          description: 'Traditional sidebar layout with category navigation and dense product grid  built for large inventories.',
           component: () => import('./ShopPage'),
         },
         'modern': {
           label: 'Modern',
-          description: 'Full-width grid with sticky filter bar and image-swap on hover — the standard modern DTC storefront.',
+          description: 'Full-width grid with sticky filter bar and image-swap on hover  the standard modern DTC storefront.',
           component: () => import('./ShopPage'),
         },
         'lookbook': {
           label: 'Lookbook',
-          description: 'Visual discovery with asymmetric grid, large portrait imagery, and minimal text — boutique and high-end.',
+          description: 'Visual discovery with asymmetric grid, large portrait imagery, and minimal text  boutique and high-end.',
           component: () => import('./ShopPage'),
         },
       },
@@ -119,12 +119,12 @@ export const definition: TemplateDefinition = {
         },
         'split-image': {
           label: 'Split Image',
-          description: 'Contact form alongside a brand image — warm and inviting.',
+          description: 'Contact form alongside a brand image  warm and inviting.',
           component: () => import('./ContactPage'),
         },
         'map-and-hours': {
           label: 'Map & Hours',
-          description: 'Contact form with embedded map and business hours — great for local businesses.',
+          description: 'Contact form with embedded map and business hours  great for local businesses.',
           component: () => import('./ContactPage'),
         },
       },
@@ -137,12 +137,12 @@ export const definition: TemplateDefinition = {
       variants: {
         'directory': {
           label: 'Directory',
-          description: 'Structured documentation index — topic list with descriptions, article counts, and sidebar tools.',
+          description: 'Structured documentation index  topic list with descriptions, article counts, and sidebar tools.',
           component: () => import('./ResourcesPage'),
         },
         'grid': {
           label: 'Grid',
-          description: 'Topic cards in a responsive grid with icons and article counts — visual and scannable.',
+          description: 'Topic cards in a responsive grid with icons and article counts  visual and scannable.',
           component: () => import('./ResourcesPage'),
         },
         'magazine': {
@@ -173,12 +173,12 @@ export const definition: TemplateDefinition = {
       variants: {
         'accordion': {
           label: 'Accordion',
-          description: 'Expandable FAQ sections grouped by category — clean, utilitarian, easy to navigate.',
+          description: 'Expandable FAQ sections grouped by category  clean, utilitarian, easy to navigate.',
           component: () => import('./FAQsPage'),
         },
         'search': {
           label: 'Search',
-          description: 'Help-center style — prominent search bar as hero with instant filtering and category cards.',
+          description: 'Help-center style  prominent search bar as hero with instant filtering and category cards.',
           component: () => import('./FAQsPage'),
         },
       },

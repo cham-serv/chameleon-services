@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import { Inter, Syne } from 'next/font/google';
 import { ChameleonLogo } from '@/components/marketing/ChameleonLogo';
 import Link from 'next/link';
@@ -19,11 +19,11 @@ const syne = Syne({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Chameleon — AI-Ready Websites for South African Businesses',
+    default: 'Chameleon - AI-Ready Websites for South African Businesses',
     template: '%s | Chameleon',
   },
   description:
-    'Chameleon builds AI-ready, GEO-optimised websites and ecommerce stores for South African businesses. Beautiful templates. Always up to date. Search has changed — adapt with Chameleon.',
+    'Chameleon builds AI-ready, GEO-optimised websites and ecommerce stores for South African businesses. Beautiful templates. Always up to date. Search has changed - adapt with Chameleon.',
   keywords: [
     'AI-ready website',
     'GEO optimised',
@@ -40,13 +40,13 @@ export const metadata: Metadata = {
     locale: 'en_ZA',
     url: 'https://chameleon.services',
     siteName: 'Chameleon',
-    title: 'Chameleon — AI-Ready Websites for South African Businesses',
+    title: 'Chameleon - AI-Ready Websites for South African Businesses',
     description:
-      'Search has changed. Chameleon adapts your business to the new era of AI-powered search with authority-engine architecture — so you\'re never left behind.',
+      'Search has changed. Chameleon adapts your business to the new era of AI-powered search with authority-engine architecture - so you\'re never left behind.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Chameleon — AI-Ready Websites for South African Businesses',
+    title: 'Chameleon - AI-Ready Websites for South African Businesses',
     description: 'Search has changed. Adapt with Chameleon.',
   },
   robots: { index: true, follow: true },
@@ -96,7 +96,7 @@ export default function MarketingLayout({
   );
 }
 
-// ── Footer ───────────────────────────────────────────────────────────────────
+// - Footer -
 
 function MarketingFooter() {
   return (
@@ -132,7 +132,7 @@ function MarketingFooter() {
               }}
             >
               Search has changed. We help South African businesses adapt to
-              the new era of AI-powered search — beautifully and affordably.
+              the new era of AI-powered search - beautifully and affordably.
             </p>
           </div>
 
@@ -167,7 +167,7 @@ function MarketingFooter() {
             color: 'var(--m-text-faint)',
           }}
         >
-          <span>© 2026 Chameleon. South Africa 🇿🇦</span>
+          <span> 2026 Chameleon. South Africa </span>
           <span>Built for businesses that refuse to fall behind.</span>
         </div>
       </div>

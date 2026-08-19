@@ -1,7 +1,7 @@
-'use client';
+﻿'use client';
 
 /**
- * DemoExplorer — Client Component
+ * DemoExplorer - Client Component
  *
  * A collapsible drawer that appears on demo tenant sites, allowing
  * visitors to browse template pages and switch between variants in
@@ -17,7 +17,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import type { ExplorerRoute } from '@/lib/demo-explorer-types';
 
-// ── Types ─────────────────────────────────────────────────────────────────
+// - Types -
 
 type DemoExplorerProps = {
   routes: ExplorerRoute[];
@@ -34,7 +34,7 @@ type BrandPreview = {
   fontBody: string;
 };
 
-// ── Preset Palettes ───────────────────────────────────────────────────────
+// - Preset Palettes -
 
 const PRESET_PALETTES: { label: string; primary: string; secondary: string; accent: string }[] = [
   { label: 'Forest',   primary: '#2d6a4f', secondary: '#52b788', accent: '#f59e0b' },
@@ -45,7 +45,7 @@ const PRESET_PALETTES: { label: string; primary: string; secondary: string; acce
   { label: 'Slate',    primary: '#0f172a', secondary: '#334155', accent: '#06b6d4' },
 ];
 
-// ── Font Pair Presets ─────────────────────────────────────────────────────
+// - Font Pair Presets -
 
 const FONT_PAIRS: { label: string; heading: string; body: string }[] = [
   { label: 'Modern',    heading: 'Plus Jakarta Sans', body: 'Inter' },
@@ -56,7 +56,7 @@ const FONT_PAIRS: { label: string; heading: string; body: string }[] = [
   { label: 'Techy',     heading: 'Space Grotesk',     body: 'JetBrains Mono' },
 ];
 
-// ── Button Style Options ──────────────────────────────────────────────────
+// - Button Style Options -
 
 const BTN_STYLES: { label: string; value: BrandPreview['buttonStyle'] }[] = [
   { label: 'Filled',  value: 'filled'  },
@@ -65,11 +65,11 @@ const BTN_STYLES: { label: string; value: BrandPreview['buttonStyle'] }[] = [
   { label: 'Soft',    value: 'soft'    },
 ];
 
-// ── Tab type ──────────────────────────────────────────────────────────────
+// - Tab type -
 
 type ExplorerTab = 'pages' | 'brand';
 
-// ── Component ─────────────────────────────────────────────────────────────
+// - Component -
 
 export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -78,7 +78,7 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // Brand preview state — starts from current CSS vars on :root
+  // Brand preview state - starts from current CSS vars on :root
   const [brand, setBrand] = useState<BrandPreview>({
     primary:     '#2d6a4f',
     secondary:   '#52b788',
@@ -88,7 +88,7 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
     fontBody:    'Inter',
   });
 
-  // ── Derive current state from URL ─────────────────────────────────
+  // - Derive current state from URL -
 
   const tenantPath = useMemo(() => {
     // Strip the basePath prefix (e.g. '' or '/atlas-demo') to get the page path
@@ -126,7 +126,7 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
     return currentRoute.defaultVariant;
   }, [currentRoute, currentDv]);
 
-  // ── Brand preview: inject CSS custom properties on :root ──────────
+  // - Brand preview: inject CSS custom properties on :root -
 
   useEffect(() => {
     const root = document.documentElement;
@@ -136,7 +136,7 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
     document.body.setAttribute('data-btn-style', brand.buttonStyle);
 
     // Font preview: inject a runtime @import for demo purposes only.
-    // NOTE: This is intentionally a runtime @import — it allows the
+    // NOTE: This is intentionally a runtime @import - it allows the
     // DemoExplorer to preview any of the 15 platform fonts without
     // requiring a full page reload. This is acceptable for a demo
     // tool but would never be used in production page rendering
@@ -171,7 +171,7 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
     updateBrand({ fontHeading: pair.heading, fontBody: pair.body });
   }, [updateBrand]);
 
-  // ── Actions ───────────────────────────────────────────────────────
+  // - Actions -
 
   const open = useCallback(() => setIsOpen(true), []);
   const close = useCallback(() => setIsOpen(false), []);
@@ -202,7 +202,7 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
     router.push(qs ? `${pathname}?${qs}` : pathname);
   }, [pathname, searchParams, router]);
 
-  // ── Keyboard & scroll lock ────────────────────────────────────────
+  // - Keyboard & scroll lock -
 
   useEffect(() => {
     if (!isOpen) return;
@@ -217,7 +217,7 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
     };
   }, [isOpen, close]);
 
-  // ── Render ────────────────────────────────────────────────────────
+  // - Render -
 
   return (
     <>
@@ -228,7 +228,7 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
         onClick={open}
         aria-label="Open demo explorer"
       >
-        <span className="demo-explorer-tab-icon">🦎</span>
+        <span className="demo-explorer-tab-icon"></span>
         Explore
       </button>
 
@@ -251,7 +251,7 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
         {/* Header */}
         <div className="demo-explorer-header">
           <h2 className="demo-explorer-title">
-            <span className="demo-explorer-title-icon">🦎</span>
+            <span className="demo-explorer-title-icon"></span>
             Demo Explorer
           </h2>
           <button
@@ -280,14 +280,14 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
             data-active={activeTab === 'brand'}
             onClick={() => setActiveTab('brand')}
           >
-            ✨ Brand
+             Brand
           </button>
         </div>
 
         {/* Body */}
         <div className="demo-explorer-body">
 
-          {/* ── Pages Tab ── */}
+          {/* - Pages Tab - */}
           {activeTab === 'pages' && (
             <>
               <p className="demo-explorer-section-label">Pages</p>
@@ -313,7 +313,7 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
               {currentRoute && currentRoute.variants.length > 1 && (
                 <>
                   <p className="demo-explorer-section-label">
-                    Variants — {currentRoute.label}
+                    Variants - {currentRoute.label}
                   </p>
                   <div className="demo-explorer-variant-list">
                     {currentRoute.variants.map((variant) => (
@@ -344,7 +344,7 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
             </>
           )}
 
-          {/* ── Brand Tab ── */}
+          {/* - Brand Tab - */}
           {activeTab === 'brand' && (
             <>
               {/* Palette Presets */}

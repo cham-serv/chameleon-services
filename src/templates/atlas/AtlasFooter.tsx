@@ -1,5 +1,5 @@
-/**
- * AtlasFooter — Server Component
+﻿/**
+ * AtlasFooter  Server Component
  *
  * Multi-column footer driven by tenant config. Shows brand info,
  * quick links, contact details, and social icons.
@@ -27,7 +27,7 @@ export default function AtlasFooter({ config }: Props) {
   if (fc.contact?.enabled) navLinks.push({ href: '/contact', label: 'Contact' });
   if (fc.legal?.enabled) navLinks.push({ href: '/legal', label: 'Legal' });
 
-  // Social links — flat fields as exposed by engine (NOT nested socialLinks)
+  // Social links  flat fields as exposed by engine (NOT nested socialLinks)
   const s = config.settings;
   const socialEntries: Array<{ platform: string; url: string }> = [
     s?.socialFacebook  && { platform: 'facebook',  url: s.socialFacebook },
@@ -113,7 +113,7 @@ export default function AtlasFooter({ config }: Props) {
 
         {/* Copyright */}
         <div className="atlas-footer-bottom">
-          <span>© {new Date().getFullYear()} {siteName}. All rights reserved.</span>
+          <span> {new Date().getFullYear()} {siteName}. All rights reserved.</span>
           {fc.legal?.enabled && (
             <span>
               <Link href="/legal">Privacy Policy</Link>

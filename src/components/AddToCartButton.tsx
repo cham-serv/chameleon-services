@@ -1,8 +1,8 @@
-/**
+﻿/**
  * AddToCartButton Component
  *
  * Client Component that adds a product to the cart store.
- * Provides brief "Added ✓" feedback animation.
+ * Provides brief "Added " feedback animation.
  * Templates override styling via the className prop.
  */
 
@@ -91,12 +91,12 @@ export function AddToCartButton({
             : `Add ${product.name} to cart`
       }
     >
-      {isOutOfStock ? 'Out of Stock' : added ? 'Added ✓' : label}
+      {isOutOfStock ? 'Out of Stock' : added ? 'Added ' : label}
     </button>
   );
 }
 
-// ── Helpers ─────────────────────────────────────────────────────────────────
+// - Helpers -
 
 function resolveFirstImageUrl(
   images?: Array<{ image: MediaItem }>,

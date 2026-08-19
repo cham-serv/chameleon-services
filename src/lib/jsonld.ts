@@ -1,12 +1,12 @@
-/**
+﻿/**
  * JSON-LD Structured Data Builders
  *
  * Generates schema.org JSON-LD objects for search engine rich results.
- * Each builder returns a plain object â€” use the <JsonLd> component to
+ * Each builder returns a plain object - use the <JsonLd> component to
  * inject it into the page as a <script> tag.
  *
  * Product schema design:
- *   - Every field is conditional â€” missing data is never surfaced as empty
+ *   - Every field is conditional - missing data is never surfaced as empty
  *   - Follows schema.org 24.0 and Google's structured data guidelines
  *   - gtin, hasMerchantReturnPolicy, shippingDetails unlock Google Shopping
  *     enhanced snippets (free returns badge, shipping info, price comparison)
@@ -17,7 +17,7 @@
 import type { Product, ProductCategory, Article, FAQ, Service, MediaItem } from './api';
 import type { TenantConfig } from './types';
 
-// â”€â”€ Constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+//  Constants 
 
 const AVAILABILITY: Record<string, string> = {
   inStock:      'https://schema.org/InStock',
@@ -54,7 +54,7 @@ const SUBSCRIPTION_UNIT_CODE: Record<string, string> = {
   weekly: 'WEE', monthly: 'MON', quarterly: 'QTR', annually: 'ANN',
 };
 
-// ── Organization ─────────────────────────────────────────────────────────────
+// - Organization -
 
 /** Collect populated flat social link values from SiteSettings into an array */
 function buildSameAs(settings: TenantConfig['settings']): string[] {
@@ -90,7 +90,7 @@ export function buildOrganizationLd(config: TenantConfig, siteUrl: string) {
   };
 }
 
-// ——————————————————————————————————————————————————————————————————————————————
+// ------------------------------------------------------------------------------
 
 export function buildProductLd(
   product: Product,
@@ -102,7 +102,7 @@ export function buildProductLd(
   const images = resolveAllImages(product.images);
   const primaryImage = images[0] ?? null;
 
-  // ——————————————————————————————————————————————————————————————————————————————
+  // ------------------------------------------------------------------------------
   let availability = AVAILABILITY.inStock;
   if (product.availabilityStatus) {
     availability = AVAILABILITY[product.availabilityStatus] ?? AVAILABILITY.inStock;
@@ -110,7 +110,7 @@ export function buildProductLd(
     availability = AVAILABILITY.outOfStock;
   }
 
-  // ——————————————————————————————————————————————————————————————————————————————
+  // ------------------------------------------------------------------------------
   const offer: Record<string, unknown> = {
     '@type': 'Offer',
     price: (product.price / 100).toFixed(2),
@@ -126,7 +126,7 @@ export function buildProductLd(
   if (product.availableFrom) offer.availabilityStarts = product.availableFrom;
   if (product.availableUntil) offer.availabilityEnds = product.availableUntil;
 
-  // Merchant return policy — unlocks Google's Free Returns badge
+  // Merchant return policy - unlocks Google's Free Returns badge
   if (product.returnDays != null) {
     offer.hasMerchantReturnPolicy = {
       '@type': 'MerchantReturnPolicy',
@@ -138,7 +138,7 @@ export function buildProductLd(
     };
   }
 
-  // Shipping details — unlocks shipping annotations in search results
+  // Shipping details - unlocks shipping annotations in search results
   if (product.shippingCost != null || product.deliveryLeadTime || product.handlingTimeDays != null) {
     const shippingDetails: Record<string, unknown> = { '@type': 'OfferShippingDetails' };
     if (product.shippingCost != null) {
@@ -165,7 +165,7 @@ export function buildProductLd(
     offer.shippingDetails = shippingDetails;
   }
 
-  // Volume pricing tiers → priceSpecification
+  // Volume pricing tiers  priceSpecification
   const priceSpecs: Record<string, unknown>[] = [];
   if (product.quantityDiscounts?.length) {
     for (const tier of product.quantityDiscounts) {
@@ -199,7 +199,7 @@ export function buildProductLd(
 
   if (priceSpecs.length > 0) offer.priceSpecification = priceSpecs;
 
-  // ——————————————————————————————————————————————————————————————————————————————
+  // ------------------------------------------------------------------------------
   const schemaType = product.productType === 'service' ? 'Service' : 'Product';
 
   const schema: Record<string, unknown> = {
@@ -216,7 +216,7 @@ export function buildProductLd(
     },
   };
 
-  // Images — include all, not just first
+  // Images - include all, not just first
   if (images.length === 1)      schema.image = images[0].url;
   else if (images.length > 1)   schema.image = images.map((img) => img.url);
 
@@ -248,7 +248,7 @@ export function buildProductLd(
     }
   }
 
-  // Competitor comparison → additionalProperty for AI "vs" queries
+  // Competitor comparison  additionalProperty for AI "vs" queries
   if (product.comparedTo?.length) {
     schema.additionalProperty = product.comparedTo.map((c) => ({
       '@type': 'PropertyValue',
@@ -257,7 +257,7 @@ export function buildProductLd(
     }));
   }
 
-  // Certifications → hasCertification
+  // Certifications  hasCertification
   if (product.certifications?.length) {
     schema.hasCertification = product.certifications.map((cert) => ({
       '@type': 'Certification',
@@ -288,11 +288,11 @@ export function buildProductLd(
     };
   }
 
-  // Demo video → VideoObject
+  // Demo video  VideoObject
   if (product.demoVideo) {
     schema.video = {
       '@type': 'VideoObject',
-      name: product.demoVideoTitle || `${product.name} — Demo`,
+      name: product.demoVideoTitle || `${product.name} - Demo`,
       description: product.shortDescription || product.aiSummary || `Product demo for ${product.name}`,
       contentUrl: product.demoVideo,
       ...(primaryImage && { thumbnailUrl: primaryImage.url }),
@@ -300,17 +300,17 @@ export function buildProductLd(
     };
   }
 
-  // 3D Model (AR in mobile search results — early adopter advantage)
+  // 3D Model (AR in mobile search results - early adopter advantage)
   if (product.model3dUrl) {
     schema.subjectOf = {
       '@type': '3DModel',
       contentUrl: product.model3dUrl,
-      name: product.model3dAlt || `${product.name} — 3D View`,
+      name: product.model3dAlt || `${product.name} - 3D View`,
       encodingFormat: 'model/gltf-binary',
     };
   }
 
-  // SpeakableSpecification — voice search & AI assistant answers
+  // SpeakableSpecification - voice search & AI assistant answers
   if (product.voiceSearchPhrase || product.aiSummary) {
     schema.speakable = {
       '@type': 'SpeakableSpecification',
@@ -318,7 +318,7 @@ export function buildProductLd(
     };
   }
 
-  // Expert pros → Review
+  // Expert pros  Review
   if (product.expertPros?.length) {
     schema.review = {
       '@type': 'Review',
@@ -343,7 +343,7 @@ export function buildProductLd(
   return schema;
 }
 
-// ——————————————————————————————————————————————————————————————————————————————
+// ------------------------------------------------------------------------------
 
 export function buildCategoryHubLd(
   category: ProductCategory,
@@ -402,7 +402,7 @@ export function buildCategoryHubLd(
   return schemas;
 }
 
-// ——————————————————————————————————————————————————————————————————————————————
+// ------------------------------------------------------------------------------
 
 export function buildArticleLd(
   article: Article,
@@ -433,15 +433,15 @@ export function buildArticleLd(
   };
 }
 
-// ——————————————————————————————————————————————————————————————————————————————
+// ------------------------------------------------------------------------------
 
 /**
  * Builds a full FAQPage schema with knowledge graph attribution.
  *
  * Beyond the basic Q&A pairs this adds:
- *  - publisher → Organization (brand attribution — answers are by THIS brand)
- *  - about     → Organization (what the page is about)
- *  - speakable → SpeakableSpecification (voice/AI assistant targeting)
+ *  - publisher  Organization (brand attribution - answers are by THIS brand)
+ *  - about      Organization (what the page is about)
+ *  - speakable  SpeakableSpecification (voice/AI assistant targeting)
  *  - category grouping via DefinedTermSet (topic clustering for AI)
  *
  * Without publisher/about, FAQ answers are anonymous knowledge floating in the
@@ -457,7 +457,7 @@ export function buildFAQPageLd(
   const logoUrl  = config?.settings?.logo?.url;
   const pageUrl  = siteUrl ? `${siteUrl}/faqs` : undefined;
 
-  // Publisher entity — ties answers to the brand for knowledge graph attribution
+  // Publisher entity - ties answers to the brand for knowledge graph attribution
   const publisher = siteName
     ? {
         '@type': 'Organization',
@@ -477,7 +477,7 @@ export function buildFAQPageLd(
   const hasMeaningfulCategories = categoryMap.size > 1 ||
     (categoryMap.size === 1 && !categoryMap.has('General'));
 
-  // DefinedTermSet — helps AI engines understand topic taxonomy
+  // DefinedTermSet - helps AI engines understand topic taxonomy
   const definedTermSets = hasMeaningfulCategories
     ? Array.from(categoryMap.entries()).map(([cat, catFaqs]) => ({
         '@type': 'DefinedTermSet',
@@ -498,7 +498,7 @@ export function buildFAQPageLd(
     ...(pageUrl && { url: pageUrl }),
     ...(publisher && { publisher }),
     ...(publisher && { about: publisher }),
-    // SpeakableSpecification — targets [data-speakable] elements for voice/AI
+    // SpeakableSpecification - targets [data-speakable] elements for voice/AI
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: ['[data-speakable]'],
@@ -514,13 +514,13 @@ export function buildFAQPageLd(
         ...(publisher && { author: publisher }),
       },
     })),
-    // Topic clusters — additional schema for AI knowledge graph traversal
+    // Topic clusters - additional schema for AI knowledge graph traversal
     ...(definedTermSets && { subjectOf: definedTermSets }),
   };
 }
 
 
-// â”€â”€ Service â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+//  Service 
 
 export function buildServiceLd(
   service: Service,
@@ -540,7 +540,7 @@ export function buildServiceLd(
   };
 }
 
-// â”€â”€ Breadcrumb List â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+//  Breadcrumb List 
 
 export type BreadcrumbItem = {
   name: string;
@@ -560,12 +560,12 @@ export function buildBreadcrumbLd(items: BreadcrumbItem[]) {
   };
 }
 
-// â”€â”€ Local Business â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+//  Local Business 
 
 /**
  * Builds a full LocalBusiness schema from SiteSettings.
  * Reads address, geo, phone, opening hours, and social links directly
- * from the engine's structured data — no manual address param needed.
+ * from the engine's structured data - no manual address param needed.
  */
 export function buildLocalBusinessLd(config: TenantConfig, siteUrl: string) {
   const s = config.settings;
@@ -585,7 +585,7 @@ export function buildLocalBusinessLd(config: TenantConfig, siteUrl: string) {
       }
     : null;
 
-  // OpeningHoursSpecification — structured and ready to use directly
+  // OpeningHoursSpecification - structured and ready to use directly
   const openingHoursSpec = s?.openingHours
     ?.filter((h) => !h.isClosed)
     .map((h) => ({
@@ -617,7 +617,7 @@ export function buildLocalBusinessLd(config: TenantConfig, siteUrl: string) {
 }
 
 
-// â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+//  Helpers 
 
 function resolveAllImages(
   images?: Array<{ image: MediaItem }>,

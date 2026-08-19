@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ContentBlocks Component
  *
  * Renders Articles' block-based content structure.
@@ -12,7 +12,7 @@ import Image from 'next/image';
 import { RichTextRenderer } from './RichTextRenderer';
 import type { MediaItem } from '@/lib/api';
 
-// ── Block Types ─────────────────────────────────────────────────────────────
+// - Block Types -
 
 type RichTextBlock = {
   blockType: 'richText';
@@ -58,7 +58,7 @@ type ContentBlocksProps = {
   className?: string;
 };
 
-// ── Component ───────────────────────────────────────────────────────────────
+// - Component -
 
 export function ContentBlocks({ blocks, className }: ContentBlocksProps) {
   if (!blocks || blocks.length === 0) return null;
@@ -72,7 +72,7 @@ export function ContentBlocks({ blocks, className }: ContentBlocksProps) {
   );
 }
 
-// ── Block Renderer ──────────────────────────────────────────────────────────
+// - Block Renderer -
 
 function RenderBlock({ block }: { block: ContentBlock }) {
   switch (block.blockType) {
@@ -110,7 +110,7 @@ function RenderBlock({ block }: { block: ContentBlock }) {
   }
 }
 
-// ── Image Gallery ───────────────────────────────────────────────────────────
+// - Image Gallery -
 
 function ImageGallery({
   images,
@@ -160,7 +160,7 @@ function ImageGallery({
   );
 }
 
-// ── Quote ───────────────────────────────────────────────────────────────────
+// - Quote -
 
 function Quote({
   text,
@@ -193,14 +193,14 @@ function Quote({
             color: '#999',
           }}
         >
-          — {attribution}
+          - {attribution}
         </figcaption>
       )}
     </figure>
   );
 }
 
-// ── Video Embed ─────────────────────────────────────────────────────────────
+// - Video Embed -
 
 function VideoEmbed({ url, caption }: { url: string; caption?: string }) {
   const embedUrl = getEmbedUrl(url);
@@ -269,7 +269,7 @@ function getEmbedUrl(url: string): string | null {
   return null;
 }
 
-// ── Call to Action ──────────────────────────────────────────────────────────
+// - Call to Action -
 
 function CallToAction({
   heading,

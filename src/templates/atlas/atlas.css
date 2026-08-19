@@ -1,8 +1,8 @@
-/**
+﻿/**
  * Atlas Design System
  *
  * Template-specific tokens and utilities built on top of the brand CSS
- * custom properties injected by the tenant layout. No hardcoded colours —
+ * custom properties injected by the tenant layout. No hardcoded colours -
  * everything references var(--brand-*) tokens.
  *
  * Breakpoints: 640px (sm), 768px (md), 1024px (lg), 1280px (xl)
@@ -1788,7 +1788,7 @@
   }
 }
 
-/* -- Badge — additional variants for the Polish Layer ----------------- */
+/* -- Badge - additional variants for the Polish Layer ----------------- */
 
 .atlas-badge--primary {
   background: color-mix(in srgb, var(--brand-primary, #2d6a4f) 10%, transparent);
@@ -1944,7 +1944,7 @@
   Colour always comes from --brand-* tokens, shape is the only change.
 */
 
-/* filled (default) — already the base .atlas-btn-primary style */
+/* filled (default) - already the base .atlas-btn-primary style */
 
 /* outline */
 [data-btn-style="outline"] .atlas-btn-primary {
@@ -1958,7 +1958,7 @@
   color: #ffffff;
 }
 
-/* pill — fully rounded, otherwise identical to filled */
+/* pill - fully rounded, otherwise identical to filled */
 [data-btn-style="pill"] .atlas-btn-primary,
 [data-btn-style="pill"] .atlas-btn-secondary,
 [data-btn-style="pill"] .atlas-btn-outline,
@@ -1966,7 +1966,7 @@
   border-radius: 9999px;
 }
 
-/* soft — light tinted background, no hard border */
+/* soft - light tinted background, no hard border */
 [data-btn-style="soft"] .atlas-btn-primary {
   background: color-mix(in srgb, var(--brand-primary, #2d6a4f) 12%, transparent);
   color: var(--brand-primary, #2d6a4f);
@@ -2004,7 +2004,7 @@
    4.1 HOME PAGE VARIANTS
    ============================================================ */
 
-/* ── Shared Home Utilities ──────────────────────────────────────── */
+/* - Shared Home Utilities - */
 
 /* CTA Banner (used by all variants) */
 .atlas-cta-banner {
@@ -2040,7 +2040,7 @@
   background: rgba(255, 255, 255, 0.9);
 }
 
-/* Value Bar — trust signals strip */
+/* Value Bar - trust signals strip */
 .atlas-value-bar {
   background: color-mix(in srgb, var(--brand-primary, #2d6a4f) 6%, var(--brand-background, #ffffff));
   border-top: 1px solid color-mix(in srgb, var(--brand-text, #1b1b1b) 6%, transparent);
@@ -2134,7 +2134,7 @@
   margin: 0 auto;
 }
 
-/* Featured article card — editorial variant */
+/* Featured article card - editorial variant */
 .atlas-featured-article {
   display: grid;
   gap: var(--atlas-spacing-lg);
@@ -2162,7 +2162,7 @@
   gap: 0.75rem;
 }
 
-/* Editorial product row — larger images, less grid-like */
+/* Editorial product row - larger images, less grid-like */
 .atlas-editorial-products {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -2176,7 +2176,7 @@
   }
 }
 
-/* ── Storefront Variant ───────────────────────────────────────── */
+/* - Storefront Variant - */
 
 [data-variant="storefront"] .atlas-home-hero {
   padding: var(--atlas-spacing-4xl) 0;
@@ -2206,7 +2206,7 @@
   background: color-mix(in srgb, var(--brand-primary, #2d6a4f) 8%, var(--brand-background, #fff));
 }
 
-/* ── Editorial Variant ─────────────────────────────────────────── */
+/* - Editorial Variant - */
 
 [data-variant="editorial"] .atlas-home-hero {
   min-height: calc(70svh - var(--atlas-header-h));
@@ -2265,7 +2265,7 @@
   margin: 0 0 1rem;
 }
 
-/* ── Modern Variant ────────────────────────────────────────────── */
+/* - Modern Variant - */
 
 [data-variant="modern"] .atlas-home-hero {
   min-height: calc(90svh - var(--atlas-header-h));
@@ -2315,7 +2315,7 @@
   color: var(--brand-accent, #f59e0b);
 }
 
-/* ── Bold Variant ──────────────────────────────────────────────── */
+/* - Bold Variant - */
 
 [data-variant="bold"] .atlas-home-hero {
   min-height: calc(100svh - var(--atlas-header-h));
@@ -2365,7 +2365,7 @@
   letter-spacing: 0.04em;
 }
 
-/* Bold category cards — sharp, no radius */
+/* Bold category cards - sharp, no radius */
 [data-variant="bold"] .atlas-category-card {
   border-radius: 0;
 }
@@ -2374,13 +2374,13 @@
   transform: none;
 }
 
-/* Bold product grid — dark */
+/* Bold product grid - dark */
 [data-variant="bold"] .atlas-section-dark .atlas-card {
   background: color-mix(in srgb, var(--brand-primary, #1a1a2e) 80%, #fff);
   border-color: rgba(255, 255, 255, 0.08);
 }
 
-/* ── Minimalist Variant ────────────────────────────────────────── */
+/* - Minimalist Variant - */
 
 [data-variant="minimalist"] .atlas-home-hero {
   min-height: calc(100svh - var(--atlas-header-h));
@@ -2422,7 +2422,7 @@
   z-index: 0;
 }
 
-/* Minimalist product rows — widely spaced */
+/* Minimalist product rows - widely spaced */
 .atlas-product-row-wide {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -2454,7 +2454,7 @@
    ANIMATION PRIMITIVES (formerly atlas-animations.css)
    ============================================================ */
 
-/* ── Keyframes ───────────────────────────────────────────────────────────── */
+/* - Keyframes - */
 
 @keyframes atlas-reveal-up {
   from {
@@ -2509,7 +2509,7 @@
   }
 }
 
-/* ── Scroll Reveal — data-reveal attribute ───────────────────────────────── */
+/* - Scroll Reveal - data-reveal attribute - */
 
 @media (prefers-reduced-motion: no-preference) {
   [data-reveal] {
@@ -2540,7 +2540,7 @@
   [data-reveal-delay="500"][data-revealed="true"] { animation-delay: 500ms; }
 }
 
-/* ── Marquee ─────────────────────────────────────────────────────────────── */
+/* - Marquee - */
 
 .atlas-marquee {
   overflow: hidden;
@@ -2582,7 +2582,7 @@
   font-size: 1rem;
 }
 
-/* ── Counter ─────────────────────────────────────────────────────────────── */
+/* - Counter - */
 
 .atlas-counter {
   display: flex;
@@ -2609,12 +2609,12 @@
   color: color-mix(in srgb, var(--brand-text, #1b1b1b) 55%, transparent);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   ABOUT PAGE — VARIANT STYLES
+/* -
+   ABOUT PAGE - VARIANT STYLES
    Scoped via data-variant attribute set on the page wrapper div.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   - */
 
-/* ── Shared responsive fixes for the mission grid (team-grid variant) ───── */
+/* - Shared responsive fixes for the mission grid (team-grid variant) - */
 
 [data-variant="team-grid"] .atlas-about-mission-grid {
   grid-template-columns: 1fr; /* single column on mobile */
@@ -2626,7 +2626,7 @@
   }
 }
 
-/* ── story-split: zigzag responsive (collapse to single column on mobile) ── */
+/* - story-split: zigzag responsive (collapse to single column on mobile) - */
 
 [data-variant="story-split"] .atlas-about-zigzag-row {
   grid-template-columns: 1fr;
@@ -2639,7 +2639,7 @@
   }
 }
 
-/* ── story-split: hide scrollbar on the team horizontal strip ─────────────── */
+/* - story-split: hide scrollbar on the team horizontal strip - */
 
 [data-variant="story-split"] .atlas-about-team-scroll {
   scrollbar-width: none; /* Firefox */
@@ -2649,7 +2649,7 @@
   display: none; /* Chrome/Safari/Edge */
 }
 
-/* ── team-grid: team card hover effect ─────────────────────────────────────── */
+/* - team-grid: team card hover effect - */
 
 @media (prefers-reduced-motion: no-preference) {
   [data-variant="team-grid"] .atlas-team-card {
@@ -2661,7 +2661,7 @@
   }
 }
 
-/* ── manifesto: pull-quote font sizing ─────────────────────────────────────── */
+/* - manifesto: pull-quote font sizing - */
 
 [data-variant="manifesto"] .atlas-about--manifesto h1 {
   font-size: clamp(2rem, 6vw, 4rem);
@@ -2669,7 +2669,7 @@
   letter-spacing: -0.025em;
 }
 
-/* ── About page: general mobile improvements ──────────────────────────────── */
+/* - About page: general mobile improvements - */
 
 @media (max-width: 767px) {
   /* story-split zigzag: image placeholder hidden on mobile, text only */
@@ -2678,11 +2678,11 @@
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   SHOP PAGE — VARIANT STYLES
-   ═══════════════════════════════════════════════════════════════════════════ */
+/* -
+   SHOP PAGE - VARIANT STYLES
+   - */
 
-/* ── Shared: secondary image for hover-swap ──────────────────────────────── */
+/* - Shared: secondary image for hover-swap - */
 
 .atlas-product-img-primary,
 .atlas-product-img-secondary {
@@ -2703,7 +2703,7 @@
   }
 }
 
-/* ── Catalog variant ─────────────────────────────────────────────────────── */
+/* - Catalog variant - */
 
 /* Layout: single column on mobile, 2-col (sidebar + content) on desktop */
 [data-variant="catalog"] .atlas-catalog-layout {
@@ -2779,11 +2779,11 @@
 
 @media (min-width: 768px) {
   [data-variant="catalog"] .atlas-catalog-pills-mobile {
-    display: none; /* hide on desktop — sidebar takes over */
+    display: none; /* hide on desktop - sidebar takes over */
   }
 }
 
-/* ── Modern variant ──────────────────────────────────────────────────────── */
+/* - Modern variant - */
 
 /* Sticky filter bar */
 [data-variant="modern"] .atlas-modern-filter-bar {
@@ -2829,7 +2829,7 @@
   }
 }
 
-/* ── Lookbook variant ────────────────────────────────────────────────────── */
+/* - Lookbook variant - */
 
 /* Editorial hero */
 [data-variant="lookbook"] .atlas-lookbook-hero {
@@ -2886,7 +2886,7 @@
 }
 
 /* Asymmetric grid
-   Pattern: every 3rd+1 item (1st, 4th, 7th…) spans full width.
+   Pattern: every 3rd+1 item (1st, 4th, 7th) spans full width.
    Items 2-3, 5-6, 8-9 share a row in 2 columns.
    Uses nth-child on the direct Link children.
 */
@@ -2934,7 +2934,7 @@
   justify-content: center;
 }
 
-/* Hover overlay — pure CSS */
+/* Hover overlay - pure CSS */
 [data-variant="lookbook"] .atlas-lookbook-overlay {
   position: absolute;
   inset: 0;
@@ -3206,7 +3206,7 @@
   font-size: 0.875rem;
 }
 
-/* GEO abstract block � visible summary for AI crawlers */
+/* GEO abstract block  visible summary for AI crawlers */
 .atlas-article-ai-summary {
   margin-top: var(--atlas-spacing-lg);
   padding: var(--atlas-spacing-md) var(--atlas-spacing-lg);
@@ -3316,7 +3316,7 @@
 }
 
 /* ============================================================
-   Phase 4.5 — Shop GEO/SEO: New Product & Category Hub Styles
+   Phase 4.5 - Shop GEO/SEO: New Product & Category Hub Styles
    ============================================================ */
 
 /* Product Highlights (feature bullets above ATC) */
@@ -3335,7 +3335,7 @@
   color: color-mix(in srgb, var(--brand-text, #1b1b1b) 85%, transparent);
 }
 .atlas-product-highlights li::before {
-  content: '✓';
+  content: '';
   position: absolute;
   left: 0;
   color: var(--brand-primary, #2563eb);
@@ -3540,7 +3540,7 @@
   font-weight: 700;
 }
 .atlas-cons-list li::before {
-  content: '− ';
+  content: ' ';
   color: #dc2626;
   font-weight: 700;
 }
@@ -3604,9 +3604,9 @@
   opacity: 0.85;
 }
 
-/* ──────────────────────────────────────────────────────────────────────────── */
-/* PHASE 4.4 — Contact Page Variants                                            */
-/* ──────────────────────────────────────────────────────────────────────────── */
+/* - */
+/* PHASE 4.4 - Contact Page Variants                                            */
+/* - */
 
 /* Shared heading/subheadline spacing */
 .atlas-contact-headline {
@@ -3618,7 +3618,7 @@
   max-width: 600px;
 }
 
-/* ── Minimal variant ── */
+/* - Minimal variant - */
 .atlas-contact-minimal-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -3631,7 +3631,7 @@
   }
 }
 
-/* ── Info card ── */
+/* - Info card - */
 .atlas-contact-info-card {
   padding: var(--atlas-spacing-lg);
 }
@@ -3680,7 +3680,7 @@
   flex-wrap: wrap;
 }
 
-/* ── Hours card ── */
+/* - Hours card - */
 .atlas-contact-hours-card {
   padding: var(--atlas-spacing-lg);
 }
@@ -3701,7 +3701,7 @@
   font-style: italic;
 }
 
-/* ── Split-image variant ── */
+/* - Split-image variant - */
 .atlas-contact-split {
   display: grid;
   grid-template-columns: 1fr;
@@ -3769,7 +3769,7 @@
   }
 }
 
-/* ── Map-and-hours variant ── */
+/* - Map-and-hours variant - */
 .atlas-contact-map-header {
   width: 100%;
   overflow: hidden;
@@ -3812,9 +3812,9 @@
   }
 }
 
-/* ──────────────────────────────────────────────────────────────────────────── */
-/* PHASE 4.6 — FAQ Search Variant                                               */
-/* ──────────────────────────────────────────────────────────────────────────── */
+/* - */
+/* PHASE 4.6 - FAQ Search Variant                                               */
+/* - */
 
 .atlas-faq-page-headline {
   margin-top: var(--atlas-spacing-lg);

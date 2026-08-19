@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ArticleCard Component
  *
  * Renders an article card for blog/resource listing grids. Server Component.
@@ -101,7 +101,7 @@ export function ArticleCard({
             </span>
           )}
           {topic && article.readTime && (
-            <span aria-hidden="true">·</span>
+            <span aria-hidden="true"></span>
           )}
           {article.readTime && (
             <span>{article.readTime} min read</span>
@@ -161,7 +161,7 @@ export function ArticleCard({
   );
 }
 
-// ── Helpers ─────────────────────────────────────────────────────────────────
+// - Helpers -
 
 function resolveMedia(
   media: MediaItem | number | null | undefined,

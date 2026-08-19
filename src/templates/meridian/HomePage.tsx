@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+﻿import { Suspense } from 'react';
 import type { PageProps } from '@/lib/types';
 
 export default function HomePage({ config, variant }: PageProps) {
@@ -11,7 +11,7 @@ export default function HomePage({ config, variant }: PageProps) {
           fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.06em',
           textTransform: 'uppercase' as const, color: 'var(--brand-secondary, #6C63FF)',
         }}>
-          Meridian · Home · {variant}
+          Meridian  Home  {variant}
         </span>
         <h1 style={{
           fontSize: '2.75rem', fontWeight: 700, marginTop: '0.5rem',
@@ -21,7 +21,7 @@ export default function HomePage({ config, variant }: PageProps) {
           Welcome to {siteName}
         </h1>
         <p style={{ color: 'var(--brand-text, #555)', marginTop: '1rem', lineHeight: 1.7, fontSize: '1.125rem' }}>
-          Meridian HomePage stub — <strong>{variant}</strong> variant.
+          Meridian HomePage stub  <strong>{variant}</strong> variant.
           Phase 4: professional hero with service highlights and social proof.
         </p>
         <Suspense fallback={null}>

@@ -1,7 +1,7 @@
-'use client';
+﻿'use client';
 
 /**
- * AtlasHeader — Client Component
+ * AtlasHeader  Client Component
  *
  * Sticky header with scroll-aware background, dynamic nav links,
  * cart badge, and mobile hamburger. Uses next/link for SPA transitions.

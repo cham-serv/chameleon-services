@@ -1,7 +1,7 @@
-/**
- * Meridian Template — Route Map & Metadata
+﻿/**
+ * Meridian Template  Route Map & Metadata
  *
- * Professional services focused template — clean, authority-driven aesthetic.
+ * Professional services focused template  clean, authority-driven aesthetic.
  */
 
 import type { TemplateDefinition } from '@/lib/types';

@@ -1,10 +1,10 @@
-'use client';
+﻿'use client';
 
 /**
- * AtlasContactForm — Client Component
+ * AtlasContactForm  Client Component
  *
  * Handles form state, validation, and submission to /api/public/inquiry.
- * Turnstile integration ready (placeholder for now — needs the sitekey from settings).
+ * Turnstile integration ready (placeholder for now  needs the sitekey from settings).
  */
 
 import { useState, type FormEvent } from 'react';
@@ -67,7 +67,7 @@ export function AtlasContactForm({ tenant }: AtlasContactFormProps) {
           borderLeft: '4px solid var(--brand-primary, #2d6a4f)',
         }}
       >
-        <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: 'var(--atlas-spacing-md)' }}>✓</span>
+        <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: 'var(--atlas-spacing-md)' }}></span>
         <h2 className="atlas-h4">Message Sent</h2>
         <p className="atlas-body" style={{ marginTop: 'var(--atlas-spacing-sm)', opacity: 0.8 }}>
           Thank you for reaching out. We&apos;ll get back to you shortly.

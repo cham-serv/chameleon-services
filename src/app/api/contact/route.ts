@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Contact Form API Route
  *
  * Receives contact form submissions and sends an email via Resend.
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { name, company, email, phone, message, source, turnstileToken } = body;
 
-    // ── Basic validation ────────────────────────────────────────────────────
+    // - Basic validation -
     if (!name || !email || !message) {
       return NextResponse.json(
         { error: 'Name, email and message are required.' },
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid email address.' }, { status: 400 });
     }
 
-    // ── Turnstile verification (optional — skipped in dev if secret not set) ─
+    // - Turnstile verification (optional - skipped in dev if secret not set) -
     const turnstileSecret = process.env.TURNSTILE_SECRET_KEY;
     if (turnstileSecret && turnstileToken) {
       const verifyRes = await fetch(
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // ── Send email via Resend ───────────────────────────────────────────────
+    // - Send email via Resend -
     if (!process.env.RESEND_API_KEY) {
       // Dev mode: log instead of sending
       console.log('[Contact Form] Would send email:', { name, email, company, message });
@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
       from: FROM_EMAIL,
       to: CONTACT_EMAIL,
       replyTo: email,
-      subject: `New enquiry from ${name}${company ? ` — ${company}` : ''}`,
+      subject: `New enquiry from ${name}${company ? ` - ${company}` : ''}`,
       html: `
         <div style="font-family: -apple-system, sans-serif; max-width: 600px;">
           <h2 style="margin: 0 0 24px; color: #0d1117;">New Contact Enquiry</h2>

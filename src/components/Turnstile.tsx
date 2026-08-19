@@ -1,11 +1,11 @@
-/**
+﻿/**
  * Turnstile Component
  *
  * Cloudflare Turnstile CAPTCHA wrapper. Client Component.
  *
  * Loads the Turnstile script dynamically and renders the widget.
  * Falls back gracefully when NEXT_PUBLIC_TURNSTILE_SITE_KEY is not set
- * (renders nothing — allows development without Turnstile).
+ * (renders nothing  allows development without Turnstile).
  *
  * Usage:
  *   <Turnstile onVerify={(token) => setToken(token)} />
@@ -106,7 +106,7 @@ export function Turnstile({
       script.defer = true;
       document.head.appendChild(script);
     } else {
-      // Script exists but hasn't loaded yet — set the callback
+      // Script exists but hasn't loaded yet  set the callback
       window.onTurnstileLoad = renderWidget;
     }
 
@@ -126,7 +126,7 @@ export function Turnstile({
   if (!siteKey) {
     if (process.env.NODE_ENV === 'development') {
       console.warn(
-        '[Turnstile] NEXT_PUBLIC_TURNSTILE_SITE_KEY not set — widget disabled',
+        '[Turnstile] NEXT_PUBLIC_TURNSTILE_SITE_KEY not set  widget disabled',
       );
     }
     return null;

@@ -1,7 +1,7 @@
-'use client';
+﻿'use client';
 
 /**
- * AtlasLayoutShell — Client Component
+ * AtlasLayoutShell  Client Component
  *
  * Coordinates the interactive layout chrome: header, mobile nav drawer,
  * and cart drawer. Manages open/close state for both drawers.

@@ -1,5 +1,5 @@
-/**
- * Tenant Layout — HTML shell for multi-tenant pages.
+﻿/**
+ * Tenant Layout  HTML shell for multi-tenant pages.
  *
  * Responsibilities:
  * 1. Fetches tenant config (React deduplicates with the catch-all page's fetch)
@@ -7,7 +7,7 @@
  * 3. Injects brand tokens as CSS custom properties
  * 4. Provides <html> and <body> tags
  *
- * The template-specific chrome (header/footer/nav) is NOT here —
+ * The template-specific chrome (header/footer/nav) is NOT here 
  * that's provided by the template's own Layout component, rendered
  * by the catch-all page.
  */
@@ -25,8 +25,8 @@ export default async function TenantLayout({ children, params }: Props) {
   const config = await fetchTenantConfig(tenant);
 
   // Brand config coalesces from two sources:
-  // 1. settings (from SiteSettings collection — generic, any template)
-  // 2. pageConfig (from atlas-site-config — Atlas-specific, richer)
+  // 1. settings (from SiteSettings collection  generic, any template)
+  // 2. pageConfig (from atlas-site-config  Atlas-specific, richer)
   // settings takes priority; pageConfig fills in what's missing.
   const pc = config?.pageConfig;
   const s = config?.settings;
@@ -35,7 +35,7 @@ export default async function TenantLayout({ children, params }: Props) {
   const fontBody = s?.fontBody ?? pc?.fontBody ?? null;
   const fontClasses = getFontClasses(fontHeading, fontBody);
 
-  // Brand tokens — inject as CSS custom properties
+  // Brand tokens  inject as CSS custom properties
   const brandTokens = buildBrandTokens({
     colourPrimary:    s?.colourPrimary    ?? pc?.colourPrimary    ?? undefined,
     colourSecondary:  s?.colourSecondary  ?? pc?.colourSecondary  ?? undefined,

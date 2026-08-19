@@ -1,14 +1,14 @@
-/**
- * Middleware — Multi-tenant domain routing.
+﻿/**
+ * Middleware - Multi-tenant domain routing.
  *
  * Routes requests based on the hostname:
- * - Root domains (chameleon.services, localhost) → pass through to (marketing)
- * - Tenant subdomains (atlas-demo.chameleon.services) → rewrite to (tenant)/[tenant]
- * - Custom domains (freshroast.co.za) → rewrite using full domain (Phase 3+)
+ * - Root domains (chameleon.services, localhost)  pass through to (marketing)
+ * - Tenant subdomains (atlas-demo.chameleon.services)  rewrite to (tenant)/[tenant]
+ * - Custom domains (freshroast.co.za)  rewrite using full domain (Phase 3+)
  *
  * DEV_MODE controls local routing:
- * - DEV_MODE=marketing → localhost renders the company site
- * - DEV_MODE=tenant → localhost renders as DEV_TENANT_DOMAIN
+ * - DEV_MODE=marketing  localhost renders the company site
+ * - DEV_MODE=tenant  localhost renders as DEV_TENANT_DOMAIN
  */
 
 import { NextResponse } from 'next/server';
@@ -26,37 +26,37 @@ export function middleware(request: NextRequest) {
   // Strip port number
   hostname = hostname.replace(/:\d+$/, '');
 
-  // Strip www prefix (so www.freshroast.co.za → freshroast.co.za)
+  // Strip www prefix (so www.freshroast.co.za  freshroast.co.za)
   hostname = hostname.replace(/^www\./, '');
 
-  // ── Dev mode override ──────────────────────────────────────────────────
+  // - Dev mode override -
   // When developing locally, DEV_MODE controls which site you see:
-  // - DEV_MODE=tenant → pretend we're on DEV_TENANT_DOMAIN
-  // - DEV_MODE=marketing (or unset) → show the company site
+  // - DEV_MODE=tenant  pretend we're on DEV_TENANT_DOMAIN
+  // - DEV_MODE=marketing (or unset)  show the company site
   if (hostname === 'localhost') {
     const devMode = process.env.DEV_MODE;
     if (devMode === 'tenant' && process.env.DEV_TENANT_DOMAIN) {
       hostname = process.env.DEV_TENANT_DOMAIN;
     } else {
-      // Marketing mode — let the request pass through to (marketing) routes
+      // Marketing mode - let the request pass through to (marketing) routes
       return NextResponse.next();
     }
   }
 
-  // ── Root domain detection ──────────────────────────────────────────────
+  // - Root domain detection -
   // Also treat Vercel preview deployments (*.vercel.app) as marketing/root
   if (ROOT_DOMAINS.includes(hostname) || hostname.endsWith('.vercel.app') || hostname === 'vercel.app') {
     return NextResponse.next();
   }
 
-  // ── Tenant slug extraction ─────────────────────────────────────────────
+  // - Tenant slug extraction -
   let tenantSlug: string;
 
   if (hostname.endsWith(PLATFORM_SUFFIX)) {
-    // Platform subdomain: atlas-demo.chameleon.services → atlas-demo
+    // Platform subdomain: atlas-demo.chameleon.services  atlas-demo
     tenantSlug = hostname.slice(0, -PLATFORM_SUFFIX.length);
   } else {
-    // Custom domain: freshroast.co.za → use full domain as slug
+    // Custom domain: freshroast.co.za  use full domain as slug
     // The tenant-config API will need to resolve this via shellDomain lookup
     // For now, use the first segment as a best-effort slug
     tenantSlug = hostname.split('.')[0];
@@ -66,15 +66,15 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // ── Staging detection ────────────────────────────────────────────────
-  // Platform subdomains are staging (build mode) — always serve fresh.
-  // Custom domains are production — full ISR caching.
+  // - Staging detection -
+  // Platform subdomains are staging (build mode) - always serve fresh.
+  // Custom domains are production - full ISR caching.
   // Header is set explicitly in both cases to prevent spoofing.
   const isStaging = hostname.endsWith(PLATFORM_SUFFIX);
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-is-staging', isStaging ? 'true' : 'false');
 
-  // ── Rewrite to tenant catch-all ────────────────────────────────────
+  // - Rewrite to tenant catch-all -
   const url = request.nextUrl.clone();
   url.pathname = `/${tenantSlug}${url.pathname}`;
 

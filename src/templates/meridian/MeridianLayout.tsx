@@ -1,8 +1,8 @@
-/**
- * Meridian Template Layout — Header, Nav, Footer
+﻿/**
+ * Meridian Template Layout - Header, Nav, Footer
  *
  * Clean, authority-driven design for professional services.
- * Stub implementation — full design in Phase 4.
+ * Stub implementation - full design in Phase 4.
  */
 
 import type { LayoutProps } from '@/lib/types';
@@ -25,7 +25,7 @@ export default function MeridianLayout({ config, children }: LayoutProps) {
 
   return (
     <>
-      {/* ── Header ─────────────────────────────────────────────── */}
+      {/* - Header - */}
       <header style={{
         position: 'sticky',
         top: 0,
@@ -73,12 +73,12 @@ export default function MeridianLayout({ config, children }: LayoutProps) {
         </div>
       </header>
 
-      {/* ── Main Content ───────────────────────────────────────── */}
+      {/* - Main Content - */}
       <main style={{ minHeight: '60vh' }}>
         {children}
       </main>
 
-      {/* ── Footer ─────────────────────────────────────────────── */}
+      {/* - Footer - */}
       <footer style={{
         background: 'var(--brand-primary, #1a1a2e)',
         color: 'rgba(255,255,255,0.65)',
@@ -108,7 +108,7 @@ export default function MeridianLayout({ config, children }: LayoutProps) {
             )}
           </div>
           <div style={{ fontSize: '0.75rem', opacity: 0.5 }}>
-            © {new Date().getFullYear()} {siteName}
+             {new Date().getFullYear()} {siteName}
           </div>
         </div>
       </footer>

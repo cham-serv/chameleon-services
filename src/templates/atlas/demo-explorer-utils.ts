@@ -1,5 +1,5 @@
-/**
- * DemoExplorer Utilities — Server-side
+﻿/**
+ * DemoExplorer Utilities  Server-side
  *
  * Extracts serialisable route metadata from a template definition,
  * filtered by the tenant's enabled features. The output is safe to
@@ -24,7 +24,7 @@ export function buildExplorerRoutes(
   const routes: ExplorerRoute[] = [];
 
   for (const [routeKey, page] of Object.entries(templateDef.routes)) {
-    // Skip wildcard detail routes — they have one variant and switching
+    // Skip wildcard detail routes  they have one variant and switching
     // doesn't make sense without specific content loaded
     if (routeKey.endsWith('/*')) continue;
 

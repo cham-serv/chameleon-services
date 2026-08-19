@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Shared types for the Chameleon multi-tenant rendering pipeline.
  *
  * Used by: tenant resolver, catch-all page, template definitions,
@@ -7,7 +7,7 @@
 
 import type { ComponentType } from 'react';
 
-// ── Tenant Config (from engine API) ─────────────────────────────────────────
+// - Tenant Config (from engine API) -
 
 export type TenantConfig = {
   tenant: {
@@ -61,7 +61,7 @@ export type SiteSettings = {
     opens?: string;
     closes?: string;
   }>;
-  // Social links — flat fields as exposed by engine (NOT nested socialLinks)
+  // Social links - flat fields as exposed by engine (NOT nested socialLinks)
   socialFacebook?: string;
   socialInstagram?: string;
   socialLinkedIn?: string;
@@ -103,7 +103,7 @@ export type SiteSettings = {
   turnstileSiteKey?: string;
 };
 
-// ── Page Config (from atlas-site-config via tenant-config API) ───────────────
+// - Page Config (from atlas-site-config via tenant-config API) -
 
 export type PageConfigMedia = { url: string; alt?: string; width?: number; height?: number } | null;
 
@@ -148,7 +148,7 @@ export type PageConfig = {
   // Page enablement & variants
   pages?: PageConfigPages | null;
 
-  // Home page — variant-specific content
+  // Home page - variant-specific content
   homeStorefrontHeadline?: string | null;
   homeStorefrontSubheadline?: string | null;
   homeStorefrontHeroImage?: PageConfigMedia;
@@ -166,7 +166,7 @@ export type PageConfig = {
   homeMinimalistSubheadline?: string | null;
   homeMinimalistHeroImage?: PageConfigMedia;
 
-  // Home page — shared content
+  // Home page - shared content
   homeCta1Text?: string | null;
   homeCta1Link?: string | null;
   homeCta2Text?: string | null;
@@ -182,7 +182,7 @@ export type PageConfig = {
   aboutStory?: unknown; // richText JSON
   aboutSplitImage?: PageConfigMedia;
   aboutTeamMembers?: PageConfigTeamMember[] | null;
-  // About page — variant-specific content
+  // About page - variant-specific content
   aboutTeamGridHeadline?: string | null;
   aboutTeamGridIntro?: string | null;
   aboutTeamGridImage?: PageConfigMedia;
@@ -227,7 +227,7 @@ export type PageConfig = {
   legalSeoDescription?: string | null;
 };
 
-// ── Page Component Props ────────────────────────────────────────────────────
+// - Page Component Props -
 
 /** Props passed to every template page component. */
 export type PageProps = {
@@ -235,7 +235,7 @@ export type PageProps = {
   path: string[];
   variant: string;
   searchParams: Record<string, string | string[] | undefined>;
-  /** True on *.chameleon.services staging subdomains — disables ISR cache for instant feedback */
+  /** True on *.chameleon.services staging subdomains - disables ISR cache for instant feedback */
   noCache: boolean;
 };
 
@@ -245,7 +245,7 @@ export type LayoutProps = {
   children: React.ReactNode;
 };
 
-// ── Template Definition (route map contract) ────────────────────────────────
+// - Template Definition (route map contract) -
 
 export type PageVariant = {
   /** Human-readable name shown in DemoExplorer (e.g. "Split Image") */
@@ -276,7 +276,7 @@ export type TemplateDefinition = {
   layout: () => Promise<{ default: ComponentType<LayoutProps> }>;
 };
 
-// ── Resolved Page (output of resolvePage) ───────────────────────────────────
+// - Resolved Page (output of resolvePage) -
 
 export type ResolvedPage = {
   page: PageDefinition;

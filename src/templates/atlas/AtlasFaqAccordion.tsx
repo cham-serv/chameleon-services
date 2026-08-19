@@ -1,7 +1,7 @@
-'use client';
+﻿'use client';
 
 /**
- * AtlasFaqAccordion — Client Component
+ * AtlasFaqAccordion  Client Component
  *
  * Renders FAQ groups with expand/collapse + client-side text search.
  */

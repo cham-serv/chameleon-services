@@ -1,11 +1,11 @@
-'use client';
+﻿'use client';
 
 /**
- * AtlasImageGallery — Client Component
+ * AtlasImageGallery  Client Component
  *
  * Product image gallery with main image display and thumbnail strip.
  * Click a thumbnail to swap the main image. Only this component is
- * a client boundary — the rest of ProductPage remains a server component.
+ * a client boundary  the rest of ProductPage remains a server component.
  */
 
 import { useState } from 'react';
@@ -47,7 +47,7 @@ export function AtlasImageGallery({ images, productName }: AtlasImageGalleryProp
   if (images.length === 0) {
     return (
       <div className="atlas-pdp-image-empty" aria-label="No product images available">
-        <span aria-hidden="true" style={{ fontSize: '3rem' }}>📦</span>
+        <span aria-hidden="true" style={{ fontSize: '3rem' }}></span>
         <p>No images available</p>
       </div>
     );
@@ -69,7 +69,7 @@ export function AtlasImageGallery({ images, productName }: AtlasImageGalleryProp
         />
       </div>
 
-      {/* Thumbnail strip — only show if more than one image */}
+      {/* Thumbnail strip  only show if more than one image */}
       {images.length > 1 && (
         <div className="atlas-pdp-thumbnail-strip" role="list" aria-label={`${productName} images`}>
           {images.map((img, i) => (

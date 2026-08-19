@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { Turnstile } from '@/components/Turnstile';
@@ -124,7 +124,7 @@ export default function ContactPage() {
             Let&apos;s talk.
           </h1>
           <p style={{ fontSize: '1rem', color: 'var(--m-text-muted)', lineHeight: 1.6, maxWidth: '480px' }}>
-            Whether you&apos;re ready to get started or just have questions — we&apos;d love to hear from you.
+            Whether you&apos;re ready to get started or just have questions  we&apos;d love to hear from you.
           </p>
         </div>
       </section>
@@ -272,7 +272,7 @@ export default function ContactPage() {
                   'AI-ready and GEO-optimised from day one',
                   'No developers or agencies needed',
                   'South Africa-first platform and support',
-                  'Cancel anytime — no long-term contracts',
+                  'Cancel anytime  no long-term contracts',
                   'Built for businesses that refuse to fall behind',
                 ].map((point) => (
                   <li
@@ -286,7 +286,7 @@ export default function ContactPage() {
                       marginBottom: '12px',
                     }}
                   >
-                    <span style={{ color: '#22c55e', marginTop: '2px', flexShrink: 0 }}>✓</span>
+                    <span style={{ color: '#22c55e', marginTop: '2px', flexShrink: 0 }}></span>
                     {point}
                   </li>
                 ))}
@@ -318,7 +318,7 @@ export default function ContactPage() {
                   }}
                 >
                   <MapPin size={16} style={{ color: '#60a5fa' }} />
-                  South Africa 🇿🇦
+                  South Africa 
                 </div>
               </div>
             </div>

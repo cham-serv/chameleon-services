@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Currency Formatting Utility
  *
  * All prices in the engine are stored as integers in cents (e.g. 1999 = R19.99).
@@ -8,15 +8,15 @@
 const CURRENCY_CONFIG: Record<string, { locale: string; currency: string; symbol: string }> = {
   ZAR: { locale: 'en-ZA', currency: 'ZAR', symbol: 'R' },
   USD: { locale: 'en-US', currency: 'USD', symbol: '$' },
-  EUR: { locale: 'en-DE', currency: 'EUR', symbol: '€' },
-  GBP: { locale: 'en-GB', currency: 'GBP', symbol: '£' },
+  EUR: { locale: 'en-DE', currency: 'EUR', symbol: '' },
+  GBP: { locale: 'en-GB', currency: 'GBP', symbol: '' },
 };
 
 /**
  * Formats a price in cents to a human-readable currency string.
  *
- * @param cents   — price in cents (e.g. 1999)
- * @param currency — ISO 4217 code (default: 'ZAR')
+ * @param cents    price in cents (e.g. 1999)
+ * @param currency  ISO 4217 code (default: 'ZAR')
  * @returns Formatted string (e.g. 'R19.99', '$19.99')
  *
  * @example

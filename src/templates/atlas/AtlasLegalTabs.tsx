@@ -1,7 +1,7 @@
-'use client';
+﻿'use client';
 
 /**
- * AtlasLegalTabs — Client Component
+ * AtlasLegalTabs  Client Component
  *
  * Tab navigation for legal documents. Updates URL searchParams for
  * direct-linkability. Renders content via RichTextRenderer.

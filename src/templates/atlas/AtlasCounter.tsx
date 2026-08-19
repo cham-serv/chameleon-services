@@ -1,10 +1,10 @@
 ﻿'use client';
 
 /**
- * AtlasCounter — Client Component
+ * AtlasCounter  Client Component
  *
  * Animates a number from 0 to the target value when it scrolls into view.
- * Uses IntersectionObserver — fires once then disconnects. No scroll event
+ * Uses IntersectionObserver  fires once then disconnects. No scroll event
  * listeners. Respects prefers-reduced-motion.
  *
  * Usage:
@@ -50,7 +50,7 @@ export function AtlasCounter({
     const el = ref.current;
     if (!el) return;
 
-    // Respect reduced motion — snap directly to target
+    // Respect reduced motion  snap directly to target
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReduced) {
       setValue(target);

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ProductCard Component
  *
  * Renders a product card for shop listing grids. Server Component.
@@ -74,7 +74,7 @@ export function ProductCard({
             {secondaryImageUrl && (
               <Image
                 src={secondaryImageUrl}
-                alt={`${product.name} — alternate view`}
+                alt={`${product.name} - alternate view`}
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 style={{ objectFit: 'cover' }}
@@ -96,7 +96,7 @@ export function ProductCard({
             }}
             aria-label="No product image"
           >
-            📦
+            
           </div>
         )}
 
@@ -219,7 +219,7 @@ export function ProductCard({
   );
 }
 
-// ── Helpers ─────────────────────────────────────────────────────────────────
+// - Helpers -
 
 function resolveFirstImage(
   images?: Array<{ image: MediaItem }>,
