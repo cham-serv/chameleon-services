@@ -1,30 +1,32 @@
-/**
- * Atlas ShopPage — Server Component
+﻿/**
+ * Atlas ShopPage â€” Server Component
  *
  * Variant dispatch pattern:
- *   catalog  — Traditional 2-col layout: sticky left sidebar (categories + sort) + dense grid
- *   modern   — Full-width grid: sticky horizontal filter bar, image-swap on hover
- *   lookbook — Visual boutique: asymmetric grid, large portrait images, hover overlay
+ *   catalog  â€” Traditional 2-col layout: sticky left sidebar (categories + sort) + dense grid
+ *   modern   â€” Full-width grid: sticky horizontal filter bar, image-swap on hover
+ *   lookbook â€” Visual boutique: asymmetric grid, large portrait images, hover overlay
  *
  * All variants use the same server-side data fetching and URL-based filtering.
- * No client-side state management — category and sort changes navigate to a new URL.
+ * No client-side state management â€” category and sort changes navigate to a new URL.
  */
 
 import Link from "next/link";
 import React from "react";
 import type { PageProps } from "@/lib/types";
-import { getProducts, getCategories } from "@/lib/api";
+import { getProducts, getCategories, getCategoryBySlug } from "@/lib/api";
 import type { Product, ProductCategory } from "@/lib/api";
 import { ProductCard } from "@/components/ProductCard";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { RichTextRenderer } from "@/components/RichTextRenderer";
 import { JsonLd } from "@/components/JsonLd";
+import { buildBreadcrumbLd, buildCategoryHubLd } from "@/lib/jsonld";
 import { AtlasSortSelect } from "./AtlasSortSelect";
 
-// ── Types ────────────────────────────────────────────────────────────────────
+// â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 type SortOption = "newest" | "price-asc" | "price-desc" | "name";
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
+// â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function resolveSort(raw: string | string[] | undefined): SortOption {
   const val = Array.isArray(raw) ? raw[0] : raw;
@@ -58,7 +60,7 @@ function getSecondaryImage(product: Product): string | null {
   return product.images[1]?.image?.url ?? null;
 }
 
-// ── Main Component ───────────────────────────────────────────────────────────
+// â”€â”€ Main Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export default async function ShopPage({ config, variant, searchParams, noCache }: PageProps) {
   const tenant = config.tenant.slug;
@@ -86,15 +88,33 @@ export default async function ShopPage({ config, variant, searchParams, noCache 
   const totalDocs = productsRes?.totalDocs ?? 0;
   const categories = categoriesRes?.docs ?? [];
 
-  const activeCategoryObj = categories.find((c) => c.slug === activeCategory);
+  // Fetch full category Intelligence data when filtering by category
+  const activeCategoryObj = categories.find((c) => c.slug === activeCategory) ?? null;
+  const activeCategoryFull = activeCategory
+    ? await getCategoryBySlug(tenant, activeCategory, noCache)
+    : null;
 
-  // ── Shared: JSON-LD ───────────────────────────────────────────────────────
+  // â”€â”€ Shared: JSON-LD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-  const collectionSchema: Record<string, unknown> = {
+  // BreadcrumbList â€” injected on all variants
+  const breadcrumbSchema = buildBreadcrumbLd([
+    { name: "Home", url: `${siteUrl}/` },
+    { name: "Shop", url: `${siteUrl}/shop` },
+    ...(activeCategoryObj ? [{ name: activeCategoryObj.name, url: `${siteUrl}/shop?category=${activeCategoryObj.slug}` }] : []),
+  ]);
+
+  // Category hub schemas â€” CollectionPage + optional FAQPage
+  const categoryHubSchemas = activeCategoryFull
+    ? buildCategoryHubLd(activeCategoryFull, products, siteUrl, config.settings?.siteName ?? config.tenant.name)
+    : [];
+
+  // Fallback CollectionPage for the main shop index
+  const shopIndexSchema: Record<string, unknown> | null = !activeCategory ? {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: activeCategoryObj ? `${activeCategoryObj.name} — Shop` : shopHeadline,
-    url: `${siteUrl}/shop${activeCategory ? `?category=${activeCategory}` : ""}`,
+    name: shopHeadline,
+    description: shopSubheadline ?? undefined,
+    url: `${siteUrl}/shop`,
     ...(products.length > 0 && {
       mainEntity: {
         "@type": "ItemList",
@@ -106,7 +126,7 @@ export default async function ShopPage({ config, variant, searchParams, noCache 
         })),
       },
     }),
-  };
+  } : null;
 
   const breadcrumbItems = [
     { label: "Home", href: "/" },
@@ -114,7 +134,7 @@ export default async function ShopPage({ config, variant, searchParams, noCache 
     ...(activeCategoryObj ? [{ label: activeCategoryObj.name }] : []),
   ];
 
-  // ── Shared: Pagination ────────────────────────────────────────────────────
+  // â”€â”€ Shared: Pagination â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   const Pagination = totalPages > 1 ? (
     <nav className="atlas-pagination" aria-label="Shop pages">
@@ -141,7 +161,7 @@ export default async function ShopPage({ config, variant, searchParams, noCache 
     </nav>
   ) : null;
 
-  // ── Shared: Empty State ───────────────────────────────────────────────────
+  // â”€â”€ Shared: Empty State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   const EmptyState = (
     <div className="atlas-empty-state">
@@ -149,7 +169,7 @@ export default async function ShopPage({ config, variant, searchParams, noCache 
       <p className="atlas-empty-sub">
         {activeCategory
           ? "No products match this category filter."
-          : "Check back soon — more products are on the way."}
+          : "Check back soon â€” more products are on the way."}
       </p>
       {activeCategory && (
         <Link href="/shop" className="atlas-btn atlas-btn-outline" style={{ marginTop: "1rem" }}>
@@ -159,11 +179,12 @@ export default async function ShopPage({ config, variant, searchParams, noCache 
     </div>
   );
 
-  // ── Variant Dispatch ──────────────────────────────────────────────────────
+  // â”€â”€ Variant Dispatch â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   const renderProps: RenderProps = {
-    products, categories, activeCategory, activeCategoryObj, sort, page, currency,
-    shopHeadline, shopSubheadline, totalDocs, collectionSchema, breadcrumbItems,
+    products, categories, activeCategory, activeCategoryObj, activeCategoryFull,
+    sort, page, currency, shopHeadline, shopSubheadline, totalDocs,
+    breadcrumbSchema, categoryHubSchemas, shopIndexSchema, breadcrumbItems,
     siteUrl, Pagination, EmptyState,
   };
 
@@ -175,37 +196,43 @@ export default async function ShopPage({ config, variant, searchParams, noCache 
   }
 }
 
-// ── Shared render props type ──────────────────────────────────────────────────
+// â”€â”€ Shared render props type â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 type RenderProps = {
   products: Product[];
   categories: ProductCategory[];
   activeCategory: string | undefined;
-  activeCategoryObj: ProductCategory | undefined;
+  activeCategoryObj: ProductCategory | null;
+  activeCategoryFull: ProductCategory | null;
   sort: SortOption;
   page: number;
   currency: string;
   shopHeadline: string;
   shopSubheadline: string | null;
   totalDocs: number;
-  collectionSchema: Record<string, unknown>;
+  breadcrumbSchema: Record<string, unknown>;
+  categoryHubSchemas: Record<string, unknown>[];
+  shopIndexSchema: Record<string, unknown> | null;
   breadcrumbItems: { label: string; href?: string }[];
   siteUrl: string;
   Pagination: React.ReactNode;
   EmptyState: React.ReactNode;
 };
 
-// ── Render: Catalog (Sidebar Layout) ─────────────────────────────────────────
+// â”€â”€ Render: Catalog (Sidebar Layout) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function renderCatalog({
-  products, categories, activeCategory, activeCategoryObj, sort, currency,
-  shopHeadline, shopSubheadline, totalDocs, collectionSchema, breadcrumbItems,
+  products, categories, activeCategory, activeCategoryObj, activeCategoryFull,
+  sort, currency, shopHeadline, shopSubheadline, totalDocs,
+  breadcrumbSchema, categoryHubSchemas, shopIndexSchema, breadcrumbItems,
   siteUrl, Pagination, EmptyState,
 }: RenderProps) {
   const totalCategoryProducts = categories.reduce((s, c) => s + (c.productCount ?? 0), 0);
   return (
     <div data-variant="catalog">
-      <JsonLd data={collectionSchema} />
+      <JsonLd data={breadcrumbSchema} />
+      {categoryHubSchemas.map((s, i) => <JsonLd key={i} data={s} />)}
+      {shopIndexSchema && <JsonLd data={shopIndexSchema} />}
       <div className="atlas-container" style={{ paddingTop: "1.5rem", paddingBottom: "4rem" }}>
         <Breadcrumbs items={breadcrumbItems} baseUrl={siteUrl} />
         <div className="atlas-shop-header">
@@ -221,7 +248,7 @@ function renderCatalog({
         </div>
 
         <div className="atlas-catalog-layout">
-          {/* Sidebar — hidden on mobile */}
+          {/* Sidebar â€” hidden on mobile */}
           <aside className="atlas-catalog-sidebar" aria-label="Shop filters">
             {categories.length > 0 && (
               <nav aria-label="Filter by category">
@@ -286,6 +313,28 @@ function renderCatalog({
                 {Pagination}
               </>
             ) : EmptyState}
+
+            {/* Category Hub Content: Buyers Guide */}
+            {activeCategoryFull?.buyersGuide != null && (
+              <section className="atlas-buyers-guide" style={{ marginTop: 'var(--atlas-spacing-3xl)' }}>
+                <RichTextRenderer content={activeCategoryFull.buyersGuide} className="atlas-article-body" />
+              </section>
+            )}
+
+            {/* Category Hub Content: Category FAQs */}
+            {activeCategoryFull?.categoryFaqs && activeCategoryFull.categoryFaqs.length > 0 && (
+              <section style={{ marginTop: 'var(--atlas-spacing-2xl)' }}>
+                <h2 className="atlas-pdp-section-title">Frequently Asked Questions</h2>
+                <div className="atlas-pdp-faq-list">
+                  {activeCategoryFull.categoryFaqs.map((faq, i) => (
+                    <details key={i} className="atlas-pdp-faq-item">
+                      <summary className="atlas-pdp-faq-question">{faq.question}</summary>
+                      <p className="atlas-pdp-faq-answer">{faq.answer}</p>
+                    </details>
+                  ))}
+                </div>
+              </section>
+            )}
           </div>
         </div>
       </div>
@@ -293,16 +342,19 @@ function renderCatalog({
   );
 }
 
-// ── Render: Modern (Full-width + sticky filter bar) ───────────────────────────
+// â”€â”€ Render: Modern (Full-width + sticky filter bar) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function renderModern({
-  products, categories, activeCategory, activeCategoryObj, sort, currency,
-  shopHeadline, shopSubheadline, totalDocs, collectionSchema, breadcrumbItems,
+  products, categories, activeCategory, activeCategoryObj, activeCategoryFull,
+  sort, currency, shopHeadline, shopSubheadline, totalDocs,
+  breadcrumbSchema, categoryHubSchemas, shopIndexSchema, breadcrumbItems,
   siteUrl, Pagination, EmptyState,
 }: RenderProps) {
   return (
     <div data-variant="modern">
-      <JsonLd data={collectionSchema} />
+      <JsonLd data={breadcrumbSchema} />
+      {categoryHubSchemas.map((s, i) => <JsonLd key={i} data={s} />)}
+      {shopIndexSchema && <JsonLd data={shopIndexSchema} />}
       <div className="atlas-container" style={{ paddingTop: "1.5rem", paddingBottom: "1.5rem" }}>
         <Breadcrumbs items={breadcrumbItems} baseUrl={siteUrl} />
         <div className="atlas-shop-header">
@@ -360,21 +412,44 @@ function renderModern({
             {Pagination}
           </>
         ) : EmptyState}
+
+        {/* Category Hub Content */}
+        {activeCategoryFull?.buyersGuide != null && (
+          <section className="atlas-buyers-guide" style={{ marginTop: 'var(--atlas-spacing-3xl)' }}>
+            <RichTextRenderer content={activeCategoryFull.buyersGuide} className="atlas-article-body" />
+          </section>
+        )}
+        {activeCategoryFull?.categoryFaqs && activeCategoryFull.categoryFaqs.length > 0 && (
+          <section style={{ marginTop: 'var(--atlas-spacing-2xl)' }}>
+            <h2 className="atlas-pdp-section-title">Frequently Asked Questions</h2>
+            <div className="atlas-pdp-faq-list">
+              {activeCategoryFull.categoryFaqs.map((faq, i) => (
+                <details key={i} className="atlas-pdp-faq-item">
+                  <summary className="atlas-pdp-faq-question">{faq.question}</summary>
+                  <p className="atlas-pdp-faq-answer">{faq.answer}</p>
+                </details>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );
 }
 
-// ── Render: Lookbook (Asymmetric visual grid) ─────────────────────────────────
+// â”€â”€ Render: Lookbook (Asymmetric visual grid) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function renderLookbook({
-  products, categories, activeCategory, activeCategoryObj, sort, currency,
-  shopHeadline, shopSubheadline, totalDocs, collectionSchema, breadcrumbItems,
+  products, categories, activeCategory, activeCategoryObj, activeCategoryFull,
+  sort, currency, shopHeadline, shopSubheadline, totalDocs,
+  breadcrumbSchema, categoryHubSchemas, shopIndexSchema, breadcrumbItems,
   siteUrl, Pagination, EmptyState,
 }: RenderProps) {
   return (
     <div data-variant="lookbook">
-      <JsonLd data={collectionSchema} />
+      <JsonLd data={breadcrumbSchema} />
+      {categoryHubSchemas.map((s, i) => <JsonLd key={i} data={s} />)}
+      {shopIndexSchema && <JsonLd data={shopIndexSchema} />}
 
       {/* Editorial hero header */}
       <div className="atlas-lookbook-hero">
@@ -435,7 +510,7 @@ function renderLookbook({
                         />
                       ) : (
                         <div className="atlas-lookbook-img-placeholder" aria-label="No product image">
-                          <span style={{ fontSize: "3rem", opacity: 0.2 }}>📦</span>
+                          <span style={{ fontSize: "3rem", opacity: 0.2 }}>ðŸ“¦</span>
                         </div>
                       )}
                       <div className="atlas-lookbook-overlay" aria-hidden="true">
@@ -459,6 +534,26 @@ function renderLookbook({
             {Pagination}
           </>
         ) : EmptyState}
+
+        {/* Category Hub Content */}
+        {activeCategoryFull?.buyersGuide != null && (
+          <section className="atlas-buyers-guide" style={{ marginTop: 'var(--atlas-spacing-3xl)' }}>
+            <RichTextRenderer content={activeCategoryFull.buyersGuide} className="atlas-article-body" />
+          </section>
+        )}
+        {activeCategoryFull?.categoryFaqs && activeCategoryFull.categoryFaqs.length > 0 && (
+          <section style={{ marginTop: 'var(--atlas-spacing-2xl)' }}>
+            <h2 className="atlas-pdp-section-title">Frequently Asked Questions</h2>
+            <div className="atlas-pdp-faq-list">
+              {activeCategoryFull.categoryFaqs.map((faq, i) => (
+                <details key={i} className="atlas-pdp-faq-item">
+                  <summary className="atlas-pdp-faq-question">{faq.question}</summary>
+                  <p className="atlas-pdp-faq-answer">{faq.answer}</p>
+                </details>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );

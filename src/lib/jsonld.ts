@@ -2,14 +2,59 @@
  * JSON-LD Structured Data Builders
  *
  * Generates schema.org JSON-LD objects for search engine rich results.
- * Each builder returns a plain object — use the <JsonLd> component to
+ * Each builder returns a plain object â€” use the <JsonLd> component to
  * inject it into the page as a <script> tag.
+ *
+ * Product schema design:
+ *   - Every field is conditional â€” missing data is never surfaced as empty
+ *   - Follows schema.org 24.0 and Google's structured data guidelines
+ *   - gtin, hasMerchantReturnPolicy, shippingDetails unlock Google Shopping
+ *     enhanced snippets (free returns badge, shipping info, price comparison)
+ *   - SpeakableSpecification targets voice search / AI assistant answers
+ *   - llmCitationPreference is injected as <meta> in ProductPage.tsx
  */
 
-import type { Product, Article, FAQ, Service, MediaItem } from './api';
+import type { Product, ProductCategory, Article, FAQ, Service, MediaItem } from './api';
 import type { TenantConfig } from './types';
 
-// ── Organization ────────────────────────────────────────────────────────────
+// â”€â”€ Constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
+const AVAILABILITY: Record<string, string> = {
+  inStock:      'https://schema.org/InStock',
+  outOfStock:   'https://schema.org/OutOfStock',
+  preOrder:     'https://schema.org/PreOrder',
+  backOrder:    'https://schema.org/BackOrder',
+  discontinued: 'https://schema.org/Discontinued',
+};
+
+const ITEM_CONDITION: Record<string, string> = {
+  new:         'https://schema.org/NewCondition',
+  refurbished: 'https://schema.org/RefurbishedCondition',
+  used:        'https://schema.org/UsedCondition',
+  damaged:     'https://schema.org/DamagedCondition',
+};
+
+const RETURN_FEES: Record<string, string> = {
+  'free':       'https://schema.org/FreeReturn',
+  'buyer-pays': 'https://schema.org/ReturnFeesCustomerResponsibility',
+};
+
+const RETURN_METHOD: Record<string, string> = {
+  'mail':     'https://schema.org/ReturnByMail',
+  'in-store': 'https://schema.org/ReturnInStore',
+  // schema.org only supports one value; default to mail for 'both'
+  'both':     'https://schema.org/ReturnByMail',
+};
+
+const WEIGHT_UNIT_CODE: Record<string, string> = {
+  g: 'GRM', kg: 'KGM', ml: 'MLT', l: 'LTR',
+};
+
+const SUBSCRIPTION_UNIT_CODE: Record<string, string> = {
+  weekly: 'WEE', monthly: 'MON', quarterly: 'QTR', annually: 'ANN',
+};
+
+// â”€â”€ Organization â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function buildOrganizationLd(config: TenantConfig, siteUrl: string) {
   const settings = config.settings;
@@ -32,53 +77,319 @@ export function buildOrganizationLd(config: TenantConfig, siteUrl: string) {
   };
 }
 
-// ── Product ─────────────────────────────────────────────────────────────────
+// â”€â”€ Product â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function buildProductLd(
   product: Product,
   config: TenantConfig,
   productUrl: string,
-) {
-  const currency = product.currency ?? 'ZAR';
-  const image = resolveFirstImage(product.images);
+): Record<string, unknown> {
+  const currency = product.currency ?? config.settings?.currency ?? 'ZAR';
+  const siteName = config.settings?.siteName ?? config.tenant.name;
+  const images = resolveAllImages(product.images);
+  const primaryImage = images[0] ?? null;
 
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: product.name,
-    description: product.shortDescription ?? product.aiSummary,
-    ...(product.sku && { sku: product.sku }),
-    ...(image && { image: image.url }),
+  // â”€â”€ Availability â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  let availability = AVAILABILITY.inStock;
+  if (product.availabilityStatus) {
+    availability = AVAILABILITY[product.availabilityStatus] ?? AVAILABILITY.inStock;
+  } else if (product.trackInventory && product.stockLevel != null && product.stockLevel <= 0) {
+    availability = AVAILABILITY.outOfStock;
+  }
+
+  // â”€â”€ Offer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  const offer: Record<string, unknown> = {
+    '@type': 'Offer',
+    price: (product.price / 100).toFixed(2),
+    priceCurrency: currency,
+    availability,
     url: productUrl,
+    seller: { '@type': 'Organization', name: siteName },
+  };
+
+  if (product.gtin)          offer.gtin = product.gtin;
+  if (product.condition)     offer.itemCondition = ITEM_CONDITION[product.condition] ?? ITEM_CONDITION.new;
+  if (product.sku)           offer.sku = product.sku;
+  if (product.availableFrom) offer.availabilityStarts = product.availableFrom;
+  if (product.availableUntil) offer.availabilityEnds = product.availableUntil;
+
+  // Merchant return policy â€” unlocks Google's Free Returns badge
+  if (product.returnDays != null) {
+    offer.hasMerchantReturnPolicy = {
+      '@type': 'MerchantReturnPolicy',
+      applicableCountry: product.countryOfOrigin ?? 'ZA',
+      returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+      merchantReturnDays: product.returnDays,
+      returnMethod: RETURN_METHOD[product.returnMethod ?? 'mail'],
+      returnFees: RETURN_FEES[product.returnFees ?? 'buyer-pays'],
+    };
+  }
+
+  // Shipping details â€” unlocks shipping annotations in search results
+  if (product.shippingCost != null || product.deliveryLeadTime || product.handlingTimeDays != null) {
+    const shippingDetails: Record<string, unknown> = { '@type': 'OfferShippingDetails' };
+    if (product.shippingCost != null) {
+      shippingDetails.shippingRate = {
+        '@type': 'MonetaryAmount',
+        value: (product.shippingCost / 100).toFixed(2),
+        currency,
+      };
+    }
+    if (product.handlingTimeDays != null) {
+      shippingDetails.handlingTime = {
+        '@type': 'QuantitativeValue',
+        minValue: 0,
+        maxValue: product.handlingTimeDays,
+        unitCode: 'DAY',
+      };
+    }
+    if (product.deliveryRegions?.length) {
+      shippingDetails.shippingDestination = product.deliveryRegions.map((r) => ({
+        '@type': 'DefinedRegion',
+        name: r.region,
+      }));
+    }
+    offer.shippingDetails = shippingDetails;
+  }
+
+  // Volume pricing tiers â†’ priceSpecification
+  const priceSpecs: Record<string, unknown>[] = [];
+  if (product.quantityDiscounts?.length) {
+    for (const tier of product.quantityDiscounts) {
+      const discountedPrice = tier.discountType === 'fixed'
+        ? (product.price - tier.discountValue) / 100
+        : (product.price * (1 - tier.discountValue / 100)) / 100;
+      priceSpecs.push({
+        '@type': 'UnitPriceSpecification',
+        price: discountedPrice.toFixed(2),
+        priceCurrency: currency,
+        eligibleQuantity: { '@type': 'QuantitativeValue', minValue: tier.minQty },
+      });
+    }
+  }
+
+  // Subscription offer
+  if (product.isSubscription && product.subscriptionInterval) {
+    const subPrice = (product.subscriptionPrice ?? product.price) / 100;
+    priceSpecs.push({
+      '@type': 'UnitPriceSpecification',
+      priceType: 'https://schema.org/SubscriptionPrice',
+      price: subPrice.toFixed(2),
+      priceCurrency: currency,
+      billingDuration: {
+        '@type': 'QuantitativeValue',
+        value: 1,
+        unitCode: SUBSCRIPTION_UNIT_CODE[product.subscriptionInterval] ?? 'MON',
+      },
+    });
+  }
+
+  if (priceSpecs.length > 0) offer.priceSpecification = priceSpecs;
+
+  // â”€â”€ Core schema (@type = Product or Service) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  const schemaType = product.productType === 'service' ? 'Service' : 'Product';
+
+  const schema: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': schemaType,
+    name: product.metaTitle || product.name,
+    description: product.metaDescription || product.shortDescription || product.aiSummary,
+    url: productUrl,
+    offers: offer,
     brand: {
       '@type': 'Brand',
-      name: config.settings?.siteName ?? config.tenant.name,
+      name: product.brand || siteName,
+      ...(product.brandUrl && { sameAs: product.brandUrl }),
     },
-    offers: {
-      '@type': 'Offer',
-      price: (product.price / 100).toFixed(2),
-      priceCurrency: currency,
-      availability:
-        product.trackInventory && product.stockLevel != null && product.stockLevel <= 0
-          ? 'https://schema.org/OutOfStock'
-          : 'https://schema.org/InStock',
-      url: productUrl,
-      seller: {
-        '@type': 'Organization',
-        name: config.settings?.siteName ?? config.tenant.name,
-      },
-    },
-    ...(product.expertPros?.length && {
-      review: {
-        '@type': 'Review',
-        author: { '@type': 'Organization', name: 'Expert Review' },
-        reviewBody: product.expertPros.map((p) => p.point).join('. '),
-      },
-    }),
   };
+
+  // Images â€” include all, not just first
+  if (images.length === 1)      schema.image = images[0].url;
+  else if (images.length > 1)   schema.image = images.map((img) => img.url);
+
+  // Identifiers & physical attributes
+  if (product.sku)               schema.sku = product.sku;
+  if (product.gtin)              schema.gtin = product.gtin;
+  if (product.manufacturer)      schema.manufacturer = { '@type': 'Organization', name: product.manufacturer };
+  if (product.countryOfOrigin)   schema.countryOfOrigin = product.countryOfOrigin;
+  if (product.material)          schema.material = product.material;
+  if (product.color)             schema.color = product.color;
+
+  if (product.weight != null) {
+    schema.weight = {
+      '@type': 'QuantitativeValue',
+      value: product.weight,
+      unitCode: WEIGHT_UNIT_CODE[product.weightUnit ?? 'g'] ?? 'GRM',
+    };
+  }
+
+  // Service geo fields
+  if (product.productType === 'service') {
+    if (product.serviceArea) schema.areaServed = product.serviceArea;
+    if (product.geoLatitude != null && product.geoLongitude != null) {
+      schema.geo = {
+        '@type': 'GeoCoordinates',
+        latitude: product.geoLatitude,
+        longitude: product.geoLongitude,
+      };
+    }
+  }
+
+  // Competitor comparison â†’ additionalProperty for AI "vs" queries
+  if (product.comparedTo?.length) {
+    schema.additionalProperty = product.comparedTo.map((c) => ({
+      '@type': 'PropertyValue',
+      name: `vs ${c.competitorProduct}`,
+      value: `Advantage: ${c.advantage}${c.disadvantage ? `. Limitation: ${c.disadvantage}` : ''}`,
+    }));
+  }
+
+  // Certifications â†’ hasCertification
+  if (product.certifications?.length) {
+    schema.hasCertification = product.certifications.map((cert) => ({
+      '@type': 'Certification',
+      name: cert.certName,
+      ...(cert.issuedBy && { issuedBy: { '@type': 'Organization', name: cert.issuedBy } }),
+      ...(cert.certId && { certificationIdentification: cert.certId }),
+      ...(cert.certUrl && { url: cert.certUrl }),
+    }));
+  }
+
+  // Awards
+  if (product.awards?.length) schema.award = product.awards.map((a) => a.award);
+
+  // Compatibility
+  if (product.worksWith?.length) {
+    schema.isCompatibleWith = product.worksWith.map((w) => ({ '@type': 'Product', name: w.item }));
+  }
+  if (product.isAccessoryFor) {
+    schema.isAccessoryOrSparePartFor = { '@type': 'Product', name: product.isAccessoryFor };
+  }
+
+  // Sustainability
+  if (product.carbonFootprint) {
+    schema.hasMeasurement = {
+      '@type': 'QuantitativeValue',
+      name: 'Carbon Footprint',
+      value: product.carbonFootprint,
+    };
+  }
+
+  // Demo video → VideoObject
+  if (product.demoVideo) {
+    schema.video = {
+      '@type': 'VideoObject',
+      name: product.demoVideoTitle || `${product.name} — Demo`,
+      description: product.shortDescription || product.aiSummary || `Product demo for ${product.name}`,
+      contentUrl: product.demoVideo,
+      ...(primaryImage && { thumbnailUrl: primaryImage.url }),
+      uploadDate: product.createdAt,
+    };
+  }
+
+  // 3D Model (AR in mobile search results â€” early adopter advantage)
+  if (product.model3dUrl) {
+    schema.subjectOf = {
+      '@type': '3DModel',
+      contentUrl: product.model3dUrl,
+      name: product.model3dAlt || `${product.name} â€” 3D View`,
+      encodingFormat: 'model/gltf-binary',
+    };
+  }
+
+  // SpeakableSpecification â€” voice search & AI assistant answers
+  if (product.voiceSearchPhrase || product.aiSummary) {
+    schema.speakable = {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['[data-speakable]'],
+    };
+  }
+
+  // Expert pros â†’ Review
+  if (product.expertPros?.length) {
+    schema.review = {
+      '@type': 'Review',
+      author: { '@type': 'Organization', name: siteName },
+      reviewBody: product.expertPros.map((p) => p.pro).join('. '),
+    };
+  }
+
+  // Curated related products
+  if (Array.isArray(product.relatedProducts) && product.relatedProducts.length > 0) {
+    const rels = (product.relatedProducts as Product[]).filter((r) => typeof r === 'object' && r.slug);
+    if (rels.length > 0) {
+      const baseUrl = productUrl.split('/shop/')[0];
+      schema.isRelatedTo = rels.map((r) => ({
+        '@type': 'Product',
+        name: r.name,
+        url: `${baseUrl}/shop/${r.slug}`,
+      }));
+    }
+  }
+
+  return schema;
 }
 
-// ── Article ─────────────────────────────────────────────────────────────────
+// â”€â”€ Category Hub â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
+export function buildCategoryHubLd(
+  category: ProductCategory,
+  products: Product[],
+  siteUrl: string,
+  siteName: string,
+): Record<string, unknown>[] {
+  const schemas: Record<string, unknown>[] = [];
+  const categoryUrl = `${siteUrl}/shop?category=${category.slug}`;
+
+  // 1. CollectionPage with entity linking via wikidataUrl
+  schemas.push({
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: category.metaTitle || category.name,
+    description: category.aiSummary || category.metaDescription || category.description,
+    url: categoryUrl,
+    ...(category.wikidataUrl && {
+      about: {
+        '@type': 'Thing',
+        name: category.name,
+        sameAs: category.wikidataUrl,
+      },
+    }),
+    ...(products.length > 0 && {
+      hasPart: {
+        '@type': 'ItemList',
+        numberOfItems: products.length,
+        itemListElement: products.map((p, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          item: {
+            '@type': 'Product',
+            name: p.name,
+            url: `${siteUrl}/shop/${p.slug}`,
+          },
+        })),
+      },
+    }),
+    isPartOf: { '@type': 'WebSite', name: siteName, url: siteUrl },
+  });
+
+  // 2. FAQPage if categoryFaqs populated
+  if (category.categoryFaqs?.length) {
+    schemas.push({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: category.categoryFaqs.map((faq) => ({
+        '@type': 'Question',
+        name: faq.question,
+        acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+      })),
+    });
+  }
+
+  return schemas;
+}
+
+// â”€â”€ Article â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function buildArticleLd(
   article: Article,
@@ -109,7 +420,7 @@ export function buildArticleLd(
   };
 }
 
-// ── FAQ Page ────────────────────────────────────────────────────────────────
+// â”€â”€ FAQ Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function buildFAQPageLd(faqs: FAQ[]) {
   return {
@@ -126,7 +437,7 @@ export function buildFAQPageLd(faqs: FAQ[]) {
   };
 }
 
-// ── Service ─────────────────────────────────────────────────────────────────
+// â”€â”€ Service â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function buildServiceLd(
   service: Service,
@@ -146,7 +457,7 @@ export function buildServiceLd(
   };
 }
 
-// ── Breadcrumb List ─────────────────────────────────────────────────────────
+// â”€â”€ Breadcrumb List â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export type BreadcrumbItem = {
   name: string;
@@ -166,7 +477,7 @@ export function buildBreadcrumbLd(items: BreadcrumbItem[]) {
   };
 }
 
-// ── Local Business (optional, for stores with physical locations) ────────
+// â”€â”€ Local Business â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function buildLocalBusinessLd(
   config: TenantConfig,
@@ -200,14 +511,13 @@ export function buildLocalBusinessLd(
   };
 }
 
-// ── Helpers ─────────────────────────────────────────────────────────────────
+// â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-function resolveFirstImage(
+function resolveAllImages(
   images?: Array<{ image: MediaItem }>,
-): MediaItem | null {
-  if (!images?.length) return null;
-  const first = images[0];
-  return first?.image ?? null;
+): MediaItem[] {
+  if (!images?.length) return [];
+  return images.map((i) => i.image).filter(Boolean) as MediaItem[];
 }
 
 function resolveMedia(

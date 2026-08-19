@@ -88,16 +88,89 @@ export type Product = {
   stockLevel?: number | null;
   trackInventory?: boolean;
   weight?: number | null;
-  // Intelligence tab fields (only on single product)
+  weightUnit?: 'g' | 'kg' | 'ml' | 'l';
+  // Product identity
+  productType?: 'physical' | 'digital' | 'service';
+  gtin?: string;               // EAN/UPC/ISBN — connects to Google Shopping graph
+  condition?: 'new' | 'refurbished' | 'used' | 'damaged';
+  availabilityStatus?: 'inStock' | 'outOfStock' | 'preOrder' | 'backOrder' | 'discontinued';
+  availableFrom?: string;       // ISO date for pre-orders
+  availableUntil?: string;
+  // Brand & identity (Tab 4)
+  brand?: string;
+  brandUrl?: string;
+  manufacturer?: string;
+  countryOfOrigin?: string;
+  material?: string;
+  color?: string;
+  // Highlights (shown on product page as feature bullets)
+  highlights?: Array<{ highlight: string }>;
+  // Variants
+  variants?: Array<{
+    label: string;
+    variantSku?: string;
+    color?: string;
+    size?: string;
+    priceModifier?: number;
+    variantStock?: number;
+  }>;
+  // Delivery (Tab 4)
+  deliveryRegions?: Array<{ region: string }>;
+  deliveryMethod?: 'ship' | 'pickup' | 'both';
+  deliveryLeadTime?: string;
+  handlingTimeDays?: number;
+  shippingCost?: number;
+  // Service-specific geo
+  serviceArea?: string;
+  geoLatitude?: number;
+  geoLongitude?: number;
+  // Returns
+  returnDays?: number;
+  returnMethod?: 'mail' | 'in-store' | 'both';
+  returnFees?: 'free' | 'buyer-pays';
+  // Pricing extras
+  quantityDiscounts?: Array<{ minQty: number; discountType: 'percentage' | 'fixed'; discountValue: number }>;
+  isSubscription?: boolean;
+  subscriptionInterval?: 'weekly' | 'monthly' | 'quarterly' | 'annually';
+  subscriptionPrice?: number;
+  // Intelligence tab fields (only on single product fetch)
   aiSummary?: string;
-  expertPros?: Array<{ point: string }>;
-  expertCons?: Array<{ point: string }>;
-  technicalSpecs?: Array<{ label: string; value: string }>;
+  /** Engine stores as { pro: string } — mapped to this shape by the API */
+  expertPros?: Array<{ pro: string }>;
+  /** Engine stores as { con: string } — mapped to this shape by the API */
+  expertCons?: Array<{ con: string }>;
+  technicalSpecs?: Array<{ specName: string; specValue: string; specUnit?: string }>;
   productFaqs?: Array<{ question: string; answer: string }>;
-  solvesProblems?: string[];
-  idealFor?: string[];
-  keyAttributes?: Array<{ attribute: string; value: string }>;
+  solvesProblems?: Array<{ problem: string }>;
+  idealFor?: Array<{ audience: string }>;
+  /** Engine stores as { attribute: string } — single text, not key-value */
+  keyAttributes?: Array<{ attribute: string }>;
   voiceSearchPhrase?: string;
+  comparedTo?: Array<{ competitorProduct: string; advantage: string; disadvantage?: string }>;
+  // Compatibility & related
+  worksWith?: Array<{ item: string }>;
+  isAccessoryFor?: string;
+  requiredAccessories?: Array<{ accessory: string }>;
+  relatedProducts?: Product[] | number[];
+  bundleProducts?: Product[] | number[];
+  // Trust & authority
+  certifications?: Array<{ certName: string; issuedBy?: string; certId?: string; certUrl?: string }>;
+  awards?: Array<{ award: string }>;
+  featuredIn?: Array<{ publicationName: string; articleUrl?: string; featureDate?: string }>;
+  // Sustainability
+  carbonFootprint?: string;
+  recyclable?: boolean;
+  sustainablySourced?: boolean;
+  madeLocally?: boolean;
+  // Rich media
+  demoVideo?: string;
+  demoVideoTitle?: string;
+  model3dUrl?: string;
+  model3dAlt?: string;
+  // SEO
+  metaTitle?: string;
+  metaDescription?: string;
+  llmCitationPreference?: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -118,14 +191,19 @@ export type ProductCategory = {
   name: string;
   slug: string;
   description?: string;
+  longDescription?: unknown;   // Lexical richText — above product grid
   image?: MediaItem | number | null;
   icon?: string;
   parent?: ProductCategory | number | null;
   order?: number;
   featured?: boolean;
+  // Intelligence tab (only on getCategoryBySlug)
+  aiSummary?: string;
+  wikidataUrl?: string;
+  buyersGuide?: unknown;       // Lexical richText — editorial buying guide
+  categoryFaqs?: Array<{ question: string; answer: string }>;
   metaTitle?: string;
   metaDescription?: string;
-  aiSummary?: string;
   productCount?: number;
 };
 
@@ -185,6 +263,19 @@ export async function getCategories(params: GetCategoriesParams, noCache = false
     noCache
       ? { noCache: true }
       : { tags: [`tenant:${params.tenant}`, `categories:${params.tenant}`] },
+  );
+}
+
+export async function getCategoryBySlug(
+  tenant: string,
+  slug: string,
+  noCache = false,
+): Promise<ProductCategory | null> {
+  return apiFetch<ProductCategory>(
+    apiUrl(`/api/public/product-categories/${encodeURIComponent(slug)}`, { tenant }),
+    noCache
+      ? { noCache: true }
+      : { tags: [`tenant:${tenant}`, `categories:${tenant}`, `category:${slug}`] },
   );
 }
 
