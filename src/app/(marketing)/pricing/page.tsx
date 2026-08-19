@@ -13,6 +13,7 @@ const businessTiers = [
     name: 'Launch',
     monthlyFlexible: 999,
     monthlyAllInclusive: 1500,
+    setupFee: 8000,
     description: 'Perfect for simple sites. No ecommerce, limited pages, and standard GEO.',
     features: [
       'Standard GEO structure',
@@ -28,6 +29,7 @@ const businessTiers = [
     name: 'Grow',
     monthlyFlexible: 2500,
     monthlyAllInclusive: 3000,
+    setupFee: 10000,
     description: 'For service businesses needing content pages, articles, FAQs, and contact forms.',
     features: [
       'Standard GEO structure',
@@ -43,6 +45,7 @@ const businessTiers = [
     name: 'Commerce',
     monthlyFlexible: 3500,
     monthlyAllInclusive: 4500,
+    setupFee: 12000,
     description: 'Full ecommerce, product intelligence, AI schema, and advanced GEO.',
     features: [
       'Advanced GEO & AI schema',
@@ -100,7 +103,7 @@ const faqs = [
   },
   {
     q: 'What is the difference between Flexible Start and All-Inclusive?',
-    a: 'Flexible Start requires a setup fee (from R8,000) and has a lower monthly cost (month-to-month after 3 months). All-Inclusive has NO setup fee, a higher monthly cost, and requires a 24-month commitment.',
+    a: 'Flexible Start requires a setup fee (R8,000 for Launch, R10,000 for Grow, R12,000 for Commerce) and has a lower monthly cost (month-to-month after 3 months). All-Inclusive has NO setup fee, a higher monthly cost, and requires a 24-month commitment.',
   },
   {
     q: 'What happens if a client leaves our agency?',
@@ -266,7 +269,7 @@ export default function PricingPage() {
                     <span style={{ fontSize: '0.875rem', color: 'var(--m-text-muted)' }}>/mo</span>
                   </div>
                   <div style={{ fontSize: '0.75rem', color: 'var(--m-text-faint)' }}>
-                    + setup fee from R8,000
+                    + R{tier.setupFee.toLocaleString()} setup fee
                   </div>
                 </div>
 
