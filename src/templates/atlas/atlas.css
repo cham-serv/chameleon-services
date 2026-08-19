@@ -3314,3 +3314,292 @@
   position: sticky;
   top: calc(var(--atlas-header-height, 64px) + var(--atlas-spacing-lg));
 }
+
+/* ============================================================
+   Phase 4.5 — Shop GEO/SEO: New Product & Category Hub Styles
+   ============================================================ */
+
+/* Product Highlights (feature bullets above ATC) */
+.atlas-product-highlights {
+  list-style: none;
+  padding: 0;
+  margin: var(--atlas-spacing-lg) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-spacing-xs);
+}
+.atlas-product-highlights li {
+  padding-left: 1.5rem;
+  position: relative;
+  font-size: 0.9rem;
+  color: color-mix(in srgb, var(--brand-text, #1b1b1b) 85%, transparent);
+}
+.atlas-product-highlights li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--brand-primary, #2563eb);
+  font-weight: 700;
+}
+
+/* Trust Badges row */
+.atlas-trust-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--atlas-spacing-xs);
+}
+.atlas-trust-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--brand-primary, #2563eb) 30%, transparent);
+  border-radius: var(--atlas-radius-full, 9999px);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--brand-primary, #2563eb);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s ease;
+}
+.atlas-trust-badge:hover {
+  background: color-mix(in srgb, var(--brand-primary, #2563eb) 8%, transparent);
+}
+.atlas-trust-badge--eco {
+  color: #15803d;
+  border-color: color-mix(in srgb, #15803d 30%, transparent);
+}
+.atlas-trust-badge--eco:hover {
+  background: color-mix(in srgb, #15803d 8%, transparent);
+}
+
+/* As Seen In press strip */
+.atlas-as-seen-in {
+  margin-top: var(--atlas-spacing-md);
+}
+.atlas-as-seen-in-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--atlas-spacing-xs);
+}
+.atlas-press-pill {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  background: color-mix(in srgb, var(--brand-text, #1b1b1b) 6%, transparent);
+  border-radius: var(--atlas-radius-sm, 4px);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: inherit;
+  opacity: 0.7;
+  transition: opacity 0.15s ease;
+}
+.atlas-press-pill:hover { opacity: 1; }
+
+/* Volume Pricing table */
+.atlas-volume-pricing table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.atlas-volume-pricing td {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--brand-text, #1b1b1b) 8%, transparent);
+}
+.atlas-volume-pricing tr:last-child td { border-bottom: none; }
+
+/* Competitor Comparison table */
+.atlas-compare-table {
+  border: 1px solid color-mix(in srgb, var(--brand-text, #1b1b1b) 12%, transparent);
+  border-radius: var(--atlas-radius-md);
+  overflow: hidden;
+}
+.atlas-compare-table-summary {
+  cursor: pointer;
+  padding: var(--atlas-spacing-md) var(--atlas-spacing-lg);
+  list-style: none;
+  user-select: none;
+}
+.atlas-compare-table-summary::-webkit-details-marker { display: none; }
+.atlas-compare-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.atlas-compare-table th,
+.atlas-compare-table td {
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid color-mix(in srgb, var(--brand-text, #1b1b1b) 8%, transparent);
+}
+.atlas-compare-table th {
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.6;
+}
+
+/* Demo Video embed */
+.atlas-demo-video {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  border-radius: var(--atlas-radius-md);
+  overflow: hidden;
+  background: #000;
+}
+.atlas-demo-video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Related Products horizontal scroll strip */
+.atlas-related-strip {
+  display: flex;
+  gap: var(--atlas-spacing-md);
+  overflow-x: auto;
+  padding-bottom: var(--atlas-spacing-sm);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+.atlas-related-card {
+  flex: 0 0 180px;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid color-mix(in srgb, var(--brand-text, #1b1b1b) 10%, transparent);
+  border-radius: var(--atlas-radius-md);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.atlas-related-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--brand-text, #1b1b1b) 10%, transparent);
+}
+.atlas-related-card-img {
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--brand-text, #1b1b1b) 5%, transparent);
+}
+.atlas-related-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.atlas-related-card-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  opacity: 0.3;
+}
+.atlas-related-card-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: var(--atlas-spacing-xs) var(--atlas-spacing-sm) 0;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.atlas-related-card-price {
+  font-size: 0.8rem;
+  padding: 0 var(--atlas-spacing-sm) var(--atlas-spacing-sm);
+  margin: 0;
+  opacity: 0.7;
+}
+
+/* Pros & Cons */
+.atlas-pros-cons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--atlas-spacing-md);
+  margin-top: var(--atlas-spacing-lg);
+}
+@media (max-width: 480px) {
+  .atlas-pros-cons { grid-template-columns: 1fr; }
+}
+.atlas-pros-list,
+.atlas-cons-list {
+  list-style: none;
+  padding: 0;
+  margin: var(--atlas-spacing-xs) 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-spacing-xs);
+  font-size: 0.85rem;
+}
+.atlas-pros-list li::before {
+  content: '+ ';
+  color: #15803d;
+  font-weight: 700;
+}
+.atlas-cons-list li::before {
+  content: '− ';
+  color: #dc2626;
+  font-weight: 700;
+}
+.atlas-pros-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #15803d;
+  margin: 0;
+}
+.atlas-cons-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #dc2626;
+  margin: 0;
+}
+
+/* Category Buyers Guide editorial block */
+.atlas-buyers-guide {
+  margin-top: var(--atlas-spacing-3xl);
+  padding: var(--atlas-spacing-2xl) var(--atlas-spacing-xl);
+  background: color-mix(in srgb, var(--brand-primary, #2563eb) 4%, transparent);
+  border-left: 3px solid var(--brand-primary, #2563eb);
+  border-radius: 0 var(--atlas-radius-md) var(--atlas-radius-md) 0;
+}
+
+/* Product page FAQ list (shared with category FAQs) */
+.atlas-pdp-faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid color-mix(in srgb, var(--brand-text, #1b1b1b) 10%, transparent);
+  border-radius: var(--atlas-radius-md);
+  overflow: hidden;
+}
+.atlas-pdp-faq-item {
+  border-bottom: 1px solid color-mix(in srgb, var(--brand-text, #1b1b1b) 10%, transparent);
+}
+.atlas-pdp-faq-item:last-child { border-bottom: none; }
+.atlas-pdp-faq-question {
+  cursor: pointer;
+  padding: var(--atlas-spacing-md) var(--atlas-spacing-lg);
+  font-weight: 600;
+  font-size: 0.9rem;
+  list-style: none;
+  user-select: none;
+  transition: background 0.15s ease;
+}
+.atlas-pdp-faq-question::-webkit-details-marker { display: none; }
+.atlas-pdp-faq-question:hover {
+  background: color-mix(in srgb, var(--brand-text, #1b1b1b) 3%, transparent);
+}
+.atlas-pdp-faq-answer {
+  padding: 0 var(--atlas-spacing-lg) var(--atlas-spacing-md);
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  opacity: 0.85;
+}
