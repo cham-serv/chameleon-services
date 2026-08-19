@@ -61,8 +61,8 @@ export default function AtlasHeader({ config, onOpenMobileNav, onOpenCart, trans
               src={logoUrl}
               alt={logoAlt}
               className="atlas-header-logo-img"
-              height={52}
-              style={{ height: '52px', width: 'auto', display: 'block' }}
+              height={72}
+              style={{ height: '72px', width: 'auto', display: 'block' }}
             />
           ) : (
             siteName

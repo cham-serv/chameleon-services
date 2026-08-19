@@ -54,7 +54,7 @@ export default function AtlasFooter({ config }: Props) {
                 <img
                   src={logoUrl}
                   alt={logoAlt}
-                  style={{ height: '32px', width: 'auto', display: 'block' }}
+                  style={{ height: '48px', width: 'auto', display: 'block' }}
                 />
               ) : (
                 siteName
