@@ -34,7 +34,7 @@
   --m-error:          #ef4444;
 
   /* Typography */
-  --m-font-display:   var(--font-syne), 'Syne', system-ui, sans-serif;
+  --m-font-display:   var(--font-outfit), 'Outfit', system-ui, sans-serif;
   --m-font-body:      var(--font-inter), 'Inter', system-ui, sans-serif;
 
   /* Spacing */

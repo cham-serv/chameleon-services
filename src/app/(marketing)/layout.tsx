@@ -1,5 +1,5 @@
-﻿import type { Metadata } from 'next';
-import { Inter, Syne } from 'next/font/google';
+import type { Metadata } from 'next';
+import { Inter, Outfit } from 'next/font/google';
 import { ChameleonLogo } from '@/components/marketing/ChameleonLogo';
 import Link from 'next/link';
 import './marketing.css';
@@ -11,10 +11,10 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
-const syne = Syne({
+const outfit = Outfit({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-syne',
+  variable: '--font-outfit',
 });
 
 export const metadata: Metadata = {
@@ -73,7 +73,7 @@ export default function MarketingLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en-ZA" className={`${inter.variable} ${syne.variable}`}>
+    <html lang="en-ZA" className={`${inter.variable} ${outfit.variable}`}>
       <head>
         <script
           type="application/ld+json"
@@ -120,7 +120,7 @@ function MarketingFooter() {
           {/* Brand */}
           <div>
             <Link href="/" aria-label="Chameleon home">
-              <ChameleonLogo size={28} />
+              <ChameleonLogo size={32} />
             </Link>
             <p
               style={{

@@ -64,7 +64,7 @@ export function MarketingNav() {
       >
         {/* Logo */}
         <Link href="/" aria-label="Chameleon home">
-          <ChameleonLogo size={28} />
+          <ChameleonLogo size={32} />
         </Link>
 
         {/* Desktop Nav */}

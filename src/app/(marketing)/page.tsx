@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { HeroTextCycler } from '@/components/marketing/HeroTextCycler';
 import { ArrowRight, Zap, Brain, RefreshCw, Palette, Search, TrendingUp, Clock, Globe } from 'lucide-react';
@@ -242,7 +242,7 @@ export default function HomePage() {
             className="m-animate-fade-up m-animate-delay-4"
             style={{ marginTop: '24px', fontSize: '0.8rem', color: 'var(--m-text-faint)' }}
           >
-            South Africa-first platform. No lock-in. Cancel anytime.
+            South Africa-first platform. No hidden fees. Flexible or all-inclusive.
           </p>
         </div>
       </section>
