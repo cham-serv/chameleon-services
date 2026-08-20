@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Chameleon Engine API Client
  *
  * All fetch() calls to the engine, with ISR cache tags for on-demand
@@ -495,4 +495,162 @@ export async function getTopicWithArticles(
       ? { noCache: true }
       : { tags: [`tenant:${tenant}`, `topics:${tenant}`, `topic:${topicSlug}`] },
   );
+}
+
+// - Orders (client-side only — no ISR cache, always fresh) -
+
+export type CheckoutLineItem = {
+  productId: number;
+  qty: number;
+  variantLabel?: string;
+};
+
+export type CheckoutPayload = {
+  tenant: string;
+  customerType: 'individual' | 'business';
+  customerName: string;
+  customerEmail: string;
+  customerPhone?: string;
+  // Standard shipping fields (standard variant only)
+  shippingLine1?: string;
+  shippingLine2?: string;
+  shippingCity?: string;
+  shippingProvince?: string;
+  shippingPostalCode?: string;
+  shippingCountry?: string;
+  // Business mode fields (optional)
+  companyName?: string;
+  customerVatNumber?: string;
+  purchaseOrderNumber?: string;
+  orderNotes?: string;
+  // Billing address (business mode + standard variant only)
+  billingLine1?: string;
+  billingLine2?: string;
+  billingCity?: string;
+  billingProvince?: string;
+  billingPostalCode?: string;
+  billingCountry?: string;
+  // Order items
+  lineItems: CheckoutLineItem[];
+  turnstileToken: string;
+};
+
+export type CheckoutResponse = {
+  success: boolean;
+  orderId: number;
+  orderNumber: string;
+  trackingToken: string;
+  paymentUrl: string | null;
+  total: number;       // in cents
+  currency: string;
+};
+
+/**
+ * Submit a checkout order to the engine.
+ * Returns the order details + payment URL (or null for quote flow).
+ * This is a client-side call — called from CheckoutPage on form submit.
+ */
+export async function submitCheckout(
+  payload: CheckoutPayload,
+): Promise<CheckoutResponse | null> {
+  try {
+    const engineUrl =
+      process.env.NEXT_PUBLIC_CHAMELEON_ENGINE_URL ??
+      'https://chameleon-engine-production.up.railway.app';
+
+    const res = await fetch(`${engineUrl}/api/public/orders`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      cache: 'no-store',
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: 'Unknown error' }));
+      console.error('[submitCheckout] Error:', err);
+      return null;
+    }
+
+    return (await res.json()) as CheckoutResponse;
+  } catch (err) {
+    console.error('[submitCheckout] Network error:', err);
+    return null;
+  }
+}
+
+// - Order Tracking (public, no auth required) -
+
+export type OrderLineItem = {
+  productName: string;
+  productSku?: string;
+  variantLabel?: string;
+  qty: number;
+  unitPrice: number;  // cents
+  lineTotal: number;  // cents
+};
+
+export type OrderStatusEntry = {
+  status: string;
+  timestamp: string;
+  note?: string;
+};
+
+export type OrderTrackingData = {
+  orderNumber: string;
+  status: string;
+  paymentStatus: string;
+  createdAt: string;
+  // Customer
+  customerName: string;
+  customerEmail: string;
+  // Shipping address
+  shippingLine1?: string;
+  shippingLine2?: string;
+  shippingCity?: string;
+  shippingProvince?: string;
+  shippingPostalCode?: string;
+  shippingCountry?: string;
+  // Line items
+  lineItems: OrderLineItem[];
+  // Totals (cents)
+  subtotal: number;
+  shippingCost: number;
+  discountAmount: number;
+  total: number;
+  currency: string;
+  // Courier
+  shippingCarrier?: string | null;
+  shippingTrackingNumber?: string | null;
+  shippingTrackingUrl?: string | null;
+  estimatedDeliveryDate?: string | null;
+  // Invoice
+  invoiceUrl?: string | null;
+  // Status history
+  statusHistory: OrderStatusEntry[];
+};
+
+/**
+ * Fetch an order by its tracking token.
+ * Used by the OrderConfirmationPage — no auth required.
+ * Always fetches fresh (no ISR cache) — order status changes frequently.
+ */
+export async function getOrderByTrackingToken(
+  token: string,
+): Promise<OrderTrackingData | null> {
+  try {
+    const engineUrl =
+      process.env.NEXT_PUBLIC_CHAMELEON_ENGINE_URL ??
+      'https://chameleon-engine-production.up.railway.app';
+
+    const res = await fetch(
+      `${engineUrl}/api/public/orders/${encodeURIComponent(token)}`,
+      { cache: 'no-store' },
+    );
+
+    if (!res.ok) return null;
+    return (await res.json()) as OrderTrackingData;
+  } catch (err) {
+    console.error('[getOrderByTrackingToken] Error:', err);
+    return null;
+  }
 }
