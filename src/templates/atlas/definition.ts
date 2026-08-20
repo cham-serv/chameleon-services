@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Atlas Template  Route Map & Metadata
  *
  * E-commerce focused template with multiple page variants.
@@ -193,6 +193,50 @@ export const definition: TemplateDefinition = {
           label: 'Standard',
           description: 'Tabbed legal document viewer for privacy, terms, and refund policies.',
           component: () => import('./LegalPage'),
+        },
+      },
+    },
+
+    '/cart': {
+      label: 'Cart',
+      feature: 'shop',
+      defaultVariant: 'standard',
+      variants: {
+        'standard': {
+          label: 'Standard',
+          description: 'Full cart review with line items, quantities, shipping estimate, and order summary.',
+          component: () => import('./CartPage'),
+        },
+      },
+    },
+
+    '/checkout': {
+      label: 'Checkout',
+      feature: 'shop',
+      defaultVariant: 'standard',
+      variants: {
+        'standard': {
+          label: 'Standard',
+          description: 'Single-page checkout with Individual/Business toggle, shipping address, and order summary.',
+          component: () => import('./CheckoutPage'),
+        },
+        'express': {
+          label: 'Express',
+          description: 'No shipping address. Individual/Business toggle for company details. For digital products or collect-in-store.',
+          component: () => import('./CheckoutPage'),
+        },
+      },
+    },
+
+    '/order/confirmation/*': {
+      label: 'Order Status',
+      feature: 'shop',
+      defaultVariant: 'standard',
+      variants: {
+        'standard': {
+          label: 'Standard',
+          description: 'Order confirmation, status tracking, courier details, and delivery updates.',
+          component: () => import('./OrderConfirmationPage'),
         },
       },
     },
