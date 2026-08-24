@@ -1,5 +1,5 @@
 /**
- * resolveImages — Pure utility (no client/server boundary)
+ * resolveImages - Pure utility (no client/server boundary)
  *
  * Extracted from AtlasImageGallery so it can be called from both
  * server components (ProductPage) and client components (AtlasImageGallery).
