@@ -10,11 +10,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { resolveImages } from './resolveImages';
 import type { GalleryImage } from './resolveImages';
-
-export type { GalleryImage };
-export { resolveImages };
 
 type AtlasImageGalleryProps = {
   images: GalleryImage[];
