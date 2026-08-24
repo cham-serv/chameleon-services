@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 /**
  * AtlasImageGallery  Client Component
@@ -10,36 +10,16 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import type { MediaItem } from '@/lib/api';
+import { resolveImages } from './resolveImages';
+import type { GalleryImage } from './resolveImages';
 
-type GalleryImage = {
-  url: string;
-  alt: string;
-  width?: number;
-  height?: number;
-};
+export type { GalleryImage };
+export { resolveImages };
 
 type AtlasImageGalleryProps = {
   images: GalleryImage[];
   productName: string;
 };
-
-function resolveImages(
-  raw?: Array<{ image: MediaItem }>,
-  productName?: string,
-): GalleryImage[] {
-  if (!raw?.length) return [];
-  return raw
-    .filter((entry) => entry.image?.url)
-    .map((entry) => ({
-      url: entry.image.url,
-      alt: entry.image.alt ?? productName ?? 'Product image',
-      width: entry.image.width,
-      height: entry.image.height,
-    }));
-}
-
-export { resolveImages };
 
 export function AtlasImageGallery({ images, productName }: AtlasImageGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Atlas ProductPage - Server Component
  *
  * The GEO powerhouse page. Renders the richest possible structured data
@@ -24,7 +24,8 @@ import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { JsonLd } from '@/components/JsonLd';
 import { AddToCartButton } from '@/components/AddToCartButton';
 import { RichTextRenderer } from '@/components/RichTextRenderer';
-import { AtlasImageGallery, resolveImages } from './AtlasImageGallery';
+import { AtlasImageGallery } from './AtlasImageGallery';
+import { resolveImages } from './resolveImages';
 
 /** Convert YouTube/Vimeo watch URLs to embeddable format */
 function toEmbedUrl(url: string): string {
