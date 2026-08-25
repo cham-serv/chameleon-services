@@ -220,7 +220,11 @@ export default function OrderConfirmationPage({ config, path }: PageProps) {
   }
 
   const isPaid = order.paymentStatus === 'paid';
-  const isQuote = order.paymentStatus === 'unpaid' || order.status === 'quote';
+  // Quote = explicitly no payment gateway (status === 'quote') — not just unpaid
+  const isQuote = order.status === 'quote';
+  // Pending payment = order was placed through a gateway but ITN hasn't fired yet
+  // (the window between PayFast redirect and our webhook receiving confirmation)
+  const isPendingPayment = order.paymentStatus === 'unpaid' && !isQuote;
   const isDelivered = order.status === 'delivered';
   const isShipped = order.status === 'shipped';
   const isTracking = isShipped || isDelivered || order.status === 'processing';
@@ -248,7 +252,20 @@ export default function OrderConfirmationPage({ config, path }: PageProps) {
           </div>
         )}
 
-        {/* ---- Hero (Quote Submitted) ---- */}
+        {/* ---- Hero (Payment Pending — awaiting gateway ITN) ---- */}
+        {isPendingPayment && !isTracking && (
+          <div className="atlas-confirmation-hero">
+            <div className="atlas-confirmation-hero-icon">⏳</div>
+            <h1 className="atlas-h2" style={{ marginTop: '1rem' }}>
+              Order Received
+            </h1>
+            <p className="atlas-body-lg" style={{ marginTop: '0.5rem', opacity: 0.75 }}>
+              Your order has been placed. We&apos;re confirming your payment — this page will update automatically.
+            </p>
+          </div>
+        )}
+
+        {/* ---- Hero (Quote Submitted — no payment gateway) ---- */}
         {isQuote && (
           <div className="atlas-confirmation-hero">
             <div className="atlas-confirmation-hero-icon">📋</div>
