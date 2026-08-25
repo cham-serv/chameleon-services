@@ -10,7 +10,8 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import type { GalleryImage } from './resolveImages';
+
+export type GalleryImage = { url: string; alt: string; width?: number; height?: number };
 
 type AtlasImageGalleryProps = {
   images: GalleryImage[];
