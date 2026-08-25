@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Atlas ProductPage - Server Component
  *
  * The GEO powerhouse page. Renders the richest possible structured data
@@ -17,14 +17,14 @@
 
 import Link from 'next/link';
 import type { PageProps } from '@/lib/types';
-import { getProductBySlug, type ProductCategory, type Product } from '@/lib/api';
+import { getProductBySlug, type ProductCategory, type Product, type MediaItem } from '@/lib/api';
 import { formatCurrency } from '@/lib/currency';
 import { buildProductLd, buildBreadcrumbLd } from '@/lib/jsonld';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { JsonLd } from '@/components/JsonLd';
 import { AddToCartButton } from '@/components/AddToCartButton';
 import { RichTextRenderer } from '@/components/RichTextRenderer';
-import { AtlasImageGallery, resolveImages } from './AtlasImageGallery';
+import { AtlasImageGallery } from './AtlasImageGallery';
 
 /** Convert YouTube/Vimeo watch URLs to embeddable format */
 function toEmbedUrl(url: string): string {
@@ -33,6 +33,20 @@ function toEmbedUrl(url: string): string {
   const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
   if (vimeoMatch) return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
   return url;
+}
+
+/** Resolve product images array into gallery-ready format (inlined to avoid client boundary issues) */
+type GalleryImage = { url: string; alt: string; width?: number; height?: number };
+function resolveImages(raw?: Array<{ image: MediaItem }>, productName?: string): GalleryImage[] {
+  if (!raw?.length) return [];
+  return raw
+    .filter((entry) => entry.image?.url)
+    .map((entry) => ({
+      url: entry.image.url,
+      alt: entry.image.alt ?? productName ?? 'Product image',
+      width: entry.image.width,
+      height: entry.image.height,
+    }));
 }
 
 export default async function ProductPage({ config, path, noCache }: PageProps) {
