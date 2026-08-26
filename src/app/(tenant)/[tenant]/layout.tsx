@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Tenant Layout  HTML shell for multi-tenant pages.
  *
  * Responsibilities:
@@ -12,6 +12,7 @@
  * by the catch-all page.
  */
 
+import type { Metadata } from 'next';
 import { getFontClasses, getFontVariables } from '@/lib/fonts';
 import { fetchTenantConfig } from '@/lib/tenant';
 
@@ -19,6 +20,44 @@ type Props = {
   children: React.ReactNode;
   params: Promise<{ tenant: string }>;
 };
+
+/**
+ * generateMetadata — per-tenant browser tab favicon.
+ *
+ * Priority: SiteSettings.logoMark → AtlasSiteConfig.logoMark
+ *         → SiteSettings.logo → AtlasSiteConfig.logo
+ *         → Chameleon platform mark (fallback)
+ *
+ * Next.js deduplicates the fetchTenantConfig fetch between this
+ * function and TenantLayout within the same request, so there is
+ * no double network call.
+ */
+export async function generateMetadata({ params }: { params: Promise<{ tenant: string }> }): Promise<Metadata> {
+  const { tenant } = await params;
+  const config = await fetchTenantConfig(tenant);
+
+  const siteName =
+    config?.settings?.siteName ??
+    config?.pageConfig?.siteName ??
+    tenant;
+
+  // Prefer the logoMark (square/icon-only asset) over the full lockup logo
+  const faviconUrl =
+    config?.settings?.logoMark?.url ??
+    config?.pageConfig?.logoMark?.url ??
+    config?.settings?.logo?.url ??
+    config?.pageConfig?.logo?.url ??
+    null;
+
+  const icons = faviconUrl
+    ? { icon: faviconUrl, shortcut: faviconUrl, apple: faviconUrl }
+    : { icon: '/logo-icon.webp', shortcut: '/logo-icon.webp', apple: '/logo-icon.webp' };
+
+  return {
+    title: { default: siteName, template: `%s | ${siteName}` },
+    icons,
+  };
+}
 
 export default async function TenantLayout({ children, params }: Props) {
   const { tenant } = await params;
