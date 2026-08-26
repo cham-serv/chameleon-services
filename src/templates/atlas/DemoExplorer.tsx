@@ -74,7 +74,7 @@ const BTN_STYLES: { label: string; value: BrandPreview['buttonStyle'] }[] = [
 
 // - Tab type -
 
-type ExplorerTab = 'pages' | 'brand';
+type ExplorerTab = 'pages' | 'brand' | 'style';
 
 // - Component -
 
@@ -321,7 +321,14 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
             data-active={activeTab === 'brand'}
             onClick={() => setActiveTab('brand')}
           >
-             Brand
+            Brand
+          </button>
+          <button
+            className="demo-explorer-tab-btn"
+            data-active={activeTab === 'style'}
+            onClick={() => setActiveTab('style')}
+          >
+            Style
           </button>
         </div>
 
@@ -407,15 +414,13 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
                 ))}
               </div>
 
-              {/* Custom Hex Inputs */}
+              {/* Custom Brand Colours */}
               <p className="demo-explorer-section-label" style={{ marginTop: '1rem' }}>Custom Colours</p>
               <div className="demo-explorer-colour-inputs">
                 {[
-                  { key: 'primary',    label: 'Primary'    },
-                  { key: 'secondary',  label: 'Secondary'  },
-                  { key: 'accent',     label: 'Accent'     },
-                  { key: 'textColour', label: 'Text'       },
-                  { key: 'bgColour',   label: 'Background' },
+                  { key: 'primary',   label: 'Primary'   },
+                  { key: 'secondary', label: 'Secondary' },
+                  { key: 'accent',    label: 'Accent'    },
                 ].map(({ key, label }) => (
                   <div key={key} className="demo-explorer-colour-row">
                     <input
@@ -444,8 +449,28 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
                 ))}
               </div>
 
-              {/* Font Pair Presets */}
-              <p className="demo-explorer-section-label" style={{ marginTop: '1rem' }}>Font Pairs</p>
+              {/* Button Style */}
+              <p className="demo-explorer-section-label" style={{ marginTop: '1rem' }}>Button Style</p>
+              <div className="demo-explorer-btn-style-grid">
+                {BTN_STYLES.map(({ label, value }) => (
+                  <button
+                    key={value}
+                    className="demo-explorer-btn-style-option"
+                    data-active={brand.buttonStyle === value}
+                    onClick={() => updateBrand({ buttonStyle: value })}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+
+          {/* - Style Tab - */}
+          {activeTab === 'style' && (
+            <>
+              {/* Font Pairs */}
+              <p className="demo-explorer-section-label">Font Pairs</p>
               <div className="demo-explorer-font-grid">
                 {FONT_PAIRS.map((pair) => (
                   <button
@@ -460,18 +485,37 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
                 ))}
               </div>
 
-              {/* Button Style */}
-              <p className="demo-explorer-section-label" style={{ marginTop: '1rem' }}>Button Style</p>
-              <div className="demo-explorer-btn-style-grid">
-                {BTN_STYLES.map(({ label, value }) => (
-                  <button
-                    key={value}
-                    className="demo-explorer-btn-style-option"
-                    data-active={brand.buttonStyle === value}
-                    onClick={() => updateBrand({ buttonStyle: value })}
-                  >
-                    {label}
-                  </button>
+              {/* Text & Background */}
+              <p className="demo-explorer-section-label" style={{ marginTop: '1rem' }}>Text & Background</p>
+              <div className="demo-explorer-colour-inputs">
+                {[
+                  { key: 'textColour', label: 'Text'       },
+                  { key: 'bgColour',   label: 'Background' },
+                ].map(({ key, label }) => (
+                  <div key={key} className="demo-explorer-colour-row">
+                    <input
+                      type="color"
+                      className="demo-explorer-colour-swatch-input"
+                      value={brand[key as keyof BrandPreview] as string}
+                      onChange={(e) => updateBrand({ [key]: e.target.value } as Partial<BrandPreview>)}
+                      aria-label={`${label} colour`}
+                    />
+                    <input
+                      type="text"
+                      className="demo-explorer-hex-input"
+                      value={brand[key as keyof BrandPreview] as string}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (/^#[0-9a-fA-F]{0,6}$/.test(val)) {
+                          updateBrand({ [key]: val } as Partial<BrandPreview>);
+                        }
+                      }}
+                      maxLength={7}
+                      spellCheck={false}
+                      aria-label={`${label} hex code`}
+                    />
+                    <span className="demo-explorer-colour-label">{label}</span>
+                  </div>
                 ))}
               </div>
             </>
