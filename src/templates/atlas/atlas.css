@@ -2331,6 +2331,31 @@
   color: var(--brand-accent, #f59e0b);
 }
 
+/* Modern variant: category cards in dark sections
+ * Base .atlas-category-card uses --brand-text (dark) which is invisible on dark bg */
+[data-variant="modern"] .atlas-section-dark .atlas-category-card {
+  color: rgba(255, 255, 255, 0.88);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-variant="modern"] .atlas-section-dark .atlas-category-card:hover {
+  border-color: var(--brand-accent, #f59e0b);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: none;
+}
+
+/* Modern variant: counter labels in dark sections
+ * Base .atlas-counter-label uses color-mix(--brand-text) which is dark on dark bg */
+[data-variant="modern"] .atlas-section-dark .atlas-counter-label {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* Modern variant: dark product grid cards (mirrors bold variant override) */
+[data-variant="modern"] .atlas-section-dark .atlas-card {
+  background: color-mix(in srgb, var(--brand-primary, #0f172a) 80%, #fff);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
 /* - Bold Variant - */
 
 [data-variant="bold"] .atlas-home-hero {
