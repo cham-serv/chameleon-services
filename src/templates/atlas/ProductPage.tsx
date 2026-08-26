@@ -17,7 +17,7 @@
 
 import Link from 'next/link';
 import type { PageProps } from '@/lib/types';
-import { getProductBySlug, type ProductCategory, type Product } from '@/lib/api';
+import { getProductBySlug, type ProductCategory, type Product, type MediaItem } from '@/lib/api';
 import { formatCurrency } from '@/lib/currency';
 import { buildProductLd, buildBreadcrumbLd } from '@/lib/jsonld';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
@@ -25,7 +25,6 @@ import { JsonLd } from '@/components/JsonLd';
 import { AddToCartButton } from '@/components/AddToCartButton';
 import { RichTextRenderer } from '@/components/RichTextRenderer';
 import { AtlasImageGallery } from './AtlasImageGallery';
-import type { MediaItem } from '@/lib/api';
 
 /** Convert YouTube/Vimeo watch URLs to embeddable format */
 function toEmbedUrl(url: string): string {
