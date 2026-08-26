@@ -24,7 +24,8 @@ import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { JsonLd } from '@/components/JsonLd';
 import { AddToCartButton } from '@/components/AddToCartButton';
 import { RichTextRenderer } from '@/components/RichTextRenderer';
-import { AtlasImageGallery, resolveImages } from './AtlasImageGallery';
+import { AtlasImageGallery } from './AtlasImageGallery';
+import type { MediaItem } from '@/lib/api';
 
 /** Convert YouTube/Vimeo watch URLs to embeddable format */
 function toEmbedUrl(url: string): string {
@@ -33,6 +34,22 @@ function toEmbedUrl(url: string): string {
   const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
   if (vimeoMatch) return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
   return url;
+}
+
+/** Map raw Payload image array to gallery-ready objects (server-safe) */
+function resolveImages(
+  raw?: Array<{ image: MediaItem }>,
+  productName?: string,
+): { url: string; alt: string; width?: number; height?: number }[] {
+  if (!raw?.length) return [];
+  return raw
+    .filter((entry) => entry.image?.url)
+    .map((entry) => ({
+      url: entry.image.url,
+      alt: entry.image.alt ?? productName ?? 'Product image',
+      width: entry.image.width,
+      height: entry.image.height,
+    }));
 }
 
 export default async function ProductPage({ config, path, noCache }: PageProps) {
