@@ -198,7 +198,6 @@ export default function CheckoutPage({ config, variant }: PageProps) {
 
   // Full-screen redirect overlay
   if (status === 'redirecting') {
-    const gatewayName = config.settings?.paymentGateway === 'paystack' ? 'Paystack' : 'PayFast';
     return (
       <div style={{
         position: 'fixed', inset: 0, zIndex: 9999,
@@ -211,7 +210,7 @@ export default function CheckoutPage({ config, variant }: PageProps) {
           Redirecting to secure payment…
         </p>
         <p style={{ fontSize: '0.875rem', color: 'var(--atlas-text-muted, #888)', margin: 0 }}>
-          You’re being taken to {gatewayName} to complete your purchase.
+          You’re being taken to our secure payment processor to complete your purchase.
         </p>
       </div>
     );
