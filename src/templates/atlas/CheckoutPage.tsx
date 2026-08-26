@@ -213,7 +213,7 @@ export default function CheckoutPage({ config, variant }: PageProps) {
         <p style={{ fontSize: '1.125rem', fontWeight: 600, color: 'var(--atlas-text, #1b1b1b)', margin: 0 }}>
           Redirecting to secure payment…
         </p>
-        <p style={{ fontSize: '0.875rem', color: 'var(--atlas-text-muted, #888)', margin: 0 }}>
+        <p style={{ fontSize: '0.875rem', color: 'var(--atlas-text-muted, #767676)', margin: 0 }}>
           You’re being taken to our secure payment processor to complete your purchase.
         </p>
       </div>

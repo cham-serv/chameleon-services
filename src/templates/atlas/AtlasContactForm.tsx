@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 /**
  * AtlasContactForm  Client Component
@@ -89,7 +89,7 @@ export function AtlasContactForm({ tenant }: AtlasContactFormProps) {
       {/* Name */}
       <div>
         <label htmlFor="contact-name" className="atlas-caption" style={{ fontWeight: 600, display: 'block', marginBottom: 4 }}>
-          Name <span style={{ color: '#e53e3e' }}>*</span>
+          Name <span style={{ color: '#c0392b' }}>*</span>
         </label>
         <input
           id="contact-name"
@@ -105,7 +105,7 @@ export function AtlasContactForm({ tenant }: AtlasContactFormProps) {
       {/* Email */}
       <div>
         <label htmlFor="contact-email" className="atlas-caption" style={{ fontWeight: 600, display: 'block', marginBottom: 4 }}>
-          Email <span style={{ color: '#e53e3e' }}>*</span>
+          Email <span style={{ color: '#c0392b' }}>*</span>
         </label>
         <input
           id="contact-email"
@@ -151,7 +151,7 @@ export function AtlasContactForm({ tenant }: AtlasContactFormProps) {
       {/* Message */}
       <div>
         <label htmlFor="contact-message" className="atlas-caption" style={{ fontWeight: 600, display: 'block', marginBottom: 4 }}>
-          Message <span style={{ color: '#e53e3e' }}>*</span>
+          Message <span style={{ color: '#c0392b' }}>*</span>
         </label>
         <textarea
           id="contact-message"
