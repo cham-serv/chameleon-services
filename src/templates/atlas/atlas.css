@@ -4578,3 +4578,139 @@
   justify-content: center;
   padding-top: var(--atlas-spacing-xl);
 }
+
+/* ============================================================
+   MOBILE EXCELLENCE — P0 + P1 OVERRIDES
+   Appended after all other rules so cascade priority wins.
+   Audit reference: atlas_mobile_audit.md items #1 #3 #4 #5 #7 #10 #17
+   ============================================================ */
+
+/* ── #1 · iOS Safari input auto-zoom prevention (P0) ────────────────
+   iOS Safari zooms in on any focused input whose computed font-size
+   is below 16px, and the zoom does not reset on blur.
+   .atlas-input / .atlas-select are 0.9375rem (15px).
+   .atlas-sort-select is 0.875rem (14px).
+   Enforcing 1rem (16px) on touch viewports prevents the zoom.     */
+
+@media (max-width: 767px) {
+  .atlas-input,
+  .atlas-textarea,
+  .atlas-select,
+  .atlas-sort-select {
+    font-size: 1rem; /* 16px — iOS Safari auto-zoom threshold */
+  }
+}
+
+/* ── #3 · Quantity stepper touch targets (P0) ───────────────────────
+   Apple HIG + Google Material mandate ≥ 44×44 px tap targets.
+   Stepper buttons are 32×32 px (28×28 px in the cart drawer).     */
+
+@media (max-width: 767px) {
+  .atlas-qty-stepper button {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* ── #4 · Section vertical spacing (P1) ────────────────────────────
+   .atlas-section uses --atlas-spacing-3xl = 64px top+bottom.
+   On a 375px phone that is 128px of dead space between sections.
+   Reducing to 40px recovers ~48px per section seam.               */
+
+@media (max-width: 767px) {
+  .atlas-section {
+    padding-top: 2.5rem;    /* was 4rem (64px) → now 2.5rem (40px) */
+    padding-bottom: 2.5rem;
+  }
+
+  .atlas-section-sm {
+    padding-top: 1.75rem;   /* was 3rem (48px) → now 1.75rem (28px) */
+    padding-bottom: 1.75rem;
+  }
+}
+
+/* ── #5 · Container gutters (P1) ────────────────────────────────────
+   .atlas-container and .atlas-header-inner use --atlas-spacing-lg
+   (24px) each side. On a 320px screen that leaves only 272px for
+   content. Industry-standard mobile gutter is 16px.               */
+
+@media (max-width: 767px) {
+  .atlas-container {
+    padding-left: 1rem;   /* was 1.5rem → now 1rem */
+    padding-right: 1rem;
+  }
+
+  .atlas-header-inner {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* ── #7 · Storefront / Editorial hero: centre text on mobile (P1) ───
+   These variants enforce text-align: left on their hero content.
+   When the 2-column grid collapses to single-column on mobile,
+   left-aligned text above a centred full-width image is visually
+   unbalanced. Modern and Bold already centre; align all variants.  */
+
+@media (max-width: 767px) {
+  [data-variant="storefront"] .atlas-home-hero-content,
+  [data-variant="editorial"]  .atlas-home-hero-content {
+    text-align: center;
+  }
+
+  [data-variant="storefront"] .atlas-home-hero-content .atlas-hero-cta-row,
+  [data-variant="editorial"]  .atlas-home-hero-content .atlas-hero-cta-row {
+    justify-content: center;
+  }
+}
+
+/* ── #10 · Product grid: single column on very small phones (P1) ────
+   2-col default gives each card ≈ 124px on a 320px screen.
+   Product images shrink to thumbnails, names truncate mid-word.
+   Single column below 480px is far more usable.                   */
+
+@media (max-width: 479px) {
+  .atlas-product-grid,
+  .atlas-product-grid-dense {
+    grid-template-columns: 1fr;
+    gap: var(--atlas-spacing-md); /* tighten to 16px, was 24px */
+  }
+}
+
+/* ── #17 · Card hover lifts: pointer-accurate devices only (P1) ─────
+   On touch screens :hover fires on tap and stays elevated until
+   the user taps elsewhere ("phantom hover" effect).
+   @media (hover: none) resets all lift transforms for touch-only
+   devices. Mouse/trackpad users are unaffected.                    */
+
+@media (hover: none) {
+  .atlas-card:hover {
+    box-shadow: none;
+    transform: none;
+    border-color: color-mix(in srgb, var(--brand-text, #1b1b1b) 8%, transparent);
+  }
+
+  .atlas-hover-lift:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .atlas-category-card:hover {
+    border-color: color-mix(in srgb, var(--brand-text, #1b1b1b) 10%, transparent);
+    box-shadow: none;
+    transform: none;
+  }
+
+  [data-variant="team-grid"] .atlas-team-card:hover {
+    transform: none;
+  }
+
+  [data-variant="grid"] .atlas-resources-topic-card:hover {
+    transform: none;
+  }
+
+  .atlas-related-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
