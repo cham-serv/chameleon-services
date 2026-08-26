@@ -23,6 +23,19 @@ const templates = [
     status: 'available',
   },
   {
+    id: 'atlas-lite',
+    name: 'Atlas Lite',
+    tagline: 'A powerful catalogue and quote engine, without the ecommerce overhead.',
+    description:
+      'Atlas Lite is the perfect solution for businesses that want to showcase their products and allow customers to build a quote, without managing complex ecommerce payments or shipping. Get all the SEO power and beautiful design of Atlas, streamlined for quote generation.',
+    features: ['Quote Request Flow', 'Product Catalogue', 'Articles & Blog', 'FAQ', 'Contact', 'Legal Pages'],
+    industries: ['B2B Wholesale', 'Custom Manufacturing', 'Bulk Suppliers', 'High-Value Retail'],
+    demoHref: 'https://atlas-lite-demo.chameleon.services',
+    gradient: 'linear-gradient(135deg, #7c2d12 0%, #431407 60%, #1c0a03 100%)',
+    accentColor: '#fb923c',
+    status: 'available',
+  },
+  {
     id: 'meridian',
     name: 'Meridian',
     tagline: 'Services & consulting, built to convert.',
