@@ -26,6 +26,7 @@ import type { PageProps } from '@/lib/types';
 // Status badge colours
 const STATUS_COLOURS: Record<string, { bg: string; text: string; label: string }> = {
   pending:    { bg: '#fef3c7', text: '#d97706', label: 'Pending' },
+  confirmed:  { bg: '#d1fae5', text: '#059669', label: 'Confirmed' },
   processing: { bg: '#dbeafe', text: '#2563eb', label: 'Processing' },
   shipped:    { bg: '#ede9fe', text: '#7c3aed', label: 'Shipped' },
   delivered:  { bg: '#d1fae5', text: '#059669', label: 'Delivered' },
@@ -36,6 +37,7 @@ const STATUS_COLOURS: Record<string, { bg: string; text: string; label: string }
 
 const STATUS_ICONS: Record<string, string> = {
   pending:    '⏳',
+  confirmed:  '✓',
   processing: '⚙️',
   shipped:    '🚚',
   delivered:  '✅',
@@ -177,11 +179,15 @@ export default function OrderConfirmationPage({ config, path }: PageProps) {
     fetchOrder();
   }, [fetchOrder]);
 
-  // Poll every 30 seconds for live status updates
+  // Poll for live status updates.
+  // Fast-poll (3s) while payment is still pending — catches the ITN update
+  // quickly after PayFast redirects the customer back before firing the webhook.
+  // Reverts to slow-poll (30s) once payment is confirmed.
   useEffect(() => {
-    const interval = setInterval(fetchOrder, 30_000);
+    const isPendingPayment = order?.paymentStatus === 'unpaid' && order?.status !== 'quote';
+    const interval = setInterval(fetchOrder, isPendingPayment ? 3_000 : 30_000);
     return () => clearInterval(interval);
-  }, [fetchOrder]);
+  }, [fetchOrder, order?.paymentStatus, order?.status]);
 
   // Loading state
   if (loading) {
