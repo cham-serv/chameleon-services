@@ -35,11 +35,9 @@ function toEmbedUrl(url: string): string {
   return url;
 }
 
-/** Map raw Payload image array to gallery-ready objects (server-safe) */
-function resolveImages(
-  raw?: Array<{ image: MediaItem }>,
-  productName?: string,
-): { url: string; alt: string; width?: number; height?: number }[] {
+/** Resolve product images array into gallery-ready format (inlined to avoid client boundary issues) */
+type GalleryImage = { url: string; alt: string; width?: number; height?: number };
+function resolveImages(raw?: Array<{ image: MediaItem }>, productName?: string): GalleryImage[] {
   if (!raw?.length) return [];
   return raw
     .filter((entry) => entry.image?.url)

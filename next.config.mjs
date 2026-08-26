@@ -1,5 +1,6 @@
 import createMDX from '@next/mdx'
 
+// Build cache bust: 2026-08-25T11:36
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
