@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 /**
  * DemoExplorer - Client Component
@@ -74,6 +74,8 @@ type ExplorerTab = 'pages' | 'brand';
 export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<ExplorerTab>('pages');
+  // Hint arrow: shown on first visit, never again after drawer is opened
+  const [showHint, setShowHint] = useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -173,7 +175,24 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
 
   // - Actions -
 
-  const open = useCallback(() => setIsOpen(true), []);
+  // Check localStorage once on mount to decide whether to show the hint
+  useEffect(() => {
+    try {
+      if (!localStorage.getItem('demo-explorer-seen')) {
+        setShowHint(true);
+      }
+    } catch {
+      // localStorage blocked (private browsing etc.) — show hint anyway
+      setShowHint(true);
+    }
+  }, []);
+
+  const open = useCallback(() => {
+    setIsOpen(true);
+    // Dismiss hint permanently on first open
+    setShowHint(false);
+    try { localStorage.setItem('demo-explorer-seen', '1'); } catch { /* ignore */ }
+  }, []);
   const close = useCallback(() => setIsOpen(false), []);
 
   const navigateToPage = useCallback(
@@ -221,6 +240,13 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
 
   return (
     <>
+      {/* Hint arrow — points at the EXPLORE tab, auto-fades after 5s */}
+      {showHint && (
+        <div className="demo-explorer-hint" aria-hidden="true">
+          <span className="demo-explorer-hint-arrow">&#8594;</span>
+        </div>
+      )}
+
       {/* Edge Tab */}
       <button
         className="demo-explorer-tab"
