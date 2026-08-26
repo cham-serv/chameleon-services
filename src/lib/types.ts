@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Shared types for the Chameleon multi-tenant rendering pipeline.
  *
  * Used by: tenant resolver, catch-all page, template definitions,
@@ -79,6 +79,14 @@ export type SiteSettings = {
   fontHeading?: string;
   fontBody?: string;
   // Ecommerce
+  /**
+   * Controls the overall store behaviour and maps to the Chameleon pricing tier.
+   * 'retail'    = Full ecommerce with payment (Atlas)
+   * 'quote'     = Quote-only, prices hidden, no payment gateway (Atlas Light)
+   * 'trade'     = B2B authenticated pricing (future)
+   * 'catalogue' = Browse-only, no ordering (future)
+   */
+  storeMode?: 'retail' | 'quote' | 'trade' | 'catalogue';
   currency?: string;
   currencySymbol?: string;
   paymentGateway?: string;

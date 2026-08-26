@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Atlas ShopPage - Server Component
  *
  * Variant dispatch pattern:
@@ -65,6 +65,8 @@ function getSecondaryImage(product: Product): string | null {
 export default async function ShopPage({ config, variant, searchParams, noCache }: PageProps) {
   const tenant = config.tenant.slug;
   const currency = config.settings?.currency ?? "ZAR";
+  const storeMode = config.settings?.storeMode ?? 'retail';
+  const showPrices = storeMode === 'retail';
   const siteUrl = `https://${tenant}.chameleon.services`;
 
   const activeCategory = resolveStr(searchParams?.category);
@@ -185,7 +187,7 @@ export default async function ShopPage({ config, variant, searchParams, noCache 
     products, categories, activeCategory, activeCategoryObj, activeCategoryFull,
     sort, page, currency, shopHeadline, shopSubheadline, totalDocs,
     breadcrumbSchema, categoryHubSchemas, shopIndexSchema, breadcrumbItems,
-    siteUrl, Pagination, EmptyState,
+    siteUrl, Pagination, EmptyState, showPrices,
   };
 
   switch (variant) {
@@ -217,6 +219,7 @@ type RenderProps = {
   siteUrl: string;
   Pagination: React.ReactNode;
   EmptyState: React.ReactNode;
+  showPrices: boolean;
 };
 
 //  Render: Catalog (Sidebar Layout) 
@@ -225,7 +228,7 @@ function renderCatalog({
   products, categories, activeCategory, activeCategoryObj, activeCategoryFull,
   sort, currency, shopHeadline, shopSubheadline, totalDocs,
   breadcrumbSchema, categoryHubSchemas, shopIndexSchema, breadcrumbItems,
-  siteUrl, Pagination, EmptyState,
+  siteUrl, Pagination, EmptyState, showPrices,
 }: RenderProps) {
   const totalCategoryProducts = categories.reduce((s, c) => s + (c.productCount ?? 0), 0);
   return (
@@ -241,7 +244,7 @@ function renderCatalog({
           </h1>
           {!activeCategoryObj && shopSubheadline && (
             <p className="atlas-body-lg" style={{ marginTop: "var(--atlas-spacing-xs)", opacity: 0.7, maxWidth: 600 }}>
-              {shopSubheadline}
+                  {shopSubheadline}
             </p>
           )}
           <p className="atlas-shop-count">{totalDocs} product{totalDocs !== 1 ? "s" : ""}</p>
@@ -251,37 +254,37 @@ function renderCatalog({
           {/* Sidebar - hidden on mobile */}
           <aside className="atlas-catalog-sidebar" aria-label="Shop filters">
             {categories.length > 0 && (
-              <nav aria-label="Filter by category">
-                <p className="atlas-overline" style={{ marginBottom: "var(--atlas-spacing-sm)" }}>Categories</p>
-                <ul className="atlas-catalog-cat-list" style={{ listStyle: "none", padding: 0, margin: 0 }}>
-                  <li>
-                    <Link
-                      href={buildCatUrl(null, sort)}
-                      className={`atlas-catalog-cat-link${!activeCategory ? " atlas-catalog-cat-link--active" : ""}`}
-                    >
-                      <span>All Products</span>
-                      <span className="atlas-catalog-cat-count">{totalCategoryProducts}</span>
-                    </Link>
-                  </li>
-                  {categories.map((cat) => (
-                    <li key={cat.id}>
-                      <Link
-                        href={buildCatUrl(cat.slug, sort)}
-                        className={`atlas-catalog-cat-link${activeCategory === cat.slug ? " atlas-catalog-cat-link--active" : ""}`}
-                      >
-                        <span>{cat.name}</span>
-                        {cat.productCount != null && (
-                          <span className="atlas-catalog-cat-count">{cat.productCount}</span>
-                        )}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
+                  <nav aria-label="Filter by category">
+                    <p className="atlas-overline" style={{ marginBottom: "var(--atlas-spacing-sm)" }}>Categories</p>
+                    <ul className="atlas-catalog-cat-list" style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                      <li>
+                        <Link
+                          href={buildCatUrl(null, sort)}
+                          className={`atlas-catalog-cat-link${!activeCategory ? " atlas-catalog-cat-link--active" : ""}`}
+                        >
+                          <span>All Products</span>
+                          <span className="atlas-catalog-cat-count">{totalCategoryProducts}</span>
+                        </Link>
+                      </li>
+                      {categories.map((cat) => (
+                        <li key={cat.id}>
+                          <Link
+                            href={buildCatUrl(cat.slug, sort)}
+                            className={`atlas-catalog-cat-link${activeCategory === cat.slug ? " atlas-catalog-cat-link--active" : ""}`}
+                          >
+                            <span>{cat.name}</span>
+                            {cat.productCount != null && (
+                              <span className="atlas-catalog-cat-count">{cat.productCount}</span>
+                            )}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </nav>
             )}
             <div style={{ marginTop: "var(--atlas-spacing-xl)" }}>
-              <p className="atlas-overline" style={{ marginBottom: "var(--atlas-spacing-sm)" }}>Sort by</p>
-              <AtlasSortSelect currentSort={sort} currentCategory={activeCategory} />
+                  <p className="atlas-overline" style={{ marginBottom: "var(--atlas-spacing-sm)" }}>Sort by</p>
+                  <AtlasSortSelect currentSort={sort} currentCategory={activeCategory} />
             </div>
           </aside>
 
@@ -289,51 +292,51 @@ function renderCatalog({
           <div className="atlas-catalog-content">
             {/* Mobile pill bar */}
             {categories.length > 0 && (
-              <nav className="atlas-category-pills atlas-catalog-pills-mobile" aria-label="Filter by category">
-                <Link href={buildCatUrl(null, sort)} className={`atlas-pill${!activeCategory ? " atlas-pill-active" : ""}`}>All</Link>
-                {categories.map((cat) => (
-                  <Link
-                    key={cat.id}
-                    href={buildCatUrl(cat.slug, sort)}
-                    className={`atlas-pill${activeCategory === cat.slug ? " atlas-pill-active" : ""}`}
-                  >
-                    {cat.name}
-                    {cat.productCount != null && <span className="atlas-pill-count">{cat.productCount}</span>}
-                  </Link>
-                ))}
-              </nav>
+                  <nav className="atlas-category-pills atlas-catalog-pills-mobile" aria-label="Filter by category">
+                    <Link href={buildCatUrl(null, sort)} className={`atlas-pill${!activeCategory ? " atlas-pill-active" : ""}`}>All</Link>
+                    {categories.map((cat) => (
+                      <Link
+                        key={cat.id}
+                        href={buildCatUrl(cat.slug, sort)}
+                        className={`atlas-pill${activeCategory === cat.slug ? " atlas-pill-active" : ""}`}
+                      >
+                        {cat.name}
+                        {cat.productCount != null && <span className="atlas-pill-count">{cat.productCount}</span>}
+                      </Link>
+                    ))}
+                  </nav>
             )}
             {products.length > 0 ? (
-              <>
-                <div className="atlas-product-grid">
-                  {products.map((product, index) => (
-                    <ProductCard key={product.id} product={product} currency={currency} priority={index < 4} />
-                  ))}
-                </div>
-                {Pagination}
-              </>
+                  <>
+                    <div className="atlas-product-grid">
+                      {products.map((product, index) => (
+                        <ProductCard key={product.id} product={product} currency={currency} priority={index < 4} showPrices={showPrices} />
+                      ))}
+                    </div>
+                    {Pagination}
+                  </>
             ) : EmptyState}
 
             {/* Category Hub Content: Buyers Guide */}
             {activeCategoryFull?.buyersGuide != null && (
-              <section className="atlas-buyers-guide" style={{ marginTop: 'var(--atlas-spacing-3xl)' }}>
-                <RichTextRenderer content={activeCategoryFull.buyersGuide} className="atlas-article-body" />
-              </section>
+                  <section className="atlas-buyers-guide" style={{ marginTop: 'var(--atlas-spacing-3xl)' }}>
+                    <RichTextRenderer content={activeCategoryFull.buyersGuide} className="atlas-article-body" />
+                  </section>
             )}
 
             {/* Category Hub Content: Category FAQs */}
             {activeCategoryFull?.categoryFaqs && activeCategoryFull.categoryFaqs.length > 0 && (
-              <section style={{ marginTop: 'var(--atlas-spacing-2xl)' }}>
-                <h2 className="atlas-pdp-section-title">Frequently Asked Questions</h2>
-                <div className="atlas-pdp-faq-list">
-                  {activeCategoryFull.categoryFaqs.map((faq, i) => (
-                    <details key={i} className="atlas-pdp-faq-item">
-                      <summary className="atlas-pdp-faq-question">{faq.question}</summary>
-                      <p className="atlas-pdp-faq-answer">{faq.answer}</p>
-                    </details>
-                  ))}
-                </div>
-              </section>
+                  <section style={{ marginTop: 'var(--atlas-spacing-2xl)' }}>
+                    <h2 className="atlas-pdp-section-title">Frequently Asked Questions</h2>
+                    <div className="atlas-pdp-faq-list">
+                      {activeCategoryFull.categoryFaqs.map((faq, i) => (
+                        <details key={i} className="atlas-pdp-faq-item">
+                          <summary className="atlas-pdp-faq-question">{faq.question}</summary>
+                          <p className="atlas-pdp-faq-answer">{faq.answer}</p>
+                        </details>
+                      ))}
+                    </div>
+                  </section>
             )}
           </div>
         </div>
@@ -348,7 +351,7 @@ function renderModern({
   products, categories, activeCategory, activeCategoryObj, activeCategoryFull,
   sort, currency, shopHeadline, shopSubheadline, totalDocs,
   breadcrumbSchema, categoryHubSchemas, shopIndexSchema, breadcrumbItems,
-  siteUrl, Pagination, EmptyState,
+  siteUrl, Pagination, EmptyState, showPrices,
 }: RenderProps) {
   return (
     <div data-variant="modern">
@@ -363,7 +366,7 @@ function renderModern({
           </h1>
           {!activeCategoryObj && shopSubheadline && (
             <p className="atlas-body-lg" style={{ marginTop: "var(--atlas-spacing-xs)", opacity: 0.7, maxWidth: 600 }}>
-              {shopSubheadline}
+                  {shopSubheadline}
             </p>
           )}
           <p className="atlas-shop-count">{totalDocs} product{totalDocs !== 1 ? "s" : ""}</p>
@@ -375,17 +378,17 @@ function renderModern({
         <div className="atlas-container atlas-modern-filter-inner">
           {categories.length > 0 && (
             <nav className="atlas-modern-filter-pills" aria-label="Filter by category">
-              <Link href={buildCatUrl(null, sort)} className={`atlas-pill${!activeCategory ? " atlas-pill-active" : ""}`}>All</Link>
-              {categories.map((cat) => (
-                <Link
-                  key={cat.id}
-                  href={buildCatUrl(cat.slug, sort)}
-                  className={`atlas-pill${activeCategory === cat.slug ? " atlas-pill-active" : ""}`}
-                >
-                  {cat.name}
-                  {cat.productCount != null && <span className="atlas-pill-count">{cat.productCount}</span>}
-                </Link>
-              ))}
+                  <Link href={buildCatUrl(null, sort)} className={`atlas-pill${!activeCategory ? " atlas-pill-active" : ""}`}>All</Link>
+                  {categories.map((cat) => (
+                    <Link
+                      key={cat.id}
+                      href={buildCatUrl(cat.slug, sort)}
+                      className={`atlas-pill${activeCategory === cat.slug ? " atlas-pill-active" : ""}`}
+                    >
+                      {cat.name}
+                      {cat.productCount != null && <span className="atlas-pill-count">{cat.productCount}</span>}
+                    </Link>
+                  ))}
             </nav>
           )}
           <div className="atlas-modern-filter-sort">
@@ -398,16 +401,17 @@ function renderModern({
         {products.length > 0 ? (
           <>
             <div className="atlas-product-grid atlas-modern-grid">
-              {products.map((product, index) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  currency={currency}
-                  priority={index < 4}
-                  secondaryImageUrl={getSecondaryImage(product)}
-                  className="atlas-modern-card"
-                />
-              ))}
+                  {products.map((product, index) => (
+                    <ProductCard
+                      key={product.id}
+                      product={product}
+                      currency={currency}
+                      priority={index < 4}
+                      secondaryImageUrl={getSecondaryImage(product)}
+                      className="atlas-modern-card"
+                      showPrices={showPrices}
+                    />
+                  ))}
             </div>
             {Pagination}
           </>
@@ -423,12 +427,12 @@ function renderModern({
           <section style={{ marginTop: 'var(--atlas-spacing-2xl)' }}>
             <h2 className="atlas-pdp-section-title">Frequently Asked Questions</h2>
             <div className="atlas-pdp-faq-list">
-              {activeCategoryFull.categoryFaqs.map((faq, i) => (
-                <details key={i} className="atlas-pdp-faq-item">
-                  <summary className="atlas-pdp-faq-question">{faq.question}</summary>
-                  <p className="atlas-pdp-faq-answer">{faq.answer}</p>
-                </details>
-              ))}
+                  {activeCategoryFull.categoryFaqs.map((faq, i) => (
+                    <details key={i} className="atlas-pdp-faq-item">
+                      <summary className="atlas-pdp-faq-question">{faq.question}</summary>
+                      <p className="atlas-pdp-faq-answer">{faq.answer}</p>
+                    </details>
+                  ))}
             </div>
           </section>
         )}
@@ -443,7 +447,7 @@ function renderLookbook({
   products, categories, activeCategory, activeCategoryObj, activeCategoryFull,
   sort, currency, shopHeadline, shopSubheadline, totalDocs,
   breadcrumbSchema, categoryHubSchemas, shopIndexSchema, breadcrumbItems,
-  siteUrl, Pagination, EmptyState,
+  siteUrl, Pagination, EmptyState, showPrices,
 }: RenderProps) {
   return (
     <div data-variant="lookbook">
@@ -470,16 +474,16 @@ function renderLookbook({
         <div className="atlas-lookbook-filter-bar">
           <div className="atlas-container">
             <nav className="atlas-lookbook-filter-pills" aria-label="Filter by category">
-              <Link href="/shop" className={`atlas-pill${!activeCategory ? " atlas-pill-active" : ""}`}>All</Link>
-              {categories.map((cat) => (
-                <Link
-                  key={cat.id}
-                  href={`/shop?category=${cat.slug}`}
-                  className={`atlas-pill${activeCategory === cat.slug ? " atlas-pill-active" : ""}`}
-                >
-                  {cat.name}
-                </Link>
-              ))}
+                  <Link href="/shop" className={`atlas-pill${!activeCategory ? " atlas-pill-active" : ""}`}>All</Link>
+                  {categories.map((cat) => (
+                    <Link
+                      key={cat.id}
+                      href={`/shop?category=${cat.slug}`}
+                      className={`atlas-pill${activeCategory === cat.slug ? " atlas-pill-active" : ""}`}
+                    >
+                      {cat.name}
+                    </Link>
+                  ))}
             </nav>
           </div>
         </div>
@@ -490,46 +494,52 @@ function renderLookbook({
         {products.length > 0 ? (
           <>
             <div className="atlas-lookbook-grid">
-              {products.map((product, index) => {
-                const img = product.images?.[0]?.image;
-                const hasDiscount = product.compareAtPrice != null && product.compareAtPrice > product.price;
-                return (
-                  <Link
-                    key={product.id}
-                    href={`/shop/${product.slug}`}
-                    className="atlas-lookbook-card"
-                    style={{ textDecoration: "none", color: "inherit", display: "block" }}
-                  >
-                    <div className="atlas-lookbook-img-wrap">
-                      {img ? (
-                        <img
-                          src={img.url}
-                          alt={img.alt ?? product.name}
-                          className="atlas-lookbook-img"
-                          loading={index < 3 ? "eager" : "lazy"}
-                        />
-                      ) : (
-                        <div className="atlas-lookbook-img-placeholder" aria-label="No product image">
-                          <span style={{ fontSize: "3rem", opacity: 0.2 }}></span>
+                  {products.map((product, index) => {
+                    const img = product.images?.[0]?.image;
+                    const hasDiscount = product.compareAtPrice != null && product.compareAtPrice > product.price;
+                    return (
+                      <Link
+                        key={product.id}
+                        href={`/shop/${product.slug}`}
+                        className="atlas-lookbook-card"
+                        style={{ textDecoration: "none", color: "inherit", display: "block" }}
+                      >
+                        <div className="atlas-lookbook-img-wrap">
+                          {img ? (
+                            <img
+                              src={img.url}
+                              alt={img.alt ?? product.name}
+                              className="atlas-lookbook-img"
+                              loading={index < 3 ? "eager" : "lazy"}
+                            />
+                          ) : (
+                            <div className="atlas-lookbook-img-placeholder" aria-label="No product image">
+                              <span style={{ fontSize: "3rem", opacity: 0.2 }}></span>
+                            </div>
+                          )}
+                          <div className="atlas-lookbook-overlay" aria-hidden="true">
+                            <span className="atlas-lookbook-overlay-label">View &rarr;</span>
+                          </div>
+                          {hasDiscount && <span className="atlas-lookbook-badge">Sale</span>}
                         </div>
-                      )}
-                      <div className="atlas-lookbook-overlay" aria-hidden="true">
-                        <span className="atlas-lookbook-overlay-label">View &rarr;</span>
-                      </div>
-                      {hasDiscount && <span className="atlas-lookbook-badge">Sale</span>}
-                    </div>
-                    <div className="atlas-lookbook-info">
-                      <p className="atlas-lookbook-name">{product.name}</p>
-                      <p className="atlas-lookbook-price">
-                        {new Intl.NumberFormat("en-ZA", {
-                          style: "currency",
-                          currency: product.currency ?? currency,
-                        }).format(product.price)}
-                      </p>
-                    </div>
-                  </Link>
-                );
-              })}
+                        <div className="atlas-lookbook-info">
+                          <p className="atlas-lookbook-name">{product.name}</p>
+                          {showPrices ? (
+                            <p className="atlas-lookbook-price">
+                              {new Intl.NumberFormat("en-ZA", {
+                                style: "currency",
+                                currency: product.currency ?? currency,
+                              }).format(product.price)}
+                            </p>
+                          ) : (
+                            <p className="atlas-lookbook-price" style={{ opacity: 0.6, fontSize: '0.75rem', fontWeight: 600 }}>
+                              Request a Quote
+                            </p>
+                          )}
+                        </div>
+                      </Link>
+                    );
+                  })}
             </div>
             {Pagination}
           </>
@@ -545,12 +555,12 @@ function renderLookbook({
           <section style={{ marginTop: 'var(--atlas-spacing-2xl)' }}>
             <h2 className="atlas-pdp-section-title">Frequently Asked Questions</h2>
             <div className="atlas-pdp-faq-list">
-              {activeCategoryFull.categoryFaqs.map((faq, i) => (
-                <details key={i} className="atlas-pdp-faq-item">
-                  <summary className="atlas-pdp-faq-question">{faq.question}</summary>
-                  <p className="atlas-pdp-faq-answer">{faq.answer}</p>
-                </details>
-              ))}
+                  {activeCategoryFull.categoryFaqs.map((faq, i) => (
+                    <details key={i} className="atlas-pdp-faq-item">
+                      <summary className="atlas-pdp-faq-question">{faq.question}</summary>
+                      <p className="atlas-pdp-faq-answer">{faq.answer}</p>
+                    </details>
+                  ))}
             </div>
           </section>
         )}

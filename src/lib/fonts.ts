@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Platform Font Registry - self-hosted via next/font/google.
  *
  * All fonts are downloaded at build time and served from the Vercel CDN.
@@ -92,4 +92,26 @@ export function getFontVariables(heading: string | null | undefined, body: strin
   const h = PLATFORM_FONTS[heading as PlatformFont]?.style.fontFamily ?? plusJakartaSans.style.fontFamily;
   const b = PLATFORM_FONTS[body as PlatformFont]?.style.fontFamily ?? inter.style.fontFamily;
   return `--font-heading: ${h}; --font-body: ${b};`;
+}
+
+/**
+ * Returns the pre-computed CSS font-family stack for a named platform font.
+ *
+ * Used by DemoExplorer to update --font-heading / --font-body at runtime
+ * WITHOUT making any request to Google Fonts CDN — the fonts are already
+ * self-hosted via next/font/google and available immediately.
+ *
+ * Falls back to Plus Jakarta Sans (heading) or Inter (body) if the name
+ * is not in the registry.
+ */
+export function getFontStack(
+  fontName: string | null | undefined,
+  role: 'heading' | 'body' = 'body',
+): string {
+  const found = PLATFORM_FONTS[fontName as PlatformFont]?.style.fontFamily;
+  if (found) return found;
+  // Safe fallback — use the default for each role
+  return role === 'heading'
+    ? plusJakartaSans.style.fontFamily
+    : inter.style.fontFamily;
 }

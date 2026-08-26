@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 /**
  * DemoExplorer - Client Component
@@ -16,6 +16,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import type { ExplorerRoute } from '@/lib/demo-explorer-types';
+import { getFontStack } from '@/lib/fonts';
 
 // - Types -
 
@@ -29,6 +30,8 @@ type BrandPreview = {
   primary: string;
   secondary: string;
   accent: string;
+  textColour: string;   // maps to --brand-text
+  bgColour: string;     // maps to --brand-background
   buttonStyle: 'filled' | 'outline' | 'pill' | 'soft';
   fontHeading: string;
   fontBody: string;
@@ -48,12 +51,16 @@ const PRESET_PALETTES: { label: string; primary: string; secondary: string; acce
 // - Font Pair Presets -
 
 const FONT_PAIRS: { label: string; heading: string; body: string }[] = [
-  { label: 'Modern',    heading: 'Plus Jakarta Sans', body: 'Inter' },
-  { label: 'Editorial', heading: 'Playfair Display',  body: 'Lato' },
-  { label: 'Bold',      heading: 'Syne',              body: 'DM Sans' },
-  { label: 'Clean',     heading: 'Outfit',            body: 'Open Sans' },
-  { label: 'Elegant',   heading: 'Raleway',           body: 'Figtree' },
+  { label: 'Modern',    heading: 'Plus Jakarta Sans', body: 'Inter'          },
+  { label: 'Editorial', heading: 'Playfair Display',  body: 'Lato'           },
+  { label: 'Bold',      heading: 'Syne',              body: 'DM Sans'        },
+  { label: 'Clean',     heading: 'Outfit',            body: 'Open Sans'      },
+  { label: 'Elegant',   heading: 'Raleway',           body: 'Figtree'        },
   { label: 'Techy',     heading: 'Space Grotesk',     body: 'JetBrains Mono' },
+  { label: 'Luxury',    heading: 'Lora',              body: 'Poppins'        },
+  { label: 'Classic',   heading: 'Montserrat',        body: 'Lato'           },
+  { label: 'Warm',      heading: 'Poppins',           body: 'Figtree'        },
+  { label: 'Sharp',     heading: 'Syne',              body: 'Poppins'        },
 ];
 
 // - Button Style Options -
@@ -67,13 +74,15 @@ const BTN_STYLES: { label: string; value: BrandPreview['buttonStyle'] }[] = [
 
 // - Tab type -
 
-type ExplorerTab = 'pages' | 'brand';
+type ExplorerTab = 'pages' | 'brand' | 'style';
 
 // - Component -
 
 export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<ExplorerTab>('pages');
+  // Hint arrow: shown on first visit, never again after drawer is opened
+  const [showHint, setShowHint] = useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -83,6 +92,8 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
     primary:     '#2d6a4f',
     secondary:   '#52b788',
     accent:      '#f59e0b',
+    textColour:  '#1b1b1b',
+    bgColour:    '#ffffff',
     buttonStyle: 'filled',
     fontHeading: 'Plus Jakarta Sans',
     fontBody:    'Inter',
@@ -130,17 +141,21 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
 
   useEffect(() => {
     const root = document.documentElement;
-    root.style.setProperty('--brand-primary', brand.primary);
-    root.style.setProperty('--brand-secondary', brand.secondary);
-    root.style.setProperty('--brand-accent', brand.accent);
+    root.style.setProperty('--brand-primary',    brand.primary);
+    root.style.setProperty('--brand-secondary',  brand.secondary);
+    root.style.setProperty('--brand-accent',     brand.accent);
+    root.style.setProperty('--brand-text',       brand.textColour);
+    root.style.setProperty('--brand-background', brand.bgColour);
     document.body.setAttribute('data-btn-style', brand.buttonStyle);
 
-    // Font preview: inject a runtime @import for demo purposes only.
-    // NOTE: This is intentionally a runtime @import - it allows the
-    // DemoExplorer to preview any of the 15 platform fonts without
-    // requiring a full page reload. This is acceptable for a demo
-    // tool but would never be used in production page rendering
-    // (which uses next/font/google for zero-latency self-hosted fonts).
+    // Font preview + body-level colour overrides injected as a <style> element.
+    // We use a <style> block (not just CSS vars) so that:
+    //   a) font-family stacks are set without any network request
+    //   b) html/body get a colour/background cascade base — ensuring ALL page
+    //      content that inherits from body responds to the text/background
+    //      colour controls, not just elements that explicitly reference the var().
+    //   Dark sections (e.g. atlas-section-dark) retain their own backgrounds
+    //   because their CSS rules are more specific than a body rule.
     const styleId = 'demo-explorer-font-preview';
     let el = document.getElementById(styleId) as HTMLStyleElement | null;
     if (!el) {
@@ -148,15 +163,16 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
       el.id = styleId;
       document.head.appendChild(el);
     }
-    const hFont = brand.fontHeading.replace(/ /g, '+');
-    const bFont = brand.fontBody.replace(/ /g, '+');
-    el.textContent = `
-      @import url('https://fonts.googleapis.com/css2?family=${hFont}:wght@400;700;800&family=${bFont}:wght@400;500;600&display=swap');
-      :root {
-        --font-heading: '${brand.fontHeading}', system-ui, sans-serif;
-        --font-body: '${brand.fontBody}', system-ui, sans-serif;
-      }
-    `;
+    const hStack = getFontStack(brand.fontHeading, 'heading');
+    const bStack = getFontStack(brand.fontBody, 'body');
+    el.textContent = [
+      `:root { --font-heading: ${hStack}; --font-body: ${bStack}; }`,
+      // Cascade base: any element that inherits colour from body picks this up
+      `html, body {`,
+      `  background-color: var(--brand-background, #ffffff);`,
+      `  color: var(--brand-text, #1b1b1b);`,
+      `}`,
+    ].join('\n');
   }, [brand]);
 
   const updateBrand = useCallback((patch: Partial<BrandPreview>) => {
@@ -173,7 +189,24 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
 
   // - Actions -
 
-  const open = useCallback(() => setIsOpen(true), []);
+  // Check localStorage once on mount to decide whether to show the hint
+  useEffect(() => {
+    try {
+      if (!localStorage.getItem('demo-explorer-seen')) {
+        setShowHint(true);
+      }
+    } catch {
+      // localStorage blocked (private browsing etc.) — show hint anyway
+      setShowHint(true);
+    }
+  }, []);
+
+  const open = useCallback(() => {
+    setIsOpen(true);
+    // Dismiss hint permanently on first open
+    setShowHint(false);
+    try { localStorage.setItem('demo-explorer-seen', '1'); } catch { /* ignore */ }
+  }, []);
   const close = useCallback(() => setIsOpen(false), []);
 
   const navigateToPage = useCallback(
@@ -221,6 +254,14 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
 
   return (
     <>
+      {/* Hint arrow — points at the EXPLORE tab, auto-fades after 5s */}
+      {showHint && (
+        <div className="demo-explorer-hint" aria-hidden="true">
+          <span className="demo-explorer-hint-label">Explore</span>
+          <span className="demo-explorer-hint-arrow">&#8594;</span>
+        </div>
+      )}
+
       {/* Edge Tab */}
       <button
         className="demo-explorer-tab"
@@ -280,7 +321,14 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
             data-active={activeTab === 'brand'}
             onClick={() => setActiveTab('brand')}
           >
-             Brand
+            Brand
+          </button>
+          <button
+            className="demo-explorer-tab-btn"
+            data-active={activeTab === 'style'}
+            onClick={() => setActiveTab('style')}
+          >
+            Style
           </button>
         </div>
 
@@ -366,7 +414,7 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
                 ))}
               </div>
 
-              {/* Custom Hex Inputs */}
+              {/* Custom Brand Colours */}
               <p className="demo-explorer-section-label" style={{ marginTop: '1rem' }}>Custom Colours</p>
               <div className="demo-explorer-colour-inputs">
                 {[
@@ -401,8 +449,28 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
                 ))}
               </div>
 
-              {/* Font Pair Presets */}
-              <p className="demo-explorer-section-label" style={{ marginTop: '1rem' }}>Font Pairs</p>
+              {/* Button Style */}
+              <p className="demo-explorer-section-label" style={{ marginTop: '1rem' }}>Button Style</p>
+              <div className="demo-explorer-btn-style-grid">
+                {BTN_STYLES.map(({ label, value }) => (
+                  <button
+                    key={value}
+                    className="demo-explorer-btn-style-option"
+                    data-active={brand.buttonStyle === value}
+                    onClick={() => updateBrand({ buttonStyle: value })}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+
+          {/* - Style Tab - */}
+          {activeTab === 'style' && (
+            <>
+              {/* Font Pairs */}
+              <p className="demo-explorer-section-label">Font Pairs</p>
               <div className="demo-explorer-font-grid">
                 {FONT_PAIRS.map((pair) => (
                   <button
@@ -417,18 +485,37 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
                 ))}
               </div>
 
-              {/* Button Style */}
-              <p className="demo-explorer-section-label" style={{ marginTop: '1rem' }}>Button Style</p>
-              <div className="demo-explorer-btn-style-grid">
-                {BTN_STYLES.map(({ label, value }) => (
-                  <button
-                    key={value}
-                    className="demo-explorer-btn-style-option"
-                    data-active={brand.buttonStyle === value}
-                    onClick={() => updateBrand({ buttonStyle: value })}
-                  >
-                    {label}
-                  </button>
+              {/* Text & Background */}
+              <p className="demo-explorer-section-label" style={{ marginTop: '1rem' }}>Text & Background</p>
+              <div className="demo-explorer-colour-inputs">
+                {[
+                  { key: 'textColour', label: 'Text'       },
+                  { key: 'bgColour',   label: 'Background' },
+                ].map(({ key, label }) => (
+                  <div key={key} className="demo-explorer-colour-row">
+                    <input
+                      type="color"
+                      className="demo-explorer-colour-swatch-input"
+                      value={brand[key as keyof BrandPreview] as string}
+                      onChange={(e) => updateBrand({ [key]: e.target.value } as Partial<BrandPreview>)}
+                      aria-label={`${label} colour`}
+                    />
+                    <input
+                      type="text"
+                      className="demo-explorer-hex-input"
+                      value={brand[key as keyof BrandPreview] as string}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (/^#[0-9a-fA-F]{0,6}$/.test(val)) {
+                          updateBrand({ [key]: val } as Partial<BrandPreview>);
+                        }
+                      }}
+                      maxLength={7}
+                      spellCheck={false}
+                      aria-label={`${label} hex code`}
+                    />
+                    <span className="demo-explorer-colour-label">{label}</span>
+                  </div>
                 ))}
               </div>
             </>

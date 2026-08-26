@@ -54,6 +54,8 @@ export default async function ProductPage({ config, path, noCache }: PageProps) 
   const productSlug = path[1];
   const siteUrl = `https://${tenant}.chameleon.services`;
   const currency = config.settings?.currency ?? 'ZAR';
+  const storeMode = config.settings?.storeMode ?? 'retail';
+  const showPrices = storeMode === 'retail';
 
   if (!productSlug) {
     return (
@@ -166,20 +168,22 @@ export default async function ProductPage({ config, path, noCache }: PageProps) 
 
             <h1 className="atlas-pdp-name">{product.name}</h1>
 
-            {/* Price */}
-            <div className="atlas-pdp-price-row">
-              <span className={`atlas-pdp-price${hasDiscount ? ' atlas-pdp-price-sale' : ''}`}>
-                {formatCurrency(product.price, productCurrency)}
-              </span>
-              {hasDiscount && product.compareAtPrice != null && (
-                <span className="atlas-pdp-compare-price">
-                  {formatCurrency(product.compareAtPrice, productCurrency)}
+            {/* Price — hidden in quote/catalogue mode */}
+            {showPrices && (
+              <div className="atlas-pdp-price-row">
+                <span className={`atlas-pdp-price${hasDiscount ? ' atlas-pdp-price-sale' : ''}`}>
+                  {formatCurrency(product.price, productCurrency)}
                 </span>
-              )}
-              {isOutOfStock && (
-                <span className="atlas-pdp-stock-badge atlas-pdp-out-of-stock">Out of Stock</span>
-              )}
-            </div>
+                {hasDiscount && product.compareAtPrice != null && (
+                  <span className="atlas-pdp-compare-price">
+                    {formatCurrency(product.compareAtPrice, productCurrency)}
+                  </span>
+                )}
+                {isOutOfStock && (
+                  <span className="atlas-pdp-stock-badge atlas-pdp-out-of-stock">Out of Stock</span>
+                )}
+              </div>
+            )}
 
             {/* Short description */}
             {product.shortDescription && (
@@ -195,8 +199,8 @@ export default async function ProductPage({ config, path, noCache }: PageProps) 
               </ul>
             )}
 
-            {/* Volume pricing */}
-            {product.quantityDiscounts && product.quantityDiscounts.length > 0 && (
+            {/* Volume pricing — only shown when prices are visible */}
+            {showPrices && product.quantityDiscounts && product.quantityDiscounts.length > 0 && (
               <div className="atlas-volume-pricing" style={{ marginTop: 'var(--atlas-spacing-md)' }}>
                 <p className="atlas-overline" style={{ marginBottom: 'var(--atlas-spacing-xs)' }}>Volume Pricing</p>
                 <table>
@@ -227,7 +231,7 @@ export default async function ProductPage({ config, path, noCache }: PageProps) 
                 product={product}
                 currency={productCurrency}
                 className="atlas-btn atlas-btn-primary atlas-btn-lg"
-                label={isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
+                label={isOutOfStock ? 'Out of Stock' : (storeMode === 'quote' ? 'Add to Quote' : 'Add to Cart')}
               />
             </div>
 
@@ -490,9 +494,15 @@ export default async function ProductPage({ config, path, noCache }: PageProps) 
                       )}
                     </div>
                     <p className="atlas-related-card-name">{rel.name}</p>
-                    <p className="atlas-related-card-price">
-                      {formatCurrency(rel.price, rel.currency ?? productCurrency)}
-                    </p>
+                    {showPrices ? (
+                      <p className="atlas-related-card-price">
+                        {formatCurrency(rel.price, rel.currency ?? productCurrency)}
+                      </p>
+                    ) : (
+                      <p className="atlas-related-card-price" style={{ opacity: 0.6, fontSize: '0.75rem', fontWeight: 600 }}>
+                        Request a Quote
+                      </p>
+                    )}
                   </Link>
                 );
               })}

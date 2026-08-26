@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 /**
  * AtlasLayoutShell  Client Component
@@ -14,6 +14,7 @@ import type { TenantConfig } from '@/lib/types';
 import AtlasHeader from './AtlasHeader';
 import AtlasMobileNav from './AtlasMobileNav';
 import AtlasCartDrawer from './AtlasCartDrawer';
+import { AtlasScrollReveal } from './AtlasScrollReveal';
 
 type Props = {
   config: TenantConfig;
@@ -64,6 +65,9 @@ export default function AtlasLayoutShell({ config, children, transparentHeader =
         isOpen={cartOpen}
         onClose={closeCart}
       />
+
+      {/* Scroll-reveal observer — activates data-reveal animations site-wide */}
+      <AtlasScrollReveal />
 
       {children}
     </>
