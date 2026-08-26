@@ -52,7 +52,7 @@ const SA_PROVINCES = [
 ];
 
 type CustomerType = 'individual' | 'business';
-type SubmitStatus = 'idle' | 'submitting' | 'error';
+type SubmitStatus = 'idle' | 'submitting' | 'error' | 'redirecting';
 
 export default function CheckoutPage({ config, variant }: PageProps) {
   const router = useRouter();
@@ -97,12 +97,12 @@ export default function CheckoutPage({ config, variant }: PageProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Redirect to cart if empty
+  // Redirect to cart if empty — but NOT if we're in the middle of a payment redirect
   useEffect(() => {
-    if (items.length === 0) {
+    if (items.length === 0 && status !== 'redirecting') {
       router.replace('/cart');
     }
-  }, [items.length, router]);
+  }, [items.length, status, router]);
 
   // Analytics: add_shipping_info when province is chosen (proxy for "section complete")
   const handleProvinceChange = () => {
@@ -182,18 +182,39 @@ export default function CheckoutPage({ config, variant }: PageProps) {
       currency,
     );
 
-    clearCart();
-
     if (result.paymentUrl) {
-      // Redirect to payment gateway (PayFast / Paystack)
+      // Show redirect overlay BEFORE clearing cart to prevent empty-cart flash
+      setStatus('redirecting');
+      clearCart();
       window.location.href = result.paymentUrl;
     } else {
       // Quote flow — no payment gateway configured
+      clearCart();
       router.push(`/order/confirmation/${result.trackingToken}`);
     }
   }
 
-  if (items.length === 0) return null; // handled by redirect effect
+  if (items.length === 0 && status !== 'redirecting') return null;
+
+  // Full-screen redirect overlay
+  if (status === 'redirecting') {
+    return (
+      <div style={{
+        position: 'fixed', inset: 0, zIndex: 9999,
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        background: 'var(--atlas-surface, #ffffff)',
+        gap: '1.25rem',
+      }}>
+        <span className="atlas-spinner" style={{ width: '2.5rem', height: '2.5rem' }} />
+        <p style={{ fontSize: '1.125rem', fontWeight: 600, color: 'var(--atlas-text, #1b1b1b)', margin: 0 }}>
+          Redirecting to secure payment…
+        </p>
+        <p style={{ fontSize: '0.875rem', color: 'var(--atlas-text-muted, #888)', margin: 0 }}>
+          You’re being taken to our secure payment processor to complete your purchase.
+        </p>
+      </div>
+    );
+  }
 
   const ctaLabel = hasGateway ? 'Proceed to Payment' : 'Request a Quote';
 
