@@ -16,6 +16,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import type { ExplorerRoute } from '@/lib/demo-explorer-types';
+import { getFontStack } from '@/lib/fonts';
 
 // - Types -
 
@@ -137,12 +138,10 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
     root.style.setProperty('--brand-accent', brand.accent);
     document.body.setAttribute('data-btn-style', brand.buttonStyle);
 
-    // Font preview: inject a runtime @import for demo purposes only.
-    // NOTE: This is intentionally a runtime @import - it allows the
-    // DemoExplorer to preview any of the 15 platform fonts without
-    // requiring a full page reload. This is acceptable for a demo
-    // tool but would never be used in production page rendering
-    // (which uses next/font/google for zero-latency self-hosted fonts).
+    // Font preview: update CSS custom properties using pre-loaded self-hosted font stacks.
+    // All 15 platform fonts are already self-hosted via next/font/google in fonts.ts —
+    // getFontStack() returns the build-time font-family string with zero network cost.
+    // No @import or Google Fonts CDN request is needed or made.
     const styleId = 'demo-explorer-font-preview';
     let el = document.getElementById(styleId) as HTMLStyleElement | null;
     if (!el) {
@@ -150,15 +149,9 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
       el.id = styleId;
       document.head.appendChild(el);
     }
-    const hFont = brand.fontHeading.replace(/ /g, '+');
-    const bFont = brand.fontBody.replace(/ /g, '+');
-    el.textContent = `
-      @import url('https://fonts.googleapis.com/css2?family=${hFont}:wght@400;700;800&family=${bFont}:wght@400;500;600&display=swap');
-      :root {
-        --font-heading: '${brand.fontHeading}', system-ui, sans-serif;
-        --font-body: '${brand.fontBody}', system-ui, sans-serif;
-      }
-    `;
+    const hStack = getFontStack(brand.fontHeading, 'heading');
+    const bStack = getFontStack(brand.fontBody, 'body');
+    el.textContent = `:root { --font-heading: ${hStack}; --font-body: ${bStack}; }`;
   }, [brand]);
 
   const updateBrand = useCallback((patch: Partial<BrandPreview>) => {
