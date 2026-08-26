@@ -236,6 +236,7 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
       {/* Hint arrow — points at the EXPLORE tab, auto-fades after 5s */}
       {showHint && (
         <div className="demo-explorer-hint" aria-hidden="true">
+          <span className="demo-explorer-hint-label">Explore</span>
           <span className="demo-explorer-hint-arrow">&#8594;</span>
         </div>
       )}

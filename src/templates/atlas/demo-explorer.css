@@ -31,7 +31,7 @@
 
 .demo-explorer-hint {
   position: fixed;
-  right: 36px;                   /* sits just left of the ~32px-wide tab */
+  right: 44px;                   /* sits just left of the ~40px-wide tab */
   top: 50%;
   transform: translateY(-50%);
   z-index: 997;                  /* below the tab (998) so it doesn't obscure it */
@@ -39,30 +39,33 @@
 
   display: flex;
   align-items: center;
-  gap: 0.375rem;
+  gap: 0.4rem;
+
+  /* Dark pill — legible on ANY page background (light or dark) without
+   * needing per-tenant theming. Replaces the previous drop-shadow approach. */
+  background: rgba(15, 15, 35, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 9999px;
+  padding: 0.5rem 0.875rem 0.5rem 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
 
   animation:
     demo-hint-lifecycle 5s ease forwards;
+}
+
+.demo-explorer-hint-label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 
 .demo-explorer-hint-arrow {
   font-size: 1.5rem;
   line-height: 1;
   color: #ffffff;
-  /*
-   * Dual-shadow technique: works on ANY page background colour.
-   * Dark shadows create a visible outline on light backgrounds.
-   * The white arrow remains visible on dark backgrounds.
-   * Same principle used for video subtitle legibility.
-   *
-   * NOTE (BL-004): A proper demoPageTheme setting in SiteSettings
-   * will allow per-tenant theming of this arrow. See backlog.
-   */
-  filter:
-    drop-shadow(0 0 1px rgba(0, 0, 0, 0.9))
-    drop-shadow(0 0 3px rgba(0, 0, 0, 0.8))
-    drop-shadow(0 0 8px rgba(0, 0, 0, 0.4))
-    drop-shadow(0 0 12px rgba(163, 191, 250, 0.5));
+  /* Pill background provides legibility — no filter stack required */
 
   animation: demo-hint-bounce 0.9s ease-in-out infinite;
 }
