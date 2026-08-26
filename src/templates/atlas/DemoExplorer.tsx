@@ -60,6 +60,7 @@ const FONT_PAIRS: { label: string; heading: string; body: string }[] = [
   { label: 'Luxury',    heading: 'Lora',              body: 'Poppins'        },
   { label: 'Classic',   heading: 'Montserrat',        body: 'Lato'           },
   { label: 'Warm',      heading: 'Poppins',           body: 'Figtree'        },
+  { label: 'Sharp',     heading: 'Syne',              body: 'Poppins'        },
 ];
 
 // - Button Style Options -
@@ -147,10 +148,14 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
     root.style.setProperty('--brand-background', brand.bgColour);
     document.body.setAttribute('data-btn-style', brand.buttonStyle);
 
-    // Font preview: update CSS custom properties using pre-loaded self-hosted font stacks.
-    // All 15 platform fonts are already self-hosted via next/font/google in fonts.ts —
-    // getFontStack() returns the build-time font-family string with zero network cost.
-    // No @import or Google Fonts CDN request is needed or made.
+    // Font preview + body-level colour overrides injected as a <style> element.
+    // We use a <style> block (not just CSS vars) so that:
+    //   a) font-family stacks are set without any network request
+    //   b) html/body get a colour/background cascade base — ensuring ALL page
+    //      content that inherits from body responds to the text/background
+    //      colour controls, not just elements that explicitly reference the var().
+    //   Dark sections (e.g. atlas-section-dark) retain their own backgrounds
+    //   because their CSS rules are more specific than a body rule.
     const styleId = 'demo-explorer-font-preview';
     let el = document.getElementById(styleId) as HTMLStyleElement | null;
     if (!el) {
@@ -160,7 +165,14 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
     }
     const hStack = getFontStack(brand.fontHeading, 'heading');
     const bStack = getFontStack(brand.fontBody, 'body');
-    el.textContent = `:root { --font-heading: ${hStack}; --font-body: ${bStack}; }`;
+    el.textContent = [
+      `:root { --font-heading: ${hStack}; --font-body: ${bStack}; }`,
+      // Cascade base: any element that inherits colour from body picks this up
+      `html, body {`,
+      `  background-color: var(--brand-background, #ffffff);`,
+      `  color: var(--brand-text, #1b1b1b);`,
+      `}`,
+    ].join('\n');
   }, [brand]);
 
   const updateBrand = useCallback((patch: Partial<BrandPreview>) => {
