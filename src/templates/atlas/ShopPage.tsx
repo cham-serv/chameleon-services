@@ -187,7 +187,7 @@ export default async function ShopPage({ config, variant, searchParams, noCache 
     products, categories, activeCategory, activeCategoryObj, activeCategoryFull,
     sort, page, currency, shopHeadline, shopSubheadline, totalDocs,
     breadcrumbSchema, categoryHubSchemas, shopIndexSchema, breadcrumbItems,
-    siteUrl, Pagination, EmptyState,
+    siteUrl, Pagination, EmptyState, showPrices,
   };
 
   switch (variant) {
@@ -219,6 +219,7 @@ type RenderProps = {
   siteUrl: string;
   Pagination: React.ReactNode;
   EmptyState: React.ReactNode;
+  showPrices: boolean;
 };
 
 //  Render: Catalog (Sidebar Layout) 
@@ -227,7 +228,7 @@ function renderCatalog({
   products, categories, activeCategory, activeCategoryObj, activeCategoryFull,
   sort, currency, shopHeadline, shopSubheadline, totalDocs,
   breadcrumbSchema, categoryHubSchemas, shopIndexSchema, breadcrumbItems,
-  siteUrl, Pagination, EmptyState,
+  siteUrl, Pagination, EmptyState, showPrices,
 }: RenderProps) {
   const totalCategoryProducts = categories.reduce((s, c) => s + (c.productCount ?? 0), 0);
   return (
@@ -350,7 +351,7 @@ function renderModern({
   products, categories, activeCategory, activeCategoryObj, activeCategoryFull,
   sort, currency, shopHeadline, shopSubheadline, totalDocs,
   breadcrumbSchema, categoryHubSchemas, shopIndexSchema, breadcrumbItems,
-  siteUrl, Pagination, EmptyState,
+  siteUrl, Pagination, EmptyState, showPrices,
 }: RenderProps) {
   return (
     <div data-variant="modern">
@@ -446,7 +447,7 @@ function renderLookbook({
   products, categories, activeCategory, activeCategoryObj, activeCategoryFull,
   sort, currency, shopHeadline, shopSubheadline, totalDocs,
   breadcrumbSchema, categoryHubSchemas, shopIndexSchema, breadcrumbItems,
-  siteUrl, Pagination, EmptyState,
+  siteUrl, Pagination, EmptyState, showPrices,
 }: RenderProps) {
   return (
     <div data-variant="lookbook">
