@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ProductCard Component
  *
  * Renders a product card for shop listing grids. Server Component.
@@ -20,6 +20,8 @@ type ProductCardProps = {
   priority?: boolean;
   /** Optional secondary image URL for CSS hover-swap (modern variant) */
   secondaryImageUrl?: string | null;
+  /** When false (quote/catalogue mode), prices are hidden. Default: true */
+  showPrices?: boolean;
 };
 
 export function ProductCard({
@@ -29,6 +31,7 @@ export function ProductCard({
   className,
   priority = false,
   secondaryImageUrl,
+  showPrices = true,
 }: ProductCardProps) {
   const image = resolveFirstImage(product.images);
   const productCurrency = product.currency ?? currency;
@@ -119,7 +122,8 @@ export function ProductCard({
           </span>
         )}
 
-        {hasDiscount && !isOutOfStock && (
+        {/* Sale badge — only shown when prices are visible */}
+        {hasDiscount && !isOutOfStock && showPrices && (
           <span
             style={{
               position: 'absolute',
@@ -190,30 +194,48 @@ export function ProductCard({
           </p>
         )}
 
-        {/* Price */}
-        <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span
-            style={{
-              fontSize: '1rem',
-              fontWeight: 600,
-              color: hasDiscount ? '#e53e3e' : 'inherit',
-            }}
-          >
-            {formatCurrency(product.price, productCurrency)}
-          </span>
-
-          {hasDiscount && product.compareAtPrice != null && (
+        {/* Price — hidden in quote/catalogue mode */}
+        {showPrices ? (
+          <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span
               style={{
-                fontSize: '0.85rem',
-                color: '#999',
-                textDecoration: 'line-through',
+                fontSize: '1rem',
+                fontWeight: 600,
+                color: hasDiscount ? '#e53e3e' : 'inherit',
               }}
             >
-              {formatCurrency(product.compareAtPrice, productCurrency)}
+              {formatCurrency(product.price, productCurrency)}
             </span>
-          )}
-        </div>
+
+            {hasDiscount && product.compareAtPrice != null && (
+              <span
+                style={{
+                  fontSize: '0.85rem',
+                  color: '#999',
+                  textDecoration: 'line-through',
+                }}
+              >
+                {formatCurrency(product.compareAtPrice, productCurrency)}
+              </span>
+            )}
+          </div>
+        ) : (
+          <div style={{ marginTop: '8px' }}>
+            <span
+              style={{
+                display: 'inline-block',
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                padding: '3px 8px',
+                borderRadius: '4px',
+                border: '1px solid currentColor',
+                opacity: 0.6,
+              }}
+            >
+              Request a Quote
+            </span>
+          </div>
+        )}
       </div>
     </Link>
   );

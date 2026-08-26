@@ -62,8 +62,12 @@ export default function CheckoutPage({ config, variant }: PageProps) {
 
   const currency = config.settings?.currency ?? 'ZAR';
   const tenantSlug = config.tenant.slug;
-  const hasGateway = !!config.settings?.paymentGateway;
+  // storeMode is the authoritative control. In 'quote' mode we bypass any
+  // configured payment gateway — the checkout submits as a quote request.
+  const storeMode = config.settings?.storeMode ?? 'retail';
+  const hasGateway = storeMode === 'retail' && !!config.settings?.paymentGateway;
   const turnstileSiteKey = config.settings?.turnstileSiteKey;
+
 
   const flatShippingRate = config.settings?.flatShippingRate ?? 0;
   const freeShippingThreshold = config.settings?.freeShippingThreshold ?? 0;
