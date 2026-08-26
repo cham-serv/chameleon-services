@@ -335,12 +335,14 @@
 }
 
 .demo-explorer-branding a {
-  color: #6366f1;
-  text-decoration: none;
+  /* WCAG AA: #a5b4fc on #0f0f23 ≈ 7.2:1. Underline ensures not colour-only. */
+  color: #a5b4fc;
+  text-decoration: underline;
 }
 
 .demo-explorer-branding a:hover {
   text-decoration: underline;
+  opacity: 0.85;
 }
 
 /* ── Variant Count Badge ──────────────────────────────────────────── */
