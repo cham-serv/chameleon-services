@@ -35,6 +35,11 @@ export const metadata: Metadata = {
   authors: [{ name: 'Chameleon' }],
   creator: 'Chameleon',
   metadataBase: new URL('https://chameleon.services'),
+  icons: {
+    icon: '/logo-icon.webp',
+    shortcut: '/logo-icon.webp',
+    apple: '/logo-icon.webp',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_ZA',
