@@ -30,6 +30,8 @@ type BrandPreview = {
   primary: string;
   secondary: string;
   accent: string;
+  textColour: string;   // maps to --brand-text
+  bgColour: string;     // maps to --brand-background
   buttonStyle: 'filled' | 'outline' | 'pill' | 'soft';
   fontHeading: string;
   fontBody: string;
@@ -49,12 +51,15 @@ const PRESET_PALETTES: { label: string; primary: string; secondary: string; acce
 // - Font Pair Presets -
 
 const FONT_PAIRS: { label: string; heading: string; body: string }[] = [
-  { label: 'Modern',    heading: 'Plus Jakarta Sans', body: 'Inter' },
-  { label: 'Editorial', heading: 'Playfair Display',  body: 'Lato' },
-  { label: 'Bold',      heading: 'Syne',              body: 'DM Sans' },
-  { label: 'Clean',     heading: 'Outfit',            body: 'Open Sans' },
-  { label: 'Elegant',   heading: 'Raleway',           body: 'Figtree' },
+  { label: 'Modern',    heading: 'Plus Jakarta Sans', body: 'Inter'          },
+  { label: 'Editorial', heading: 'Playfair Display',  body: 'Lato'           },
+  { label: 'Bold',      heading: 'Syne',              body: 'DM Sans'        },
+  { label: 'Clean',     heading: 'Outfit',            body: 'Open Sans'      },
+  { label: 'Elegant',   heading: 'Raleway',           body: 'Figtree'        },
   { label: 'Techy',     heading: 'Space Grotesk',     body: 'JetBrains Mono' },
+  { label: 'Luxury',    heading: 'Lora',              body: 'Poppins'        },
+  { label: 'Classic',   heading: 'Montserrat',        body: 'Lato'           },
+  { label: 'Warm',      heading: 'Poppins',           body: 'Figtree'        },
 ];
 
 // - Button Style Options -
@@ -86,6 +91,8 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
     primary:     '#2d6a4f',
     secondary:   '#52b788',
     accent:      '#f59e0b',
+    textColour:  '#1b1b1b',
+    bgColour:    '#ffffff',
     buttonStyle: 'filled',
     fontHeading: 'Plus Jakarta Sans',
     fontBody:    'Inter',
@@ -133,9 +140,11 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
 
   useEffect(() => {
     const root = document.documentElement;
-    root.style.setProperty('--brand-primary', brand.primary);
-    root.style.setProperty('--brand-secondary', brand.secondary);
-    root.style.setProperty('--brand-accent', brand.accent);
+    root.style.setProperty('--brand-primary',    brand.primary);
+    root.style.setProperty('--brand-secondary',  brand.secondary);
+    root.style.setProperty('--brand-accent',     brand.accent);
+    root.style.setProperty('--brand-text',       brand.textColour);
+    root.style.setProperty('--brand-background', brand.bgColour);
     document.body.setAttribute('data-btn-style', brand.buttonStyle);
 
     // Font preview: update CSS custom properties using pre-loaded self-hosted font stacks.
@@ -390,9 +399,11 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
               <p className="demo-explorer-section-label" style={{ marginTop: '1rem' }}>Custom Colours</p>
               <div className="demo-explorer-colour-inputs">
                 {[
-                  { key: 'primary',   label: 'Primary'   },
-                  { key: 'secondary', label: 'Secondary' },
-                  { key: 'accent',    label: 'Accent'    },
+                  { key: 'primary',    label: 'Primary'    },
+                  { key: 'secondary',  label: 'Secondary'  },
+                  { key: 'accent',     label: 'Accent'     },
+                  { key: 'textColour', label: 'Text'       },
+                  { key: 'bgColour',   label: 'Background' },
                 ].map(({ key, label }) => (
                   <div key={key} className="demo-explorer-colour-row">
                     <input
