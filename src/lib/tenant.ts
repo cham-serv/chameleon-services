@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Tenant Resolution Library
  *
  * Core functions:
@@ -145,35 +145,47 @@ const ENGINE_API_URL = process.env.CHAMELEON_API_URL ?? 'https://chameleon-engin
  * Fetches tenant configuration from the engine API.
  *
  * Cache strategy:
- * - Staging (noCache: true): cache: 'no-store' - always fresh for build mode
- * - Production (noCache: false/default): ISR with tags - cached for 1 hour,
+ * - Staging (noCache: true): cache: 'no-store' — always fresh for build mode
+ * - Production (noCache: false/default): ISR with tags — cached for 1 hour,
  *   revalidated on-demand when the engine fires a tag bust
  *
- * The tenant slug is extracted from the domain by the middleware
- * (e.g. "atlas-demo.chameleon.services"  "atlas-demo").
+ * The identifier is either:
+ * - A tenant slug (e.g. "atlas-demo") — extracted from platform subdomains
+ * - A full domain (e.g. "freshroast.co.za") — from custom domain middleware
+ *
+ * The function detects which by checking for a dot: slugs never contain dots
+ * (they're generated via toLowerCase + replace non-alphanumeric with hyphens),
+ * while domains always do.
  */
 export async function fetchTenantConfig(
-  tenantSlug: string,
+  tenantSlugOrDomain: string,
   options?: { noCache?: boolean },
 ): Promise<TenantConfig | null> {
   const cacheOptions = options?.noCache
     ? { cache: 'no-store' as const }
-    : { next: { revalidate: 3600, tags: [`tenant:${tenantSlug}`] } };
+    : { next: { revalidate: 3600, tags: [`tenant:${tenantSlugOrDomain}`] } };
+
+  // If the identifier contains a dot, it's a domain — use domain-based lookup.
+  // Tenant slugs never contain dots (they're lowercase-alphanumeric-hyphens).
+  const isDomain = tenantSlugOrDomain.includes('.');
+  const queryParam = isDomain
+    ? `domain=${encodeURIComponent(tenantSlugOrDomain)}`
+    : `tenant=${encodeURIComponent(tenantSlugOrDomain)}`;
 
   try {
     const res = await fetch(
-      `${ENGINE_API_URL}/api/public/tenant-config?tenant=${encodeURIComponent(tenantSlug)}`,
+      `${ENGINE_API_URL}/api/public/tenant-config?${queryParam}`,
       cacheOptions,
     );
 
     if (!res.ok) {
-      console.warn(`[tenant] Failed to fetch config for "${tenantSlug}": ${res.status}`);
+      console.warn(`[tenant] Failed to fetch config for "${tenantSlugOrDomain}": ${res.status}`);
       return null;
     }
 
     return await res.json() as TenantConfig;
   } catch (error) {
-    console.error(`[tenant] Error fetching config for "${tenantSlug}":`, error);
+    console.error(`[tenant] Error fetching config for "${tenantSlugOrDomain}":`, error);
     return null;
   }
 }
