@@ -108,7 +108,7 @@ export default async function TenantLayout({ children, params }: Props) {
         />
         {/* Preload the logo so it arrives before the header <img> is discovered */}
         {logoUrl && (
-          <link rel="preload" as="image" href={logoUrl} />
+          <link rel="preload" as="image" href={logoUrl} fetchPriority="high" />
         )}
       </head>
       <body

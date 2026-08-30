@@ -674,12 +674,13 @@
   font-weight: 500;
   color: var(--brand-text, #1b1b1b);
   text-decoration: none;
-  transition: color var(--atlas-transition);
+  transition: opacity var(--atlas-transition);
   position: relative;
 }
 
 .atlas-header-nav a:hover {
   color: var(--brand-primary, #2d6a4f);
+  opacity: 0.85;
 }
 
 .atlas-header-nav a::after {
@@ -755,11 +756,12 @@
   /* WCAG AA: rgba(255,255,255,0.87) on dark brand background passes 4.5:1 */
   color: rgba(255, 255, 255, 0.87);
   text-decoration: none;
-  transition: color var(--atlas-transition);
+  transition: opacity var(--atlas-transition);
 }
 
 .atlas-footer a:hover {
   color: #ffffff;
+  opacity: 1;
 }
 
 .atlas-footer-grid {
@@ -936,7 +938,7 @@
   color: var(--brand-text, #1b1b1b);
   text-decoration: none;
   border-bottom: 1px solid color-mix(in srgb, var(--brand-text, #1b1b1b) 6%, transparent);
-  transition: color var(--atlas-transition);
+  transition: opacity var(--atlas-transition);
 }
 
 .atlas-mobile-nav-link:hover {
@@ -1926,8 +1928,8 @@
 
 .atlas-badge--accent {
   background: color-mix(in srgb, var(--brand-accent, #f59e0b) 12%, transparent);
-  /* WCAG AA: mix 60% accent with black for sufficient contrast on light tinted bg */
-  color: color-mix(in srgb, var(--brand-accent, #f59e0b) 60%, #000);
+  /* WCAG AA: mix 70% accent with black for reliable 4.5:1 contrast on light tinted bg */
+  color: color-mix(in srgb, var(--brand-accent, #f59e0b) 50%, #000);
 }
 
 .atlas-badge--solid {
@@ -2251,7 +2253,7 @@
   text-decoration: none;
   white-space: nowrap;
   scroll-snap-align: start;
-  transition: background var(--atlas-transition), border-color var(--atlas-transition), color var(--atlas-transition);
+  transition: background var(--atlas-transition), border-color var(--atlas-transition);
 }
 
 .atlas-category-pill:hover {
@@ -3250,7 +3252,7 @@
   font-size: 1rem;
   font-weight: 600;
   margin: 0 0 0.2rem;
-  transition: color 0.18s ease;
+  transition: opacity 0.18s ease;
 }
 
 [data-variant="directory"] .atlas-directory-topic-row:hover .atlas-directory-topic-name {
@@ -3278,7 +3280,7 @@
   letter-spacing: 0.05em;
   text-transform: uppercase;
   opacity: 0.4;
-  transition: opacity 0.18s ease, color 0.18s ease;
+  transition: opacity 0.18s ease;
   white-space: nowrap;
 }
 
@@ -4419,7 +4421,7 @@
   background: transparent;
   color: color-mix(in srgb, var(--brand-text, #1b1b1b) 60%, transparent);
   cursor: pointer;
-  transition: background var(--atlas-transition), color var(--atlas-transition);
+  transition: background var(--atlas-transition);
   font-family: inherit;
 }
 
