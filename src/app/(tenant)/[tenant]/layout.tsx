@@ -95,6 +95,9 @@ export default async function TenantLayout({ children, params }: Props) {
 
   const buttonStyle = s?.buttonStyle ?? pc?.buttonStyle ?? 'filled';
 
+  // Logo URL — preloaded in <head> to eliminate header CLS
+  const logoUrl = s?.logo?.url ?? pc?.logo?.url ?? null;
+
   return (
     <html lang="en" className={fontClasses}>
       <head>
@@ -103,6 +106,10 @@ export default async function TenantLayout({ children, params }: Props) {
             __html: `:root { ${brandTokens} ${getFontVariables(fontHeading, fontBody)} }`,
           }}
         />
+        {/* Preload the logo so it arrives before the header <img> is discovered */}
+        {logoUrl && (
+          <link rel="preload" as="image" href={logoUrl} />
+        )}
       </head>
       <body
         data-btn-style={buttonStyle}

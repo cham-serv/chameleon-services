@@ -637,9 +637,13 @@
   max-width: var(--atlas-container);
   margin: 0 auto;
   padding: 0 var(--atlas-spacing-lg);
-  display: flex;
+  /* Grid layout: 3 stable columns that never shift when content loads.
+   * Logo column (1fr) | Nav column (auto = content width) | Actions column (1fr)
+   * The 1fr columns absorb free space equally, keeping the nav centred.
+   * Logo image loading only fills WITHIN its column — column widths never change. */
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  justify-content: space-between;
   height: 100%;
 }
 
@@ -697,6 +701,8 @@
   display: flex;
   align-items: center;
   gap: var(--atlas-spacing-sm);
+  /* Right-align within its grid column */
+  justify-self: end;
 }
 
 .atlas-cart-badge {
@@ -1988,18 +1994,12 @@
     box-shadow var(--atlas-transition-slow);
 }
 
-/* Suppress ALL transitions and hide content until after React hydration.
+/* Suppress ALL transitions until after React hydration.
  * data-ready is absent on SSR and the first paint; it is set to true
  * by a useEffect in AtlasHeader after mount. This prevents font-swap
- * and Zustand re-render from causing visible layout shift. */
+ * and Zustand re-render from causing visible transition animations. */
 .atlas-header:not([data-ready]) {
   transition: none !important;
-}
-.atlas-header:not([data-ready]) .atlas-header-inner {
-  /* Hide header content until fonts + hydration are ready.
-   * The header itself remains visible (correct height, bg, border)
-   * so there is no page-level layout shift. */
-  visibility: hidden;
 }
 .atlas-header:not([data-ready]) .atlas-header-logo,
 .atlas-header:not([data-ready]) .atlas-header-nav a {
