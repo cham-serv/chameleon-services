@@ -45,24 +45,10 @@ export function ProductCard({
   return (
     <Link
       href={`${basePath}/${product.slug}`}
-      className={className}
-      style={{
-        display: 'block',
-        textDecoration: 'none',
-        color: 'inherit',
-        position: 'relative',
-      }}
+      className={`atlas-product-card${className ? ` ${className}` : ''}`}
     >
       {/* Image */}
-      <div
-        style={{
-          position: 'relative',
-          aspectRatio: '1 / 1',
-          overflow: 'hidden',
-          borderRadius: '8px',
-          backgroundColor: '#f5f5f5',
-        }}
-      >
+      <div className="atlas-product-card-img-wrap">
         {image ? (
           <>
             <Image
@@ -102,6 +88,11 @@ export function ProductCard({
             
           </div>
         )}
+
+        {/* Hover overlay with View label */}
+        <div className="atlas-product-card-overlay" aria-hidden="true">
+          <span className="atlas-product-card-overlay-label">View Product</span>
+        </div>
 
         {/* Badges */}
         {isOutOfStock && (
