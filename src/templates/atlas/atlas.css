@@ -380,6 +380,88 @@
   }
 }
 
+/* -- Product Card -- */
+
+.atlas-product-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: transform var(--atlas-transition);
+}
+
+.atlas-product-card:hover {
+  transform: translateY(-4px);
+}
+
+.atlas-product-card-img-wrap {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: var(--atlas-radius-lg);
+  background: color-mix(in srgb, var(--brand-primary, #2d6a4f) 5%, #f5f5f5);
+}
+
+.atlas-product-img-primary {
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.atlas-product-card:hover .atlas-product-img-primary {
+  transform: scale(1.06);
+}
+
+.atlas-product-card-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: var(--atlas-spacing-md);
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.48) 0%,
+    rgba(0, 0, 0, 0.12) 40%,
+    transparent 65%
+  );
+  border-radius: var(--atlas-radius-lg);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.atlas-product-card:hover .atlas-product-card-overlay {
+  opacity: 1;
+}
+
+.atlas-product-card-overlay-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Hero placeholder: shown when no hero image is configured */
+.atlas-hero-media-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(
+      ellipse at 30% 60%,
+      color-mix(in srgb, var(--brand-secondary, #52b788) 35%, transparent) 0%,
+      transparent 65%
+    ),
+    linear-gradient(
+      135deg,
+      var(--brand-primary, #2d6a4f) 0%,
+      color-mix(in srgb, var(--brand-primary, #2d6a4f) 75%, var(--brand-secondary, #52b788)) 100%
+    );
+  color: rgba(255, 255, 255, 0.18);
+}
+
 /* -- Animations -- */
 
 @keyframes atlas-fadeIn {
@@ -1035,6 +1117,23 @@
   margin: 0 0 1.5rem;
   font-family: var(--font-heading, inherit);
   color: var(--brand-text, #1b1b1b);
+  padding-bottom: 0.625rem;
+  position: relative;
+}
+
+.atlas-section-heading::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 2.5rem;
+  height: 3px;
+  border-radius: 9999px;
+  background: var(--brand-primary, #2d6a4f);
+}
+
+.atlas-section-header-row .atlas-section-heading::after {
+  width: 2rem;
 }
 
 .atlas-section-header-row {
@@ -1127,7 +1226,12 @@
   /* WCAG AA: --brand-primary is always the darker anchor colour (e.g. dark green).
    * --brand-secondary can be a light/bright colour that fails contrast with white text.
    * Both CTA banner definitions now consistently use --brand-primary. */
-  background: var(--brand-primary, #2d6a4f);
+  background:
+    linear-gradient(
+      135deg,
+      var(--brand-primary, #2d6a4f) 0%,
+      color-mix(in srgb, var(--brand-primary, #2d6a4f) 80%, var(--brand-secondary, #52b788)) 100%
+    );
   color: #ffffff;
   text-align: center;
   padding: 4rem 0;
@@ -1884,12 +1988,18 @@
     box-shadow var(--atlas-transition-slow);
 }
 
-/* Suppress ALL transitions until after React hydration.
+/* Suppress ALL transitions and hide content until after React hydration.
  * data-ready is absent on SSR and the first paint; it is set to true
- * by a useEffect in AtlasHeader after mount. This prevents the Zustand
- * cart store re-render and scroll-restore from animating the header. */
+ * by a useEffect in AtlasHeader after mount. This prevents font-swap
+ * and Zustand re-render from causing visible layout shift. */
 .atlas-header:not([data-ready]) {
   transition: none !important;
+}
+.atlas-header:not([data-ready]) .atlas-header-inner {
+  /* Hide header content until fonts + hydration are ready.
+   * The header itself remains visible (correct height, bg, border)
+   * so there is no page-level layout shift. */
+  visibility: hidden;
 }
 .atlas-header:not([data-ready]) .atlas-header-logo,
 .atlas-header:not([data-ready]) .atlas-header-nav a {
