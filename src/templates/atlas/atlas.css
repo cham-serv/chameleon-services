@@ -31,6 +31,9 @@
   --atlas-spacing-2xl: 3rem;
   --atlas-spacing-3xl: 4rem;
   --atlas-spacing-4xl: 6rem;
+  /* Reserve scrollbar width from first paint to prevent CLS when
+   * content fills in below the fold and the scrollbar appears. */
+  scrollbar-gutter: stable;
 }
 
 /* -- Typography -- */
