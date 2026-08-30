@@ -1,4 +1,4 @@
-﻿import Link from 'next/link';
+import Link from 'next/link';
 import Image from 'next/image';
 import type { PageProps, PageConfig } from '@/lib/types';
 import { getProducts, getCategories, getArticles } from '@/lib/api';
@@ -219,15 +219,12 @@ function renderStorefront(
                   priority
                 />
               ) : (
-                <div style={{
-                  width: '100%',
-                  height: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  background: 'color-mix(in srgb, var(--brand-primary) 10%, transparent)',
-                }}>
-                  <span style={{ fontSize: '4rem', opacity: 0.3 }}></span>
+                <div className="atlas-hero-media-placeholder" aria-hidden="true">
+                  <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.75" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <path d="M16 10a4 4 0 0 1-8 0" />
+                  </svg>
                 </div>
               )}
             </div>
