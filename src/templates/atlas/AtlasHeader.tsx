@@ -26,15 +26,25 @@ export default function AtlasHeader({ config, onOpenMobileNav, onOpenCart, trans
   const fc = config.tenant.featureConfig;
   const totalItems = useCartStore((s) => s.totalItems());
   const [scrolled, setScrolled] = useState(false);
+  // Suppress CSS transitions until after hydration. Without this, the Zustand
+  // store re-render (cart count etc.) triggers the slow transition rule and
+  // causes the header to visually flash/shift on hard refresh.
+  const [mounted, setMounted] = useState(false);
 
   const handleScroll = useCallback(() => {
     setScrolled(window.scrollY > 10);
   }, []);
 
   useEffect(() => {
+    // Check current scroll position immediately (handles scroll-restore on hard refresh)
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Build nav from feature config
   const navLinks: { href: string; label: string }[] = [
@@ -51,7 +61,12 @@ export default function AtlasHeader({ config, onOpenMobileNav, onOpenCart, trans
   const logoAlt = config.pageConfig?.logo?.alt ?? siteName;
 
   return (
-    <header className="atlas-header" data-scrolled={scrolled} data-transparent={transparent || undefined}>
+    <header
+      className="atlas-header"
+      data-scrolled={scrolled}
+      data-transparent={transparent || undefined}
+      data-ready={mounted || undefined}
+    >
       <div className="atlas-header-inner">
         {/* Logo */}
         <Link href="/" className="atlas-header-logo">

@@ -2002,6 +2002,18 @@
     box-shadow var(--atlas-transition-slow);
 }
 
+/* Suppress ALL transitions until after React hydration.
+ * data-ready is absent on SSR and the first paint; it is set to true
+ * by a useEffect in AtlasHeader after mount. This prevents the Zustand
+ * cart store re-render and scroll-restore from animating the header. */
+.atlas-header:not([data-ready]) {
+  transition: none !important;
+}
+.atlas-header:not([data-ready]) .atlas-header-logo,
+.atlas-header:not([data-ready]) .atlas-header-nav a {
+  transition: none !important;
+}
+
 .atlas-header-logo,
 .atlas-header-nav a {
   transition:
