@@ -77,6 +77,8 @@ export default function AtlasHeader({ config, onOpenMobileNav, onOpenCart, trans
               alt={logoAlt}
               className="atlas-header-logo-img"
               height={56}
+              // eslint-disable-next-line react/no-unknown-property
+              fetchPriority="high"
               style={{
                 height: 'clamp(36px, 8vw, 56px)',
                 width: 'auto',
