@@ -663,3 +663,56 @@
   border-color: rgba(99, 102, 241, 0.35);
   color: #818cf8;
 }
+
+/* ============================================================
+   DEMO EXPLORER — MOBILE OVERRIDES
+   ============================================================ */
+
+/* ── #18 · Drawer Width on Smallest Phones ───────────────────────────
+   85vw = 272px on 320px screens — too cramped for the palette/font grids.
+   92vw gives ~295px on the smallest phones while still showing backdrop. */
+
+@media (max-width: 400px) {
+  .demo-explorer-drawer {
+    width: min(340px, 92vw);
+  }
+}
+
+/* ── #19 · Edge Tab → FAB on Mobile ─────────────────────────────────
+   The vertical writing-mode tab at right:0 top:50% is easy to miss on
+   narrow screens and can overlap content. Reposition as a circular FAB
+   in the bottom-right for better thumb reach. Hide the text label,
+   show only the icon.                                                  */
+
+@media (max-width: 767px) {
+  .demo-explorer-tab {
+    top: auto;
+    bottom: 1.5rem;
+    right: 1rem;
+    transform: none;
+    writing-mode: horizontal-tb;
+    text-orientation: mixed;
+    border-radius: 50%;
+    width: 52px;
+    height: 52px;
+    padding: 0;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  }
+
+  /* Hide the text label, keep the icon */
+  .demo-explorer-tab-label {
+    display: none;
+  }
+
+  /* Adjust icon size for the FAB */
+  .demo-explorer-tab-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  /* When drawer is open, slide FAB off-screen to the right */
+  .demo-explorer-tab[data-open="true"] {
+    transform: translateX(calc(100% + 1rem));
+  }
+}

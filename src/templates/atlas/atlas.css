@@ -4714,3 +4714,291 @@
     box-shadow: none;
   }
 }
+
+/* ============================================================
+   MOBILE EXCELLENCE — P2 OVERRIDES
+   Audit reference: atlas_mobile_audit.md items #2 #6 #8 #9 #13 #14
+   ============================================================ */
+
+/* ── #2 · Cart Row Grid Overflow on 320px (P2) ──────────────────────
+   On 320px screens the 3-col stacking layout (72px + 1fr + auto) with
+   qty/total/remove all in column 2 creates a cramped jumble.
+   Below 480px we switch to a 2-col layout (image | info) and let the
+   action row span full width with flex layout.                        */
+
+@media (max-width: 479px) {
+  .atlas-cart-row {
+    grid-template-columns: 64px 1fr;
+    grid-template-rows: auto auto;
+    gap: 0.75rem;
+    padding: 1rem 0;
+  }
+
+  .atlas-cart-row-image {
+    width: 64px;
+    height: 64px;
+  }
+
+  .atlas-cart-row-qty,
+  .atlas-cart-row-total,
+  .atlas-cart-row-remove {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+}
+
+/* ── #6 · Hero Height Cap on Short Phones / Landscape (P2) ─────────
+   Bold and Minimalist heroes use calc(100svh - header) which forces
+   content below the fold on short or landscape viewports.
+   Modern uses 90svh which is borderline.
+   Cap all variants at 80svh on mobile to keep content visible.        */
+
+@media (max-width: 767px) {
+  [data-variant="modern"] .atlas-home-hero,
+  [data-variant="bold"] .atlas-home-hero,
+  [data-variant="minimalist"] .atlas-home-hero,
+  [data-variant="editorial"] .atlas-home-hero {
+    min-height: calc(80svh - var(--atlas-header-h, 64px));
+  }
+}
+
+/* ── #8 · Footer Social Icons → 44px Touch Target (P2) ─────────────
+   .atlas-footer-social a is 36×36px — below Apple HIG / Google
+   Material 44×44px minimum for interactive tap targets.              */
+
+@media (max-width: 767px) {
+  .atlas-footer-social a {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* ── #9 · Pagination Buttons → 44px Touch Target (P2) ──────────────
+   .atlas-page-link is min-width/height 2.25rem (36px) — below minimum.
+   Bump to 2.75rem (44px) on mobile.                                  */
+
+@media (max-width: 767px) {
+  .atlas-page-link {
+    min-width: 2.75rem;
+    height: 2.75rem;
+  }
+}
+
+/* ── #13 · Header Logo Max-Height (P2) ──────────────────────────────
+   Logo image is hardcoded to 72px inline in AtlasHeader.tsx.
+   The header itself is only 64px (--atlas-header-h).
+   CSS clamp ensures the logo is responsive; TSX also patched.        */
+
+@media (max-width: 767px) {
+  .atlas-header-logo-img {
+    height: auto !important;           /* override inline style */
+    max-height: calc(var(--atlas-header-h, 64px) - 16px); /* 48px */
+    width: auto;
+  }
+}
+
+/* ── #14 · CTA Banner Padding on Mobile (P2) ────────────────────────
+   .atlas-cta-banner uses padding: 4rem 0 — 64px top/bottom.
+   Same dead-space issue as .atlas-section on mobile.                 */
+
+@media (max-width: 767px) {
+  .atlas-cta-banner {
+    padding: 2.5rem 0;
+  }
+}
+
+/* ============================================================
+   MOBILE EXCELLENCE — P3 OVERRIDES
+   Audit reference: atlas_mobile_audit.md items #11 #12 #15 #16 #20
+   ============================================================ */
+
+/* ── #11 · Category Card Padding on Narrow Screens (P3) ─────────────
+   In a 2-col grid on 320px, 1.5rem 1rem padding creates cramped cards.
+   Reduce to 1rem 0.75rem below 480px.                                */
+
+@media (max-width: 479px) {
+  .atlas-category-card {
+    padding: 1rem 0.75rem;
+  }
+}
+
+/* ── #12 · Mobile Nav Link Full-Width Tap Target (P3) ───────────────
+   .atlas-mobile-nav-link has no horizontal padding — the tap target
+   only extends to the text width, not the full drawer width.
+   Add horizontal padding and active highlight for visual feedback.    */
+
+.atlas-mobile-nav-link {
+  padding-left: var(--atlas-spacing-sm, 0.5rem);
+  padding-right: var(--atlas-spacing-sm, 0.5rem);
+  border-radius: var(--atlas-radius-sm, 4px);
+}
+
+.atlas-mobile-nav-link:active {
+  background: color-mix(in srgb, var(--brand-primary, #2d6a4f) 8%, transparent);
+}
+
+/* ── #15 · Contact Split-Image Layout on Mobile (P3) ────────────────
+   .atlas-contact-split has min-height: 100vh on single-column mobile.
+   The image panel at min-height: 40vh (267px on 667px phone) pushes
+   the form below the fold before the user even sees it.              */
+
+@media (max-width: 899px) {
+  .atlas-contact-split {
+    min-height: auto;
+  }
+
+  .atlas-contact-split-image {
+    min-height: 30vh;
+  }
+}
+
+/* ── #16 · Checkout Breadcrumb Horizontal Scroll on Narrow Screens (P3)
+   With long tenant names the breadcrumb wraps mid-separator creating
+   confusing visual breaks. Scroll horizontally instead.               */
+
+@media (max-width: 479px) {
+  .atlas-checkout-breadcrumb {
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .atlas-checkout-breadcrumb::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ── #20 · Footer Bottom Row — Column Layout on Mobile (P3) ─────────
+   .atlas-footer-bottom uses justify-content: space-between with
+   flex-wrap: wrap. On mobile the items wrap but remain space-between,
+   creating an awkward left-right split.                               */
+
+@media (max-width: 767px) {
+  .atlas-footer-bottom {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+/* ============================================================
+   MOBILE EXCELLENCE — P4 ENHANCEMENTS (World-Class Polish)
+   Audit reference: atlas_mobile_audit.md items #21 #23 #24 #25
+   ============================================================ */
+
+/* ── #21 · Horizontal Scroll for Category Grid on Mobile (P4) ───────
+   With 6+ categories, a 2-col grid creates 3+ rows of small cards.
+   An app-like horizontal scroll strip is more engaging and reduces
+   vertical height consumption. Matches the lookbook filter pills
+   pattern already used elsewhere in the template.                     */
+
+@media (max-width: 639px) {
+  .atlas-category-grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 0.75rem;
+    padding-bottom: 0.75rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .atlas-category-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .atlas-category-grid .atlas-category-card {
+    flex: 0 0 140px;
+    scroll-snap-align: start;
+  }
+}
+
+/* ── #23 · Safe Area Insets — iPhone Notch / Dynamic Island / Home Bar (P4)
+   env(safe-area-inset-*) values are non-zero only when the page uses
+   viewport-fit=cover (set in layout.tsx). On devices without notches
+   these values are 0 so this rule is a no-op.                         */
+
+@supports (padding-top: env(safe-area-inset-top)) {
+  .atlas-header {
+    /* Extend header background behind the status bar */
+    padding-top: env(safe-area-inset-top);
+    height: calc(var(--atlas-header-h, 64px) + env(safe-area-inset-top));
+  }
+
+  .atlas-footer-bottom {
+    /* Lift footer content above the home indicator bar */
+    padding-bottom: calc(var(--atlas-spacing-lg, 1.5rem) + env(safe-area-inset-bottom));
+  }
+
+  /* Left-side drawer (mobile nav) */
+  .atlas-drawer--left {
+    padding-top: env(safe-area-inset-top);
+    padding-left: env(safe-area-inset-left);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Cart drawer (right side) */
+  .atlas-drawer--right {
+    padding-top: env(safe-area-inset-top);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* ── #24 · CTA Button Active Feedback (P4) ──────────────────────────
+   .atlas-btn:active already scales to 0.97 — good.
+   Add a brightness flash on primary/secondary CTAs for satisfying
+   tactile feedback on touch that confirms the action registered.      */
+
+.atlas-btn-primary:active {
+  filter: brightness(1.12);
+}
+
+.atlas-btn-secondary:active {
+  filter: brightness(1.12);
+}
+
+/* ── #25 · Skeleton Loading Shimmer (P4) ────────────────────────────
+   Reusable .atlas-skeleton class with CSS shimmer animation.
+   Apply to image containers while src loads. Works on any element.
+   Uses brand text colour for the shimmer so it respects dark themes.  */
+
+@keyframes atlas-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+.atlas-skeleton {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--brand-text, #1b1b1b) 4%, transparent) 25%,
+    color-mix(in srgb, var(--brand-text, #1b1b1b) 9%, transparent) 50%,
+    color-mix(in srgb, var(--brand-text, #1b1b1b) 4%, transparent) 75%
+  );
+  background-size: 200% 100%;
+  animation: atlas-shimmer 1.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .atlas-skeleton {
+    animation: none;
+    background: color-mix(in srgb, var(--brand-text, #1b1b1b) 6%, transparent);
+  }
+}
+
+/* ── Mobile Nav CTA styles (P4) ─────────────────────────────────────
+   Full-width CTA button pinned to the bottom of the mobile drawer.
+   Styles the .atlas-mobile-nav-cta link added in AtlasMobileNav.tsx.  */
+
+.atlas-mobile-nav-cta {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  padding: 0.875rem 1.5rem;
+  font-size: 1rem;
+  border-radius: var(--atlas-radius-md);
+  margin-top: var(--atlas-spacing-lg, 1.5rem);
+}
