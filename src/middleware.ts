@@ -1,10 +1,11 @@
-﻿/**
+/**
  * Middleware - Multi-tenant domain routing.
  *
  * Routes requests based on the hostname:
- * - Root domains (chameleon.services, localhost)  pass through to (marketing)
- * - Tenant subdomains (atlas-demo.chameleon.services)  rewrite to (tenant)/[tenant]
- * - Custom domains (freshroast.co.za)  rewrite using full domain (Phase 3+)
+ * - Root domains (chameleon.services, localhost) → pass through to (marketing)
+ * - Tenant subdomains (atlas-demo.chameleon.services) → rewrite to (tenant)/[tenant]
+ * - Custom domains (freshroast.co.za) → rewrite using full domain; fetchTenantConfig
+ *   detects the dot and uses ?domain= for engine API resolution
  *
  * DEV_MODE controls local routing:
  * - DEV_MODE=marketing  localhost renders the company site
@@ -51,15 +52,18 @@ export function middleware(request: NextRequest) {
 
   // - Tenant slug extraction -
   let tenantSlug: string;
+  let isCustomDomain = false;
 
   if (hostname.endsWith(PLATFORM_SUFFIX)) {
     // Platform subdomain: atlas-demo.chameleon.services  atlas-demo
     tenantSlug = hostname.slice(0, -PLATFORM_SUFFIX.length);
   } else {
-    // Custom domain: freshroast.co.za  use full domain as slug
-    // The tenant-config API will need to resolve this via shellDomain lookup
-    // For now, use the first segment as a best-effort slug
-    tenantSlug = hostname.split('.')[0];
+    // Custom domain: freshroast.co.za
+    // Use the full domain as the "slug" for the URL rewrite path segment.
+    // fetchTenantConfig will detect this contains a dot and use ?domain=
+    // instead of ?tenant= for resolution against the engine API.
+    tenantSlug = hostname;
+    isCustomDomain = true;
   }
 
   if (!tenantSlug) {
@@ -73,6 +77,9 @@ export function middleware(request: NextRequest) {
   const isStaging = hostname.endsWith(PLATFORM_SUFFIX);
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-is-staging', isStaging ? 'true' : 'false');
+  if (isCustomDomain) {
+    requestHeaders.set('x-custom-domain', hostname);
+  }
 
   // - Rewrite to tenant catch-all -
   const url = request.nextUrl.clone();
