@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 /**
  * AtlasMobileNav  Client Component
@@ -138,6 +138,25 @@ export default function AtlasMobileNav({ config, isOpen, onClose }: Props) {
               </Link>
             ))}
           </nav>
+
+          {/* Primary CTA — shop first, contact fallback */}
+          {fc.shop?.enabled ? (
+            <Link
+              href="/shop"
+              className="atlas-btn atlas-btn-primary atlas-mobile-nav-cta"
+              onClick={onClose}
+            >
+              Shop Now
+            </Link>
+          ) : fc.contact?.enabled ? (
+            <Link
+              href="/contact"
+              className="atlas-btn atlas-btn-primary atlas-mobile-nav-cta"
+              onClick={onClose}
+            >
+              Get in Touch
+            </Link>
+          ) : null}
         </div>
       </div>
     </>

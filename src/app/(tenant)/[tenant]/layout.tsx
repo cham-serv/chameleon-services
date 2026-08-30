@@ -12,7 +12,7 @@
  * by the catch-all page.
  */
 
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { getFontClasses, getFontVariables } from '@/lib/fonts';
 import { fetchTenantConfig } from '@/lib/tenant';
 
@@ -32,6 +32,16 @@ type Props = {
  * function and TenantLayout within the same request, so there is
  * no double network call.
  */
+/**
+ * viewport — sets viewport-fit=cover so that env(safe-area-inset-*)
+ * CSS values are non-zero on iPhones with a notch / Dynamic Island / home bar.
+ */
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+};
+
 export async function generateMetadata({ params }: { params: Promise<{ tenant: string }> }): Promise<Metadata> {
   const { tenant } = await params;
   const config = await fetchTenantConfig(tenant);
