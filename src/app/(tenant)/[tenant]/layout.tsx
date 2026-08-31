@@ -15,6 +15,9 @@
 import type { Metadata, Viewport } from 'next';
 import { getFontClasses, getFontVariables } from '@/lib/fonts';
 import { fetchTenantConfig } from '@/lib/tenant';
+import { DemoExplorer } from '@/templates/atlas/DemoExplorer';
+import { definition as atlasDefinition } from '@/templates/atlas/definition';
+import { buildExplorerRoutes } from '@/templates/atlas/demo-explorer-utils';
 
 type Props = {
   children: React.ReactNode;
@@ -98,6 +101,16 @@ export default async function TenantLayout({ children, params }: Props) {
   // Logo URL — preloaded in <head> to eliminate header CLS
   const logoUrl = s?.logo?.url ?? pc?.logo?.url ?? null;
 
+  // Build demo explorer routes if this is a demo tenant.
+  // DemoExplorer lives here (not in AtlasLayout) so it is rendered in the
+  // persistent layout segment — it never remounts during client-side page
+  // navigation, which means isOpen state survives naturally with no flicker.
+  // TODO: select definition by config.tenant.template?.slug when multi-template support lands.
+  const explorerRoutes =
+    config?.tenant?.isDemoTenant
+      ? buildExplorerRoutes(atlasDefinition, config.tenant.featureConfig)
+      : null;
+
   return (
     <html lang="en" className={fontClasses}>
       <head>
@@ -121,6 +134,7 @@ export default async function TenantLayout({ children, params }: Props) {
         }}
       >
         {children}
+        {explorerRoutes && <DemoExplorer routes={explorerRoutes} basePath="" />}
       </body>
     </html>
   );

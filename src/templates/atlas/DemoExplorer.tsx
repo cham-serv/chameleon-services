@@ -1,4 +1,5 @@
 'use client';
+import './demo-explorer.css';
 
 /**
  * DemoExplorer - Client Component
