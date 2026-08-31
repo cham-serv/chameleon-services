@@ -391,6 +391,67 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* - Section 3.5: Setup Costs - */}
+      <section className="m-section" id="setup-costs" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="m-container">
+          <div style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto 64px' }}>
+            <h2 style={{ fontFamily: 'var(--m-font-display)', fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--m-text)', margin: '0 0 16px' }}>
+              Thinking of building a new website?
+            </h2>
+            <p style={{ fontSize: '1rem', color: 'var(--m-text-muted)', lineHeight: 1.7, margin: 0 }}>
+              Traditional web builds are expensive, slow and hard to update. We replaced the 3-month agency build with a fast, predictable setup.
+            </p>
+          </div>
+
+          <div className="m-card" style={{ maxWidth: '900px', margin: '0 auto 32px', overflow: 'hidden' }}>
+             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+               <thead>
+                 <tr style={{ background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                   <th style={{ padding: '24px', fontSize: '0.95rem', color: 'var(--m-text-muted)', fontWeight: 600, width: '50%', borderRight: '1px solid rgba(255,255,255,0.04)' }}>The Traditional Agency Build</th>
+                   <th style={{ padding: '24px', fontSize: '0.95rem', color: 'var(--m-text)', fontWeight: 600, width: '50%' }}>The Chameleon Setup</th>
+                 </tr>
+               </thead>
+               <tbody style={{ fontSize: '0.95rem' }}>
+                 <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                   <td style={{ padding: '24px', borderRight: '1px solid rgba(255,255,255,0.04)' }}>
+                     <div style={{ color: 'var(--m-text)', fontWeight: 600, marginBottom: '4px' }}>High-Performance Custom Build</div>
+                     <div style={{ color: '#ef4444', fontWeight: 700, fontSize: '1.1rem', marginBottom: '8px' }}>R40,000 - R80,000</div>
+                     <div style={{ color: 'var(--m-text-faint)', fontSize: '0.85rem' }}>Bespoke UI, fast loading, SEO architecture</div>
+                   </td>
+                   <td style={{ padding: '24px' }}>
+                     <div style={{ color: '#60a5fa', fontWeight: 600, marginBottom: '4px' }}>Launch Tier</div>
+                     <div style={{ color: 'var(--m-text)', fontWeight: 700, fontSize: '1.1rem', marginBottom: '8px' }}>R8,000 setup <span style={{ fontSize: '0.9rem', color: 'var(--m-text-muted)', fontWeight: 400 }}>(then R999/mo)</span></div>
+                     <div style={{ color: 'var(--m-text-faint)', fontSize: '0.85rem' }}>AI-ready template, domain setup, onboarding</div>
+                   </td>
+                 </tr>
+                 <tr>
+                   <td style={{ padding: '24px', borderRight: '1px solid rgba(255,255,255,0.04)' }}>
+                     <div style={{ color: 'var(--m-text)', fontWeight: 600, marginBottom: '4px' }}>Advanced Next-Gen E-commerce</div>
+                     <div style={{ color: '#ef4444', fontWeight: 700, fontSize: '1.1rem', marginBottom: '8px' }}>R85,000 - R250,000+</div>
+                     <div style={{ color: 'var(--m-text-faint)', fontSize: '0.85rem' }}>Multi-channel sync, payment gateways, automation</div>
+                   </td>
+                   <td style={{ padding: '24px' }}>
+                     <div style={{ color: '#60a5fa', fontWeight: 600, marginBottom: '4px' }}>Commerce Tier</div>
+                     <div style={{ color: 'var(--m-text)', fontWeight: 700, fontSize: '1.1rem', marginBottom: '8px' }}>R12,000 setup <span style={{ fontSize: '0.9rem', color: 'var(--m-text-muted)', fontWeight: 400 }}>(then R3,499/mo)</span></div>
+                     <div style={{ color: 'var(--m-text-faint)', fontSize: '0.85rem' }}>Full ecommerce config, product intelligence</div>
+                   </td>
+                 </tr>
+               </tbody>
+             </table>
+          </div>
+
+          <div style={{ maxWidth: '900px', margin: '0 auto', padding: '24px', borderRadius: '12px', background: 'rgba(59,130,246,0.05)', border: '1px solid rgba(59,130,246,0.15)', display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+            <div style={{ fontSize: '1.5rem', marginTop: '-2px' }}>🔒</div>
+            <div>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: 600, color: 'var(--m-text)', margin: '0 0 8px' }}>You own your core business data.</h3>
+              <p style={{ margin: 0, color: 'var(--m-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+                Your original products, customer lists and content belong entirely to you and can be exported at any time. The proprietary AI schemas, GEO architecture and engine-generated optimisations are platform features that work tirelessly to power your site for as long as you&apos;re with us.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* - Why Now? AI & SEO Explained - */}
       <section className="m-section" id="why-now">
         <div className="m-container">
