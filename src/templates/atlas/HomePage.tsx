@@ -148,7 +148,7 @@ export default async function HomePage({ config, variant, noCache }: PageProps) 
           ? renderBold(hero, featuredProducts, featuredCategories, currency)
           : variant === 'minimalist'
           ? renderMinimalist(hero, featuredProducts, featuredCategories, currency)
-          : renderStorefront(hero, featuredProducts, featuredCategories, currency)}
+          : renderStorefront(hero, featuredProducts, featuredCategories, currency, pc ?? undefined)}
       </div>
     </>
   );
@@ -182,7 +182,16 @@ function renderStorefront(
   products: Product[],
   categories: ProductCategory[],
   currency: string,
+  pc?: PageConfig,
 ) {
+  // Resolve trust signals:
+  //   • tenant has defined their own list → use it (may be empty, hiding the bar)
+  //   • field is absent / null            → fall back to built-in defaults
+  const visibleSignals: Array<{ icon?: string | null; text: string }> =
+    pc?.homeTrustSignals != null
+      ? pc.homeTrustSignals
+      : TRUST_SIGNALS;
+
   return (
     <>
       {/* Hero - split layout */}
@@ -232,19 +241,24 @@ function renderStorefront(
         </div>
       </section>
 
-      {/* Value Bar - trust signals */}
-      <section className="atlas-value-bar">
-        <div className="atlas-container">
-          <div className="atlas-value-bar-inner">
-            {TRUST_SIGNALS.map((signal) => (
-              <div key={signal.text} className="atlas-value-item">
-                <span className="atlas-value-icon" aria-hidden="true">{signal.icon}</span>
-                <span>{signal.text}</span>
-              </div>
-            ))}
+      {/* Value Bar - trust signals (hidden when array is empty) */}
+      {visibleSignals.length > 0 && (
+        <section className="atlas-value-bar">
+          <div className="atlas-container">
+            <div className="atlas-value-bar-inner">
+              {visibleSignals.map((signal) => (
+                <div key={signal.text} className="atlas-value-item">
+                  {signal.icon && (
+                    <span className="atlas-value-icon" aria-hidden="true">{signal.icon}</span>
+                  )}
+                  <span>{signal.text}</span>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
+
 
       {/* Featured Categories - pill row */}
       {categories.length > 0 && (

@@ -183,6 +183,12 @@ export type PageConfig = {
   homeSeoDescription?: string | null;
   homeSeoOgImage?: PageConfigMedia;
 
+  // Home page - storefront trust bar (storefront variant only).
+  // Each item has an optional icon (emoji/character) and a required text label.
+  // • null / undefined  → falls back to the built-in defaults (Free Shipping, Easy Returns, etc.)
+  // • empty array []    → hides the trust bar entirely
+  // • populated array   → renders exactly what the tenant supplies, in order
+  homeTrustSignals?: Array<{ icon?: string | null; text: string }> | null;
 
   // About page content
   aboutHeadline?: string | null;
