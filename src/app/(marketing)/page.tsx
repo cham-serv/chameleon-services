@@ -432,7 +432,7 @@ export default function HomePage() {
                    </td>
                    <td style={{ padding: '24px' }}>
                      <div style={{ color: '#60a5fa', fontWeight: 600, marginBottom: '4px' }}>Commerce Tier</div>
-                     <div style={{ color: 'var(--m-text)', fontWeight: 700, fontSize: '1.1rem', marginBottom: '8px' }}>R12,000 setup <span style={{ fontSize: '0.9rem', color: 'var(--m-text-muted)', fontWeight: 400 }}>(then R3,499/mo)</span></div>
+                     <div style={{ color: 'var(--m-text)', fontWeight: 700, fontSize: '1.1rem', marginBottom: '8px' }}>R12,000 setup <span style={{ fontSize: '0.9rem', color: 'var(--m-text-muted)', fontWeight: 400 }}>(then R3,500/mo)</span></div>
                      <div style={{ color: 'var(--m-text-faint)', fontSize: '0.85rem' }}>Full ecommerce config, product intelligence</div>
                    </td>
                  </tr>
