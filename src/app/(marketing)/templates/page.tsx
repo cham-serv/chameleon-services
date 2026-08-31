@@ -130,8 +130,8 @@ export default function TemplatesPage() {
     <>
       {/* Header */}
       <section
+        className="m-hero-pt"
         style={{
-          paddingTop: '120px',
           paddingBottom: '64px',
           textAlign: 'center',
           borderBottom: '1px solid rgba(255,255,255,0.06)',
@@ -277,7 +277,7 @@ export default function TemplatesPage() {
                 </div>
 
                 {/* Info */}
-                <div style={{ padding: '40px' }}>
+                <div className="m-template-info">
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '4px' }}>
                     <h2
                       style={{

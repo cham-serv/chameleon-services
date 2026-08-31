@@ -147,8 +147,8 @@ export default function PricingPage() {
     <>
       {/* Header */}
       <section
+        className="m-hero-pt"
         style={{
-          paddingTop: '120px',
           paddingBottom: '64px',
           textAlign: 'center',
           position: 'relative',
@@ -219,16 +219,7 @@ export default function PricingPage() {
             </p>
 
             {/* Payment Path Toggle */}
-            <div
-              style={{
-                display: 'inline-flex',
-                background: 'rgba(255,255,255,0.04)',
-                borderRadius: '12px',
-                padding: '4px',
-                border: '1px solid rgba(255,255,255,0.08)',
-                gap: '4px',
-              }}
-            >
+            <div className="m-pricing-toggle">
               {paymentPaths.map((path) => {
                 const isActive = activePath === path.id;
                 return (
@@ -249,7 +240,6 @@ export default function PricingPage() {
                       flexDirection: 'column',
                       alignItems: 'center',
                       gap: '2px',
-                      minWidth: '140px',
                     }}
                   >
                     <span style={{ fontWeight: 600, fontSize: '0.9rem' }}>{path.label}</span>

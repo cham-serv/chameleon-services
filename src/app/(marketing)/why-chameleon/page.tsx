@@ -5,7 +5,7 @@ import { ArrowRight, Search, TrendingUp, Clock, Globe } from 'lucide-react';
 export const metadata: Metadata = {
   title: 'Why Chameleon - The Real Cost of Your Website',
   description:
-    'See what the average South African SME actually spends on their website each month, and how Chameleon consolidates those costs into one predictable fee.',
+    'See what the average business actually spends on their website each month, and how Chameleon consolidates those costs into one predictable fee.',
 };
 
 const whyNowPoints = [
@@ -72,8 +72,8 @@ export default function WhyChameleonPage() {
     <>
       {/* Header */}
       <section
+        className="m-hero-pt"
         style={{
-          paddingTop: '120px',
           paddingBottom: '64px',
           textAlign: 'center',
           position: 'relative',
@@ -119,7 +119,7 @@ export default function WhyChameleonPage() {
               lineHeight: 1.7,
             }}
           >
-            Most South African businesses are paying for a website they built years ago, 
+            Most businesses are paying for a website they built years ago,
             maintaining it with a patchwork of subscriptions and retainers, 
             and losing ground to AI search every single month.
           </p>
@@ -135,7 +135,9 @@ export default function WhyChameleonPage() {
             </h2>
           </div>
 
-          <div className="m-card" style={{ maxWidth: '800px', margin: '0 auto 24px', overflow: 'hidden' }}>
+          {/* Bill killer: desktop table + mobile stacked cards */}
+          <div className="m-bill-table-wrap">
+            {/* Desktop table */}
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
               <thead>
                 <tr style={{ background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
@@ -166,6 +168,20 @@ export default function WhyChameleonPage() {
                 </tr>
               </tfoot>
             </table>
+
+            {/* Mobile stacked cards */}
+            <div className="m-bill-cards">
+              {billKillerItems.map(([cost, chameleon]) => (
+                <div key={cost} className="m-bill-card">
+                  <div className="m-bill-card-label">{cost}</div>
+                  <div className="m-bill-card-value">{chameleon}</div>
+                </div>
+              ))}
+              <div className="m-bill-card m-bill-card-total">
+                <div className="m-bill-card-label">Typical monthly total: R8,000–R25,000+</div>
+                <div className="m-bill-card-value">Chameleon: from R999/mo</div>
+              </div>
+            </div>
           </div>
 
           <p style={{ textAlign: 'center', color: 'var(--m-text-muted)', fontSize: '0.9rem', maxWidth: '600px', margin: '0 auto' }}>
@@ -186,8 +202,9 @@ export default function WhyChameleonPage() {
             </p>
           </div>
 
-          <div className="m-card" style={{ maxWidth: '900px', margin: '0 auto 32px', overflow: 'hidden' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+          {/* Setup cost table: horizontal scroll on mobile (complex two-column layout) */}
+          <div className="m-table-scroll">
+            <table style={{ borderCollapse: 'collapse', textAlign: 'left' }}>
               <thead>
                 <tr style={{ background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
                   <th style={{ padding: '24px', fontSize: '0.95rem', color: 'var(--m-text-muted)', fontWeight: 600, width: '50%', borderRight: '1px solid rgba(255,255,255,0.04)' }}>The Traditional Agency Build</th>
@@ -347,10 +364,9 @@ export default function WhyChameleonPage() {
       {/* CTA */}
       <section className="m-section" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
         <div
-          className="m-container-sm"
+          className="m-container-sm m-cta-callout"
           style={{
             textAlign: 'center',
-            padding: '64px 24px',
             borderRadius: '20px',
             background: 'linear-gradient(135deg, rgba(59,130,246,0.1) 0%, rgba(129,140,248,0.06) 100%)',
             border: '1px solid rgba(59,130,246,0.2)',

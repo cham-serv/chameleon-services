@@ -57,8 +57,8 @@ export default function AgenciesPage() {
     <>
       {/* Hero */}
       <section
+        className="m-hero-pt"
         style={{
-          paddingTop: '120px',
           paddingBottom: '80px',
           position: 'relative',
           overflow: 'hidden',
@@ -186,8 +186,7 @@ export default function AgenciesPage() {
       {/* The Math */}
       <section className="m-section" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
         <div className="m-container-sm">
-          <div className="m-card" style={{ 
-            padding: '48px', 
+          <div className="m-card m-cta-callout" style={{
             background: 'linear-gradient(135deg, rgba(59,130,246,0.05) 0%, rgba(13,17,23,1) 100%)',
             border: '1px solid rgba(59,130,246,0.2)',
             textAlign: 'center'
@@ -309,10 +308,9 @@ export default function AgenciesPage() {
       {/* CTA */}
       <section className="m-section" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
         <div
-          className="m-container-sm"
+          className="m-container-sm m-cta-callout"
           style={{
             textAlign: 'center',
-            padding: '64px 24px',
             borderRadius: '20px',
             background: 'linear-gradient(135deg, rgba(59,130,246,0.1) 0%, rgba(129,140,248,0.06) 100%)',
             border: '1px solid rgba(59,130,246,0.2)',

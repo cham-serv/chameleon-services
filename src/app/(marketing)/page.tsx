@@ -459,33 +459,15 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: '0',
-              position: 'relative',
-            }}
-          >
-            {/* Connector lines */}
-            <div
-              aria-hidden="true"
-              style={{
-                position: 'absolute',
-                top: '32px',
-                left: 'calc(33.333% - 1px)',
-                right: 'calc(33.333% - 1px)',
-                height: '1px',
-                background: 'linear-gradient(90deg, rgba(59,130,246,0.4), rgba(59,130,246,0.4))',
-                pointerEvents: 'none',
-              }}
-            />
+          <div className="m-how-it-works-grid">
+            {/* Connector lines — hidden on mobile via CSS */}
+            <div aria-hidden="true" className="m-how-it-works-connector" />
 
             {howItWorksSteps.map((step, idx) => (
               <div
                 key={step.step}
                 id={`step-${idx + 1}`}
-                style={{ padding: '0 32px 0', textAlign: 'center', position: 'relative' }}
+                className="m-how-it-works-step"
               >
                 {/* Step number circle */}
                 <div

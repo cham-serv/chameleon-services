@@ -260,6 +260,45 @@
   }
 }
 
+/* ── How It Works step grid ───────────────────────────────────── */
+.m-how-it-works-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  position: relative;
+}
+
+.m-how-it-works-connector {
+  position: absolute;
+  top: 32px;
+  left: calc(33.333% - 1px);
+  right: calc(33.333% - 1px);
+  height: 1px;
+  background: linear-gradient(90deg, rgba(59,130,246,0.4), rgba(59,130,246,0.4));
+  pointer-events: none;
+}
+
+.m-how-it-works-step {
+  padding: 0 32px 0;
+  text-align: center;
+  position: relative;
+}
+
+@media (max-width: 640px) {
+  .m-how-it-works-grid {
+    grid-template-columns: 1fr;
+  }
+  .m-how-it-works-connector {
+    display: none;
+  }
+  .m-how-it-works-step {
+    padding: 0 16px 40px;
+  }
+  .m-how-it-works-step:last-child {
+    padding-bottom: 0;
+  }
+}
+
 /* ── Skip link ───────────────────────────────────────────────── */
 .m-skip-link {
   position: absolute;
@@ -525,4 +564,79 @@
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
+}
+/* ── Inner page hero — top padding responsive ─────────────────── */
+/* All inner pages offset 120px for the fixed nav; reduce on mobile */
+.m-hero-pt {
+  padding-top: 120px;
+}
+@media (max-width: 640px) {
+  .m-hero-pt {
+    padding-top: 80px;
+  }
+}
+
+/* ── Pricing payment path toggle ──────────────────────────────── */
+.m-pricing-toggle {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 4px;
+  max-width: 100%;
+}
+@media (max-width: 500px) {
+  .m-pricing-toggle {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+/* ── Scrollable table (complex multi-column, e.g. setup costs) ── */
+.m-table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 900px;
+  margin: 0 auto 32px;
+  border-radius: var(--m-radius-lg);
+  border: 1px solid var(--m-border);
+  background: var(--m-bg-glass);
+  backdrop-filter: blur(12px);
+}
+.m-table-scroll table {
+  min-width: 560px;
+  width: 100%;
+}
+
+/* ── Template card info panel ─────────────────────────────────── */
+.m-template-info {
+  padding: 40px;
+}
+@media (max-width: 640px) {
+  .m-template-info {
+    padding: 24px;
+  }
+}
+
+/* ── CTA callout section ──────────────────────────────────────── */
+.m-cta-callout {
+  padding: 64px 24px;
+}
+@media (max-width: 640px) {
+  .m-cta-callout {
+    padding: 40px 20px;
+  }
+}
+
+/* ── Contact form + info panel layout ────────────────────────── */
+.m-contact-layout {
+  gap: 64px;
+  align-items: flex-start;
+}
+@media (max-width: 640px) {
+  .m-contact-layout {
+    gap: 40px;
+  }
 }
