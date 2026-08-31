@@ -19,17 +19,18 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Chameleon | The AI-Ready Website Platform for South Africa',
+    default: 'Chameleon | The AI-Ready Storefront Platform',
     template: '%s | Chameleon',
   },
   description:
-    'Stop paying for a website that AI search engines can\'t find. Chameleon delivers high-performance, GEO-optimised storefronts for South African SMEs, with hosting, maintenance, and SEO all built into one predictable monthly fee.',
+    'AI search has rewritten the rules. Chameleon builds high-performance, GEO-optimised storefronts that get found by AI and humans alike — with hosting, maintenance, and SEO all included.',
   keywords: [
     'AI-ready website',
     'GEO optimised',
-    'ecommerce South Africa',
-    'AI SEO platform',
-    'website builder South Africa',
+    'generative engine optimisation',
+    'ecommerce platform',
+    'AI SEO',
+    'storefront platform',
     'Chameleon',
   ],
   authors: [{ name: 'Chameleon' }],
@@ -42,25 +43,25 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    locale: 'en_ZA',
+    locale: 'en',
     url: 'https://chameleon.services',
     siteName: 'Chameleon',
-    title: 'Chameleon | The AI-Ready Website Platform for South Africa',
+    title: 'Chameleon | The AI-Ready Storefront Platform',
     description:
-      'Stop paying for a website that AI search engines can\'t find. Chameleon delivers high-performance, GEO-optimised storefronts with hosting, maintenance, and SEO all built into one predictable monthly fee.',
+      'AI search has rewritten the rules. Chameleon builds high-performance, GEO-optimised storefronts that get found by AI and humans alike — with hosting, maintenance, and SEO all included.',
     images: [
       {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Chameleon - The AI-Ready Website Platform',
+        alt: 'Chameleon — The AI-Ready Storefront Platform',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Chameleon | The AI-Ready Website Platform for South Africa',
-    description: 'Stop paying for a website that AI search engines can\'t find. Built for South African SMEs.',
+    title: 'Chameleon | The AI-Ready Storefront Platform',
+    description: 'AI search has rewritten the rules. Get a GEO-optimised, high-performance storefront with hosting, maintenance, and SEO built in.',
     images: ['/og-image.jpg'],
   },
   robots: { index: true, follow: true },
