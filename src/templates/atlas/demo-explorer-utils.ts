@@ -1,4 +1,4 @@
-﻿/**
+/**
  * DemoExplorer Utilities  Server-side
  *
  * Extracts serialisable route metadata from a template definition,
@@ -27,6 +27,9 @@ export function buildExplorerRoutes(
     // Skip wildcard detail routes  they have one variant and switching
     // doesn't make sense without specific content loaded
     if (routeKey.endsWith('/*')) continue;
+
+    // Skip pages explicitly excluded from demo navigation (e.g. cart, checkout)
+    if (page.navigableInDemo === false) continue;
 
     // Check feature enablement (null feature = always available)
     if (page.feature !== null) {

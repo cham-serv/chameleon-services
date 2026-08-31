@@ -88,7 +88,8 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // Brand preview state - starts from current CSS vars on :root
+  // Brand preview state — initialised to safe defaults; overwritten on mount
+  // from the actual CSS vars on :root so pickers always show the real tenant colours.
   const [brand, setBrand] = useState<BrandPreview>({
     primary:     '#2d6a4f',
     secondary:   '#52b788',
@@ -190,19 +191,45 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
 
   // - Actions -
 
-  // On mount: auto-open if _de=1 is in the URL (persisted from a drawer navigation)
-  // and check localStorage for the hint.
+  // On mount:
+  //   1. Read actual brand CSS vars from :root so colour pickers reflect the real tenant colours.
+  //   2. Auto-open if _de=1 is in the URL (persisted via navigateToPage).
+  //   3. Show the hint arrow for first-time visitors; auto-clear it after 5s (matching CSS).
   useEffect(() => {
+    // 1. Sync brand state to real CSS vars
+    const style = getComputedStyle(document.documentElement);
+    const get = (v: string, fallback: string) => style.getPropertyValue(v).trim() || fallback;
+    setBrand((prev) => ({
+      ...prev,
+      primary:    get('--brand-primary',    prev.primary),
+      secondary:  get('--brand-secondary',  prev.secondary),
+      accent:     get('--brand-accent',     prev.accent),
+      textColour: get('--brand-text',       prev.textColour),
+      bgColour:   get('--brand-background', prev.bgColour),
+    }));
+
+    // 2 & 3. URL param + hint logic
     const hasDeParam = searchParams.get('_de') === '1';
     try {
       const seen = !!localStorage.getItem('demo-explorer-seen');
-      if (!seen && !hasDeParam) setShowHint(true);
+      if (!seen && !hasDeParam) {
+        setShowHint(true);
+        // Auto-clear hint after 5 000 ms — matches the CSS demo-hint-lifecycle animation
+        // so React state and the visual state stay in sync. Without this, any re-render
+        // after 5s would recreate the element and restart the animation.
+        const timer = window.setTimeout(() => setShowHint(false), 5000);
+        return () => window.clearTimeout(timer);
+      }
       if (hasDeParam) {
         setIsOpen(true);
         localStorage.setItem('demo-explorer-seen', '1');
       }
     } catch {
-      if (!hasDeParam) setShowHint(true);
+      if (!hasDeParam) {
+        setShowHint(true);
+        const timer = window.setTimeout(() => setShowHint(false), 5000);
+        return () => window.clearTimeout(timer);
+      }
       if (hasDeParam) setIsOpen(true);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -212,19 +239,20 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
     setIsOpen(true);
     setShowHint(false);
     try { localStorage.setItem('demo-explorer-seen', '1'); } catch { /* ignore */ }
-    // Write _de=1 into the URL so a subsequent navigation can restore the open state
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('_de', '1');
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-  }, [pathname, searchParams, router]);
+    // Intentionally NOT writing _de=1 here — URL stays clean when opened manually.
+    // _de=1 is only written by navigateToPage() so that hard-refresh after a
+    // drawer-initiated navigation restores the open state on the new page.
+  }, []);
 
   const close = useCallback(() => {
     setIsOpen(false);
-    // Remove _de from the URL so shared links don't auto-open the drawer
-    const params = new URLSearchParams(searchParams.toString());
-    params.delete('_de');
-    const qs = params.toString();
-    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+    // Only touch the URL if _de is actually present — avoids spurious history entries
+    if (searchParams.has('_de')) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete('_de');
+      const qs = params.toString();
+      router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+    }
   }, [pathname, searchParams, router]);
 
   const navigateToPage = useCallback(
@@ -298,8 +326,13 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
         onClick={open}
         aria-label="Open demo explorer"
       >
-        <span className="demo-explorer-tab-icon"></span>
-        Explore
+        <span className="demo-explorer-tab-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </span>
+        <span className="demo-explorer-tab-label">Explore</span>
       </button>
 
       {/* Backdrop */}

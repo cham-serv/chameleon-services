@@ -312,6 +312,13 @@ export type PageDefinition = {
   variants: Record<string, PageVariant>;
   /** Which variant slug to use if none specified */
   defaultVariant: string;
+  /**
+   * If false, the page is hidden from the Demo Explorer pages list.
+   * Useful for transactional pages (cart, checkout, order confirmation)
+   * that don't make sense as standalone demo destinations.
+   * Defaults to true.
+   */
+  navigableInDemo?: boolean;
 };
 
 export type TemplateDefinition = {
