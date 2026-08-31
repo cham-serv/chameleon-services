@@ -189,32 +189,58 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
 
   // - Actions -
 
-  // Check localStorage once on mount to decide whether to show the hint
+  // On mount: auto-open if _de=1 is in the URL (persisted from a drawer navigation)
+  // and check localStorage for the hint.
   useEffect(() => {
+    const hasDeParam = searchParams.get('_de') === '1';
     try {
-      if (!localStorage.getItem('demo-explorer-seen')) {
-        setShowHint(true);
+      const seen = !!localStorage.getItem('demo-explorer-seen');
+      if (!seen && !hasDeParam) setShowHint(true);
+      if (hasDeParam) {
+        setIsOpen(true);
+        localStorage.setItem('demo-explorer-seen', '1');
       }
     } catch {
-      // localStorage blocked (private browsing etc.) — show hint anyway
-      setShowHint(true);
+      if (!hasDeParam) setShowHint(true);
+      if (hasDeParam) setIsOpen(true);
     }
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // intentionally only runs on mount
 
   const open = useCallback(() => {
     setIsOpen(true);
-    // Dismiss hint permanently on first open
     setShowHint(false);
     try { localStorage.setItem('demo-explorer-seen', '1'); } catch { /* ignore */ }
-  }, []);
-  const close = useCallback(() => setIsOpen(false), []);
+    // Write _de=1 into the URL so a subsequent navigation can restore the open state
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('_de', '1');
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  }, [pathname, searchParams, router]);
+
+  const close = useCallback(() => {
+    setIsOpen(false);
+    // Remove _de from the URL so shared links don't auto-open the drawer
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('_de');
+    const qs = params.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+  }, [pathname, searchParams, router]);
 
   const navigateToPage = useCallback(
     (routeKey: string) => {
+      // No-op if already on this page
+      if (currentRoute?.routeKey === routeKey) return;
+
       const path = routeKey === '/' ? '' : routeKey;
-      router.push(`${basePath}${path}`);
+      // Fallback to '/' if basePath and path are both empty (home on a domain tenant)
+      const target = `${basePath}${path}` || '/';
+
+      // Carry _de=1 so the drawer auto-opens on the destination page
+      const params = new URLSearchParams();
+      params.set('_de', '1');
+      router.push(`${target}?${params.toString()}`);
     },
-    [basePath, router],
+    [basePath, router, currentRoute],
   );
 
   const selectVariant = useCallback(
@@ -223,6 +249,7 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
       const dvValue = `${normalizedRoute}:${variantSlug}`;
       const params = new URLSearchParams(searchParams.toString());
       params.set('_dv', dvValue);
+      params.set('_de', '1'); // Keep drawer open after variant switch
       router.push(`${pathname}?${params.toString()}`);
     },
     [pathname, searchParams, router],
@@ -231,6 +258,7 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
   const resetVariant = useCallback(() => {
     const params = new URLSearchParams(searchParams.toString());
     params.delete('_dv');
+    params.set('_de', '1'); // Keep drawer open after reset
     const qs = params.toString();
     router.push(qs ? `${pathname}?${qs}` : pathname);
   }, [pathname, searchParams, router]);
