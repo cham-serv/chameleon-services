@@ -83,9 +83,10 @@ export default async function TenantLayout({ children, params }: Props) {
   const pc = config?.pageConfig;
   const s = config?.settings;
 
-  const fontHeading = s?.fontHeading ?? pc?.fontHeading ?? null;
-  const fontBody = s?.fontBody ?? pc?.fontBody ?? null;
-  const fontClasses = getFontClasses(fontHeading, fontBody);
+  const fontHeading  = s?.fontHeading  ?? pc?.fontHeading  ?? null;
+  const fontBody     = s?.fontBody     ?? pc?.fontBody     ?? null;
+  const fontDisplay  = s?.fontDisplay  ?? pc?.fontDisplay  ?? null;
+  const fontClasses  = getFontClasses(fontHeading, fontBody, fontDisplay);
 
   // Brand tokens  inject as CSS custom properties
   const brandTokens = buildBrandTokens({
@@ -93,7 +94,8 @@ export default async function TenantLayout({ children, params }: Props) {
     colourSecondary:  s?.colourSecondary  ?? pc?.colourSecondary  ?? undefined,
     colourAccent:     s?.colourAccent     ?? pc?.colourAccent     ?? undefined,
     colourBackground: s?.colourBackground ?? pc?.colourBackground ?? undefined,
-    colourText:       s?.colourText       ?? undefined,
+    colourText:       s?.colourText       ?? pc?.colourText       ?? undefined,
+    colourHeading:    s?.colourHeading    ?? pc?.colourHeading    ?? undefined,
   });
 
   const buttonStyle = s?.buttonStyle ?? pc?.buttonStyle ?? 'filled';
@@ -116,7 +118,7 @@ export default async function TenantLayout({ children, params }: Props) {
       <head>
         <style
           dangerouslySetInnerHTML={{
-            __html: `:root { ${brandTokens} ${getFontVariables(fontHeading, fontBody)} }`,
+            __html: `:root { ${brandTokens} ${getFontVariables(fontHeading, fontBody, fontDisplay)} }`,
           }}
         />
         {/* Preload the logo so it arrives before the header <img> is discovered */}
@@ -150,19 +152,29 @@ function buildBrandTokens(settings: {
   colourAccent?: string;
   colourBackground?: string;
   colourText?: string;
+  colourHeading?: string;
 } | null | undefined): string {
-  const p = settings?.colourPrimary ?? '#0B132B';
-  const s = settings?.colourSecondary ?? '#00E5FF';
-  const a = settings?.colourAccent ?? '#f59e0b';
-  const bg = settings?.colourBackground ?? '#ffffff';
-  const text = settings?.colourText ?? '#333333';
+  const p    = settings?.colourPrimary    ?? '#0B132B';
+  const s    = settings?.colourSecondary  ?? '#00E5FF';
+  const a    = settings?.colourAccent     ?? '#f59e0b';
+  const bg   = settings?.colourBackground ?? '#ffffff';
+  const text = settings?.colourText       ?? '#333333';
 
-  return [
+  const tokens = [
     `--brand-primary: ${p}`,
     `--brand-secondary: ${s}`,
     `--brand-accent: ${a}`,
     `--brand-background: ${bg}`,
     `--brand-text: ${text}`,
     `--brand-surface: color-mix(in oklch, ${bg} 95%, ${p} 5%)`,
-  ].join('; ');
+  ];
+
+  // Only emit --brand-heading when the tenant has explicitly set a heading colour.
+  // Otherwise the CSS :root default (var(--brand-text)) handles it,
+  // which means changing text colour also updates heading colour automatically.
+  if (settings?.colourHeading) {
+    tokens.push(`--brand-heading: ${settings.colourHeading}`);
+  }
+
+  return tokens.join('; ');
 }

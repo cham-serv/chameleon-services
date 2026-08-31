@@ -78,20 +78,36 @@ export type PlatformFont = keyof typeof PLATFORM_FONTS;
  * Returns combined CSS class names for the tenant's selected fonts.
  * Falls back to Plus Jakarta Sans (heading) + Inter (body) if not found.
  */
-export function getFontClasses(heading: string | null | undefined, body: string | null | undefined): string {
+export function getFontClasses(
+  heading: string | null | undefined,
+  body: string | null | undefined,
+  display?: string | null,
+): string {
   const h = PLATFORM_FONTS[heading as PlatformFont]?.className ?? plusJakartaSans.className;
   const b = PLATFORM_FONTS[body as PlatformFont]?.className ?? inter.className;
-  return `${h} ${b}`;
+  // Display font: only add its class if it's a different font from heading
+  const d = display && display !== heading
+    ? (PLATFORM_FONTS[display as PlatformFont]?.className ?? '')
+    : '';
+  return [h, b, d].filter(Boolean).join(' ');
 }
 
 /**
  * Returns CSS variable declarations for the tenant's selected fonts.
  * Used in the tenant layout's <style> tag.
  */
-export function getFontVariables(heading: string | null | undefined, body: string | null | undefined): string {
+export function getFontVariables(
+  heading: string | null | undefined,
+  body: string | null | undefined,
+  display?: string | null,
+): string {
   const h = PLATFORM_FONTS[heading as PlatformFont]?.style.fontFamily ?? plusJakartaSans.style.fontFamily;
   const b = PLATFORM_FONTS[body as PlatformFont]?.style.fontFamily ?? inter.style.fontFamily;
-  return `--font-heading: ${h}; --font-body: ${b};`;
+  // --font-display falls back to --font-heading if no separate display font is set
+  const d = display
+    ? (PLATFORM_FONTS[display as PlatformFont]?.style.fontFamily ?? h)
+    : h;
+  return `--font-display: ${d}; --font-heading: ${h}; --font-body: ${b};`;
 }
 
 /**
@@ -101,17 +117,17 @@ export function getFontVariables(heading: string | null | undefined, body: strin
  * WITHOUT making any request to Google Fonts CDN — the fonts are already
  * self-hosted via next/font/google and available immediately.
  *
- * Falls back to Plus Jakarta Sans (heading) or Inter (body) if the name
+ * Falls back to Plus Jakarta Sans (heading/display) or Inter (body) if the name
  * is not in the registry.
  */
 export function getFontStack(
   fontName: string | null | undefined,
-  role: 'heading' | 'body' = 'body',
+  role: 'display' | 'heading' | 'body' = 'body',
 ): string {
   const found = PLATFORM_FONTS[fontName as PlatformFont]?.style.fontFamily;
   if (found) return found;
   // Safe fallback — use the default for each role
-  return role === 'heading'
-    ? plusJakartaSans.style.fontFamily
-    : inter.style.fontFamily;
+  return role === 'body'
+    ? inter.style.fontFamily
+    : plusJakartaSans.style.fontFamily;
 }

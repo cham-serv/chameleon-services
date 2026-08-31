@@ -74,8 +74,10 @@ export type SiteSettings = {
   colourAccent?: string;
   colourBackground?: string;
   colourText?: string;
+  colourHeading?: string;
   /** Controls button shape. CSS applied via data-btn-style on <body>. */
   buttonStyle?: 'filled' | 'outline' | 'pill' | 'soft';
+  fontDisplay?: string;
   fontHeading?: string;
   fontBody?: string;
   // Ecommerce
@@ -149,7 +151,10 @@ export type PageConfig = {
   colourSecondary?: string | null;
   colourAccent?: string | null;
   colourBackground?: string | null;
+  colourText?: string | null;
+  colourHeading?: string | null;
   buttonStyle?: 'filled' | 'outline' | 'pill' | 'soft' | null;
+  fontDisplay?: string | null;
   fontHeading?: string | null;
   fontBody?: string | null;
 
