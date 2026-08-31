@@ -49,6 +49,22 @@ const PRESET_PALETTES: { label: string; primary: string; secondary: string; acce
   { label: 'Slate',    primary: '#0f172a', secondary: '#334155', accent: '#06b6d4' },
 ];
 
+/**
+ * Curated palettes for home page variant previews.
+ * Applied automatically in the Demo Explorer when switching variants
+ * so each demo variant looks visually intentional instead of just
+ * inheriting whatever the demo tenant's default colours happen to be.
+ *
+ * In production these are never applied — real tenants use their own colours.
+ */
+const VARIANT_PALETTES: Record<string, { primary: string; secondary: string; accent: string; bgColour: string; textColour: string }> = {
+  storefront: { primary: '#2d6a4f', secondary: '#52b788', accent: '#f59e0b',  bgColour: '#ffffff', textColour: '#1b1b1b' },
+  editorial:  { primary: '#0369a1', secondary: '#38bdf8', accent: '#f97316',  bgColour: '#fafaf9', textColour: '#1c1917' },
+  modern:     { primary: '#4f46e5', secondary: '#7c3aed', accent: '#06b6d4',  bgColour: '#0a0f1e', textColour: '#e2e8f0' },
+  bold:       { primary: '#1a1a2e', secondary: '#e94560', accent: '#f5a623',  bgColour: '#0d0d1a', textColour: '#f8fafc' },
+  minimalist: { primary: '#1c1917', secondary: '#57534e', accent: '#16a34a',  bgColour: '#fafaf9', textColour: '#1c1917' },
+};
+
 // - Font Pair Presets -
 
 const FONT_PAIRS: { label: string; heading: string; body: string }[] = [
@@ -280,6 +296,23 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
       params.set('_dv', dvValue);
       params.set('_de', '1'); // Keep drawer open after variant switch
       router.push(`${pathname}?${params.toString()}`);
+
+      // Auto-apply a curated palette when switching home variants in the demo.
+      // This ensures each variant looks visually intentional rather than inheriting
+      // whatever the demo tenant's default colours happen to be.
+      if (routeKey === '/') {
+        const curated = VARIANT_PALETTES[variantSlug];
+        if (curated) {
+          setBrand((prev) => ({
+            ...prev,
+            primary:    curated.primary,
+            secondary:  curated.secondary,
+            accent:     curated.accent,
+            bgColour:   curated.bgColour,
+            textColour: curated.textColour,
+          }));
+        }
+      }
     },
     [pathname, searchParams, router],
   );

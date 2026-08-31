@@ -518,8 +518,27 @@ function renderModern(
 
   return (
     <>
-      {/* Hero - atmospheric gradient background */}
-      <section className="atlas-home-hero atlas-atmo-bg">
+      {/* Hero - deep slate with animated orbs and mesh */}
+      <section className="atlas-home-hero">
+        {/* Subtle grid mesh overlay */}
+        <div className="atlas-home-hero-grid" aria-hidden="true" />
+        {/* Geometric corner accent lines */}
+        <div className="atlas-home-hero-lines" aria-hidden="true">
+          <svg width="100%" height="100%" viewBox="0 0 1440 800" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {/* Top-left corner bracket */}
+            <path d="M 0 120 L 0 0 L 120 0" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+            {/* Top-right corner bracket */}
+            <path d="M 1320 0 L 1440 0 L 1440 120" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+            {/* Bottom-left corner bracket */}
+            <path d="M 0 680 L 0 800 L 120 800" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+            {/* Bottom-right corner bracket */}
+            <path d="M 1320 800 L 1440 800 L 1440 680" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+            {/* Faint horizontal rule mid-left */}
+            <line x1="0" y1="400" x2="180" y2="400" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
+            {/* Faint horizontal rule mid-right */}
+            <line x1="1260" y1="400" x2="1440" y2="400" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
+          </svg>
+        </div>
         <div className="atlas-container" style={{ padding: '0 var(--atlas-spacing-lg)' }}>
           <div className="atlas-home-hero-content">
             <AtlasBadge variant="accent" size="sm">
