@@ -339,3 +339,190 @@
 @media (prefers-reduced-motion: reduce) {
   .m-animate-fade-up { animation: none; }
 }
+
+/* ── Container: tighten on smallest phones ────────────────────── */
+@media (max-width: 380px) {
+  .m-container,
+  .m-container-sm {
+    padding-inline: 16px;
+  }
+}
+
+/* ── Hero inner container ─────────────────────────────────────── */
+/* paddingBlock used inline as 80px; on mobile shrink to 48px     */
+.m-hero-inner {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding-block: 80px;
+}
+@media (max-width: 640px) {
+  .m-hero-inner {
+    padding-block: 48px;
+  }
+}
+
+/* ── Bill Killer Table — responsive wrapper ───────────────────── */
+.m-bill-table-wrap {
+  max-width: 800px;
+  margin: 0 auto;
+  overflow: hidden;  /* clip card radius */
+  border-radius: var(--m-radius-lg);
+  border: 1px solid var(--m-border);
+  background: var(--m-bg-glass);
+  backdrop-filter: blur(12px);
+}
+
+/* Desktop: show table, hide cards */
+.m-bill-table-wrap table  { display: table; }
+.m-bill-cards             { display: none; }
+
+@media (max-width: 540px) {
+  /* Hide table, show stacked cards */
+  .m-bill-table-wrap table { display: none; }
+  .m-bill-cards             { display: flex; flex-direction: column; gap: 1px; }
+
+  .m-bill-card {
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.01);
+  }
+  .m-bill-card:last-child { border-bottom: none; }
+  .m-bill-card-label {
+    font-size: 0.875rem;
+    color: var(--m-text-muted);
+    line-height: 1.5;
+    margin-bottom: 4px;
+  }
+  .m-bill-card-value {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--m-accent-light);
+  }
+  /* Total row */
+  .m-bill-card-total {
+    padding: 16px 18px;
+    background: rgba(59, 130, 246, 0.05);
+  }
+  .m-bill-card-total .m-bill-card-label {
+    font-weight: 700;
+    color: var(--m-text);
+    font-size: 0.9rem;
+  }
+  .m-bill-card-total .m-bill-card-value {
+    font-size: 1rem;
+  }
+}
+
+/* ── Pricing Tracks — 3-col → stacked ────────────────────────── */
+.m-pricing-tracks {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 32px;
+  max-width: 900px;
+  margin: 0 auto 40px;
+  align-items: start;
+}
+
+.m-pricing-divider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 28px;
+  gap: 8px;
+}
+.m-pricing-divider-line {
+  width: 1px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.08);
+}
+.m-pricing-divider-label {
+  font-size: 0.7rem;
+  color: var(--m-text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 640px) {
+  .m-pricing-tracks {
+    grid-template-columns: 1fr;
+    gap: 0;
+    max-width: 100%;
+  }
+  .m-pricing-divider {
+    flex-direction: row;
+    padding-top: 0;
+    padding-block: 20px;
+  }
+  .m-pricing-divider-line {
+    width: auto;
+    flex: 1;
+    height: 1px;
+  }
+}
+
+/* ── Footer layout ────────────────────────────────────────────── */
+.m-footer-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 32px;
+  align-items: flex-start;
+  margin-bottom: 40px;
+}
+
+.m-footer-nav {
+  display: flex;
+  gap: 48px;
+}
+
+.m-footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--m-text-faint);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+@media (max-width: 640px) {
+  .m-footer-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .m-footer-nav {
+    gap: 32px;
+  }
+  .m-footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}
+
+/* ── Mobile nav drawer animation ─────────────────────────────── */
+.m-mobile-nav-drawer {
+  position: fixed;
+  inset: 0;
+  top: 64px;
+  background: rgba(13, 17, 23, 0.97);
+  backdrop-filter: blur(20px);
+  z-index: 99;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  /* hidden state */
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.m-mobile-nav-drawer[data-open="true"] {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}

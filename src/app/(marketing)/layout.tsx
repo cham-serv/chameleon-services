@@ -73,8 +73,7 @@ const orgJsonLd = {
   name: 'Chameleon',
   url: 'https://chameleon.services',
   description:
-    'Chameleon builds AI-ready, GEO-optimised authority engines and ecommerce stores for South African businesses and agencies.',
-  areaServed: 'ZA',
+    'Chameleon builds AI-ready, GEO-optimised storefronts and authority engines that get found by AI search and human search alike.',
   contactPoint: {
     '@type': 'ContactPoint',
     email: 'chris@chameleon.services',
@@ -88,7 +87,7 @@ export default function MarketingLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en-ZA" className={`${inter.variable} ${outfit.variable}`}>
+    <html lang="en" className={`${inter.variable} ${outfit.variable}`}>
       <head>
         <script
           type="application/ld+json"
@@ -123,15 +122,7 @@ function MarketingFooter() {
       }}
     >
       <div className="m-container">
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr auto',
-            gap: '32px',
-            alignItems: 'flex-start',
-            marginBottom: '40px',
-          }}
-        >
+        <div className="m-footer-grid">
           {/* Brand */}
           <div>
             <Link href="/" aria-label="Chameleon home">
@@ -146,13 +137,12 @@ function MarketingFooter() {
                 lineHeight: 1.6,
               }}
             >
-              Search has changed. We help South African businesses adapt to
-              the new era of AI-powered search - beautifully and affordably.
+              Stay visible in the AI era — beautifully and affordably.
             </p>
           </div>
 
           {/* Nav columns */}
-          <div style={{ display: 'flex', gap: '48px' }}>
+          <div className="m-footer-nav">
             <FooterCol
               title="Product"
               links={[
@@ -172,18 +162,8 @@ function MarketingFooter() {
         </div>
 
         {/* Bottom bar */}
-        <div
-          style={{
-            borderTop: '1px solid rgba(255,255,255,0.06)',
-            paddingTop: '24px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            fontSize: '0.8rem',
-            color: 'var(--m-text-faint)',
-          }}
-        >
-          <span> 2026 Chameleon. South Africa </span>
+        <div className="m-footer-bottom">
+          <span>© 2026 Chameleon</span>
           <span>Built for businesses that refuse to fall behind.</span>
         </div>
       </div>

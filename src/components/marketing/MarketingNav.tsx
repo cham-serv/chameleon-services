@@ -113,12 +113,17 @@ export function MarketingNav() {
             id="mobile-menu-toggle"
             className="m-mobile-toggle"
             style={{
-              padding: '8px',
+              padding: '10px',
               background: 'transparent',
               border: '1px solid rgba(255,255,255,0.12)',
               borderRadius: '6px',
               color: 'var(--m-text)',
               cursor: 'pointer',
+              minWidth: '40px',
+              minHeight: '40px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
             {mobileOpen ? <X size={20} /> : <Menu size={20} />}
@@ -126,50 +131,40 @@ export function MarketingNav() {
         </div>
       </div>
 
-      {/* Mobile drawer */}
-      {mobileOpen && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            top: '64px',
-            background: 'rgba(13,17,23,0.97)',
-            backdropFilter: 'blur(20px)',
-            zIndex: 99,
-            padding: '24px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '8px',
-          }}
-        >
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              style={{
-                padding: '14px 16px',
-                borderRadius: '8px',
-                fontSize: '1.1rem',
-                fontWeight: 500,
-                color: pathname === link.href ? 'var(--m-accent-light)' : 'var(--m-text)',
-                textDecoration: 'none',
-                background: pathname === link.href ? 'rgba(59,130,246,0.08)' : 'transparent',
-              }}
-              id={`mobile-nav-${link.label.toLowerCase()}`}
-            >
-              {link.label}
-            </Link>
-          ))}
+      {/* Mobile drawer — always rendered, toggled via CSS transition */}
+      <div
+        className="m-mobile-nav-drawer"
+        data-open={mobileOpen}
+        aria-hidden={!mobileOpen}
+        id="mobile-nav-drawer"
+      >
+        {navLinks.map((link) => (
           <Link
-            href="/contact"
-            className="m-btn m-btn-primary m-btn-lg"
-            style={{ marginTop: '16px' }}
-            id="mobile-nav-cta"
+            key={link.href}
+            href={link.href}
+            style={{
+              padding: '14px 16px',
+              borderRadius: '8px',
+              fontSize: '1.1rem',
+              fontWeight: 500,
+              color: pathname === link.href ? 'var(--m-accent-light)' : 'var(--m-text)',
+              textDecoration: 'none',
+              background: pathname === link.href ? 'rgba(59,130,246,0.08)' : 'transparent',
+            }}
+            id={`mobile-nav-${link.label.toLowerCase().replace(/\s+/g, '-')}`}
           >
-            Get Started
+            {link.label}
           </Link>
-        </div>
-      )}
+        ))}
+        <Link
+          href="/contact"
+          className="m-btn m-btn-primary m-btn-lg"
+          style={{ marginTop: '16px' }}
+          id="mobile-nav-cta"
+        >
+          Get Started
+        </Link>
+      </div>
     </header>
   );
 }

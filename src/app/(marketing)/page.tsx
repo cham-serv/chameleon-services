@@ -156,7 +156,7 @@ export default function HomePage() {
           }}
         />
 
-        <div className="m-container" style={{ position: 'relative', zIndex: 1, textAlign: 'center', paddingBlock: '80px' }}>
+        <div className="m-container m-hero-inner">
           {/* Badge */}
           <div className="m-animate-fade-up" style={{ marginBottom: '24px' }}>
             <span className="m-badge">
@@ -240,7 +240,7 @@ export default function HomePage() {
             className="m-animate-fade-up m-animate-delay-4"
             style={{ marginTop: '24px', fontSize: '0.8rem', color: 'var(--m-text-faint)' }}
           >
-            South Africa-first platform. No hidden fees. Flexible or all-inclusive.
+            No hidden fees. Cancel any time.
           </p>
         </div>
       </section>
@@ -322,34 +322,57 @@ export default function HomePage() {
              </h2>
           </div>
           
-          <div className="m-card" style={{ maxWidth: '800px', margin: '0 auto', overflow: 'hidden' }}>
-             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-               <thead>
-                 <tr style={{ background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-                   <th style={{ padding: '16px 24px', fontSize: '0.9rem', color: 'var(--m-text-muted)', fontWeight: 600 }}>What you&apos;re probably paying now</th>
-                   <th style={{ padding: '16px 24px', fontSize: '0.9rem', color: 'var(--m-text)', fontWeight: 600 }}>With Chameleon</th>
-                 </tr>
-               </thead>
-               <tbody style={{ fontSize: '0.95rem' }}>
-                 {[
-                   ['Web hosting (shared/VPS): R600–R1,500/mo', '✅ Included'],
-                   ['WordPress maintenance & updates: R800–R2,500/mo', '✅ Included'],
-                   ['Plugin subscriptions (Yoast, WooCommerce, etc.): R400–R1,200/mo', '✅ Included'],
-                   ['SSL Certificate renewal: R200–R600/yr', '✅ Included'],
-                   ['Developer call-out fees (when things break): R1,500–R5,000/incident', '✅ Included'],
-                   ['SEO agency retainer to "fix" your site: R5,000–R15,000/mo', '✅ Built in from day one']
-                 ].map((row, i) => (
-                   <tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                     <td style={{ padding: '16px 24px', color: 'var(--m-text-muted)' }}>{row[0]}</td>
-                     <td style={{ padding: '16px 24px', color: '#60a5fa', fontWeight: 500 }}>{row[1]}</td>
-                   </tr>
-                 ))}
-                 <tr style={{ background: 'rgba(59,130,246,0.05)' }}>
-                   <td style={{ padding: '20px 24px', color: 'var(--m-text)', fontWeight: 700, fontSize: '1rem' }}>Typical monthly total: R8,000–R25,000+</td>
-                   <td style={{ padding: '20px 24px', color: '#60a5fa', fontWeight: 700, fontSize: '1.1rem' }}>Chameleon: from R999/mo</td>
-                 </tr>
-               </tbody>
-             </table>
+          {/* Bill table — desktop (table) + mobile (stacked cards) */}
+          <div className="m-bill-table-wrap">
+            {/* Desktop table */}
+            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+              <thead>
+                <tr style={{ background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                  <th style={{ padding: '16px 24px', fontSize: '0.9rem', color: 'var(--m-text-muted)', fontWeight: 600 }}>What you&apos;re probably paying now</th>
+                  <th style={{ padding: '16px 24px', fontSize: '0.9rem', color: 'var(--m-text)', fontWeight: 600 }}>With Chameleon</th>
+                </tr>
+              </thead>
+              <tbody style={{ fontSize: '0.95rem' }}>
+                {[
+                  ['Web hosting (shared/VPS): R600–R1,500/mo', '✅ Included'],
+                  ['WordPress maintenance & updates: R800–R2,500/mo', '✅ Included'],
+                  ['Plugin subscriptions (Yoast, WooCommerce, etc.): R400–R1,200/mo', '✅ Included'],
+                  ['SSL Certificate renewal: R200–R600/yr', '✅ Included'],
+                  ['Developer call-out fees (when things break): R1,500–R5,000/incident', '✅ Included'],
+                  ['SEO agency retainer to “fix” your site: R5,000–R15,000/mo', '✅ Built in from day one'],
+                ].map((row, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                    <td style={{ padding: '16px 24px', color: 'var(--m-text-muted)' }}>{row[0]}</td>
+                    <td style={{ padding: '16px 24px', color: '#60a5fa', fontWeight: 500 }}>{row[1]}</td>
+                  </tr>
+                ))}
+                <tr style={{ background: 'rgba(59,130,246,0.05)' }}>
+                  <td style={{ padding: '20px 24px', color: 'var(--m-text)', fontWeight: 700, fontSize: '1rem' }}>Typical monthly total: R8,000–R25,000+</td>
+                  <td style={{ padding: '20px 24px', color: '#60a5fa', fontWeight: 700, fontSize: '1.1rem' }}>Chameleon: from R999/mo</td>
+                </tr>
+              </tbody>
+            </table>
+
+            {/* Mobile stacked cards (CSS hides/shows these) */}
+            <div className="m-bill-cards">
+              {[
+                { label: 'Web hosting (shared/VPS): R600–R1,500/mo',                         value: '✅ Included' },
+                { label: 'WordPress maintenance & updates: R800–R2,500/mo',                  value: '✅ Included' },
+                { label: 'Plugin subscriptions (Yoast, WooCommerce, etc.): R400–R1,200/mo', value: '✅ Included' },
+                { label: 'SSL Certificate renewal: R200–R600/yr',                            value: '✅ Included' },
+                { label: 'Developer call-out fees (when things break): R1,500–R5,000/incident', value: '✅ Included' },
+                { label: 'SEO agency retainer to “fix” your site: R5,000–R15,000/mo',       value: '✅ Built in from day one' },
+              ].map((item, i) => (
+                <div key={i} className="m-bill-card">
+                  <div className="m-bill-card-label">{item.label}</div>
+                  <div className="m-bill-card-value">{item.value}</div>
+                </div>
+              ))}
+              <div className="m-bill-card m-bill-card-total">
+                <div className="m-bill-card-label">Typical monthly total: R8,000–R25,000+</div>
+                <div className="m-bill-card-value">Chameleon: from R999/mo</div>
+              </div>
+            </div>
           </div>
           <p style={{ textAlign: 'center', fontSize: '0.8rem', color: 'var(--m-text-faint)', marginTop: '16px' }}>
             Typical costs for a mid-market WordPress site. Your actual savings will vary.
@@ -597,8 +620,8 @@ export default function HomePage() {
             Direct plans for businesses, flat monthly scaling for agencies. No hidden fees.
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: '32px', maxWidth: '900px', margin: '0 auto 40px', alignItems: 'start' }}>
-            {/* Track 1 */}
+          <div className="m-pricing-tracks">
+            {/* Track 1 — Businesses */}
             <div>
               <div style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--m-text-muted)', marginBottom: '16px' }}>
                 For Businesses
@@ -610,14 +633,8 @@ export default function HomePage() {
                   { name: 'Storefront',   price: 'from R2,999', href: '/pricing' },
                   { name: 'Commerce',     price: 'from R4,500', href: '/pricing' },
                 ].map((tier) => (
-                  <Link
-                    key={tier.name}
-                    href={tier.href}
-                    className="m-tier-row"
-                  >
-                    <span style={{ fontSize: '0.9rem', fontWeight: 400, color: 'var(--m-text-muted)' }}>
-                      {tier.name}
-                    </span>
+                  <Link key={tier.name} href={tier.href} className="m-tier-row">
+                    <span style={{ fontSize: '0.9rem', fontWeight: 400, color: 'var(--m-text-muted)' }}>{tier.name}</span>
                     <span style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--m-text-muted)' }}>
                       {tier.price}<span style={{ fontWeight: 400, fontSize: '0.75rem' }}>/mo</span>
                     </span>
@@ -627,13 +644,13 @@ export default function HomePage() {
             </div>
 
             {/* Divider */}
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '28px', gap: '8px' }}>
-              <div style={{ width: '1px', height: '40px', background: 'rgba(255,255,255,0.08)' }} />
-              <span style={{ fontSize: '0.7rem', color: 'var(--m-text-faint)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>or</span>
-              <div style={{ width: '1px', height: '40px', background: 'rgba(255,255,255,0.08)' }} />
+            <div className="m-pricing-divider">
+              <div className="m-pricing-divider-line" />
+              <span className="m-pricing-divider-label">or</span>
+              <div className="m-pricing-divider-line" />
             </div>
 
-            {/* Track 2 */}
+            {/* Track 2 — Agencies */}
             <div>
               <div style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--m-text-muted)', marginBottom: '16px' }}>
                 For Agencies
@@ -644,15 +661,9 @@ export default function HomePage() {
                   { name: 'Silver', clients: '3-9 clients',  price: 'R4,500', href: '/agencies' },
                   { name: 'Gold',   clients: '10+ clients',  price: 'Free',   href: '/agencies' },
                 ].map((tier) => (
-                  <Link
-                    key={tier.name}
-                    href={tier.href}
-                    className="m-tier-row"
-                  >
+                  <Link key={tier.name} href={tier.href} className="m-tier-row">
                     <div style={{ textAlign: 'left' }}>
-                      <span style={{ fontSize: '0.9rem', fontWeight: 400, color: 'var(--m-text-muted)', display: 'block' }}>
-                        {tier.name}
-                      </span>
+                      <span style={{ fontSize: '0.9rem', fontWeight: 400, color: 'var(--m-text-muted)', display: 'block' }}>{tier.name}</span>
                       <span style={{ fontSize: '0.75rem', color: 'var(--m-text-faint)' }}>{tier.clients}</span>
                     </div>
                     <span style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--m-text-muted)' }}>
@@ -723,7 +734,7 @@ export default function HomePage() {
                 lineHeight: 1.7,
               }}
             >
-              Join South African businesses already using Chameleon to stay visible
+              Join businesses already using Chameleon to stay visible
               in the AI era.
             </p>
             <Link href="/contact" className="m-btn m-btn-primary m-btn-lg" id="final-cta-get-started">
