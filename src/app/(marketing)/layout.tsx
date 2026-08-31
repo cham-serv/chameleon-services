@@ -19,11 +19,11 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Chameleon - AI-Ready Websites for South African Businesses',
+    default: 'Chameleon | The AI-Ready Website Platform for South Africa',
     template: '%s | Chameleon',
   },
   description:
-    'Chameleon builds AI-ready, GEO-optimised websites and ecommerce stores for South African businesses. Beautiful templates. Always up to date. Search has changed - adapt with Chameleon.',
+    'Stop paying for a website that AI search engines can\'t find. Chameleon delivers high-performance, GEO-optimised storefronts for South African SMEs, with hosting, maintenance, and SEO all built into one predictable monthly fee.',
   keywords: [
     'AI-ready website',
     'GEO optimised',
@@ -45,14 +45,23 @@ export const metadata: Metadata = {
     locale: 'en_ZA',
     url: 'https://chameleon.services',
     siteName: 'Chameleon',
-    title: 'Chameleon - AI-Ready Websites for South African Businesses',
+    title: 'Chameleon | The AI-Ready Website Platform for South Africa',
     description:
-      'Search has changed. Chameleon adapts your business to the new era of AI-powered search with authority-engine architecture - so you\'re never left behind.',
+      'Stop paying for a website that AI search engines can\'t find. Chameleon delivers high-performance, GEO-optimised storefronts with hosting, maintenance, and SEO all built into one predictable monthly fee.',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Chameleon - The AI-Ready Website Platform',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Chameleon - AI-Ready Websites for South African Businesses',
-    description: 'Search has changed. Adapt with Chameleon.',
+    title: 'Chameleon | The AI-Ready Website Platform for South Africa',
+    description: 'Stop paying for a website that AI search engines can\'t find. Built for South African SMEs.',
+    images: ['/og-image.jpg'],
   },
   robots: { index: true, follow: true },
 };

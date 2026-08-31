@@ -613,19 +613,7 @@ export default function HomePage() {
                   <Link
                     key={tier.name}
                     href={tier.href}
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      padding: '12px 20px',
-                      borderRadius: '8px',
-                      border: '1px solid rgba(255,255,255,0.07)',
-                      background: 'rgba(255,255,255,0.02)',
-                      textDecoration: 'none',
-                      transition: 'border-color 0.15s, background 0.15s',
-                    }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(59,130,246,0.3)'; (e.currentTarget as HTMLElement).style.background = 'rgba(59,130,246,0.04)'; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.07)'; (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)'; }}
+                    className="m-tier-row"
                   >
                     <span style={{ fontSize: '0.9rem', fontWeight: 400, color: 'var(--m-text-muted)' }}>
                       {tier.name}
@@ -659,19 +647,7 @@ export default function HomePage() {
                   <Link
                     key={tier.name}
                     href={tier.href}
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      padding: '12px 20px',
-                      borderRadius: '8px',
-                      border: '1px solid rgba(255,255,255,0.07)',
-                      background: 'rgba(255,255,255,0.02)',
-                      textDecoration: 'none',
-                      transition: 'border-color 0.15s, background 0.15s',
-                    }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(59,130,246,0.3)'; (e.currentTarget as HTMLElement).style.background = 'rgba(59,130,246,0.04)'; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.07)'; (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)'; }}
+                    className="m-tier-row"
                   >
                     <div style={{ textAlign: 'left' }}>
                       <span style={{ fontSize: '0.9rem', fontWeight: 400, color: 'var(--m-text-muted)', display: 'block' }}>
