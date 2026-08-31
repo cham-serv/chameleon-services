@@ -36,26 +36,33 @@ import {
 
 // - Font instances (declared at module level - next/font requirement) -
 
-const inter          = Inter({ subsets: ['latin'], variable: '--nf-inter', display: 'swap' });
-const lato           = Lato({ subsets: ['latin'], weight: ['300', '400', '700'], variable: '--nf-lato', display: 'swap' });
-const openSans       = Open_Sans({ subsets: ['latin'], variable: '--nf-opensans', display: 'swap' });
-const dmSans         = DM_Sans({ subsets: ['latin'], variable: '--nf-dmsans', display: 'swap' });
-const plusJakartaSans = Plus_Jakarta_Sans({ subsets: ['latin'], variable: '--nf-jakarta', display: 'swap' });
-const outfit         = Outfit({ subsets: ['latin'], variable: '--nf-outfit', display: 'swap' });
-const poppins        = Poppins({ subsets: ['latin'], weight: ['300', '400', '500', '600', '700'], variable: '--nf-poppins', display: 'swap' });
-const montserrat     = Montserrat({ subsets: ['latin'], variable: '--nf-montserrat', display: 'swap' });
-const figtree        = Figtree({ subsets: ['latin'], variable: '--nf-figtree', display: 'swap' });
-const raleway        = Raleway({ subsets: ['latin'], variable: '--nf-raleway', display: 'swap' });
-const syne           = Syne({ subsets: ['latin'], variable: '--nf-syne', display: 'swap' });
-const lora           = Lora({ subsets: ['latin'], variable: '--nf-lora', display: 'swap' });
-const playfairDisplay = Playfair_Display({ subsets: ['latin'], variable: '--nf-playfair', display: 'swap' });
-const jetbrainsMono  = JetBrains_Mono({ subsets: ['latin'], variable: '--nf-jetbrains', display: 'swap' });
-const spaceGrotesk   = Space_Grotesk({ subsets: ['latin'], variable: '--nf-spacegrotesk', display: 'swap' });
-const roboto         = Roboto({ subsets: ['latin'], weight: ['300', '400', '500', '700'], variable: '--nf-roboto', display: 'swap' });
-const nunito         = Nunito({ subsets: ['latin'], variable: '--nf-nunito', display: 'swap' });
-const josefinSans    = Josefin_Sans({ subsets: ['latin'], variable: '--nf-josefin', display: 'swap' });
-const merriweather   = Merriweather({ subsets: ['latin'], weight: ['300', '400', '700'], variable: '--nf-merriweather', display: 'swap' });
-const oswald         = Oswald({ subsets: ['latin'], variable: '--nf-oswald', display: 'swap' });
+// preload: false on ALL fonts — this is intentional and critical for performance.
+// next/font defaults to preload: true, which injects a <link rel="preload"> for every
+// font instantiated in a file that is imported. Because this registry file is imported
+// on every tenant page, without preload: false the browser would be told to preload
+// all 20 fonts on every single page load — destroying LCP and Lighthouse scores.
+// With preload: false the @font-face rules are still generated and self-hosted;
+// the browser downloads only the 1–3 fonts it actually encounters during layout.
+const inter           = Inter({ subsets: ['latin'], variable: '--nf-inter', display: 'swap', preload: false });
+const lato            = Lato({ subsets: ['latin'], weight: ['300', '400', '700'], variable: '--nf-lato', display: 'swap', preload: false });
+const openSans        = Open_Sans({ subsets: ['latin'], variable: '--nf-opensans', display: 'swap', preload: false });
+const dmSans          = DM_Sans({ subsets: ['latin'], variable: '--nf-dmsans', display: 'swap', preload: false });
+const plusJakartaSans = Plus_Jakarta_Sans({ subsets: ['latin'], variable: '--nf-jakarta', display: 'swap', preload: false });
+const outfit          = Outfit({ subsets: ['latin'], variable: '--nf-outfit', display: 'swap', preload: false });
+const poppins         = Poppins({ subsets: ['latin'], weight: ['300', '400', '500', '600', '700'], variable: '--nf-poppins', display: 'swap', preload: false });
+const montserrat      = Montserrat({ subsets: ['latin'], variable: '--nf-montserrat', display: 'swap', preload: false });
+const figtree         = Figtree({ subsets: ['latin'], variable: '--nf-figtree', display: 'swap', preload: false });
+const raleway         = Raleway({ subsets: ['latin'], variable: '--nf-raleway', display: 'swap', preload: false });
+const syne            = Syne({ subsets: ['latin'], variable: '--nf-syne', display: 'swap', preload: false });
+const lora            = Lora({ subsets: ['latin'], variable: '--nf-lora', display: 'swap', preload: false });
+const playfairDisplay = Playfair_Display({ subsets: ['latin'], variable: '--nf-playfair', display: 'swap', preload: false });
+const jetbrainsMono   = JetBrains_Mono({ subsets: ['latin'], variable: '--nf-jetbrains', display: 'swap', preload: false });
+const spaceGrotesk    = Space_Grotesk({ subsets: ['latin'], variable: '--nf-spacegrotesk', display: 'swap', preload: false });
+const roboto          = Roboto({ subsets: ['latin'], weight: ['300', '400', '500', '700'], variable: '--nf-roboto', display: 'swap', preload: false });
+const nunito          = Nunito({ subsets: ['latin'], variable: '--nf-nunito', display: 'swap', preload: false });
+const josefinSans     = Josefin_Sans({ subsets: ['latin'], variable: '--nf-josefin', display: 'swap', preload: false });
+const merriweather    = Merriweather({ subsets: ['latin'], weight: ['300', '400', '700'], variable: '--nf-merriweather', display: 'swap', preload: false });
+const oswald          = Oswald({ subsets: ['latin'], variable: '--nf-oswald', display: 'swap', preload: false });
 
 // - Public registry -
 
