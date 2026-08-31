@@ -2183,6 +2183,216 @@
   background: rgba(255, 255, 255, 0.9);
 }
 
+/* ============================================================
+   Announcement Strip
+   ============================================================ */
+
+.atlas-announcement-strip {
+  width: 100%;
+  padding: 0.625rem var(--atlas-spacing-lg);
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+  position: relative;
+  z-index: calc(var(--atlas-z-header) + 1);
+}
+
+.atlas-announcement-strip--info {
+  background: color-mix(in srgb, var(--brand-primary) 12%, var(--brand-background));
+  color: var(--brand-text);
+  border-bottom: 1px solid color-mix(in srgb, var(--brand-primary) 20%, transparent);
+}
+
+.atlas-announcement-strip--promo {
+  background: var(--brand-accent, #f97316);
+  color: #fff;
+}
+
+.atlas-announcement-strip--urgent {
+  background: #dc2626;
+  color: #fff;
+}
+
+.atlas-announcement-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--atlas-spacing-md);
+  max-width: var(--atlas-max-width);
+  margin: 0 auto;
+}
+
+.atlas-announcement-text {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.atlas-announcement-link {
+  font-weight: 600;
+  text-decoration: underline;
+  color: inherit;
+  white-space: nowrap;
+}
+
+.atlas-announcement-link:hover {
+  opacity: 0.8;
+}
+
+.atlas-announcement-dismiss {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  opacity: 0.6;
+  padding: 0.25rem;
+  line-height: 1;
+  font-size: 1rem;
+  flex-shrink: 0;
+  transition: opacity 0.15s ease;
+}
+
+.atlas-announcement-dismiss:hover {
+  opacity: 1;
+}
+
+/* ============================================================
+   Brand Story Snippet
+   ============================================================ */
+
+.atlas-story-snippet {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--atlas-spacing-2xl);
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .atlas-story-snippet {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.atlas-story-snippet-media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--atlas-radius-lg);
+  overflow: hidden;
+  background: var(--atlas-muted);
+}
+
+.atlas-story-snippet-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-spacing-md);
+}
+
+/* ============================================================
+   Testimonials
+   ============================================================ */
+
+.atlas-testimonials-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--atlas-spacing-lg);
+}
+
+@media (min-width: 640px) {
+  .atlas-testimonials-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .atlas-testimonials-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.atlas-testimonial-card {
+  background: var(--brand-background);
+  border: 1px solid var(--atlas-border);
+  border-radius: var(--atlas-radius-lg);
+  padding: var(--atlas-spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-spacing-sm);
+}
+
+.atlas-testimonial-stars {
+  display: flex;
+  gap: 2px;
+}
+
+.atlas-star {
+  color: var(--atlas-border);
+  font-size: 1rem;
+}
+
+.atlas-star--filled {
+  color: #f59e0b;
+}
+
+.atlas-testimonial-quote {
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--brand-text);
+  opacity: 0.85;
+  margin: 0;
+  font-style: italic;
+  flex: 1;
+}
+
+.atlas-testimonial-author {
+  font-style: normal;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.875rem;
+}
+
+.atlas-testimonial-role {
+  opacity: 0.55;
+  font-size: 0.8125rem;
+}
+
+/* ============================================================
+   Logo / Brand Bar
+   ============================================================ */
+
+.atlas-logos-heading {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand-text);
+  opacity: 0.45;
+  text-align: center;
+  margin: 0 0 var(--atlas-spacing-xl);
+}
+
+.atlas-logos-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--atlas-spacing-xl) var(--atlas-spacing-2xl);
+}
+
+.atlas-logo-item {
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.atlas-logo-item:hover {
+  opacity: 0.85;
+}
+
 /* Value Bar - trust signals strip */
 .atlas-value-bar {
   background: color-mix(in srgb, var(--brand-primary, #2d6a4f) 6%, var(--brand-background, #ffffff));

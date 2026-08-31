@@ -91,6 +91,8 @@ export default async function HomePage({ config, variant, noCache }: PageProps) 
   let featuredCategories: ProductCategory[] = [];
   let latestArticles: Article[] = [];
 
+  let secondRowProducts: Product[] = [];
+
   switch (variant) {
     case 'editorial': {
       const [productsRes, articlesRes] = await Promise.all([
@@ -103,23 +105,31 @@ export default async function HomePage({ config, variant, noCache }: PageProps) 
     }
     case 'modern':
     case 'bold':
-    case 'minimalist': {
-      const [productsRes, categoriesRes] = await Promise.all([
-        getProducts({ tenant, featured: true, limit: 4 }, noCache),
-        getCategories({ tenant, featured: true }, noCache),
-      ]);
-      featuredProducts = productsRes?.docs ?? [];
-      featuredCategories = categoriesRes?.docs ?? [];
-      break;
-    }
+    case 'minimalist':
     case 'storefront':
     default: {
-      const [productsRes, categoriesRes] = await Promise.all([
-        getProducts({ tenant, featured: true, limit: 8 }, noCache),
+      const secondRowHeading = pc?.homeSecondRowHeading;
+      const fetches: Promise<unknown>[] = [
+        getProducts({ tenant, featured: true, limit: variant === 'storefront' ? 8 : 4 }, noCache),
         getCategories({ tenant, featured: true }, noCache),
-      ]);
+      ];
+      if (secondRowHeading) {
+        fetches.push(
+          getProducts({
+            tenant,
+            sort: pc?.homeSecondRowSort ?? 'newest',
+            limit: pc?.homeSecondRowLimit ?? 4,
+          }, noCache)
+        );
+      }
+      const [productsRes, categoriesRes, secondRowRes] = await Promise.all(fetches) as [
+        Awaited<ReturnType<typeof getProducts>>,
+        Awaited<ReturnType<typeof getCategories>>,
+        Awaited<ReturnType<typeof getProducts>> | undefined,
+      ];
       featuredProducts = productsRes?.docs ?? [];
       featuredCategories = categoriesRes?.docs ?? [];
+      secondRowProducts = secondRowRes?.docs ?? [];
       break;
     }
   }
@@ -143,12 +153,12 @@ export default async function HomePage({ config, variant, noCache }: PageProps) 
         {variant === 'editorial'
           ? renderEditorial(hero, featuredProducts, latestArticles, currency, pc ?? undefined)
           : variant === 'modern'
-          ? renderModern(hero, featuredProducts, featuredCategories, currency)
+          ? renderModern(hero, featuredProducts, featuredCategories, currency, secondRowProducts, pc ?? undefined)
           : variant === 'bold'
-          ? renderBold(hero, featuredProducts, featuredCategories, currency)
+          ? renderBold(hero, featuredProducts, featuredCategories, currency, secondRowProducts, pc ?? undefined)
           : variant === 'minimalist'
-          ? renderMinimalist(hero, featuredProducts, featuredCategories, currency)
-          : renderStorefront(hero, featuredProducts, featuredCategories, currency, pc ?? undefined)}
+          ? renderMinimalist(hero, featuredProducts, featuredCategories, currency, secondRowProducts, pc ?? undefined)
+          : renderStorefront(hero, featuredProducts, featuredCategories, currency, secondRowProducts, pc ?? undefined)}
       </div>
     </>
   );
@@ -182,6 +192,7 @@ function renderStorefront(
   products: Product[],
   categories: ProductCategory[],
   currency: string,
+  secondRowProducts: Product[],
   pc?: PageConfig,
 ) {
   // Resolve trust signals:
@@ -191,6 +202,10 @@ function renderStorefront(
     pc?.homeTrustSignals != null
       ? pc.homeTrustSignals
       : TRUST_SIGNALS;
+
+  const testimonialsSection = renderTestimonialsSection(pc);
+  const logosSection = renderLogosSection(pc);
+  const swapOrder = pc?.homeLogosBeforeTestimonials === true;
 
   return (
     <>
@@ -259,6 +274,8 @@ function renderStorefront(
         </section>
       )}
 
+      {/* Brand Story Snippet */}
+      {renderStorySection(pc)}
 
       {/* Featured Categories - pill row */}
       {categories.length > 0 && (
@@ -304,6 +321,12 @@ function renderStorefront(
           </div>
         </section>
       )}
+
+      {/* Second Product Row */}
+      {renderSecondRow(secondRowProducts, currency, pc)}
+
+      {/* Testimonials / Logos — order controlled by swap boolean */}
+      {swapOrder ? <>{logosSection}{testimonialsSection}</> : <>{testimonialsSection}{logosSection}</>}
 
       {/* CTA Banner */}
       <section className="atlas-cta-banner">
@@ -486,7 +509,13 @@ function renderModern(
   products: Product[],
   categories: ProductCategory[],
   currency: string,
+  secondRowProducts: Product[],
+  pc?: PageConfig,
 ) {
+  const testimonialsSection = renderTestimonialsSection(pc);
+  const logosSection = renderLogosSection(pc);
+  const swapOrder = pc?.homeLogosBeforeTestimonials === true;
+
   return (
     <>
       {/* Hero - atmospheric gradient background */}
@@ -572,6 +601,15 @@ function renderModern(
         </section>
       )}
 
+      {/* Brand Story Snippet */}
+      {renderStorySection(pc)}
+
+      {/* Second Product Row */}
+      {renderSecondRow(secondRowProducts, currency, pc)}
+
+      {/* Testimonials / Logos — order controlled by swap boolean */}
+      {swapOrder ? <>{logosSection}{testimonialsSection}</> : <>{testimonialsSection}{logosSection}</>}
+
       {/* CTA - gradient atmospheric */}
       <section className="atlas-cta-banner atlas-atmo-bg" style={{ overflow: 'hidden' }}>
         <div className="atlas-container" style={{ position: 'relative', zIndex: 1 }}>
@@ -602,7 +640,13 @@ function renderBold(
   products: Product[],
   categories: ProductCategory[],
   currency: string,
+  secondRowProducts: Product[],
+  pc?: PageConfig,
 ) {
+  const testimonialsSection = renderTestimonialsSection(pc);
+  const logosSection = renderLogosSection(pc);
+  const swapOrder = pc?.homeLogosBeforeTestimonials === true;
+
   return (
     <>
       {/* Hero - full-viewport dark */}
@@ -676,16 +720,14 @@ function renderBold(
         </section>
       )}
 
-      {/* Brand Statement - full-width typographic section */}
-      <section className="atlas-section-dark">
-        <div className="atlas-container">
-          <div className="atlas-brand-statement">
-            <p className="atlas-brand-statement-text" style={{ color: '#ffffff' }}>
-              Quality is not an act. It is a habit.
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* Second Product Row */}
+      {renderSecondRow(secondRowProducts, currency, pc)}
+
+      {/* Brand Story Snippet (replaces hardcoded quote) */}
+      {renderStorySection(pc)}
+
+      {/* Testimonials / Logos — order controlled by swap boolean */}
+      {swapOrder ? <>{logosSection}{testimonialsSection}</> : <>{testimonialsSection}{logosSection}</>}
 
       {/* CTA - inverted (light on dark) */}
       <section className="atlas-cta-banner" style={{ background: 'var(--brand-background, #ffffff)' }}>
@@ -722,7 +764,13 @@ function renderMinimalist(
   products: Product[],
   categories: ProductCategory[],
   currency: string,
+  secondRowProducts: Product[],
+  pc?: PageConfig,
 ) {
+  const testimonialsSection = renderTestimonialsSection(pc);
+  const logosSection = renderLogosSection(pc);
+  const swapOrder = pc?.homeLogosBeforeTestimonials === true;
+
   return (
     <>
       {/* Hero - full-viewport, centred, gentle */}
@@ -807,6 +855,15 @@ function renderMinimalist(
         </section>
       )}
 
+      {/* Brand Story Snippet */}
+      {renderStorySection(pc)}
+
+      {/* Second Product Row */}
+      {renderSecondRow(secondRowProducts, currency, pc)}
+
+      {/* Testimonials / Logos — order controlled by swap boolean */}
+      {swapOrder ? <>{logosSection}{testimonialsSection}</> : <>{testimonialsSection}{logosSection}</>}
+
       {/* Minimal CTA */}
       <section className="atlas-section">
         <div className="atlas-container">
@@ -821,5 +878,142 @@ function renderMinimalist(
         </div>
       </section>
     </>
+  );
+}
+
+// -
+//  SHARED SECTION HELPERS
+//  Used by all (or most) variants to render optional CMS-driven sections.
+// -
+
+function renderStorySection(pc?: PageConfig) {
+  if (!pc?.homeStoryHeadline && !pc?.homeStoryBlurb) return null;
+  const ctaLink = pc?.homeStoryCtaLink ?? '/about';
+  const ctaText = pc?.homeStoryCtaText ?? 'Our Story';
+  return (
+    <section className="atlas-section">
+      <div className="atlas-container">
+        <div className="atlas-story-snippet" data-reveal="up">
+          {pc?.homeStoryImage?.url && (
+            <div className="atlas-story-snippet-media">
+              <Image
+                src={pc.homeStoryImage.url}
+                alt={pc.homeStoryImage.alt ?? pc.homeStoryHeadline ?? ''}
+                fill
+                sizes="(max-width: 768px) 100vw, 45vw"
+                style={{ objectFit: 'cover' }}
+              />
+            </div>
+          )}
+          <div className="atlas-story-snippet-body">
+            {pc?.homeStoryHeadline && (
+              <h2 className="atlas-section-heading">{pc.homeStoryHeadline}</h2>
+            )}
+            {pc?.homeStoryBlurb && (
+              <p className="atlas-body">{pc.homeStoryBlurb}</p>
+            )}
+            <Link href={ctaLink} className="atlas-link-arrow">
+              {ctaText} &rarr;
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function renderTestimonialsSection(pc?: PageConfig) {
+  if (!pc?.homeTestimonials?.length) return null;
+  return (
+    <section className="atlas-section atlas-section-alt">
+      <div className="atlas-container">
+        {pc?.homeTestimonialsHeading && (
+          <h2 className="atlas-section-heading" style={{ textAlign: 'center' }}>
+            {pc.homeTestimonialsHeading}
+          </h2>
+        )}
+        <div className="atlas-testimonials-grid" data-reveal="up">
+          {pc.homeTestimonials.map((t, i) => (
+            <div key={i} className="atlas-testimonial-card">
+              {t.rating != null && (
+                <div className="atlas-testimonial-stars" aria-label={`${t.rating} out of 5 stars`}>
+                  {Array.from({ length: 5 }).map((_, s) => (
+                    <span key={s} className={s < t.rating! ? 'atlas-star atlas-star--filled' : 'atlas-star'} aria-hidden="true">&#9733;</span>
+                  ))}
+                </div>
+              )}
+              <blockquote className="atlas-testimonial-quote">&ldquo;{t.quote}&rdquo;</blockquote>
+              <cite className="atlas-testimonial-author">
+                <strong>{t.author}</strong>
+                {t.role && <span className="atlas-testimonial-role">{t.role}</span>}
+              </cite>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function renderLogosSection(pc?: PageConfig) {
+  const logos = pc?.homeLogos?.filter((l) => l.logo?.url);
+  if (!logos?.length) return null;
+  return (
+    <section className="atlas-section">
+      <div className="atlas-container">
+        {pc?.homeLogosHeading && (
+          <h2 className="atlas-logos-heading">{pc.homeLogosHeading}</h2>
+        )}
+        <div className="atlas-logos-strip">
+          {logos.map((item) => (
+            item.url ? (
+              <Link key={item.name} href={item.url} className="atlas-logo-item" target="_blank" rel="noopener noreferrer">
+                <Image
+                  src={item.logo!.url!}
+                  alt={item.name}
+                  width={item.logo!.width ?? 120}
+                  height={item.logo!.height ?? 40}
+                  style={{ objectFit: 'contain' }}
+                />
+              </Link>
+            ) : (
+              <div key={item.name} className="atlas-logo-item">
+                <Image
+                  src={item.logo!.url!}
+                  alt={item.name}
+                  width={item.logo!.width ?? 120}
+                  height={item.logo!.height ?? 40}
+                  style={{ objectFit: 'contain' }}
+                />
+              </div>
+            )
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function renderSecondRow(products: Product[], currency: string, pc?: PageConfig) {
+  if (!pc?.homeSecondRowHeading || !products.length) return null;
+  return (
+    <section className="atlas-section">
+      <div className="atlas-container">
+        <div className="atlas-section-header-row">
+          <h2 className="atlas-section-heading">{pc.homeSecondRowHeading}</h2>
+          <Link href="/shop" className="atlas-link-arrow">View All &rarr;</Link>
+        </div>
+        <div className="atlas-product-grid">
+          {products.map((product, index) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              currency={currency}
+              priority={index < 2}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }

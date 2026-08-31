@@ -190,6 +190,39 @@ export type PageConfig = {
   // • populated array   → renders exactly what the tenant supplies, in order
   homeTrustSignals?: Array<{ icon?: string | null; text: string }> | null;
 
+  // Home page - shared sections (all variants)
+  homeTestimonialsHeading?: string | null;
+  homeTestimonials?: Array<{
+    quote: string;
+    author: string;
+    role?: string | null;
+    rating?: number | null;
+  }> | null;
+  homeLogosHeading?: string | null;
+  homeLogos?: Array<{
+    name: string;
+    logo: PageConfigMedia;
+    url?: string | null;
+  }> | null;
+  homeLogosBeforeTestimonials?: boolean | null;
+
+  // Home page - variant-specific sections (storefront, modern, bold, minimalist)
+  homeStoryHeadline?: string | null;
+  homeStoryBlurb?: string | null;
+  homeStoryImage?: PageConfigMedia;
+  homeStoryCtaText?: string | null;
+  homeStoryCtaLink?: string | null;
+  homeSecondRowHeading?: string | null;
+  homeSecondRowSort?: 'newest' | 'price-asc' | 'price-desc' | 'name' | null;
+  homeSecondRowLimit?: number | null;
+
+  // Global announcement strip (all pages, lives in layout)
+  announcementEnabled?: boolean | null;
+  announcementText?: string | null;
+  announcementLink?: string | null;
+  announcementLinkText?: string | null;
+  announcementStyle?: 'info' | 'promo' | 'urgent' | null;
+
   // About page content
   aboutHeadline?: string | null;
   aboutIntro?: string | null;
