@@ -17,7 +17,7 @@ import './demo-explorer.css';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import type { ExplorerRoute } from '@/lib/demo-explorer-types';
-import { getFontStack } from '@/lib/fonts';
+import { getFontStack, PLATFORM_FONTS } from '@/lib/fonts';
 
 // - Types -
 
@@ -31,11 +31,13 @@ type BrandPreview = {
   primary: string;
   secondary: string;
   accent: string;
-  textColour: string;   // maps to --brand-text
-  bgColour: string;     // maps to --brand-background
+  textColour: string;    // maps to --brand-text
+  headingColour: string; // maps to --brand-heading
+  bgColour: string;      // maps to --brand-background
   buttonStyle: 'filled' | 'outline' | 'pill' | 'soft';
-  fontHeading: string;
-  fontBody: string;
+  fontDisplay: string;   // maps to --font-display (hero/H1 only; blank = inherit fontHeading)
+  fontHeading: string;   // maps to --font-heading
+  fontBody: string;      // maps to --font-body
 };
 
 // - Preset Palettes -
@@ -89,6 +91,10 @@ const BTN_STYLES: { label: string; value: BrandPreview['buttonStyle'] }[] = [
   { label: 'Soft',    value: 'soft'    },
 ];
 
+// - Font options derived from the platform registry (same 20 fonts as the CMS) -
+
+const FONT_OPTIONS: string[] = Object.keys(PLATFORM_FONTS);
+
 // - Tab type -
 
 type ExplorerTab = 'pages' | 'brand' | 'style';
@@ -107,14 +113,16 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
   // Brand preview state — initialised to safe defaults; overwritten on mount
   // from the actual CSS vars on :root so pickers always show the real tenant colours.
   const [brand, setBrand] = useState<BrandPreview>({
-    primary:     '#2d6a4f',
-    secondary:   '#52b788',
-    accent:      '#f59e0b',
-    textColour:  '#1b1b1b',
-    bgColour:    '#ffffff',
-    buttonStyle: 'filled',
-    fontHeading: 'Plus Jakarta Sans',
-    fontBody:    'Inter',
+    primary:       '#2d6a4f',
+    secondary:     '#52b788',
+    accent:        '#f59e0b',
+    textColour:    '#1b1b1b',
+    headingColour: '#1b1b1b',
+    bgColour:      '#ffffff',
+    buttonStyle:   'filled',
+    fontDisplay:   '',
+    fontHeading:   'Plus Jakarta Sans',
+    fontBody:      'Inter',
   });
 
   // - Derive current state from URL -
@@ -163,6 +171,7 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
     root.style.setProperty('--brand-secondary',  brand.secondary);
     root.style.setProperty('--brand-accent',     brand.accent);
     root.style.setProperty('--brand-text',       brand.textColour);
+    root.style.setProperty('--brand-heading',    brand.headingColour);
     root.style.setProperty('--brand-background', brand.bgColour);
     document.body.setAttribute('data-btn-style', brand.buttonStyle);
 
@@ -183,8 +192,12 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
     }
     const hStack = getFontStack(brand.fontHeading, 'heading');
     const bStack = getFontStack(brand.fontBody, 'body');
+    // Display font falls back to heading font if not explicitly set
+    const dStack = brand.fontDisplay
+      ? getFontStack(brand.fontDisplay, 'display')
+      : hStack;
     el.textContent = [
-      `:root { --font-heading: ${hStack}; --font-body: ${bStack}; }`,
+      `:root { --font-display: ${dStack}; --font-heading: ${hStack}; --font-body: ${bStack}; }`,
       // Cascade base: any element that inherits colour from body picks this up
       `html, body {`,
       `  background-color: var(--brand-background, #ffffff);`,
@@ -217,11 +230,12 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
     const get = (v: string, fallback: string) => style.getPropertyValue(v).trim() || fallback;
     setBrand((prev) => ({
       ...prev,
-      primary:    get('--brand-primary',    prev.primary),
-      secondary:  get('--brand-secondary',  prev.secondary),
-      accent:     get('--brand-accent',     prev.accent),
-      textColour: get('--brand-text',       prev.textColour),
-      bgColour:   get('--brand-background', prev.bgColour),
+      primary:       get('--brand-primary',    prev.primary),
+      secondary:     get('--brand-secondary',  prev.secondary),
+      accent:        get('--brand-accent',     prev.accent),
+      textColour:    get('--brand-text',       prev.textColour),
+      headingColour: get('--brand-heading',    prev.headingColour),
+      bgColour:      get('--brand-background', prev.bgColour),
     }));
 
     // 2 & 3. URL param + hint logic
@@ -564,7 +578,7 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
           {/* - Style Tab - */}
           {activeTab === 'style' && (
             <>
-              {/* Font Pairs */}
+              {/* Font Pairs — quick presets */}
               <p className="demo-explorer-section-label">Font Pairs</p>
               <div className="demo-explorer-font-grid">
                 {FONT_PAIRS.map((pair) => (
@@ -580,12 +594,40 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
                 ))}
               </div>
 
-              {/* Text & Background */}
+              {/* Individual Font Selectors */}
+              <p className="demo-explorer-section-label" style={{ marginTop: '1rem' }}>Individual Fonts</p>
+              <div className="demo-explorer-font-selects">
+                {([
+                  { key: 'fontDisplay', label: 'Display / Hero', hint: 'Blank = use Heading font' },
+                  { key: 'fontHeading', label: 'Heading (H2–H4)', hint: '' },
+                  { key: 'fontBody',    label: 'Body',            hint: '' },
+                ] as { key: keyof BrandPreview; label: string; hint: string }[]).map(({ key, label, hint }) => (
+                  <div key={key} className="demo-explorer-font-select-row">
+                    <label className="demo-explorer-font-select-label">{label}</label>
+                    <select
+                      className="demo-explorer-font-select"
+                      value={brand[key] as string}
+                      onChange={(e) => updateBrand({ [key]: e.target.value } as Partial<BrandPreview>)}
+                    >
+                      {key === 'fontDisplay' && (
+                        <option value="">— Same as Heading —</option>
+                      )}
+                      {FONT_OPTIONS.map((font) => (
+                        <option key={font} value={font}>{font}</option>
+                      ))}
+                    </select>
+                    {hint && <span className="demo-explorer-font-select-hint">{hint}</span>}
+                  </div>
+                ))}
+              </div>
+
+              {/* Text, Heading & Background colours */}
               <p className="demo-explorer-section-label" style={{ marginTop: '1rem' }}>Text & Background</p>
               <div className="demo-explorer-colour-inputs">
                 {[
-                  { key: 'textColour', label: 'Text'       },
-                  { key: 'bgColour',   label: 'Background' },
+                  { key: 'headingColour', label: 'Headings'   },
+                  { key: 'textColour',    label: 'Body Text'  },
+                  { key: 'bgColour',      label: 'Background' },
                 ].map(({ key, label }) => (
                   <div key={key} className="demo-explorer-colour-row">
                     <input
