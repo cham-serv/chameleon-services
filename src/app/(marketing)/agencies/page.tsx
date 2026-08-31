@@ -17,7 +17,7 @@ const agencyBenefits = [
   {
     icon: Settings,
     title: 'God Mode Dashboard',
-    desc: 'See every client site, manage configurations, and monitor analytics from a single multi-tenant screen. No switching accounts.',
+    desc: 'See every client site, manage configurations  monitor analytics from a single multi-tenant screen. No switching accounts.',
   },
   {
     icon: Zap,
@@ -27,7 +27,7 @@ const agencyBenefits = [
   {
     icon: Workflow,
     title: 'Faster Delivery',
-    desc: 'Spin up a client site in days, not months. Atlas, Meridian, or future templates  configured and live before traditional agencies even wireframe.',
+    desc: 'Spin up a client site in days, not months. Atlas, Meridian  future templates  configured and live before traditional agencies even wireframe.',
   },
 ];
 
@@ -164,7 +164,7 @@ export default function AgenciesPage() {
                 Client pays Agency
               </h3>
               <p style={{ color: 'var(--m-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
-                The client pays you your R15k-R20k/mo retainer for strategy, content, and management.
+                The client pays you your R15k-R20k/mo retainer for strategy, content  management.
               </p>
             </div>
 

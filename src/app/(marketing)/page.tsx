@@ -14,13 +14,13 @@ const features = [
     id: 'geo-optimised',
     icon: Brain,
     title: 'GEO Optimised',
-    desc: 'Every page is structured for Generative Engine Optimisation - so AI search engines like ChatGPT, Perplexity, and Google SGE can find, understand, and quote your business.',
+    desc: 'Every page is structured for Generative Engine Optimisation - so AI search engines like ChatGPT, Perplexity  Google SGE can find, understand  quote your business.',
   },
   {
     id: 'ai-content',
     icon: Zap,
     title: 'AI-Powered Content',
-    desc: 'Product listings, articles, and meta content built with structured intelligence from day one. Not retrofitted - native.',
+    desc: 'Product listings, articles  meta content built with structured intelligence from day one. Not retrofitted - native.',
   },
   {
     id: 'beautiful-templates',
@@ -40,17 +40,17 @@ const howItWorksSteps = [
   {
     step: '01',
     title: 'Choose a Template',
-    desc: 'Browse our library of professionally designed templates. Each one is AI-ready, GEO-optimised, and built for your industry.',
+    desc: 'Browse our library of professionally designed templates. Each one is AI-ready, GEO-optimised  built for your industry.',
   },
   {
     step: '02',
     title: 'Customise Your Brand',
-    desc: 'Add your logo, brand colours, fonts, products, and content through a clean, intuitive admin panel. No code required.',
+    desc: 'Add your logo, brand colours, fonts, products  content through a clean, intuitive admin panel. No code required.',
   },
   {
     step: '03',
     title: 'Go Live Today',
-    desc: 'Connect your domain and launch. Your site is live, fast, and already speaking the language of modern AI search engines.',
+    desc: 'Connect your domain and launch. Your site is live, fast  already speaking the language of modern AI search engines.',
   },
 ];
 
@@ -58,7 +58,7 @@ const templates = [
   {
     id: 'atlas',
     name: 'Atlas',
-    tagline: 'For heavy retail, industrial supply, and mid-market B2B.',
+    tagline: 'For heavy retail, industrial supply  mid-market B2B.',
     features: ['Ecommerce', 'Articles', 'FAQ', 'Cart & Checkout'],
     demoHref: 'https://atlas-demo.chameleon.services',
     gradient: 'linear-gradient(135deg, #7f1d1d 0%, #450a0a 60%, #1a0505 100%)',
@@ -96,7 +96,7 @@ const whyNowPoints = [
     icon: Globe,
     stat: 'R0',
     label: 'in additional ad spend required',
-    desc: 'This isn\'t paid advertising. It\'s earned visibility — built into the way your site is structured.',
+    desc: 'This isn\'t paid advertising. It\'s earned visibility - built into the way your site is structured.',
   },
 ];
 
@@ -210,7 +210,7 @@ export default function HomePage() {
               lineHeight: 1.7,
             }}
           >
-            Most South African businesses are still paying for a website that works the way the internet did in 2010. Chameleon replaces that with something built for how customers find you today — and tomorrow.
+            Most South African businesses are still paying for a website that works the way the internet did in 2010. Chameleon replaces that with something built for how customers find you today - and tomorrow.
           </p>
 
           {/* CTAs */}
@@ -264,7 +264,7 @@ export default function HomePage() {
               The same result. A completely different model.
             </h2>
             <p style={{ fontSize: '1rem', color: 'var(--m-text-muted)', lineHeight: 1.7, margin: 0 }}>
-              Your customers still get a beautiful, fast website. But instead of paying a developer every time something needs updating, or juggling a hosting bill, a plugin subscription, and a WordPress maintenance contract — you pay one flat monthly fee, and we handle everything that sits behind it.
+              Your customers still get a beautiful, fast website. But instead of paying a developer every time something needs updating  juggling a hosting bill, a plugin subscription  a WordPress maintenance contract - you pay one flat monthly fee  we handle everything that sits behind it.
             </p>
           </div>
 
@@ -302,8 +302,8 @@ export default function HomePage() {
                 <li style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>We set it up. It runs itself.</li>
                 <li style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>Hosting is included. Always.</li>
                 <li style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>No plugins. No updates. No security patches. Ever.</li>
-                <li style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>AI assistants (ChatGPT, Google, Perplexity) find your business and cite it in answers — automatically.</li>
-                <li style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>Your product data, pricing, and FAQs are structured so AI engines can read and recommend them directly.</li>
+                <li style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>AI assistants (ChatGPT, Google, Perplexity) find your business and cite it in answers - automatically.</li>
+                <li style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>Your product data, pricing  FAQs are structured so AI engines can read and recommend them directly.</li>
               </ul>
             </div>
           </div>
@@ -362,7 +362,7 @@ export default function HomePage() {
               Your team works on the business. Not the website.
             </h2>
             <p style={{ fontSize: '1rem', color: 'var(--m-text-muted)', lineHeight: 1.7, margin: 0 }}>
-              The average South African SME spends between R8,000 and R20,000 per month across IT support, web maintenance, and SEO retainers — for a website that still doesn&apos;t get found by AI search. Chameleon consolidates all of that into one predictable monthly fee.
+              The average South African SME spends between R8,000 and R20,000 per month across IT support, web maintenance  SEO retainers - for a website that still doesn&apos;t get found by AI search. Chameleon consolidates all of that into one predictable monthly fee.
             </p>
           </div>
 
@@ -374,17 +374,17 @@ export default function HomePage() {
                 <li style={{ display: 'flex', gap: '12px', alignItems: 'start' }}><XCircle size={18} style={{ color: '#ef4444', flexShrink: 0, marginTop: '2px' }} /><span style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>A developer on retainer for &quot;small fixes&quot;</span></li>
                 <li style={{ display: 'flex', gap: '12px', alignItems: 'start' }}><XCircle size={18} style={{ color: '#ef4444', flexShrink: 0, marginTop: '2px' }} /><span style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Expensive SEO audits to fix what the platform got wrong</span></li>
                 <li style={{ display: 'flex', gap: '12px', alignItems: 'start' }}><XCircle size={18} style={{ color: '#ef4444', flexShrink: 0, marginTop: '2px' }} /><span style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Hours of manual data entry to keep product info consistent across channels</span></li>
-                <li style={{ display: 'flex', gap: '12px', alignItems: 'start' }}><XCircle size={18} style={{ color: '#ef4444', flexShrink: 0, marginTop: '2px' }} /><span style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Someone to update prices, descriptions, and images every time something changes</span></li>
+                <li style={{ display: 'flex', gap: '12px', alignItems: 'start' }}><XCircle size={18} style={{ color: '#ef4444', flexShrink: 0, marginTop: '2px' }} /><span style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Someone to update prices, descriptions  images every time something changes</span></li>
               </ul>
             </div>
             
             <div className="m-card" style={{ padding: '32px', border: '1px solid rgba(59,130,246,0.3)', background: 'linear-gradient(180deg, rgba(59,130,246,0.05) 0%, rgba(255,255,255,0.02) 100%)' }}>
               <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--m-text)', marginBottom: '20px' }}>What this gives your team instead:</h3>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <li style={{ display: 'flex', gap: '12px', alignItems: 'start' }}><CheckCircle2 size={18} style={{ color: '#3b82f6', flexShrink: 0, marginTop: '2px' }} /><span style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>One clean admin panel — any staff member can update content, add products, change prices. No technical knowledge needed.</span></li>
+                <li style={{ display: 'flex', gap: '12px', alignItems: 'start' }}><CheckCircle2 size={18} style={{ color: '#3b82f6', flexShrink: 0, marginTop: '2px' }} /><span style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>One clean admin panel - any staff member can update content, add products, change prices. No technical knowledge needed.</span></li>
                 <li style={{ display: 'flex', gap: '12px', alignItems: 'start' }}><CheckCircle2 size={18} style={{ color: '#3b82f6', flexShrink: 0, marginTop: '2px' }} /><span style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>AI-powered product descriptions drafted automatically (coming soon)</span></li>
                 <li style={{ display: 'flex', gap: '12px', alignItems: 'start' }}><CheckCircle2 size={18} style={{ color: '#3b82f6', flexShrink: 0, marginTop: '2px' }} /><span style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Your marketing team focuses on strategy, not website maintenance</span></li>
-                <li style={{ display: 'flex', gap: '12px', alignItems: 'start' }}><CheckCircle2 size={18} style={{ color: '#3b82f6', flexShrink: 0, marginTop: '2px' }} /><span style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Agencies: manage all your clients from a single dashboard — no more logging in and out of multiple accounts</span></li>
+                <li style={{ display: 'flex', gap: '12px', alignItems: 'start' }}><CheckCircle2 size={18} style={{ color: '#3b82f6', flexShrink: 0, marginTop: '2px' }} /><span style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Agencies: manage all your clients from a single dashboard - no more logging in and out of multiple accounts</span></li>
               </ul>
             </div>
           </div>
@@ -412,8 +412,8 @@ export default function HomePage() {
             </h2>
             <p style={{ fontSize: '1rem', color: 'var(--m-text-muted)', lineHeight: 1.7, margin: 0 }}>
               AI-powered search has fundamentally changed how customers find businesses.
-              Shopify, Wix, and WordPress weren&apos;t designed for this. Updating them for GEO
-              is expensive, slow, and often impossible without breaking everything else.
+              Shopify, Wix  WordPress weren&apos;t designed for this. Updating them for GEO
+              is expensive, slow  often impossible without breaking everything else.
               Chameleon was built for this moment.
             </p>
           </div>
@@ -583,10 +583,10 @@ export default function HomePage() {
              <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
                {[
                  { title: '1. AI search is where your next customer is looking.', desc: '40% of searches now return AI-generated answers instead of a list of blue links. If your business isn\'t structured for AI to understand and cite, you\'re invisible to that 40%.' },
-                 { title: '2. Fast sites sell more.', desc: 'Chameleon pages load in under a second — built on the same technology that powers Fortune 500 online stores. Every second of delay costs 7% in conversions.' },
-                 { title: '3. Your product data works 24/7.', desc: 'Every product listing is structured so that when someone asks ChatGPT "where can I buy this in South Africa?" — Chameleon-powered sites are built to be part of the answer.' },
+                 { title: '2. Fast sites sell more.', desc: 'Chameleon pages load in under a second - built on the same technology that powers Fortune 500 online stores. Every second of delay costs 7% in conversions.' },
+                 { title: '3. Your product data works 24/7.', desc: 'Every product listing is structured so that when someone asks ChatGPT "where can I buy this in South Africa?" - Chameleon-powered sites are built to be part of the answer.' },
                  { title: '4. No maintenance window, no downtime.', desc: 'You\'re not losing sales because your plugin broke at 2am and someone has to call a developer in the morning.' },
-                 { title: '5. Your store keeps improving.', desc: 'Platform updates — including new AI features — are deployed to your site automatically. You don\'t pay for upgrades. You don\'t need to re-platform every 3 years.' }
+                 { title: '5. Your store keeps improving.', desc: 'Platform updates - including new AI features - are deployed to your site automatically. You don\'t pay for upgrades. You don\'t need to re-platform every 3 years.' }
                ].map((point, i) => (
                  <div key={i} style={{ display: 'flex', gap: '20px' }}>
                    <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(59,130,246,0.1)', color: '#60a5fa', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontWeight: 700 }}>
@@ -681,7 +681,7 @@ export default function HomePage() {
             </h2>
             <p style={{ fontSize: '0.95rem', color: 'var(--m-text-muted)', lineHeight: 1.7, margin: 0 }}>
               Each template is AI-ready from day one - not retrofitted. Pick one,
-              brand it to your business, and launch.
+              brand it to your business  launch.
             </p>
           </div>
 

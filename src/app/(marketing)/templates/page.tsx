@@ -12,9 +12,9 @@ const templates = [
   {
     id: 'atlas',
     name: 'Atlas',
-    tagline: 'For heavy retail, industrial supply, and mid-market B2B.',
+    tagline: 'For heavy retail, industrial supply  mid-market B2B.',
     description:
-      'Atlas is Chameleon\'s Commerce-tier template - built for product-first businesses that need a premium storefront with AI-powered product listings, authority-grade knowledge graphs, multi-variant page design, and full ecommerce. The most capable template in the library.',
+      'Atlas is Chameleon\'s Commerce-tier template - built for product-first businesses that need a premium storefront with AI-powered product listings, authority-grade knowledge graphs, multi-variant page design  full ecommerce. The most capable template in the library.',
     features: ['Ecommerce & Cart', 'AI Product Listings', 'Articles & Blog', 'FAQ', 'Contact', 'Legal Pages'],
     industries: ['Industrial Supply', 'Heavy Retail', 'B2B Products', 'DTC Brands'],
     demoHref: 'https://atlas-demo.chameleon.services',
@@ -40,7 +40,7 @@ const templates = [
     name: 'Meridian',
     tagline: 'Services & consulting, built to convert.',
     description:
-      'Meridian is designed for service-based businesses - consultants, agencies, clinics, and professionals - who need a credibility-first site that generates leads.',
+      'Meridian is designed for service-based businesses - consultants, agencies, clinics  professionals - who need a credibility-first site that generates leads.',
     features: ['Services Showcase', 'Lead Generation', 'Articles & Blog', 'Contact with Map', 'Legal Pages', 'FAQ'],
     industries: ['Consulting', 'Professional Services', 'Healthcare', 'Agencies'],
     demoHref: 'https://meridian-demo.chameleon.services',
@@ -53,7 +53,7 @@ const templates = [
     name: 'Solstice',
     tagline: 'Hospitality & experiences, warm and inviting.',
     description:
-      'Coming soon - Solstice is being designed for restaurants, lodges, event venues, and experience-based businesses.',
+      'Coming soon - Solstice is being designed for restaurants, lodges, event venues  experience-based businesses.',
     features: ['Menu / Experience Showcase', 'Booking Integration', 'Gallery', 'Reviews', 'Events'],
     industries: ['Hospitality', 'Restaurants', 'Events', 'Tourism'],
     demoHref: '#',
@@ -115,8 +115,7 @@ export default function TemplatesPage() {
               lineHeight: 1.7,
             }}
           >
-            Each template is AI-ready from day one  structured for GEO, built for performance,
-            and branded to your business in minutes.
+            Each template is AI-ready from day one  structured for GEO, built for performance  branded to your business in minutes.
           </p>
         </div>
       </section>

@@ -5,7 +5,7 @@ import { ArrowRight, Check } from 'lucide-react';
 export const metadata: Metadata = {
   title: 'Pricing  Flexible Plans for Businesses & Agencies',
   description:
-    'Chameleon pricing for South African businesses. Feature-based tiers for direct clients, and flat monthly scaling for agency partners. No hidden fees.',
+    'Chameleon pricing for South African businesses. Feature-based tiers for direct clients  flat monthly scaling for agency partners. No hidden fees.',
 };
 
 const businessTiers = [
@@ -14,7 +14,7 @@ const businessTiers = [
     monthlyFlexible: 999,
     monthlyAllInclusive: 1500,
     setupFee: 8000,
-    description: 'Perfect for simple sites. No ecommerce, limited pages, and standard GEO.',
+    description: 'Perfect for simple sites. No ecommerce, limited pages  standard GEO.',
     features: [
       'Standard GEO structure',
       'Contact forms',
@@ -30,7 +30,7 @@ const businessTiers = [
     monthlyFlexible: 2500,
     monthlyAllInclusive: 3000,
     setupFee: 10000,
-    description: 'For service businesses needing content pages, articles, FAQs, and contact forms.',
+    description: 'For service businesses needing content pages, articles, FAQs  contact forms.',
     features: [
       'Standard GEO structure',
       'Articles & FAQs',
@@ -46,7 +46,7 @@ const businessTiers = [
     monthlyFlexible: 3500,
     monthlyAllInclusive: 4500,
     setupFee: 12000,
-    description: 'Full ecommerce, product intelligence, AI schema, and advanced GEO.',
+    description: 'Full ecommerce, product intelligence, AI schema  advanced GEO.',
     features: [
       'Advanced GEO & AI schema',
       'Full ecommerce',
@@ -95,15 +95,15 @@ const agencyTiers = [
 const faqs = [
   {
     q: 'Do my clients pay Chameleon directly?',
-    a: "Yes. The client pays the platform fee to Chameleon, and your agency fee to you. Two separate, transparent relationships.",
+    a: "Yes. The client pays the platform fee to Chameleon  your agency fee to you. Two separate, transparent relationships.",
   },
   {
     q: 'What does the setup fee include?',
-    a: 'It covers CMS configuration, template customisation, domain setup, initial content structure, and onboarding.',
+    a: 'It covers CMS configuration, template customisation, domain setup, initial content structure  onboarding.',
   },
   {
     q: 'What is the difference between Flexible Start and All-Inclusive?',
-    a: 'Flexible Start requires a setup fee (R8,000 for Launch, R10,000 for Grow, R12,000 for Commerce) and has a lower monthly cost (month-to-month after 3 months). All-Inclusive has NO setup fee, a higher monthly cost, and requires a 24-month commitment.',
+    a: 'Flexible Start requires a setup fee (R8,000 for Launch, R10,000 for Grow, R12,000 for Commerce) and has a lower monthly cost (month-to-month after 3 months). All-Inclusive has NO setup fee, a higher monthly cost  requires a 24-month commitment.',
   },
   {
     q: 'What happens if a client leaves our agency?',
@@ -167,7 +167,7 @@ export default function PricingPage() {
             }}
           >
             Choose the track that fits your business model. 
-            Direct features for businesses, or flat monthly scaling for agencies.
+            Direct features for businesses  flat monthly scaling for agencies.
           </p>
         </div>
       </section>
@@ -188,7 +188,7 @@ export default function PricingPage() {
               Track 1: For Businesses
             </h2>
             <p style={{ color: 'var(--m-text-muted)', maxWidth: '600px', margin: '0 auto 24px' }}>
-              Select your feature tier, and then choose how you want to pay.
+              Select your feature tier  then choose how you want to pay.
             </p>
             
             <div style={{ 
