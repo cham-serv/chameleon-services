@@ -1,12 +1,10 @@
-import type { Metadata } from 'next';
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Check } from 'lucide-react';
 
-export const metadata: Metadata = {
-  title: 'Pricing - Flexible Plans for Businesses & Agencies',
-  description:
-    'Chameleon pricing for South African businesses. Feature-based tiers for direct clients, and flat monthly scaling for agency partners. No hidden fees.',
-};
+type PaymentPath = 'flexible' | 'spread' | 'allInclusive';
 
 const businessTiers = [
   {
@@ -80,20 +78,13 @@ const agencyTiers = [
     name: 'Bronze',
     clients: '1-2 client sites',
     monthly: 2500,
-    features: [
-      'Agency Dashboard',
-      'Multi-tenant management',
-    ],
+    features: ['Agency Dashboard', 'Multi-tenant management'],
   },
   {
     name: 'Silver',
     clients: '3-9 client sites',
     monthly: 4500,
-    features: [
-      'Agency Dashboard',
-      'Multi-tenant management',
-      'Priority support',
-    ],
+    features: ['Agency Dashboard', 'Multi-tenant management', 'Priority support'],
   },
   {
     name: 'Gold',
@@ -131,7 +122,27 @@ const faqs = [
   },
 ];
 
+const paymentPaths: { id: PaymentPath; label: string; sublabel: string }[] = [
+  { id: 'flexible', label: 'Flexible Start', sublabel: 'Setup fee + low monthly' },
+  { id: 'spread', label: 'Spread Start', sublabel: 'Setup split over 6 months' },
+  { id: 'allInclusive', label: 'All-Inclusive', sublabel: 'No setup fee · 12 months' },
+];
+
+function getPrice(tier: typeof businessTiers[0], path: PaymentPath) {
+  if (path === 'flexible') return tier.monthlyFlexible;
+  if (path === 'spread') return Math.round(tier.monthlyFlexible + tier.setupFee / 6);
+  return tier.monthlyAllInclusive;
+}
+
+function getPriceNote(tier: typeof businessTiers[0], path: PaymentPath) {
+  if (path === 'flexible') return `+ R${tier.setupFee.toLocaleString()} setup fee`;
+  if (path === 'spread') return `for 6 mo, then R${tier.monthlyFlexible.toLocaleString()}/mo`;
+  return 'R0 setup fee · 12-month commitment';
+}
+
 export default function PricingPage() {
+  const [activePath, setActivePath] = useState<PaymentPath>('flexible');
+
   return (
     <>
       {/* Header */}
@@ -182,7 +193,7 @@ export default function PricingPage() {
               lineHeight: 1.7,
             }}
           >
-            Choose the track that fits your business model. 
+            Choose the track that fits your business model.
             Direct features for businesses, or flat monthly scaling for agencies.
           </p>
         </div>
@@ -198,155 +209,155 @@ export default function PricingPage() {
                 fontSize: '2rem',
                 fontWeight: 700,
                 color: 'var(--m-text)',
-                marginBottom: '16px'
+                marginBottom: '8px',
               }}
             >
               Track 1: For Businesses
             </h2>
-            <p style={{ color: 'var(--m-text-muted)', maxWidth: '600px', margin: '0 auto 24px' }}>
-              Select your feature tier, and then choose how you want to pay.
+            <p style={{ color: 'var(--m-text-muted)', maxWidth: '500px', margin: '0 auto 32px' }}>
+              Select your feature tier, then choose how you want to pay.
             </p>
-            
-            <div style={{ 
-              display: 'inline-flex', 
-              background: 'rgba(255,255,255,0.05)', 
-              borderRadius: '8px', 
-              padding: '16px',
-              border: '1px solid rgba(255,255,255,0.1)',
-              textAlign: 'left',
-              gap: '24px',
-              maxWidth: '900px',
-              flexWrap: 'wrap'
-            }}>
-              <div style={{ flex: '1 1 250px' }}>
-                <strong style={{ display: 'block', color: 'white', marginBottom: '8px' }}>Flexible Start</strong>
-                <p style={{ fontSize: '0.875rem', color: 'var(--m-text-muted)', margin: 0, lineHeight: 1.5 }}>
-                  Pay a setup fee upfront for a lower monthly cost. Month-to-month after 3 months.
-                </p>
-              </div>
-              <div style={{ width: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
-              <div style={{ flex: '1 1 250px' }}>
-                <strong style={{ display: 'block', color: 'white', marginBottom: '8px' }}>Spread Start</strong>
-                <p style={{ fontSize: '0.875rem', color: 'var(--m-text-muted)', margin: 0, lineHeight: 1.5 }}>
-                  Setup fee is split over your first 6 months. No lock-in after month 6.
-                </p>
-              </div>
-              <div style={{ width: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
-              <div style={{ flex: '1 1 250px' }}>
-                <strong style={{ display: 'block', color: 'white', marginBottom: '8px' }}>All-Inclusive (12mo)</strong>
-                <p style={{ fontSize: '0.875rem', color: 'var(--m-text-muted)', margin: 0, lineHeight: 1.5 }}>
-                  No setup fee. Slightly higher monthly cost with a <strong>12-month commitment</strong>.
-                </p>
-              </div>
+
+            {/* Payment Path Toggle */}
+            <div
+              style={{
+                display: 'inline-flex',
+                background: 'rgba(255,255,255,0.04)',
+                borderRadius: '12px',
+                padding: '4px',
+                border: '1px solid rgba(255,255,255,0.08)',
+                gap: '4px',
+              }}
+            >
+              {paymentPaths.map((path) => {
+                const isActive = activePath === path.id;
+                return (
+                  <button
+                    key={path.id}
+                    onClick={() => setActivePath(path.id)}
+                    style={{
+                      padding: '10px 20px',
+                      borderRadius: '8px',
+                      border: 'none',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      background: isActive
+                        ? 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)'
+                        : 'transparent',
+                      color: isActive ? 'white' : 'var(--m-text-muted)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: '2px',
+                      minWidth: '140px',
+                    }}
+                  >
+                    <span style={{ fontWeight: 600, fontSize: '0.9rem' }}>{path.label}</span>
+                    <span style={{ fontSize: '0.72rem', opacity: 0.75 }}>{path.sublabel}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
           <div className="m-grid-4">
-            {businessTiers.map((tier) => (
-              <div
-                key={tier.name}
-                className={`m-card ${tier.highlighted ? 'm-card-highlighted' : ''}`}
-                style={{
-                  padding: '24px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  position: 'relative',
-                }}
-              >
-                {tier.highlighted && (
+            {businessTiers.map((tier) => {
+              const price = getPrice(tier, activePath);
+              const note = getPriceNote(tier, activePath);
+              return (
+                <div
+                  key={tier.name}
+                  className={`m-card ${tier.highlighted ? 'm-card-highlighted' : ''}`}
+                  style={{
+                    padding: '28px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    position: 'relative',
+                    transition: 'transform 0.2s ease',
+                  }}
+                >
+                  {tier.highlighted && (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: '-12px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+                        color: 'white',
+                        fontSize: '0.75rem',
+                        fontWeight: 700,
+                        padding: '4px 12px',
+                        borderRadius: '999px',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      Most Popular
+                    </div>
+                  )}
+
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: 600, color: 'var(--m-text)', margin: '0 0 10px' }}>
+                    {tier.name}
+                  </h3>
+
+                  <p style={{ fontSize: '0.85rem', color: 'var(--m-text-muted)', margin: '0 0 24px', lineHeight: 1.6, minHeight: '56px' }}>
+                    {tier.description}
+                  </p>
+
+                  {/* Single price block — changes based on toggle */}
                   <div
                     style={{
-                      position: 'absolute',
-                      top: '-12px',
-                      left: '50%',
-                      transform: 'translateX(-50%)',
-                      background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
-                      color: 'white',
-                      fontSize: '0.75rem',
-                      fontWeight: 700,
-                      padding: '4px 12px',
-                      borderRadius: '999px',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em',
+                      marginBottom: '24px',
+                      padding: '16px',
+                      background: tier.highlighted ? 'rgba(59,130,246,0.08)' : 'rgba(0,0,0,0.2)',
+                      borderRadius: '10px',
+                      border: tier.highlighted ? '1px solid rgba(59,130,246,0.25)' : '1px solid rgba(255,255,255,0.05)',
                     }}
                   >
-                    Most Popular
-                  </div>
-                )}
-                
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--m-text)', margin: '0 0 12px' }}>
-                  {tier.name}
-                </h3>
-                
-                <p style={{ fontSize: '0.85rem', color: 'var(--m-text-muted)', margin: '0 0 24px', lineHeight: 1.6, minHeight: '60px' }}>
-                  {tier.description}
-                </p>
-
-                <div style={{ marginBottom: '16px', padding: '12px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px' }}>
-                  <div style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--m-text-muted)', marginBottom: '4px' }}>
-                    Flexible Start
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                    <span style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--m-text)' }}>
-                      R{tier.monthlyFlexible.toLocaleString()}
-                    </span>
-                    <span style={{ fontSize: '0.8rem', color: 'var(--m-text-muted)' }}>/mo</span>
-                  </div>
-                  <div style={{ fontSize: '0.7rem', color: 'var(--m-text-faint)' }}>
-                    + R{tier.setupFee.toLocaleString()} setup fee
-                  </div>
-                </div>
-
-                <div style={{ marginBottom: '16px', padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                  <div style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--m-text-muted)', marginBottom: '4px' }}>
-                    Spread Start
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                    <span style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--m-text)' }}>
-                      R{Math.round(tier.monthlyFlexible + (tier.setupFee / 6)).toLocaleString()}
-                    </span>
-                    <span style={{ fontSize: '0.8rem', color: 'var(--m-text-muted)' }}>/mo</span>
-                  </div>
-                  <div style={{ fontSize: '0.7rem', color: 'var(--m-text-faint)' }}>
-                    for 6 mo (then R{tier.monthlyFlexible.toLocaleString()}/mo)
-                  </div>
-                </div>
-
-                <div style={{ marginBottom: '24px', padding: '12px', background: 'rgba(255,255,255,0.04)', borderRadius: '8px', border: '1px solid rgba(59,130,246,0.2)' }}>
-                  <div style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#60a5fa', marginBottom: '4px' }}>
-                    All-Inclusive (12mo)
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                    <span style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--m-text)' }}>
-                      R{tier.monthlyAllInclusive.toLocaleString()}
-                    </span>
-                    <span style={{ fontSize: '0.8rem', color: 'var(--m-text-muted)' }}>/mo</span>
-                  </div>
-                  <div style={{ fontSize: '0.7rem', color: '#10b981' }}>
-                    R0 setup fee
-                  </div>
-                </div>
-                
-                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px', flexGrow: 1 }}>
-                  {tier.features.map((f) => (
-                    <li key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '10px' }}>
-                      <Check size={14} style={{ color: tier.highlighted ? '#60a5fa' : 'var(--m-text-muted)', marginTop: '2px' }} />
-                      <span style={{ fontSize: '0.85rem', color: 'var(--m-text-muted)', lineHeight: 1.4 }}>
-                        {f}
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '6px' }}>
+                      <span
+                        style={{
+                          fontSize: '2rem',
+                          fontWeight: 700,
+                          color: 'var(--m-text)',
+                          transition: 'all 0.2s ease',
+                        }}
+                      >
+                        R{price.toLocaleString()}
                       </span>
-                    </li>
-                  ))}
-                </ul>
-                
-                <Link
-                  href="/contact"
-                  className={`m-btn ${tier.highlighted ? 'm-btn-primary' : 'm-btn-ghost'}`}
-                  style={{ width: '100%', justifyContent: 'center', fontSize: '0.9rem' }}
-                >
-                  {tier.cta}
-                </Link>
-              </div>
-            ))}
+                      <span style={{ fontSize: '0.9rem', color: 'var(--m-text-muted)' }}>/mo</span>
+                    </div>
+                    <div style={{ fontSize: '0.75rem', color: activePath === 'allInclusive' ? '#10b981' : 'var(--m-text-faint)' }}>
+                      {note}
+                    </div>
+                  </div>
+
+                  <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px', flexGrow: 1 }}>
+                    {tier.features.map((f) => (
+                      <li key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '10px' }}>
+                        <Check
+                          size={14}
+                          style={{ color: tier.highlighted ? '#60a5fa' : 'var(--m-text-muted)', marginTop: '3px', flexShrink: 0 }}
+                        />
+                        <span style={{ fontSize: '0.85rem', color: 'var(--m-text-muted)', lineHeight: 1.5 }}>
+                          {f}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Link
+                    href="/contact"
+                    className={`m-btn ${tier.highlighted ? 'm-btn-primary' : 'm-btn-ghost'}`}
+                    style={{ width: '100%', justifyContent: 'center', fontSize: '0.9rem' }}
+                  >
+                    {tier.cta}
+                  </Link>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -363,7 +374,7 @@ export default function PricingPage() {
                 fontSize: '2rem',
                 fontWeight: 700,
                 color: 'var(--m-text)',
-                marginBottom: '16px'
+                marginBottom: '16px',
               }}
             >
               Track 2: For Agencies
@@ -392,14 +403,16 @@ export default function PricingPage() {
                 <h3 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--m-text)', margin: '0 0 16px' }}>
                   {tier.name}
                 </h3>
-                
+
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '24px' }}>
                   <span style={{ fontSize: '2rem', fontWeight: 700, color: 'white' }}>
                     {typeof tier.monthly === 'number' ? `R${tier.monthly.toLocaleString()}` : tier.monthly}
                   </span>
-                  {typeof tier.monthly === 'number' && <span style={{ fontSize: '1rem', color: 'var(--m-text-muted)' }}>/mo flat</span>}
+                  {typeof tier.monthly === 'number' && (
+                    <span style={{ fontSize: '1rem', color: 'var(--m-text-muted)' }}>/mo flat</span>
+                  )}
                 </div>
-                
+
                 <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 32px', flexGrow: 1 }}>
                   {tier.features.map((f) => (
                     <li key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '12px' }}>
@@ -413,7 +426,7 @@ export default function PricingPage() {
               </div>
             ))}
           </div>
-          
+
           <div style={{ textAlign: 'center', marginTop: '48px' }}>
             <Link href="/agencies" className="m-btn m-btn-primary">
               Learn about the Agency model
