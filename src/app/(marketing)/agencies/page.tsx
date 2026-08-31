@@ -46,9 +46,9 @@ const tiers = [
   },
   {
     name: 'Gold',
-    clients: '10+ client sites (unlimited)',
-    price: 'R6,000/mo flat cap',
-    features: ['Agency Dashboard', 'Dedicated account manager', 'Early feature access'],
+    clients: '10+ clients (Professional+)',
+    price: 'Free',
+    features: ['Agency Dashboard (R0/mo)', 'Dedicated account manager', 'Early feature access'],
   },
 ];
 
@@ -176,7 +176,7 @@ export default function AgenciesPage() {
                 Agency pays Chameleon
               </h3>
               <p style={{ color: 'var(--m-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
-                You pay a flat R2,500-R6,000/mo fee for the multi-tenant God Mode dashboard.
+                You pay a flat R2,500-R4,500/mo fee for the dashboard (and it's free at scale).
               </p>
             </div>
           </div>
@@ -337,7 +337,7 @@ export default function AgenciesPage() {
             <ArrowRight size={18} />
           </Link>
           <p style={{ marginTop: '20px', fontSize: '0.8rem', color: 'var(--m-text-faint)' }}>
-            Revenue share for high-volume partners &mdash; talk to us.
+            Free dashboard for high-volume partners.
           </p>
         </div>
       </section>
