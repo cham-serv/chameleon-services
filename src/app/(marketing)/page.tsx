@@ -268,12 +268,15 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* Video Placeholder */}
-          <div style={{ maxWidth: '800px', margin: '0 auto 64px', position: 'relative', borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)', background: '#0a0a0a', aspectRatio: '16/9', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-             <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(59,130,246,0.2) 0%, rgba(10,10,10,1) 100%)', opacity: 0.5 }}></div>
-             <div style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
-               <PlayCircle size={64} style={{ color: '#60a5fa', margin: '0 auto 16px', opacity: 0.9 }} />
-               <div style={{ fontSize: '1.1rem', fontWeight: 600, color: 'white' }}>See the difference (1:30)</div>
+          {/* Explainer video — coming soon */}
+          <div style={{ maxWidth: '800px', margin: '0 auto 64px', position: 'relative', borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)', background: 'linear-gradient(135deg, rgba(59,130,246,0.06) 0%, rgba(13,17,23,1) 100%)', aspectRatio: '16/9', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
+             <div aria-hidden="true" style={{ position: 'absolute', inset: 0, backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='52' viewBox='0 0 60 52'%3E%3Cpath d='M30 1 L59 17.5 L59 34.5 L30 51 L1 34.5 L1 17.5 Z' fill='none' stroke='rgba(255,255,255,0.025)' stroke-width='1'/%3E%3C/svg%3E")`, backgroundSize: '60px 52px', pointerEvents: 'none' }} />
+             <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '32px' }}>
+               <div style={{ width: '56px', height: '56px', borderRadius: '50%', border: '1px solid rgba(59,130,246,0.3)', background: 'rgba(59,130,246,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+                 <PlayCircle size={28} style={{ color: '#60a5fa', opacity: 0.7 }} />
+               </div>
+               <div style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--m-text)', marginBottom: '8px' }}>Explainer video coming soon</div>
+               <div style={{ fontSize: '0.85rem', color: 'var(--m-text-faint)' }}>A short walkthrough of how Chameleon works — in plain language.</div>
              </div>
           </div>
 
@@ -602,31 +605,37 @@ export default function HomePage() {
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {[
-                  { name: 'Launch', price: 'from R999' },
-                  { name: 'Professional', price: 'from R1,999', popular: true },
-                  { name: 'Storefront', price: 'from R2,999' },
-                  { name: 'Commerce', price: 'from R4,500' },
+                  { name: 'Launch',       price: 'from R999',   href: '/pricing' },
+                  { name: 'Professional', price: 'from R1,999', href: '/pricing' },
+                  { name: 'Storefront',   price: 'from R2,999', href: '/pricing' },
+                  { name: 'Commerce',     price: 'from R4,500', href: '/pricing' },
                 ].map((tier) => (
-                  <div
+                  <Link
                     key={tier.name}
+                    href={tier.href}
                     style={{
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
                       padding: '12px 20px',
                       borderRadius: '8px',
-                      border: tier.popular ? '1px solid rgba(59,130,246,0.35)' : '1px solid rgba(255,255,255,0.07)',
-                      background: tier.popular ? 'rgba(59,130,246,0.06)' : 'rgba(255,255,255,0.02)',
+                      border: '1px solid rgba(255,255,255,0.07)',
+                      background: 'rgba(255,255,255,0.02)',
+                      textDecoration: 'none',
+                      transition: 'border-color 0.15s, background 0.15s',
                     }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(59,130,246,0.3)'; (e.currentTarget as HTMLElement).style.background = 'rgba(59,130,246,0.04)'; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.07)'; (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)'; }}
                   >
-                    <span style={{ fontSize: '0.9rem', fontWeight: tier.popular ? 600 : 400, color: tier.popular ? 'var(--m-text)' : 'var(--m-text-muted)' }}>
+                    <span style={{ fontSize: '0.9rem', fontWeight: 400, color: 'var(--m-text-muted)' }}>
                       {tier.name}
                     </span>
-                    <span style={{ fontSize: '0.875rem', fontWeight: 600, color: tier.popular ? '#60a5fa' : 'var(--m-text-muted)' }}>
+                    <span style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--m-text-muted)' }}>
                       {tier.price}<span style={{ fontWeight: 400, fontSize: '0.75rem' }}>/mo</span>
                     </span>
-                  </div>
+                  </Link>
                 ))}
+              </div>
               </div>
             </div>
 
@@ -644,32 +653,37 @@ export default function HomePage() {
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {[
-                  { name: 'Bronze', clients: '1-2 clients', price: 'R2,500' },
-                  { name: 'Silver', clients: '3-9 clients', price: 'R4,500', popular: true },
-                  { name: 'Gold', clients: '10+ clients', price: 'Free' },
+                  { name: 'Bronze', clients: '1-2 clients',  price: 'R2,500', href: '/agencies' },
+                  { name: 'Silver', clients: '3-9 clients',  price: 'R4,500', href: '/agencies' },
+                  { name: 'Gold',   clients: '10+ clients',  price: 'Free',   href: '/agencies' },
                 ].map((tier) => (
-                  <div
+                  <Link
                     key={tier.name}
+                    href={tier.href}
                     style={{
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
                       padding: '12px 20px',
                       borderRadius: '8px',
-                      border: tier.popular ? '1px solid rgba(59,130,246,0.35)' : '1px solid rgba(255,255,255,0.07)',
-                      background: tier.popular ? 'rgba(59,130,246,0.06)' : 'rgba(255,255,255,0.02)',
+                      border: '1px solid rgba(255,255,255,0.07)',
+                      background: 'rgba(255,255,255,0.02)',
+                      textDecoration: 'none',
+                      transition: 'border-color 0.15s, background 0.15s',
                     }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(59,130,246,0.3)'; (e.currentTarget as HTMLElement).style.background = 'rgba(59,130,246,0.04)'; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.07)'; (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)'; }}
                   >
                     <div style={{ textAlign: 'left' }}>
-                      <span style={{ fontSize: '0.9rem', fontWeight: tier.popular ? 600 : 400, color: tier.popular ? 'var(--m-text)' : 'var(--m-text-muted)', display: 'block' }}>
+                      <span style={{ fontSize: '0.9rem', fontWeight: 400, color: 'var(--m-text-muted)', display: 'block' }}>
                         {tier.name}
                       </span>
                       <span style={{ fontSize: '0.75rem', color: 'var(--m-text-faint)' }}>{tier.clients}</span>
                     </div>
-                    <span style={{ fontSize: '0.875rem', fontWeight: 600, color: tier.popular ? '#60a5fa' : 'var(--m-text-muted)' }}>
+                    <span style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--m-text-muted)' }}>
                       {tier.price}<span style={{ fontWeight: 400, fontSize: '0.75rem' }}>/mo</span>
                     </span>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </div>

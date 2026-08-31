@@ -280,22 +280,14 @@ export default function PricingPage() {
                     <div
                       style={{
                         position: 'absolute',
-                        top: '-12px',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
-                        color: 'white',
-                        fontSize: '0.75rem',
-                        fontWeight: 700,
-                        padding: '4px 12px',
-                        borderRadius: '999px',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
-                        whiteSpace: 'nowrap',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: '2px',
+                        background: 'linear-gradient(90deg, #3b82f6, #2563eb)',
+                        borderRadius: '8px 8px 0 0',
                       }}
-                    >
-                      Most Popular
-                    </div>
+                    />
                   )}
 
                   <h3 style={{ fontSize: '1.15rem', fontWeight: 600, color: 'var(--m-text)', margin: '0 0 10px' }}>
