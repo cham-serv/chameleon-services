@@ -31,6 +31,16 @@
   --atlas-spacing-2xl: 3rem;
   --atlas-spacing-3xl: 4rem;
   --atlas-spacing-4xl: 6rem;
+  /*
+   * --brand-heading: heading-specific colour token.
+   *
+   * Defaults to --brand-text so the Demo Explorer's "Text Colour" picker
+   * automatically controls heading colour on light-background sections.
+   * Dark sections (modern, bold hero, atlas-section-dark) locally override
+   * this to #ffffff to protect legibility — the override wins for that
+   * section's subtree, leaving the rest of the page unaffected.
+   */
+  --brand-heading: var(--brand-text, #1b1b1b);
   /* Reserve scrollbar width from first paint to prevent CLS when
    * content fills in below the fold and the scrollbar appears. */
   scrollbar-gutter: stable;
@@ -44,7 +54,7 @@
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -0.02em;
-  color: var(--brand-text, #1b1b1b);
+  color: var(--brand-heading, var(--brand-text, #1b1b1b));
 }
 
 .atlas-h2 {
@@ -53,7 +63,7 @@
   font-weight: 700;
   line-height: 1.15;
   letter-spacing: -0.015em;
-  color: var(--brand-text, #1b1b1b);
+  color: var(--brand-heading, var(--brand-text, #1b1b1b));
 }
 
 .atlas-h3 {
@@ -61,7 +71,7 @@
   font-size: clamp(1.25rem, 2.5vw, 1.75rem);
   font-weight: 700;
   line-height: 1.2;
-  color: var(--brand-text, #1b1b1b);
+  color: var(--brand-heading, var(--brand-text, #1b1b1b));
 }
 
 .atlas-h4 {
@@ -69,7 +79,7 @@
   font-size: 1.25rem;
   font-weight: 600;
   line-height: 1.3;
-  color: var(--brand-text, #1b1b1b);
+  color: var(--brand-heading, var(--brand-text, #1b1b1b));
 }
 
 .atlas-h5 {
@@ -77,7 +87,7 @@
   font-size: 1.0625rem;
   font-weight: 600;
   line-height: 1.4;
-  color: var(--brand-text, #1b1b1b);
+  color: var(--brand-heading, var(--brand-text, #1b1b1b));
 }
 
 .atlas-h6 {
@@ -87,7 +97,7 @@
   line-height: 1.4;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--brand-text, #1b1b1b);
+  color: var(--brand-heading, var(--brand-text, #1b1b1b));
 }
 
 .atlas-body {
@@ -145,7 +155,7 @@
 .atlas-prose h5,
 .atlas-prose h6 {
   font-family: var(--font-heading, inherit);
-  color: var(--brand-text, #1b1b1b);
+  color: var(--brand-heading, var(--brand-text, #1b1b1b));
   line-height: 1.2;
   margin: 1.5em 0 0.5em;
 }
@@ -1134,8 +1144,10 @@
 
 /* -- Hero Section -- */
 
+/* Dark standard hero: always white text — brand-heading locally overridden */
 .atlas-hero {
   background: var(--brand-primary, #2d6a4f);
+  --brand-heading: #ffffff;
   color: #ffffff;
   padding: 5rem 0 4rem;
   text-align: center;
@@ -1162,6 +1174,7 @@
   line-height: 1.1;
   margin: 0 0 1.25rem;
   font-family: var(--font-heading, inherit);
+  color: var(--brand-heading, inherit);
 }
 
 .atlas-hero-sub {
@@ -1199,7 +1212,7 @@
   font-weight: 700;
   margin: 0 0 1.5rem;
   font-family: var(--font-heading, inherit);
-  color: var(--brand-text, #1b1b1b);
+  color: var(--brand-heading, var(--brand-text, #1b1b1b));
   padding-bottom: 0.625rem;
   position: relative;
 }
@@ -2695,6 +2708,7 @@
 
 /* - Modern Variant - */
 
+/* Modern hero: dark background — local override protects white text */
 [data-variant="modern"] .atlas-home-hero {
   min-height: calc(90svh - var(--atlas-header-h));
   display: flex;
@@ -2702,6 +2716,7 @@
   justify-content: center;
   text-align: center;
   background: var(--brand-primary, #0f172a);
+  --brand-heading: #ffffff;
   color: #ffffff;
   position: relative;
   overflow: hidden;
@@ -2731,6 +2746,7 @@
 }
 
 [data-variant="modern"] .atlas-section-dark {
+  --brand-heading: #ffffff;
   background: var(--brand-primary, #0f172a);
   color: #ffffff;
 }
@@ -2770,6 +2786,7 @@
 
 /* - Bold Variant - */
 
+/* Bold hero: dark background — local override protects white text */
 [data-variant="bold"] .atlas-home-hero {
   min-height: calc(100svh - var(--atlas-header-h));
   display: flex;
@@ -2777,6 +2794,7 @@
   justify-content: center;
   text-align: center;
   background: var(--brand-primary, #1a1a2e);
+  --brand-heading: #ffffff;
   color: #ffffff;
   position: relative;
   overflow: hidden;
@@ -2809,6 +2827,7 @@
 
 [data-variant="bold"] .atlas-section-dark {
   background: var(--brand-primary, #1a1a2e);
+  --brand-heading: #ffffff;
   color: #ffffff;
 }
 
