@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { HeroTextCycler } from '@/components/marketing/HeroTextCycler';
-import { ArrowRight, Zap, Brain, RefreshCw, Palette, Search, TrendingUp, Clock, Globe } from 'lucide-react';
+import { ArrowRight, Zap, Brain, RefreshCw, Palette, Search, TrendingUp, Clock, Globe, PlayCircle, CheckCircle2, XCircle } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Chameleon - The AI Authority Engine for South African Businesses',
@@ -78,25 +78,25 @@ const whyNowPoints = [
     icon: Search,
     stat: '40%',
     label: 'of searches now return AI-generated answers',
-    desc: 'Google SGE, ChatGPT, and Perplexity are changing where your customers find you.',
+    desc: 'If AI can\'t read your site, nearly half your potential customers will find a competitor instead.',
   },
   {
     icon: TrendingUp,
     stat: '62%',
     label: 'of users trust AI answers over organic results',
-    desc: 'If the AI doesn\'t know about you, neither does your next customer.',
+    desc: 'The goal isn\'t just to rank on Google anymore. It\'s to be the answer AI gives.',
   },
   {
     icon: Clock,
     stat: '18 months',
     label: 'behind - the average legacy CMS platform',
-    desc: 'GEO requires structured data, semantic markup, and AI-friendly content architecture that old platforms weren\'t built for.',
+    desc: 'While you\'re paying to maintain WordPress, your competitors are already showing up in AI answers.',
   },
   {
     icon: Globe,
     stat: 'R0',
     label: 'in additional ad spend required',
-    desc: 'GEO is organic visibility in AI answers - earned through content structure, not paid media.',
+    desc: 'This isn\'t paid advertising. It\'s earned visibility — built into the way your site is structured.',
   },
 ];
 
@@ -210,9 +210,7 @@ export default function HomePage() {
               lineHeight: 1.7,
             }}
           >
-            Chameleon builds AI-ready, GEO-optimised websites and ecommerce stores
-            that adapt to the new era of search - so your business stays visible
-            wherever customers are looking.
+            Most South African businesses are still paying for a website that works the way the internet did in 2010. Chameleon replaces that with something built for how customers find you today — and tomorrow.
           </p>
 
           {/* CTAs */}
@@ -247,56 +245,148 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* - Feature Pillars - */}
-      <section className="m-section-sm" id="features">
+      {/* - Section 1: What is this, exactly? - */}
+      <section className="m-section" id="what-is-chameleon" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
         <div className="m-container">
-          <div className="m-grid-4">
-            {features.map((f) => (
-              <div
-                key={f.id}
-                className="m-card"
-                id={`feature-${f.id}`}
-                style={{ padding: '28px 24px' }}
-              >
-                <div
-                  style={{
-                    width: '44px',
-                    height: '44px',
-                    borderRadius: '10px',
-                    background: 'rgba(59,130,246,0.1)',
-                    border: '1px solid rgba(59,130,246,0.2)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '16px',
-                    color: '#60a5fa',
-                  }}
-                >
-                  <f.icon size={20} />
-                </div>
-                <h3
-                  style={{
-                    fontFamily: 'var(--m-font-display)',
-                    fontSize: '1rem',
-                    fontWeight: 700,
-                    color: 'var(--m-text)',
-                    margin: '0 0 8px',
-                  }}
-                >
-                  {f.title}
-                </h3>
-                <p
-                  style={{
-                    fontSize: '0.85rem',
-                    color: 'var(--m-text-muted)',
-                    margin: 0,
-                    lineHeight: 1.6,
-                  }}
-                >
-                  {f.desc}
-                </p>
-              </div>
-            ))}
+          <div style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto 64px' }}>
+            <span className="m-label">What is this, exactly?</span>
+            <div className="m-divider" style={{ margin: '16px auto' }} />
+            <h2
+              style={{
+                fontFamily: 'var(--m-font-display)',
+                fontSize: 'clamp(1.8rem, 4vw, 2.5rem)',
+                fontWeight: 700,
+                letterSpacing: '-0.02em',
+                color: 'var(--m-text)',
+                margin: '0 0 16px',
+              }}
+            >
+              The same result. A completely different model.
+            </h2>
+            <p style={{ fontSize: '1rem', color: 'var(--m-text-muted)', lineHeight: 1.7, margin: 0 }}>
+              Your customers still get a beautiful, fast website. But instead of paying a developer every time something needs updating, or juggling a hosting bill, a plugin subscription, and a WordPress maintenance contract — you pay one flat monthly fee, and we handle everything that sits behind it.
+            </p>
+          </div>
+
+          {/* Video Placeholder */}
+          <div style={{ maxWidth: '800px', margin: '0 auto 64px', position: 'relative', borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)', background: '#0a0a0a', aspectRatio: '16/9', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+             <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(59,130,246,0.2) 0%, rgba(10,10,10,1) 100%)', opacity: 0.5 }}></div>
+             <div style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
+               <PlayCircle size={64} style={{ color: '#60a5fa', margin: '0 auto 16px', opacity: 0.9 }} />
+               <div style={{ fontSize: '1.1rem', fontWeight: 600, color: 'white' }}>See the difference (1:30)</div>
+             </div>
+          </div>
+
+          {/* Side-by-side comparison */}
+          <div className="m-grid-2" style={{ gap: '24px' }}>
+            <div className="m-card" style={{ padding: '32px' }}>
+              <h3 style={{ fontSize: '1.2rem', fontFamily: 'var(--m-font-display)', fontWeight: 700, color: 'var(--m-text)', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                 <XCircle size={20} style={{ color: '#ef4444' }} />
+                 The Old Way
+              </h3>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <li style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>You hire a web developer (once, then again when things break)</li>
+                <li style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>You pay for hosting separately</li>
+                <li style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>You install WordPress plugins and hope they don&apos;t conflict</li>
+                <li style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>Google indexes your pages (if you&apos;re lucky)</li>
+                <li style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>You &quot;post content&quot; and hope someone sees it</li>
+              </ul>
+            </div>
+            
+            <div className="m-card" style={{ padding: '32px', border: '1px solid rgba(59,130,246,0.3)', background: 'linear-gradient(180deg, rgba(59,130,246,0.05) 0%, rgba(255,255,255,0.02) 100%)' }}>
+              <h3 style={{ fontSize: '1.2rem', fontFamily: 'var(--m-font-display)', fontWeight: 700, color: 'var(--m-text)', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                 <CheckCircle2 size={20} style={{ color: '#3b82f6' }} />
+                 The Chameleon Way
+              </h3>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <li style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>We set it up. It runs itself.</li>
+                <li style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>Hosting is included. Always.</li>
+                <li style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>No plugins. No updates. No security patches. Ever.</li>
+                <li style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>AI assistants (ChatGPT, Google, Perplexity) find your business and cite it in answers — automatically.</li>
+                <li style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>Your product data, pricing, and FAQs are structured so AI engines can read and recommend them directly.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* - Section 2: The Bill Killer - */}
+      <section className="m-section" id="bill-killer" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="m-container">
+          <div style={{ textAlign: 'center', maxWidth: '600px', margin: '0 auto 48px' }}>
+             <h2 style={{ fontFamily: 'var(--m-font-display)', fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--m-text)', margin: '0 0 16px' }}>
+               Stop paying for problems Chameleon doesn&apos;t have.
+             </h2>
+          </div>
+          
+          <div className="m-card" style={{ maxWidth: '800px', margin: '0 auto', overflow: 'hidden' }}>
+             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+               <thead>
+                 <tr style={{ background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                   <th style={{ padding: '16px 24px', fontSize: '0.9rem', color: 'var(--m-text-muted)', fontWeight: 600 }}>What you&apos;re probably paying now</th>
+                   <th style={{ padding: '16px 24px', fontSize: '0.9rem', color: 'var(--m-text)', fontWeight: 600 }}>With Chameleon</th>
+                 </tr>
+               </thead>
+               <tbody style={{ fontSize: '0.95rem' }}>
+                 {[
+                   ['Web hosting (shared/VPS): R600–R1,500/mo', '✅ Included'],
+                   ['WordPress maintenance & updates: R800–R2,500/mo', '✅ Included'],
+                   ['Plugin subscriptions (Yoast, WooCommerce, etc.): R400–R1,200/mo', '✅ Included'],
+                   ['SSL Certificate renewal: R200–R600/yr', '✅ Included'],
+                   ['Developer call-out fees (when things break): R1,500–R5,000/incident', '✅ Included'],
+                   ['SEO agency retainer to "fix" your site: R5,000–R15,000/mo', '✅ Built in from day one']
+                 ].map((row, i) => (
+                   <tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                     <td style={{ padding: '16px 24px', color: 'var(--m-text-muted)' }}>{row[0]}</td>
+                     <td style={{ padding: '16px 24px', color: '#60a5fa', fontWeight: 500 }}>{row[1]}</td>
+                   </tr>
+                 ))}
+                 <tr style={{ background: 'rgba(59,130,246,0.05)' }}>
+                   <td style={{ padding: '20px 24px', color: 'var(--m-text)', fontWeight: 700, fontSize: '1rem' }}>Typical monthly total: R8,000–R25,000+</td>
+                   <td style={{ padding: '20px 24px', color: '#60a5fa', fontWeight: 700, fontSize: '1.1rem' }}>Chameleon: from R999/mo</td>
+                 </tr>
+               </tbody>
+             </table>
+          </div>
+          <p style={{ textAlign: 'center', fontSize: '0.8rem', color: 'var(--m-text-faint)', marginTop: '16px' }}>
+            Typical costs for a mid-market WordPress site. Your actual savings will vary.
+          </p>
+        </div>
+      </section>
+
+      {/* - Section 3: Staff & Workflow Savings - */}
+      <section className="m-section" id="team-savings" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="m-container">
+          <div style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto 64px' }}>
+            <h2 style={{ fontFamily: 'var(--m-font-display)', fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--m-text)', margin: '0 0 16px' }}>
+              Your team works on the business. Not the website.
+            </h2>
+            <p style={{ fontSize: '1rem', color: 'var(--m-text-muted)', lineHeight: 1.7, margin: 0 }}>
+              The average South African SME spends between R8,000 and R20,000 per month across IT support, web maintenance, and SEO retainers — for a website that still doesn&apos;t get found by AI search. Chameleon consolidates all of that into one predictable monthly fee.
+            </p>
+          </div>
+
+          <div className="m-grid-2" style={{ gap: '24px' }}>
+            <div className="m-card" style={{ padding: '32px' }}>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--m-text)', marginBottom: '20px' }}>Things you no longer need to pay for or manage:</h3>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <li style={{ display: 'flex', gap: '12px', alignItems: 'start' }}><XCircle size={18} style={{ color: '#ef4444', flexShrink: 0, marginTop: '2px' }} /><span style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>IT service provider for website issues</span></li>
+                <li style={{ display: 'flex', gap: '12px', alignItems: 'start' }}><XCircle size={18} style={{ color: '#ef4444', flexShrink: 0, marginTop: '2px' }} /><span style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>A developer on retainer for &quot;small fixes&quot;</span></li>
+                <li style={{ display: 'flex', gap: '12px', alignItems: 'start' }}><XCircle size={18} style={{ color: '#ef4444', flexShrink: 0, marginTop: '2px' }} /><span style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Expensive SEO audits to fix what the platform got wrong</span></li>
+                <li style={{ display: 'flex', gap: '12px', alignItems: 'start' }}><XCircle size={18} style={{ color: '#ef4444', flexShrink: 0, marginTop: '2px' }} /><span style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Hours of manual data entry to keep product info consistent across channels</span></li>
+                <li style={{ display: 'flex', gap: '12px', alignItems: 'start' }}><XCircle size={18} style={{ color: '#ef4444', flexShrink: 0, marginTop: '2px' }} /><span style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Someone to update prices, descriptions, and images every time something changes</span></li>
+              </ul>
+            </div>
+            
+            <div className="m-card" style={{ padding: '32px', border: '1px solid rgba(59,130,246,0.3)', background: 'linear-gradient(180deg, rgba(59,130,246,0.05) 0%, rgba(255,255,255,0.02) 100%)' }}>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--m-text)', marginBottom: '20px' }}>What this gives your team instead:</h3>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <li style={{ display: 'flex', gap: '12px', alignItems: 'start' }}><CheckCircle2 size={18} style={{ color: '#3b82f6', flexShrink: 0, marginTop: '2px' }} /><span style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>One clean admin panel — any staff member can update content, add products, change prices. No technical knowledge needed.</span></li>
+                <li style={{ display: 'flex', gap: '12px', alignItems: 'start' }}><CheckCircle2 size={18} style={{ color: '#3b82f6', flexShrink: 0, marginTop: '2px' }} /><span style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>AI-powered product descriptions drafted automatically (coming soon)</span></li>
+                <li style={{ display: 'flex', gap: '12px', alignItems: 'start' }}><CheckCircle2 size={18} style={{ color: '#3b82f6', flexShrink: 0, marginTop: '2px' }} /><span style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Your marketing team focuses on strategy, not website maintenance</span></li>
+                <li style={{ display: 'flex', gap: '12px', alignItems: 'start' }}><CheckCircle2 size={18} style={{ color: '#3b82f6', flexShrink: 0, marginTop: '2px' }} /><span style={{ color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Agencies: manage all your clients from a single dashboard — no more logging in and out of multiple accounts</span></li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
@@ -473,6 +563,93 @@ export default function HomePage() {
                 </h3>
                 <p style={{ fontSize: '0.875rem', color: 'var(--m-text-muted)', lineHeight: 1.6, margin: 0 }}>
                   {step.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* - Section 4: Revenue Connection - */}
+      <section className="m-section" id="revenue" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="m-container">
+          <div style={{ textAlign: 'center', maxWidth: '600px', margin: '0 auto 64px' }}>
+            <h2 style={{ fontFamily: 'var(--m-font-display)', fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--m-text)', margin: '0 0 16px' }}>
+              More reach. Lower cost. More sales.
+            </h2>
+          </div>
+          
+          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+             <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+               {[
+                 { title: '1. AI search is where your next customer is looking.', desc: '40% of searches now return AI-generated answers instead of a list of blue links. If your business isn\'t structured for AI to understand and cite, you\'re invisible to that 40%.' },
+                 { title: '2. Fast sites sell more.', desc: 'Chameleon pages load in under a second — built on the same technology that powers Fortune 500 online stores. Every second of delay costs 7% in conversions.' },
+                 { title: '3. Your product data works 24/7.', desc: 'Every product listing is structured so that when someone asks ChatGPT "where can I buy this in South Africa?" — Chameleon-powered sites are built to be part of the answer.' },
+                 { title: '4. No maintenance window, no downtime.', desc: 'You\'re not losing sales because your plugin broke at 2am and someone has to call a developer in the morning.' },
+                 { title: '5. Your store keeps improving.', desc: 'Platform updates — including new AI features — are deployed to your site automatically. You don\'t pay for upgrades. You don\'t need to re-platform every 3 years.' }
+               ].map((point, i) => (
+                 <div key={i} style={{ display: 'flex', gap: '20px' }}>
+                   <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(59,130,246,0.1)', color: '#60a5fa', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontWeight: 700 }}>
+                     {i+1}
+                   </div>
+                   <div>
+                     <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--m-text)', margin: '0 0 8px', lineHeight: 1.4 }}>{point.title.replace(/^\d+\.\s/, '')}</h3>
+                     <p style={{ margin: 0, color: 'var(--m-text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>{point.desc}</p>
+                   </div>
+                 </div>
+               ))}
+             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* - Feature Pillars - */}
+      <section className="m-section-sm" id="features" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="m-container">
+          <div className="m-grid-4">
+            {features.map((f) => (
+              <div
+                key={f.id}
+                className="m-card"
+                id={`feature-${f.id}`}
+                style={{ padding: '28px 24px' }}
+              >
+                <div
+                  style={{
+                    width: '44px',
+                    height: '44px',
+                    borderRadius: '10px',
+                    background: 'rgba(59,130,246,0.1)',
+                    border: '1px solid rgba(59,130,246,0.2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '16px',
+                    color: '#60a5fa',
+                  }}
+                >
+                  <f.icon size={20} />
+                </div>
+                <h3
+                  style={{
+                    fontFamily: 'var(--m-font-display)',
+                    fontSize: '1rem',
+                    fontWeight: 700,
+                    color: 'var(--m-text)',
+                    margin: '0 0 8px',
+                  }}
+                >
+                  {f.title}
+                </h3>
+                <p
+                  style={{
+                    fontSize: '0.85rem',
+                    color: 'var(--m-text-muted)',
+                    margin: 0,
+                    lineHeight: 1.6,
+                  }}
+                >
+                  {f.desc}
                 </p>
               </div>
             ))}
