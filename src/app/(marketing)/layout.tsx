@@ -146,6 +146,7 @@ function MarketingFooter() {
             <FooterCol
               title="Product"
               links={[
+                { label: 'Why Chameleon', href: '/why-chameleon' },
                 { label: 'Templates', href: '/templates' },
                 { label: 'Pricing', href: '/pricing' },
                 { label: 'Agencies', href: '/agencies' },

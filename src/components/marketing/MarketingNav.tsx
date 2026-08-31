@@ -8,6 +8,7 @@ import { ChameleonLogo } from '@/components/marketing/ChameleonLogo';
 
 const navLinks = [
   { href: '/', label: 'Home' },
+  { href: '/why-chameleon', label: 'Why Chameleon' },
   { href: '/templates', label: 'Templates' },
   { href: '/pricing', label: 'Pricing' },
   { href: '/agencies', label: 'Agencies' },
