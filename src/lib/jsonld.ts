@@ -1,4 +1,4 @@
-﻿/**
+/**
  * JSON-LD Structured Data Builders
  *
  * Generates schema.org JSON-LD objects for search engine rich results.
@@ -530,8 +530,10 @@ export function buildServiceLd(
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: service.name,
-    ...(service.shortDescription && { description: service.shortDescription }),
+    name: service.title ?? (service as any).name,
+    ...(service.shortDesc ?? service.shortDescription
+      ? { description: service.shortDesc ?? service.shortDescription }
+      : {}),
     url: serviceUrl,
     provider: {
       '@type': 'Organization',

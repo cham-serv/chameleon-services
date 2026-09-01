@@ -17,6 +17,7 @@ import { getFontClasses, getFontVariables } from '@/lib/fonts';
 import { fetchTenantConfig } from '@/lib/tenant';
 import { DemoExplorer } from '@/templates/atlas/DemoExplorer';
 import { definition as atlasDefinition } from '@/templates/atlas/definition';
+import { definition as meridianDefinition } from '@/templates/meridian/definition';
 import { buildExplorerRoutes } from '@/templates/atlas/demo-explorer-utils';
 
 type Props = {
@@ -104,17 +105,23 @@ export default async function TenantLayout({ children, params }: Props) {
   const logoUrl = s?.logo?.url ?? pc?.logo?.url ?? null;
 
   // Build demo explorer routes if this is a demo tenant.
-  // DemoExplorer lives here (not in AtlasLayout) so it is rendered in the
-  // persistent layout segment — it never remounts during client-side page
-  // navigation, which means isOpen state survives naturally with no flicker.
-  // TODO: select definition by config.tenant.template?.slug when multi-template support lands.
+  // Pick the definition based on the tenant's template slug.
+  const templateSlug = config?.tenant?.template?.slug ?? 'atlas';
+  const templateDefinition =
+    templateSlug === 'meridian' ? meridianDefinition : atlasDefinition;
+
   const explorerRoutes =
     config?.tenant?.isDemoTenant
-      ? buildExplorerRoutes(atlasDefinition, config.tenant.featureConfig)
+      ? buildExplorerRoutes(templateDefinition, config.tenant.featureConfig)
       : null;
 
+  // colourScheme — resolved server-side so <html data-scheme> is set before
+  // any CSS is parsed. This is the zero-flash dark mode approach.
+  // Priority: SiteSettings.colourScheme (global) — only Meridian uses this today.
+  const colourScheme = config?.settings?.colourScheme ?? 'light';
+
   return (
-    <html lang="en" className={fontClasses}>
+    <html lang="en" className={fontClasses} data-scheme={colourScheme}>
       <head>
         <style
           dangerouslySetInnerHTML={{

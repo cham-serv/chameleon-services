@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Atlas ResourcePage - Server Component
  *
  * Dual-mode page handling the two deep levels of the knowledge graph:
@@ -398,8 +398,8 @@ async function renderArticle({ tenant, siteUrl, siteName, topicSlug, articleSlug
 
               {/* Meta row */}
               <div className="atlas-article-meta">
-                {article.author && <span style={{ fontWeight: 600 }}>{article.author}</span>}
-                {article.author && (article.publishedAt || article.readTime) && <span style={{ opacity: 0.3 }}></span>}
+                {article.author && <span style={{ fontWeight: 600 }}>{typeof article.author === 'object' && 'name' in article.author ? article.author.name : typeof article.author === 'string' ? article.author : null}</span>}
+                {article.author && (article.publishedAt || article.readTime) && <span style={{ opacity: 0.3 }}>·</span>}
                 {(isUpdated ? article.updatedAt : article.publishedAt) && (
                   <time dateTime={isUpdated ? article.updatedAt : article.publishedAt} className="atlas-caption" style={{ opacity: 0.6 }}>
                     {isUpdated ? "Updated: " : ""}{formatDate((isUpdated ? article.updatedAt : article.publishedAt)!)}

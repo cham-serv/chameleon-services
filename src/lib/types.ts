@@ -111,6 +111,12 @@ export type SiteSettings = {
   defaultDeliveryRegions?: Array<{ region: string }>;
   // Turnstile (safe public-side key)
   turnstileSiteKey?: string;
+  /**
+   * Controls dark/light mode for templates that support it (e.g. Meridian).
+   * Applied server-side as data-scheme on <html> — zero flash of unstyled content.
+   * 'auto' = follows user OS preference via CSS prefers-color-scheme.
+   */
+  colourScheme?: 'light' | 'dark' | 'auto';
 };
 
 // - Page Config (from atlas-site-config via tenant-config API) -
@@ -342,4 +348,114 @@ export type ResolvedPage = {
   routeKey: string;
   variant: string;
   Component: ComponentType<PageProps>;
+};
+
+// - Meridian Page Config -
+//
+// Fetched from /api/public/meridian-config?tenant=xxx and stored in
+// TenantConfig.meridianConfig (when template === 'meridian').
+// Mirrors the MeridianSiteConfig collection structure.
+
+export type MeridianPageConfig = {
+  // Identity (from Settings tab)
+  siteName?: string | null;
+  tagline?: string | null;
+  logo?: { url: string; alt?: string } | null;
+  logoMark?: { url: string; alt?: string } | null;
+  contactEmail?: string | null;
+  contactPhone?: string | null;
+  colourScheme?: 'light' | 'dark' | 'auto' | null;
+
+  // Global CTAs
+  homeCta1Text?: string | null;
+  homeCta1Link?: string | null;
+  homeCta2Text?: string | null;
+  homeCta2Link?: string | null;
+
+  // Page enablement & variants
+  pages?: {
+    home?:      { variant?: string };
+    services?:  { enabled?: boolean; variant?: string };
+    team?:      { enabled?: boolean; variant?: string };
+    about?:     { enabled?: boolean };
+    contact?:   { enabled?: boolean; variant?: string };
+    blog?:      { enabled?: boolean };
+    resources?: { enabled?: boolean };
+    faqs?:      { enabled?: boolean };
+    legal?:     { enabled?: boolean };
+  } | null;
+
+  // Announcement strip
+  announcementEnabled?: boolean | null;
+  announcementText?: string | null;
+  announcementLink?: string | null;
+  announcementLinkText?: string | null;
+  announcementStyle?: 'info' | 'promo' | 'urgent' | null;
+
+  // Home — Split Hero variant
+  homeSplitHeroHeadline?: string | null;
+  homeSplitHeroSubheadline?: string | null;
+  homeSplitHeroImage?: { url: string; alt?: string } | null;
+
+  // Home — Full Hero variant
+  homeFullHeroHeadline?: string | null;
+  homeFullHeroSubheadline?: string | null;
+  homeFullHeroImage?: { url: string; alt?: string } | null;
+
+  // Home — Authority variant
+  homeAuthorityHeadline?: string | null;
+  homeAuthoritySubheadline?: string | null;
+
+  // Home — Metrics variant
+  homeMetricsHeadline?: string | null;
+  homeMetricsSubheadline?: string | null;
+  homeMetricsHeroImage?: { url: string; alt?: string } | null;
+  homeMetricsCounters?: Array<{ value: string; label: string }> | null;
+
+  // Home — shared content
+  homeTrustSignals?: Array<{ text: string }> | null;
+  homeTestimonials?: Array<{
+    quote: string;
+    author: string;
+    role?: string | null;
+    rating?: number | null;
+  }> | null;
+  homePartnerLogos?: Array<{
+    name: string;
+    logo: { url: string; alt?: string } | null;
+    url?: string | null;
+  }> | null;
+  homeSeoTitle?: string | null;
+  homeSeoDescription?: string | null;
+
+  // Services page
+  servicesHeadline?: string | null;
+  servicesSubheadline?: string | null;
+  servicesSeoTitle?: string | null;
+  servicesSeoDescription?: string | null;
+
+  // Team page
+  teamHeadline?: string | null;
+  teamSubheadline?: string | null;
+  teamSeoTitle?: string | null;
+  teamSeoDescription?: string | null;
+
+  // About page
+  aboutHeadline?: string | null;
+  aboutIntro?: string | null;
+  aboutStory?: unknown; // Lexical richText JSON
+  aboutImage?: { url: string; alt?: string } | null;
+  aboutValues?: Array<{ title: string; description: string; icon?: string }> | null;
+  aboutMilestones?: Array<{ year: string; event: string }> | null;
+  aboutSeoTitle?: string | null;
+  aboutSeoDescription?: string | null;
+
+  // Contact page
+  contactHeadline?: string | null;
+  contactSubheadline?: string | null;
+  contactImage?: { url: string; alt?: string } | null;
+  contactMapEmbedUrl?: string | null;
+  contactBusinessHours?: Array<{ days: string; hours: string }> | null;
+  contactSeoTitle?: string | null;
+  contactSeoDescription?: string | null;
 };
