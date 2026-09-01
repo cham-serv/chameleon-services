@@ -2325,3 +2325,77 @@
 .mer-skip-link:focus {
   top: 0;
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   PHASE 5 UTILITIES
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Arrow inline link — used on service cards */
+.mer-arrow-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  font-family: var(--font-body, inherit);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--brand-primary, #1a2b5e);
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  transition: gap var(--mer-transition), color var(--mer-transition);
+  margin-top: auto;
+}
+
+.mer-arrow-link:hover {
+  gap: 0.65em;
+  color: color-mix(in srgb, var(--brand-primary, #1a2b5e) 80%, #000);
+}
+
+/* Image zoom on hover (applied to container) */
+.mer-img-zoom {
+  overflow: hidden;
+}
+
+.mer-img-zoom img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mer-img-zoom:hover img {
+  transform: scale(1.04);
+}
+
+/* Spinner animation — used by form loading state */
+@keyframes mer-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Fade-in-up — used by form success state */
+@keyframes mer-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive overrides for ContactPage split-image */
+@media (max-width: 1024px) {
+  .mer-contact-split {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Responsive overrides for ServicesPage sticky-scroll — mobile fallback tabs */
+@media (max-width: 1024px) {
+  .mer-sticky-scroll {
+    display: flex;
+    flex-direction: column;
+  }
+}
