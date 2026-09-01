@@ -1,117 +1,61 @@
-﻿/**
- * Meridian Template Layout - Header, Nav, Footer
+/**
+ * MeridianLayout — Server Component Shell
  *
- * Clean, authority-driven design for professional services.
- * Stub implementation - full design in Phase 4.
+ * Imports the Meridian design system CSS, composes the header,
+ * scroll reveal observer, main content area, and footer.
+ *
+ * The header and mobile nav are client components (scroll state,
+ * drawer open/close). Everything else is server-rendered.
  */
 
+import './meridian.css';
+import './meridian-animations.css';
 import type { LayoutProps } from '@/lib/types';
+import MeridianHeader from './MeridianHeader';
+import MeridianFooter from './MeridianFooter';
+import { MeridianScrollReveal } from './MeridianScrollReveal';
+import Link from 'next/link';
 
 export default function MeridianLayout({ config, children }: LayoutProps) {
-  const siteName = config.settings?.siteName ?? config.tenant.name;
-  const contactEmail = config.settings?.contactEmail ?? '';
+  const pc = config.pageConfig;
 
-  const navLinks: { href: string; label: string }[] = [
-    { href: '/', label: 'Home' },
-  ];
-
-  const fc = config.tenant.featureConfig;
-  if (fc.about?.enabled) navLinks.push({ href: '/about', label: 'About' });
-  if (fc.services?.enabled) navLinks.push({ href: '/services', label: 'Services' });
-  if (fc.blog?.enabled) navLinks.push({ href: '/blog', label: 'Blog' });
-  if (fc.resources?.enabled) navLinks.push({ href: '/resources', label: 'Resources' });
-  if (fc.faqs?.enabled) navLinks.push({ href: '/faqs', label: 'FAQs' });
-  if (fc.contact?.enabled) navLinks.push({ href: '/contact', label: 'Contact' });
+  // Announcement strip (session-dismissed client-side via CSS class toggle)
+  const showAnnouncement =
+    pc?.announcementEnabled === true && !!pc?.announcementText;
 
   return (
     <>
-      {/* - Header - */}
-      <header style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 100,
-        background: 'var(--brand-background, #ffffff)',
-        borderBottom: '1px solid rgba(0,0,0,0.06)',
-        padding: '0 1.5rem',
-      }}>
-        <div style={{
-          maxWidth: 1100,
-          margin: '0 auto',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          height: 60,
-        }}>
-          <a href="/" style={{
-            fontWeight: 600,
-            fontSize: '1.125rem',
-            color: 'var(--brand-primary, #1a1a2e)',
-            textDecoration: 'none',
-            fontFamily: 'var(--font-heading, inherit)',
-            letterSpacing: '-0.01em',
-          }}>
-            {siteName}
-          </a>
+      <a href="#mer-main" className="mer-skip-link">Skip to content</a>
 
-          <nav style={{ display: 'flex', gap: '1.75rem' }}>
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                style={{
-                  fontSize: '0.8125rem',
-                  fontWeight: 500,
-                  color: 'var(--brand-text, #555)',
-                  textDecoration: 'none',
-                  letterSpacing: '0.01em',
-                }}
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
+      {/* Announcement strip */}
+      {showAnnouncement && (
+        <div
+          className={`mer-announcement mer-announcement--${pc?.announcementStyle ?? 'info'}`}
+          role="banner"
+          aria-label="Site announcement"
+        >
+          {pc?.announcementText}
+          {pc?.announcementLink && pc?.announcementLinkText && (
+            <Link href={pc.announcementLink} className="mer-announcement-link">
+              {pc.announcementLinkText}
+            </Link>
+          )}
         </div>
-      </header>
+      )}
 
-      {/* - Main Content - */}
-      <main style={{ minHeight: '60vh' }}>
+      {/* Header — client component (scroll + mobile drawer state) */}
+      <MeridianHeader config={config} />
+
+      {/* Main content */}
+      <main id="mer-main" style={{ minHeight: '60vh' }}>
         {children}
       </main>
 
-      {/* - Footer - */}
-      <footer style={{
-        background: 'var(--brand-primary, #1a1a2e)',
-        color: 'rgba(255,255,255,0.65)',
-        padding: '2.5rem 1.5rem',
-        marginTop: '4rem',
-      }}>
-        <div style={{
-          maxWidth: 1100,
-          margin: '0 auto',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '1rem',
-        }}>
-          <div>
-            <div style={{
-              fontWeight: 600,
-              color: '#fff',
-              marginBottom: '0.25rem',
-              fontFamily: 'var(--font-heading, inherit)',
-            }}>
-              {siteName}
-            </div>
-            {contactEmail && (
-              <div style={{ fontSize: '0.8125rem' }}>{contactEmail}</div>
-            )}
-          </div>
-          <div style={{ fontSize: '0.75rem', opacity: 0.5 }}>
-             {new Date().getFullYear()} {siteName}
-          </div>
-        </div>
-      </footer>
+      {/* Footer — server component */}
+      <MeridianFooter config={config} />
+
+      {/* Scroll reveal observer — activates data-reveal animations */}
+      <MeridianScrollReveal />
     </>
   );
 }
