@@ -89,7 +89,7 @@ export function ProductCard({
           </div>
         )}
 
-        {/* Hover overlay */}
+        {/* Hover overlay with View label */}
         <div className="atlas-product-card-overlay" aria-hidden="true">
           <span className="atlas-product-card-overlay-label">View Product</span>
         </div>
