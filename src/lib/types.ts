@@ -458,4 +458,26 @@ export type MeridianPageConfig = {
   contactBusinessHours?: Array<{ days: string; hours: string }> | null;
   contactSeoTitle?: string | null;
   contactSeoDescription?: string | null;
+
+  // Blog page
+  blogHeadline?: string | null;
+  blogSubheadline?: string | null;
+  blogSeoTitle?: string | null;
+  blogSeoDescription?: string | null;
+
+  // Resources page
+  resourcesHeadline?: string | null;
+  resourcesSubheadline?: string | null;
+  resourcesSeoTitle?: string | null;
+  resourcesSeoDescription?: string | null;
+
+  // FAQs page
+  faqsHeadline?: string | null;
+  faqsSubheadline?: string | null;
+  faqsSeoTitle?: string | null;
+  faqsSeoDescription?: string | null;
+
+  // Legal page
+  legalSeoTitle?: string | null;
+  legalSeoDescription?: string | null;
 };
