@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Meridian BlogPostPage
  *
  * Layout:
@@ -153,7 +153,7 @@ export default async function BlogPostPage({ config, path }: PageProps) {
           </nav>
 
           {/* Two-column layout */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 'var(--mer-spacing-4xl)', alignItems: 'start' }}>
+          <div className="mer-article-layout">
             {/* ── Article body ─────────────────────────────────── */}
             <article>
               {/* Meta */}

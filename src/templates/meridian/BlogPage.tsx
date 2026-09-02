@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Meridian BlogPage  (variant: magazine)
  *
  * Layout:
@@ -152,7 +152,8 @@ export default async function BlogPage({ config }: PageProps) {
           <div className="mer-container">
             <a
               href={`/blog/${featured.slug}`}
-              style={{ textDecoration: 'none', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--mer-spacing-3xl)', alignItems: 'center' }}
+              className="mer-blog-featured"
+              style={{ textDecoration: 'none' }}
               data-reveal="up"
             >
               <div>

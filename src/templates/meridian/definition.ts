@@ -44,10 +44,11 @@ export const definition: TemplateDefinition = {
     '/about': {
       label: 'About',
       feature: 'about',
-      defaultVariant: 'team-grid',
+      defaultVariant: 'standard',
       variants: {
-        'team-grid': {
-          label: 'Team Grid',
+        'standard': {
+          label: 'Standard',
+          description: 'Hero, firm story, values grid, milestones timeline, featured team strip, and CTA.',
           component: () => import('./AboutPage'),
         },
       },
@@ -153,7 +154,8 @@ export const definition: TemplateDefinition = {
       defaultVariant: 'grid',
       variants: {
         'grid': {
-          label: 'Grid',
+          label: 'Topic Grid',
+          description: 'Topic-first card grid showing article counts per practice area. Falls back to flat article grid.',
           component: () => import('./ResourcesPage'),
         },
       },
@@ -163,21 +165,24 @@ export const definition: TemplateDefinition = {
       label: 'Resource',
       feature: 'resources',
       defaultVariant: 'resource-page',
+      navigableInDemo: false,
       variants: {
         'resource-page': {
           label: 'Resource Page',
+          description: 'Single guide with key takeaways, article body, related guides sidebar, and author card.',
           component: () => import('./ResourcePage'),
         },
       },
     },
 
     '/blog': {
-      label: 'Blog',
+      label: 'Insights',
       feature: 'blog',
       defaultVariant: 'magazine',
       variants: {
         'magazine': {
           label: 'Magazine',
+          description: 'Featured post hero, topic filter tabs, 3-column article card grid.',
           component: () => import('./BlogPage'),
         },
       },
@@ -187,9 +192,11 @@ export const definition: TemplateDefinition = {
       label: 'Blog Post',
       feature: 'blog',
       defaultVariant: 'blog-post',
+      navigableInDemo: false,
       variants: {
         'blog-post': {
           label: 'Blog Post',
+          description: 'Full article with hero image, sticky author sidebar, key takeaways, and related posts.',
           component: () => import('./BlogPostPage'),
         },
       },
@@ -202,6 +209,7 @@ export const definition: TemplateDefinition = {
       variants: {
         'accordion': {
           label: 'Accordion',
+          description: 'Searchable FAQ list with category filter tabs and animated accordion grouped by topic.',
           component: () => import('./FAQsPage'),
         },
       },
@@ -214,6 +222,7 @@ export const definition: TemplateDefinition = {
       variants: {
         'standard': {
           label: 'Standard',
+          description: 'Tabbed legal document viewer (Privacy Policy, T&Cs, Cookie Policy) with URL tab sync.',
           component: () => import('./LegalPage'),
         },
       },

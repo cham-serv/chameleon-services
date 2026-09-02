@@ -123,7 +123,7 @@ export default async function AboutPage({ config }: PageProps) {
       {(!!pc?.aboutStory || aboutImage) && (
         <section className="mer-section">
           <div className="mer-container">
-            <div style={{ display: 'grid', gridTemplateColumns: aboutImage ? '1fr 420px' : '1fr', gap: 'var(--mer-spacing-4xl)', alignItems: 'start' }}>
+            <div className={aboutImage ? 'mer-about-story' : 'mer-about-story mer-about-story--no-image'}>
               {!!pc?.aboutStory && (
                 <div className="mer-prose" data-reveal="up">
                   <RichTextRenderer content={pc.aboutStory as Record<string, unknown>} />

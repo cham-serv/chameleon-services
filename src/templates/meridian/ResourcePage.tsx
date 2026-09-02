@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Meridian ResourcePage  (single resource / guide)
  *
  * Layout — two-column on desktop, stacked on mobile:
@@ -141,7 +141,7 @@ export default async function ResourcePage({ config, path }: PageProps) {
           </nav>
 
           {/* Two-column */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: 'var(--mer-spacing-4xl)', alignItems: 'start' }}>
+          <div className="mer-article-layout">
 
             {/* ── Article body ─────────────────────────────── */}
             <article>

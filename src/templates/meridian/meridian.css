@@ -2416,3 +2416,177 @@
   white-space: nowrap;
   border-width: 0;
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   PHASE 8 — RESPONSIVE LAYOUT CLASSES
+   Two-column article+sidebar layouts used by BlogPost, Resource, ServicePage.
+   Sidebar collapses below the article on tablet / mobile.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Article + narrow sidebar (280–340px right column) */
+.mer-article-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: var(--mer-spacing-4xl);
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .mer-article-layout {
+    grid-template-columns: 1fr;
+  }
+
+  /* Hide sticky sidebar on narrow viewports — CTA goes to bottom */
+  .mer-article-layout > aside {
+    position: static !important;
+    top: unset !important;
+  }
+}
+
+/* Blog featured post — 1fr 1fr two column */
+.mer-blog-featured {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--mer-spacing-3xl);
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .mer-blog-featured {
+    grid-template-columns: 1fr;
+  }
+
+  .mer-blog-featured > :last-child {
+    display: none; /* Hide hero image on small screens for the featured post */
+  }
+}
+
+/* About story — text + optional side image */
+.mer-about-story {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: var(--mer-spacing-4xl);
+  align-items: start;
+}
+
+.mer-about-story--no-image {
+  grid-template-columns: 1fr;
+}
+
+@media (max-width: 1100px) {
+  .mer-about-story {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Contact split-image — already handled via mer-contact-split override above,
+   but ensure it also stacks correctly at 768px */
+@media (max-width: 768px) {
+  .mer-contact-split {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   PHASE 8 — DARK MODE FIXES
+   Ensure any components using background images or pseudo-elements that
+   bake in light-mode colours adapt under data-scheme="dark".
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Select arrow — recolour for dark mode */
+[data-scheme="dark"] .mer-select,
+[data-scheme="auto"] .mer-select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23a0a0b0' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+}
+
+/* Logo strip fade edges — use surface colour in dark mode */
+[data-scheme="dark"] .mer-logo-strip::before {
+  background: linear-gradient(to right, var(--brand-background, #0e1016), transparent);
+}
+[data-scheme="dark"] .mer-logo-strip::after {
+  background: linear-gradient(to left, var(--brand-background, #0e1016), transparent);
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-scheme="auto"] .mer-logo-strip::before {
+    background: linear-gradient(to right, var(--brand-background, #0e1016), transparent);
+  }
+  [data-scheme="auto"] .mer-logo-strip::after {
+    background: linear-gradient(to left, var(--brand-background, #0e1016), transparent);
+  }
+}
+
+/* Form success / error — text colour should stay readable in dark mode */
+[data-scheme="dark"] .mer-form-success {
+  color: #86efac; /* green-300 */
+}
+[data-scheme="dark"] .mer-form-error {
+  color: #fca5a5; /* red-300 */
+}
+@media (prefers-color-scheme: dark) {
+  [data-scheme="auto"] .mer-form-success { color: #86efac; }
+  [data-scheme="auto"] .mer-form-error   { color: #fca5a5; }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   PHASE 8 — MOBILE AUDIT FIXES
+   375px breakpoint pass — ensure no horizontal overflow.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  /* Announcement strip — text wraps cleanly */
+  .mer-announcement {
+    font-size: 0.8125rem;
+    padding: 0.5rem var(--mer-spacing-xl) 0.5rem var(--mer-spacing-md);
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  /* Filter tabs — allow wrapping on very narrow viewports */
+  .mer-filter-tabs {
+    gap: 0.375rem;
+  }
+
+  .mer-filter-tab {
+    font-size: 0.8125rem;
+    padding: 0.45em 1em;
+  }
+
+  /* Legal tabs — ensure scrollability */
+  .mer-legal-tabs {
+    padding-bottom: 1px; /* prevents border clipping during scroll */
+  }
+
+  /* Accordion — reduce horizontal padding */
+  .mer-accordion-trigger {
+    padding: var(--mer-spacing-md) var(--mer-spacing-lg);
+  }
+  .mer-accordion-body {
+    padding: 0 var(--mer-spacing-lg) var(--mer-spacing-md);
+  }
+
+  /* CTA strip — ensure button doesn't overflow */
+  .mer-cta-strip-inner .mer-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Footer bottom — stack on tiny screens */
+  .mer-footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--mer-spacing-sm);
+  }
+
+  /* Hero authority headline — clamp tighter */
+  .mer-hero-authority-headline {
+    font-size: clamp(2rem, 8vw, 3rem);
+  }
+
+  /* Metrics grid — 2 columns on mobile */
+  .mer-metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--mer-spacing-md);
+  }
+}
+
