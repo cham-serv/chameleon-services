@@ -292,7 +292,8 @@ export type Article = {
   socialImage?: MediaItem | number | null;
   topic?: { id: number; name: string; slug: string } | number | null;
   tags?: Array<{ id: number; name: string; slug: string }> | number[];
-  author?: string;
+  /** Resolved team member when depth >= 1, otherwise number id */
+  author?: TeamMember | number | null;
   featured?: boolean;
   readTime?: number;
   contentStyle?: 'guide' | 'explainer' | 'concept';
@@ -333,7 +334,7 @@ export async function getArticles(params: GetArticlesParams, noCache = false): P
     apiUrl('/api/public/articles', queryParams),
     noCache
       ? { noCache: true }
-      : { tags: [`tenant:${params.tenant}`, `articles:${params.tenant}`] },
+      : { tags: [`tenant:${params.tenant}`, `tenant:${params.tenant}:articles`] },
   );
 }
 
@@ -342,7 +343,7 @@ export async function getArticleBySlug(tenant: string, slug: string, noCache = f
     apiUrl(`/api/public/articles/${encodeURIComponent(slug)}`, { tenant }),
     noCache
       ? { noCache: true }
-      : { tags: [`tenant:${tenant}`, `articles:${tenant}`, `article:${slug}`] },
+      : { tags: [`tenant:${tenant}`, `tenant:${tenant}:articles`, `article:${slug}`] },
   );
 }
 
@@ -350,14 +351,38 @@ export async function getArticleBySlug(tenant: string, slug: string, noCache = f
 
 export type Service = {
   id: number;
-  name: string;
+  title: string;
   slug: string;
+  shortDesc?: string;
+  /** @deprecated use shortDesc */
   shortDescription?: string;
-  description?: unknown; // Lexical JSON
+  longDesc?: unknown; // Lexical JSON
+  /** @deprecated use longDesc */
+  description?: unknown;
   icon?: string;
+  heroImage?: MediaItem | number | null;
+  /** @deprecated use heroImage */
   image?: MediaItem | number | null;
   order?: number;
   published: boolean;
+  ctaLabel?: string;
+  ctaHref?: string;
+  // ── Meridian extended fields ──────────────────────────────────────────────
+  /** Department this service belongs to — used for filter tabs */
+  department?: Department | number | null;
+  priceRange?: string | null;
+  displayPricing?: boolean;
+  duration?: string | null;
+  badge?: string | null;
+  targetClient?: string | null;
+  processSteps?: Array<{ title: string; description: string }>;
+  outcomes?: Array<{ text: string }>;
+  serviceFaqs?: Array<{ question: string; answer: string }>;
+  galleryImages?: Array<{ image: MediaItem }>;
+  // SEO
+  metaTitle?: string;
+  metaDescription?: string;
+  aiSummary?: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -367,7 +392,7 @@ export async function getServices(tenant: string, noCache = false): Promise<Pagi
     apiUrl('/api/public/services', { tenant }),
     noCache
       ? { noCache: true }
-      : { tags: [`tenant:${tenant}`, `services:${tenant}`] },
+      : { tags: [`tenant:${tenant}`, `tenant:${tenant}:services`] },
   );
 }
 
@@ -376,7 +401,115 @@ export async function getServiceBySlug(tenant: string, slug: string, noCache = f
     apiUrl(`/api/public/services/${encodeURIComponent(slug)}`, { tenant }),
     noCache
       ? { noCache: true }
-      : { tags: [`tenant:${tenant}`, `services:${tenant}`, `service:${slug}`] },
+      : { tags: [`tenant:${tenant}`, `tenant:${tenant}:services`, `service:${slug}`] },
+  );
+}
+
+// - Departments (Meridian) -
+
+export type Department = {
+  id: number;
+  name: string;
+  slug: string;
+  email?: string | null;
+  /** Resolved to TeamMember when depth >= 1 */
+  head?: TeamMember | number | null;
+  description?: string | null;
+  colour?: string | null;
+  icon?: string | null;
+  order?: number;
+  published: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export async function getDepartments(tenant: string, noCache = false): Promise<PaginatedResponse<Department> | null> {
+  return apiFetch<PaginatedResponse<Department>>(
+    apiUrl('/api/public/departments', { tenant }),
+    noCache
+      ? { noCache: true }
+      : { tags: [`tenant:${tenant}`, `tenant:${tenant}:departments`] },
+  );
+}
+
+// - Team Members (Meridian) -
+
+export type TeamMember = {
+  id: number;
+  name: string;
+  slug: string;
+  role?: string | null;
+  /** Resolved to Department when depth >= 1 */
+  department?: Department | number | null;
+  photo?: MediaItem | number | null;
+  bio?: unknown; // Lexical JSON — full bio, only on getTeamMemberBySlug
+  email?: string | null;
+  phone?: string | null;
+  linkedIn?: string | null;
+  directLine?: string | null;
+  qualifications?: Array<{ qualification: string }>;
+  specialisations?: Array<{ specialisation: string }>;
+  yearsExperience?: number | null;
+  admissionYear?: string | null;
+  languages?: Array<{ language: string }>;
+  /** Services this member delivers — resolved when depth >= 1 */
+  services?: Service[] | number[];
+  heroImage?: MediaItem | number | null;
+  galleryImages?: Array<{ image: MediaItem }>;
+  // Display control booleans
+  showEmail?: boolean;
+  showPhone?: boolean;
+  showLinkedIn?: boolean;
+  showDirectContact?: boolean;
+  showQualifications?: boolean;
+  showSpecialisations?: boolean;
+  showBioOnListingPage?: boolean;
+  showOnHomePage?: boolean;
+  // SEO
+  metaTitle?: string | null;
+  metaDescription?: string | null;
+  aiSummary?: string | null;
+  featured?: boolean;
+  order?: number;
+  published: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+type GetTeamMembersParams = {
+  tenant: string;
+  department?: string; // department slug
+  featured?: boolean;
+  limit?: number;
+};
+
+export async function getTeamMembers(
+  params: GetTeamMembersParams,
+  noCache = false,
+): Promise<PaginatedResponse<TeamMember> | null> {
+  const queryParams: Record<string, string> = { tenant: params.tenant };
+  if (params.department) queryParams.department = params.department;
+  if (params.featured)   queryParams.featured   = 'true';
+  if (params.limit)      queryParams.limit       = String(params.limit);
+
+  return apiFetch<PaginatedResponse<TeamMember>>(
+    apiUrl('/api/public/team-members', queryParams),
+    noCache
+      ? { noCache: true }
+      : { tags: [`tenant:${params.tenant}`, `tenant:${params.tenant}:team`] },
+  );
+}
+
+export async function getTeamMemberBySlug(
+  tenant: string,
+  slug: string,
+  noCache = false,
+): Promise<TeamMember | null> {
+  return apiFetch<TeamMember>(
+    apiUrl(`/api/public/team-members/${encodeURIComponent(slug)}`, { tenant }),
+    noCache
+      ? { noCache: true }
+      : { tags: [`tenant:${tenant}`, `tenant:${tenant}:team`, `team-member:${slug}`] },
   );
 }
 
@@ -402,7 +535,7 @@ export async function getFaqs(tenant: string, category?: string, noCache = false
     apiUrl('/api/public/faqs', params),
     noCache
       ? { noCache: true }
-      : { tags: [`tenant:${tenant}`, `faqs:${tenant}`] },
+      : { tags: [`tenant:${tenant}`, `tenant:${tenant}:faqs`] },
   );
 }
 
@@ -428,7 +561,7 @@ export async function getLegalDocs(tenant: string, noCache = false): Promise<Leg
     apiUrl('/api/public/legal', { tenant }),
     noCache
       ? { noCache: true }
-      : { tags: [`tenant:${tenant}`, `legal:${tenant}`] },
+      : { tags: [`tenant:${tenant}`, `tenant:${tenant}:legal`] },
   );
 }
 
@@ -449,7 +582,7 @@ export async function getPageSEO(tenant: string, pageSlug: string, noCache = fal
     apiUrl('/api/public/page-seo', { tenant, slug: pageSlug }),
     noCache
       ? { noCache: true }
-      : { tags: [`tenant:${tenant}`, `seo:${tenant}`] },
+      : { tags: [`tenant:${tenant}`, `tenant:${tenant}:page-seo`] },
   );
 }
 
@@ -475,7 +608,7 @@ export async function getTopics(tenant: string, noCache = false): Promise<Pagina
     apiUrl('/api/public/topics', { tenant }),
     noCache
       ? { noCache: true }
-      : { tags: [`tenant:${tenant}`, `topics:${tenant}`] },
+      : { tags: [`tenant:${tenant}`, `tenant:${tenant}:topics`] },
   );
 }
 
@@ -493,7 +626,7 @@ export async function getTopicWithArticles(
     apiUrl(`/api/public/topics/${encodeURIComponent(topicSlug)}`, { tenant }),
     noCache
       ? { noCache: true }
-      : { tags: [`tenant:${tenant}`, `topics:${tenant}`, `topic:${topicSlug}`] },
+      : { tags: [`tenant:${tenant}`, `tenant:${tenant}:topics`, `topic:${topicSlug}`] },
   );
 }
 

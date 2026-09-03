@@ -8,19 +8,41 @@ export const metadata: Metadata = {
     'Browse Chameleon\'s library of AI-ready, GEO-optimised website templates. Every template is beautifully designed and built for modern AI-powered search.',
 };
 
-const templates = [
+type Tier = 'Launch' | 'Professional' | 'Storefront' | 'Commerce';
+
+const tierConfig: Record<Tier, { color: string; bg: string; border: string }> = {
+  Launch:       { color: '#10b981', bg: 'rgba(16,185,129,0.1)',  border: 'rgba(16,185,129,0.3)'  },
+  Professional: { color: '#3b82f6', bg: 'rgba(59,130,246,0.1)',  border: 'rgba(59,130,246,0.3)'  },
+  Storefront:   { color: '#8b5cf6', bg: 'rgba(139,92,246,0.1)',  border: 'rgba(139,92,246,0.3)'  },
+  Commerce:     { color: '#f59e0b', bg: 'rgba(245,158,11,0.1)',  border: 'rgba(245,158,11,0.3)'  },
+};
+
+const templates: {
+  id: string;
+  name: string;
+  tagline: string;
+  description: string;
+  features: string[];
+  industries: string[];
+  demoHref: string;
+  gradient: string;
+  accentColor: string;
+  status: 'available' | 'coming-soon';
+  tier: Tier;
+}[] = [
   {
     id: 'atlas',
     name: 'Atlas',
-    tagline: 'For heavy retail, industrial supply, and mid-market B2B.',
+    tagline: 'For heavy retail, industrial supply and mid-market B2B.',
     description:
-      'Atlas is Chameleon\'s Commerce-tier template - built for product-first businesses that need a premium storefront with AI-powered product listings, authority-grade knowledge graphs, multi-variant page design, and full ecommerce. The most capable template in the library.',
+      'Atlas is Chameleon\'s Commerce-tier template - built for product-first businesses that need a premium storefront with AI-powered product listings, authority-grade knowledge graphs, multi-variant page design and full ecommerce. The most capable template in the library.',
     features: ['Ecommerce & Cart', 'AI Product Listings', 'Articles & Blog', 'FAQ', 'Contact', 'Legal Pages'],
     industries: ['Industrial Supply', 'Heavy Retail', 'B2B Products', 'DTC Brands'],
     demoHref: 'https://atlas-demo.chameleon.services',
     gradient: 'linear-gradient(135deg, #7f1d1d 0%, #450a0a 60%, #1a0505 100%)',
     accentColor: '#f87171',
     status: 'available',
+    tier: 'Commerce',
   },
   {
     id: 'atlas-lite',
@@ -30,46 +52,86 @@ const templates = [
       'Atlas Lite is the perfect solution for businesses that want to showcase their products and allow customers to build a quote, without managing complex ecommerce payments or shipping. Get all the SEO power and beautiful design of Atlas, streamlined for quote generation.',
     features: ['Quote Request Flow', 'Product Catalogue', 'Articles & Blog', 'FAQ', 'Contact', 'Legal Pages'],
     industries: ['B2B Wholesale', 'Custom Manufacturing', 'Bulk Suppliers', 'High-Value Retail'],
-    demoHref: 'https://atlas-lite-demo.chameleon.services',
+    demoHref: '#',
     gradient: 'linear-gradient(135deg, #7c2d12 0%, #431407 60%, #1c0a03 100%)',
     accentColor: '#fb923c',
-    status: 'available',
+    status: 'coming-soon',
+    tier: 'Storefront',
   },
   {
     id: 'meridian',
     name: 'Meridian',
-    tagline: 'Services & consulting, built to convert.',
+    tagline: 'Services and consulting, built to convert.',
     description:
-      'Meridian is designed for service-based businesses - consultants, agencies, clinics, and professionals - who need a credibility-first site that generates leads.',
+      'Meridian is designed for service-based businesses - consultants, agencies, clinics and professionals - who need a credibility-first site that generates leads and gets found by AI search.',
     features: ['Services Showcase', 'Lead Generation', 'Articles & Blog', 'Contact with Map', 'Legal Pages', 'FAQ'],
     industries: ['Consulting', 'Professional Services', 'Healthcare', 'Agencies'],
-    demoHref: 'https://meridian-demo.chameleon.services',
+    demoHref: '#',
     gradient: 'linear-gradient(135deg, #1a2642 0%, #141a2e 50%, #0d1117 100%)',
     accentColor: '#818cf8',
-    status: 'available',
+    status: 'coming-soon',
+    tier: 'Professional',
   },
   {
     id: 'solstice',
     name: 'Solstice',
-    tagline: 'Hospitality & experiences, warm and inviting.',
+    tagline: 'Hospitality and experiences, warm and inviting.',
     description:
-      'Coming soon - Solstice is being designed for restaurants, lodges, event venues, and experience-based businesses.',
+      'Solstice is being designed for restaurants, lodges, event venues and experience-based businesses. Warm, immersive design with booking integration and a gallery built for atmosphere.',
     features: ['Menu / Experience Showcase', 'Booking Integration', 'Gallery', 'Reviews', 'Events'],
     industries: ['Hospitality', 'Restaurants', 'Events', 'Tourism'],
     demoHref: '#',
     gradient: 'linear-gradient(135deg, #2d1a0e 0%, #1a1209 50%, #0d0d10 100%)',
     accentColor: '#f59e0b',
     status: 'coming-soon',
+    tier: 'Storefront',
+  },
+  {
+    id: 'nova',
+    name: 'Nova',
+    tagline: 'Clean, fast and GEO-ready for small businesses and sole traders.',
+    description:
+      'Nova is Chameleon\'s Launch-tier template - a minimal, high-performance presence for businesses that just need to be found. Clean design, quick setup, and fully structured for AI search from day one. No ecommerce, no complexity.',
+    features: ['Site-level GEO', 'Services Overview', 'Contact Form', 'Legal Pages', 'Custom Domain'],
+    industries: ['Sole Traders', 'Local Services', 'Freelancers', 'Small Business'],
+    demoHref: '#',
+    gradient: 'linear-gradient(135deg, #0f2027 0%, #111827 50%, #0d1117 100%)',
+    accentColor: '#10b981',
+    status: 'coming-soon',
+    tier: 'Launch',
   },
 ];
+
+function TierPill({ tier }: { tier: Tier }) {
+  const { color, bg, border } = tierConfig[tier];
+  return (
+    <span
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        fontSize: '0.7rem',
+        fontWeight: 700,
+        letterSpacing: '0.08em',
+        textTransform: 'uppercase',
+        padding: '3px 10px',
+        borderRadius: '999px',
+        color,
+        background: bg,
+        border: `1px solid ${border}`,
+      }}
+    >
+      {tier}
+    </span>
+  );
+}
 
 export default function TemplatesPage() {
   return (
     <>
       {/* Header */}
       <section
+        className="m-hero-pt"
         style={{
-          paddingTop: '120px',
           paddingBottom: '64px',
           textAlign: 'center',
           borderBottom: '1px solid rgba(255,255,255,0.06)',
@@ -111,13 +173,18 @@ export default function TemplatesPage() {
               fontSize: '1rem',
               color: 'var(--m-text-muted)',
               maxWidth: '520px',
-              margin: '0 auto',
+              margin: '0 auto 24px',
               lineHeight: 1.7,
             }}
           >
-            Each template is AI-ready from day one  structured for GEO, built for performance,
-            and branded to your business in minutes.
+            Each template is AI-ready from day one - structured for GEO, built for performance and branded to your business in minutes.
           </p>
+          {/* Tier legend */}
+          <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            {(Object.keys(tierConfig) as Tier[]).map((tier) => (
+              <TierPill key={tier} tier={tier} />
+            ))}
+          </div>
         </div>
       </section>
 
@@ -132,7 +199,7 @@ export default function TemplatesPage() {
                 id={`template-${template.id}`}
                 style={{
                   overflow: 'hidden',
-                  opacity: template.status === 'coming-soon' ? 0.6 : 1,
+                  opacity: template.status === 'coming-soon' ? 0.75 : 1,
                 }}
               >
                 {/* Preview */}
@@ -210,18 +277,21 @@ export default function TemplatesPage() {
                 </div>
 
                 {/* Info */}
-                <div style={{ padding: '40px' }}>
-                  <h2
-                    style={{
-                      fontFamily: 'var(--m-font-display)',
-                      fontSize: '1.5rem',
-                      fontWeight: 700,
-                      color: 'var(--m-text)',
-                      margin: '0 0 4px',
-                    }}
-                  >
-                    {template.name}
-                  </h2>
+                <div className="m-template-info">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '4px' }}>
+                    <h2
+                      style={{
+                        fontFamily: 'var(--m-font-display)',
+                        fontSize: '1.5rem',
+                        fontWeight: 700,
+                        color: 'var(--m-text)',
+                        margin: 0,
+                      }}
+                    >
+                      {template.name}
+                    </h2>
+                    <TierPill tier={template.tier} />
+                  </div>
                   <p
                     style={{
                       fontSize: '0.9rem',

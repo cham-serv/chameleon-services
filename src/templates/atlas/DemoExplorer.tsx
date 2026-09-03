@@ -1,4 +1,5 @@
 'use client';
+import './demo-explorer.css';
 
 /**
  * DemoExplorer - Client Component
@@ -16,7 +17,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import type { ExplorerRoute } from '@/lib/demo-explorer-types';
-import { getFontStack } from '@/lib/fonts';
+import { getFontStack, PLATFORM_FONTS } from '@/lib/fonts';
 
 // - Types -
 
@@ -30,11 +31,13 @@ type BrandPreview = {
   primary: string;
   secondary: string;
   accent: string;
-  textColour: string;   // maps to --brand-text
-  bgColour: string;     // maps to --brand-background
+  textColour: string;    // maps to --brand-text
+  headingColour: string; // maps to --brand-heading
+  bgColour: string;      // maps to --brand-background
   buttonStyle: 'filled' | 'outline' | 'pill' | 'soft';
-  fontHeading: string;
-  fontBody: string;
+  fontDisplay: string;   // maps to --font-display (hero/H1 only; blank = inherit fontHeading)
+  fontHeading: string;   // maps to --font-heading
+  fontBody: string;      // maps to --font-body
 };
 
 // - Preset Palettes -
@@ -47,6 +50,22 @@ const PRESET_PALETTES: { label: string; primary: string; secondary: string; acce
   { label: 'Stone',    primary: '#292524', secondary: '#78716c', accent: '#16a34a' },
   { label: 'Slate',    primary: '#0f172a', secondary: '#334155', accent: '#06b6d4' },
 ];
+
+/**
+ * Curated palettes for home page variant previews.
+ * Applied automatically in the Demo Explorer when switching variants
+ * so each demo variant looks visually intentional instead of just
+ * inheriting whatever the demo tenant's default colours happen to be.
+ *
+ * In production these are never applied — real tenants use their own colours.
+ */
+const VARIANT_PALETTES: Record<string, { primary: string; secondary: string; accent: string; bgColour: string; textColour: string }> = {
+  storefront: { primary: '#2d6a4f', secondary: '#52b788', accent: '#f59e0b',  bgColour: '#ffffff', textColour: '#1b1b1b' },
+  editorial:  { primary: '#0369a1', secondary: '#38bdf8', accent: '#f97316',  bgColour: '#fafaf9', textColour: '#1c1917' },
+  modern:     { primary: '#4f46e5', secondary: '#7c3aed', accent: '#06b6d4',  bgColour: '#0a0f1e', textColour: '#e2e8f0' },
+  bold:       { primary: '#1a1a2e', secondary: '#e94560', accent: '#f5a623',  bgColour: '#0d0d1a', textColour: '#f8fafc' },
+  minimalist: { primary: '#1c1917', secondary: '#57534e', accent: '#16a34a',  bgColour: '#fafaf9', textColour: '#1c1917' },
+};
 
 // - Font Pair Presets -
 
@@ -72,6 +91,10 @@ const BTN_STYLES: { label: string; value: BrandPreview['buttonStyle'] }[] = [
   { label: 'Soft',    value: 'soft'    },
 ];
 
+// - Font options derived from the platform registry (same 20 fonts as the CMS) -
+
+const FONT_OPTIONS: string[] = Object.keys(PLATFORM_FONTS);
+
 // - Tab type -
 
 type ExplorerTab = 'pages' | 'brand' | 'style';
@@ -87,16 +110,19 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // Brand preview state - starts from current CSS vars on :root
+  // Brand preview state — initialised to safe defaults; overwritten on mount
+  // from the actual CSS vars on :root so pickers always show the real tenant colours.
   const [brand, setBrand] = useState<BrandPreview>({
-    primary:     '#2d6a4f',
-    secondary:   '#52b788',
-    accent:      '#f59e0b',
-    textColour:  '#1b1b1b',
-    bgColour:    '#ffffff',
-    buttonStyle: 'filled',
-    fontHeading: 'Plus Jakarta Sans',
-    fontBody:    'Inter',
+    primary:       '#2d6a4f',
+    secondary:     '#52b788',
+    accent:        '#f59e0b',
+    textColour:    '#1b1b1b',
+    headingColour: '#1b1b1b',
+    bgColour:      '#ffffff',
+    buttonStyle:   'filled',
+    fontDisplay:   '',
+    fontHeading:   'Plus Jakarta Sans',
+    fontBody:      'Inter',
   });
 
   // - Derive current state from URL -
@@ -145,6 +171,7 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
     root.style.setProperty('--brand-secondary',  brand.secondary);
     root.style.setProperty('--brand-accent',     brand.accent);
     root.style.setProperty('--brand-text',       brand.textColour);
+    root.style.setProperty('--brand-heading',    brand.headingColour);
     root.style.setProperty('--brand-background', brand.bgColour);
     document.body.setAttribute('data-btn-style', brand.buttonStyle);
 
@@ -165,8 +192,12 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
     }
     const hStack = getFontStack(brand.fontHeading, 'heading');
     const bStack = getFontStack(brand.fontBody, 'body');
+    // Display font falls back to heading font if not explicitly set
+    const dStack = brand.fontDisplay
+      ? getFontStack(brand.fontDisplay, 'display')
+      : hStack;
     el.textContent = [
-      `:root { --font-heading: ${hStack}; --font-body: ${bStack}; }`,
+      `:root { --font-display: ${dStack}; --font-heading: ${hStack}; --font-body: ${bStack}; }`,
       // Cascade base: any element that inherits colour from body picks this up
       `html, body {`,
       `  background-color: var(--brand-background, #ffffff);`,
@@ -189,32 +220,86 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
 
   // - Actions -
 
-  // Check localStorage once on mount to decide whether to show the hint
+  // On mount:
+  //   1. Read actual brand CSS vars from :root so colour pickers reflect the real tenant colours.
+  //   2. Auto-open if _de=1 is in the URL (persisted via navigateToPage).
+  //   3. Show the hint arrow for first-time visitors; auto-clear it after 5s (matching CSS).
   useEffect(() => {
+    // 1. Sync brand state to real CSS vars
+    const style = getComputedStyle(document.documentElement);
+    const get = (v: string, fallback: string) => style.getPropertyValue(v).trim() || fallback;
+    setBrand((prev) => ({
+      ...prev,
+      primary:       get('--brand-primary',    prev.primary),
+      secondary:     get('--brand-secondary',  prev.secondary),
+      accent:        get('--brand-accent',     prev.accent),
+      textColour:    get('--brand-text',       prev.textColour),
+      headingColour: get('--brand-heading',    prev.headingColour),
+      bgColour:      get('--brand-background', prev.bgColour),
+    }));
+
+    // 2 & 3. URL param + hint logic
+    const hasDeParam = searchParams.get('_de') === '1';
     try {
-      if (!localStorage.getItem('demo-explorer-seen')) {
+      const seen = !!localStorage.getItem('demo-explorer-seen');
+      if (!seen && !hasDeParam) {
         setShowHint(true);
+        // Auto-clear hint after 5 000 ms — matches the CSS demo-hint-lifecycle animation
+        // so React state and the visual state stay in sync. Without this, any re-render
+        // after 5s would recreate the element and restart the animation.
+        const timer = window.setTimeout(() => setShowHint(false), 5000);
+        return () => window.clearTimeout(timer);
+      }
+      if (hasDeParam) {
+        setIsOpen(true);
+        localStorage.setItem('demo-explorer-seen', '1');
       }
     } catch {
-      // localStorage blocked (private browsing etc.) — show hint anyway
-      setShowHint(true);
+      if (!hasDeParam) {
+        setShowHint(true);
+        const timer = window.setTimeout(() => setShowHint(false), 5000);
+        return () => window.clearTimeout(timer);
+      }
+      if (hasDeParam) setIsOpen(true);
     }
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // intentionally only runs on mount
 
   const open = useCallback(() => {
     setIsOpen(true);
-    // Dismiss hint permanently on first open
     setShowHint(false);
     try { localStorage.setItem('demo-explorer-seen', '1'); } catch { /* ignore */ }
+    // Intentionally NOT writing _de=1 here — URL stays clean when opened manually.
+    // _de=1 is only written by navigateToPage() so that hard-refresh after a
+    // drawer-initiated navigation restores the open state on the new page.
   }, []);
-  const close = useCallback(() => setIsOpen(false), []);
+
+  const close = useCallback(() => {
+    setIsOpen(false);
+    // Only touch the URL if _de is actually present — avoids spurious history entries
+    if (searchParams.has('_de')) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete('_de');
+      const qs = params.toString();
+      router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+    }
+  }, [pathname, searchParams, router]);
 
   const navigateToPage = useCallback(
     (routeKey: string) => {
+      // No-op if already on this page
+      if (currentRoute?.routeKey === routeKey) return;
+
       const path = routeKey === '/' ? '' : routeKey;
-      router.push(`${basePath}${path}`);
+      // Fallback to '/' if basePath and path are both empty (home on a domain tenant)
+      const target = `${basePath}${path}` || '/';
+
+      // Carry _de=1 so the drawer auto-opens on the destination page
+      const params = new URLSearchParams();
+      params.set('_de', '1');
+      router.push(`${target}?${params.toString()}`);
     },
-    [basePath, router],
+    [basePath, router, currentRoute],
   );
 
   const selectVariant = useCallback(
@@ -223,7 +308,25 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
       const dvValue = `${normalizedRoute}:${variantSlug}`;
       const params = new URLSearchParams(searchParams.toString());
       params.set('_dv', dvValue);
+      params.set('_de', '1'); // Keep drawer open after variant switch
       router.push(`${pathname}?${params.toString()}`);
+
+      // Auto-apply a curated palette when switching home variants in the demo.
+      // This ensures each variant looks visually intentional rather than inheriting
+      // whatever the demo tenant's default colours happen to be.
+      if (routeKey === '/') {
+        const curated = VARIANT_PALETTES[variantSlug];
+        if (curated) {
+          setBrand((prev) => ({
+            ...prev,
+            primary:    curated.primary,
+            secondary:  curated.secondary,
+            accent:     curated.accent,
+            bgColour:   curated.bgColour,
+            textColour: curated.textColour,
+          }));
+        }
+      }
     },
     [pathname, searchParams, router],
   );
@@ -231,6 +334,7 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
   const resetVariant = useCallback(() => {
     const params = new URLSearchParams(searchParams.toString());
     params.delete('_dv');
+    params.set('_de', '1'); // Keep drawer open after reset
     const qs = params.toString();
     router.push(qs ? `${pathname}?${qs}` : pathname);
   }, [pathname, searchParams, router]);
@@ -269,8 +373,13 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
         onClick={open}
         aria-label="Open demo explorer"
       >
-        <span className="demo-explorer-tab-icon"></span>
-        Explore
+        <span className="demo-explorer-tab-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </span>
+        <span className="demo-explorer-tab-label">Explore</span>
       </button>
 
       {/* Backdrop */}
@@ -469,7 +578,7 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
           {/* - Style Tab - */}
           {activeTab === 'style' && (
             <>
-              {/* Font Pairs */}
+              {/* Font Pairs — quick presets */}
               <p className="demo-explorer-section-label">Font Pairs</p>
               <div className="demo-explorer-font-grid">
                 {FONT_PAIRS.map((pair) => (
@@ -485,12 +594,40 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
                 ))}
               </div>
 
-              {/* Text & Background */}
+              {/* Individual Font Selectors */}
+              <p className="demo-explorer-section-label" style={{ marginTop: '1rem' }}>Individual Fonts</p>
+              <div className="demo-explorer-font-selects">
+                {([
+                  { key: 'fontDisplay', label: 'Display / Hero', hint: 'Blank = use Heading font' },
+                  { key: 'fontHeading', label: 'Heading (H2–H4)', hint: '' },
+                  { key: 'fontBody',    label: 'Body',            hint: '' },
+                ] as { key: keyof BrandPreview; label: string; hint: string }[]).map(({ key, label, hint }) => (
+                  <div key={key} className="demo-explorer-font-select-row">
+                    <label className="demo-explorer-font-select-label">{label}</label>
+                    <select
+                      className="demo-explorer-font-select"
+                      value={brand[key] as string}
+                      onChange={(e) => updateBrand({ [key]: e.target.value } as Partial<BrandPreview>)}
+                    >
+                      {key === 'fontDisplay' && (
+                        <option value="">— Same as Heading —</option>
+                      )}
+                      {FONT_OPTIONS.map((font) => (
+                        <option key={font} value={font}>{font}</option>
+                      ))}
+                    </select>
+                    {hint && <span className="demo-explorer-font-select-hint">{hint}</span>}
+                  </div>
+                ))}
+              </div>
+
+              {/* Text, Heading & Background colours */}
               <p className="demo-explorer-section-label" style={{ marginTop: '1rem' }}>Text & Background</p>
               <div className="demo-explorer-colour-inputs">
                 {[
-                  { key: 'textColour', label: 'Text'       },
-                  { key: 'bgColour',   label: 'Background' },
+                  { key: 'headingColour', label: 'Headings'   },
+                  { key: 'textColour',    label: 'Body Text'  },
+                  { key: 'bgColour',      label: 'Background' },
                 ].map(({ key, label }) => (
                   <div key={key} className="demo-explorer-colour-row">
                     <input

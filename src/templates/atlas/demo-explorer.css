@@ -632,6 +632,67 @@
   white-space: nowrap;
 }
 
+/* ── Individual Font Selectors ────────────────────────────────────── */
+
+.demo-explorer-font-selects {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.demo-explorer-font-select-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.demo-explorer-font-select-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.demo-explorer-font-select {
+  width: 100%;
+  padding: 0.4rem 0.5rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.375rem;
+  color: #e0e0e0;
+  font-size: 0.75rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  padding-right: 1.75rem;
+}
+
+.demo-explorer-font-select:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.demo-explorer-font-select:focus {
+  outline: none;
+  border-color: rgba(99, 102, 241, 0.5);
+}
+
+.demo-explorer-font-select option {
+  background: #1a1d2e;
+  color: #e0e0e0;
+}
+
+.demo-explorer-font-select-hint {
+  font-size: 0.625rem;
+  color: #4b5563;
+  font-style: italic;
+}
+
 /* ── Button Style Grid ────────────────────────────────────────────── */
 
 .demo-explorer-btn-style-grid {

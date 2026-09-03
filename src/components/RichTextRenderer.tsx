@@ -1,4 +1,4 @@
-﻿/**
+/**
  * RichTextRenderer Component
  *
  * Converts Payload CMS Lexical JSON into React elements.
@@ -64,7 +64,7 @@ export function RichTextRenderer({ content, className }: RichTextRendererProps) 
   if (!children || !Array.isArray(children)) return null;
 
   return (
-    <div className={className}>
+    <div className={`atlas-prose${className ? ` ${className}` : ''}`}>
       {children.map((node, index) => (
         <RenderNode key={index} node={node} />
       ))}

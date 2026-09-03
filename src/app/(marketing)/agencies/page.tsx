@@ -17,7 +17,7 @@ const agencyBenefits = [
   {
     icon: Settings,
     title: 'God Mode Dashboard',
-    desc: 'See every client site, manage configurations, and monitor analytics from a single multi-tenant screen. No switching accounts.',
+    desc: 'See every client site, manage configurations  monitor analytics from a single multi-tenant screen. No switching accounts.',
   },
   {
     icon: Zap,
@@ -27,7 +27,7 @@ const agencyBenefits = [
   {
     icon: Workflow,
     title: 'Faster Delivery',
-    desc: 'Spin up a client site in days, not months. Atlas, Meridian, or future templates  configured and live before traditional agencies even wireframe.',
+    desc: 'Spin up a client site in days, not months. Atlas, Meridian  future templates  configured and live before traditional agencies even wireframe.',
   },
 ];
 
@@ -46,9 +46,9 @@ const tiers = [
   },
   {
     name: 'Gold',
-    clients: '10+ client sites (unlimited)',
-    price: 'R6,000/mo flat cap',
-    features: ['Agency Dashboard', 'Dedicated account manager', 'Early feature access'],
+    clients: '10+ clients (Professional+)',
+    price: 'Free',
+    features: ['Agency Dashboard (R0/mo)', 'Dedicated account manager', 'Early feature access'],
   },
 ];
 
@@ -57,8 +57,8 @@ export default function AgenciesPage() {
     <>
       {/* Hero */}
       <section
+        className="m-hero-pt"
         style={{
-          paddingTop: '120px',
           paddingBottom: '80px',
           position: 'relative',
           overflow: 'hidden',
@@ -164,7 +164,7 @@ export default function AgenciesPage() {
                 Client pays Agency
               </h3>
               <p style={{ color: 'var(--m-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
-                The client pays you your R15k-R20k/mo retainer for strategy, content, and management.
+                The client pays you your R15k-R20k/mo retainer for strategy, content  management.
               </p>
             </div>
 
@@ -176,7 +176,7 @@ export default function AgenciesPage() {
                 Agency pays Chameleon
               </h3>
               <p style={{ color: 'var(--m-text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
-                You pay a flat R2,500-R6,000/mo fee for the multi-tenant God Mode dashboard.
+                You pay a flat R2,500-R4,500/mo fee for the dashboard (and it's free at scale).
               </p>
             </div>
           </div>
@@ -186,8 +186,7 @@ export default function AgenciesPage() {
       {/* The Math */}
       <section className="m-section" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
         <div className="m-container-sm">
-          <div className="m-card" style={{ 
-            padding: '48px', 
+          <div className="m-card m-cta-callout" style={{
             background: 'linear-gradient(135deg, rgba(59,130,246,0.05) 0%, rgba(13,17,23,1) 100%)',
             border: '1px solid rgba(59,130,246,0.2)',
             textAlign: 'center'
@@ -309,10 +308,9 @@ export default function AgenciesPage() {
       {/* CTA */}
       <section className="m-section" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
         <div
-          className="m-container-sm"
+          className="m-container-sm m-cta-callout"
           style={{
             textAlign: 'center',
-            padding: '64px 24px',
             borderRadius: '20px',
             background: 'linear-gradient(135deg, rgba(59,130,246,0.1) 0%, rgba(129,140,248,0.06) 100%)',
             border: '1px solid rgba(59,130,246,0.2)',
@@ -337,7 +335,7 @@ export default function AgenciesPage() {
             <ArrowRight size={18} />
           </Link>
           <p style={{ marginTop: '20px', fontSize: '0.8rem', color: 'var(--m-text-faint)' }}>
-            Revenue share for high-volume partners &mdash; talk to us.
+            Free dashboard for high-volume partners.
           </p>
         </div>
       </section>

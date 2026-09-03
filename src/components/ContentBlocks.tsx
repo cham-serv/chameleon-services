@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ContentBlocks Component
  *
  * Renders Articles' block-based content structure.
@@ -175,11 +175,12 @@ function Quote({
         style={{
           margin: 0,
           padding: '16px 24px',
-          borderLeft: '4px solid #e2e2e2',
+          borderLeft: '4px solid rgba(0,0,0,0.15)',
           fontSize: '1.1rem',
           fontStyle: 'italic',
           lineHeight: 1.6,
-          color: '#555',
+          color: 'var(--brand-text, #555)',
+          fontFamily: 'var(--font-body, inherit)',
         }}
       >
         {text}
@@ -190,10 +191,11 @@ function Quote({
             marginTop: '8px',
             paddingLeft: '24px',
             fontSize: '0.85rem',
-            color: '#999',
+            color: 'color-mix(in srgb, var(--brand-text, #999) 55%, transparent)',
+            fontFamily: 'var(--font-body, inherit)',
           }}
         >
-          - {attribution}
+          — {attribution}
         </figcaption>
       )}
     </figure>
@@ -243,7 +245,8 @@ function VideoEmbed({ url, caption }: { url: string; caption?: string }) {
           style={{
             marginTop: '8px',
             fontSize: '0.85rem',
-            color: '#999',
+            color: 'color-mix(in srgb, var(--brand-text, #999) 55%, transparent)',
+            fontFamily: 'var(--font-body, inherit)',
             textAlign: 'center',
           }}
         >
@@ -290,8 +293,8 @@ function CallToAction({
         margin: '32px 0',
         padding: '32px',
         borderRadius: '12px',
-        backgroundColor: style === 'primary' ? '#1a1a2e' : '#f8f8f8',
-        color: style === 'primary' ? '#fff' : '#333',
+        backgroundColor: style === 'primary' ? 'var(--brand-primary, #1a1a2e)' : 'color-mix(in srgb, var(--brand-text, #333) 6%, transparent)',
+        color: style === 'primary' ? '#fff' : 'var(--brand-text, #333)',
         textAlign: 'center',
       }}
     >
@@ -301,6 +304,7 @@ function CallToAction({
             margin: '0 0 8px',
             fontSize: '1.25rem',
             fontWeight: 600,
+            fontFamily: 'var(--font-heading, inherit)',
           }}
         >
           {heading}
@@ -313,6 +317,7 @@ function CallToAction({
             fontSize: '0.95rem',
             opacity: 0.85,
             lineHeight: 1.5,
+            fontFamily: 'var(--font-body, inherit)',
           }}
         >
           {body}
@@ -327,8 +332,9 @@ function CallToAction({
           fontSize: '0.9rem',
           fontWeight: 600,
           textDecoration: 'none',
-          backgroundColor: style === 'primary' ? '#fff' : '#1a1a2e',
-          color: style === 'primary' ? '#1a1a2e' : '#fff',
+          backgroundColor: style === 'primary' ? '#fff' : 'var(--brand-primary, #1a1a2e)',
+          color: style === 'primary' ? 'var(--brand-primary, #1a1a2e)' : '#fff',
+          fontFamily: 'var(--font-body, inherit)',
           transition: 'opacity 0.2s',
         }}
       >

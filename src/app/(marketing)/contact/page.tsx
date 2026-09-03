@@ -1,8 +1,8 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import { Turnstile } from '@/components/Turnstile';
-import { Send, CheckCircle, Mail, MapPin } from 'lucide-react';
+import { Send, CheckCircle, Mail } from 'lucide-react';
 
 export default function ContactPage() {
   const [form, setForm] = useState({
@@ -102,8 +102,8 @@ export default function ContactPage() {
     <>
       {/* Header */}
       <section
+        className="m-hero-pt"
         style={{
-          paddingTop: '120px',
           paddingBottom: '48px',
           borderBottom: '1px solid rgba(255,255,255,0.06)',
         }}
@@ -132,7 +132,7 @@ export default function ContactPage() {
       {/* Form + Info */}
       <section className="m-section">
         <div className="m-container">
-          <div className="m-grid-2" style={{ gap: '64px', alignItems: 'flex-start' }}>
+          <div className="m-grid-2 m-contact-layout">
             {/* Form */}
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               {/* Name + Company */}
@@ -191,7 +191,7 @@ export default function ContactPage() {
                     value={form.phone}
                     onChange={handleChange}
                     className="m-input"
-                    placeholder="+27 00 000 0000"
+                    placeholder="+00 000 000 0000"
                     autoComplete="tel"
                   />
                 </div>
@@ -271,8 +271,7 @@ export default function ContactPage() {
                 {[
                   'AI-ready and GEO-optimised from day one',
                   'No developers or agencies needed',
-                  'South Africa-first platform and support',
-                  'Cancel anytime  no long-term contracts',
+                  'No lock-in — cancel anytime',
                   'Built for businesses that refuse to fall behind',
                 ].map((point) => (
                   <li
@@ -308,18 +307,6 @@ export default function ContactPage() {
                   <Mail size={16} style={{ color: '#60a5fa' }} />
                   chris@chameleon.services
                 </a>
-                <div
-                  style={{
-                    display: 'flex',
-                    gap: '12px',
-                    alignItems: 'center',
-                    fontSize: '0.875rem',
-                    color: 'var(--m-text-muted)',
-                  }}
-                >
-                  <MapPin size={16} style={{ color: '#60a5fa' }} />
-                  South Africa 
-                </div>
               </div>
             </div>
           </div>

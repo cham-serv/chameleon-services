@@ -19,17 +19,18 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Chameleon - AI-Ready Websites for South African Businesses',
+    default: 'Chameleon | The AI-Ready Storefront Platform',
     template: '%s | Chameleon',
   },
   description:
-    'Chameleon builds AI-ready, GEO-optimised websites and ecommerce stores for South African businesses. Beautiful templates. Always up to date. Search has changed - adapt with Chameleon.',
+    'AI search has rewritten the rules. Chameleon builds high-performance, GEO-optimised storefronts that get found by AI and humans alike — with hosting, maintenance, and SEO all included.',
   keywords: [
     'AI-ready website',
     'GEO optimised',
-    'ecommerce South Africa',
-    'AI SEO platform',
-    'website builder South Africa',
+    'generative engine optimisation',
+    'ecommerce platform',
+    'AI SEO',
+    'storefront platform',
     'Chameleon',
   ],
   authors: [{ name: 'Chameleon' }],
@@ -42,17 +43,26 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    locale: 'en_ZA',
+    locale: 'en',
     url: 'https://chameleon.services',
     siteName: 'Chameleon',
-    title: 'Chameleon - AI-Ready Websites for South African Businesses',
+    title: 'Chameleon | The AI-Ready Storefront Platform',
     description:
-      'Search has changed. Chameleon adapts your business to the new era of AI-powered search with authority-engine architecture - so you\'re never left behind.',
+      'AI search has rewritten the rules. Chameleon builds high-performance, GEO-optimised storefronts that get found by AI and humans alike — with hosting, maintenance, and SEO all included.',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Chameleon — The AI-Ready Storefront Platform',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Chameleon - AI-Ready Websites for South African Businesses',
-    description: 'Search has changed. Adapt with Chameleon.',
+    title: 'Chameleon | The AI-Ready Storefront Platform',
+    description: 'AI search has rewritten the rules. Get a GEO-optimised, high-performance storefront with hosting, maintenance, and SEO built in.',
+    images: ['/og-image.jpg'],
   },
   robots: { index: true, follow: true },
 };
@@ -63,8 +73,7 @@ const orgJsonLd = {
   name: 'Chameleon',
   url: 'https://chameleon.services',
   description:
-    'Chameleon builds AI-ready, GEO-optimised authority engines and ecommerce stores for South African businesses and agencies.',
-  areaServed: 'ZA',
+    'Chameleon builds AI-ready, GEO-optimised storefronts and authority engines that get found by AI search and human search alike.',
   contactPoint: {
     '@type': 'ContactPoint',
     email: 'chris@chameleon.services',
@@ -78,7 +87,7 @@ export default function MarketingLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en-ZA" className={`${inter.variable} ${outfit.variable}`}>
+    <html lang="en" className={`${inter.variable} ${outfit.variable}`}>
       <head>
         <script
           type="application/ld+json"
@@ -113,15 +122,7 @@ function MarketingFooter() {
       }}
     >
       <div className="m-container">
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr auto',
-            gap: '32px',
-            alignItems: 'flex-start',
-            marginBottom: '40px',
-          }}
-        >
+        <div className="m-footer-grid">
           {/* Brand */}
           <div>
             <Link href="/" aria-label="Chameleon home">
@@ -136,16 +137,16 @@ function MarketingFooter() {
                 lineHeight: 1.6,
               }}
             >
-              Search has changed. We help South African businesses adapt to
-              the new era of AI-powered search - beautifully and affordably.
+              Stay visible in the AI era — beautifully and affordably.
             </p>
           </div>
 
           {/* Nav columns */}
-          <div style={{ display: 'flex', gap: '48px' }}>
+          <div className="m-footer-nav">
             <FooterCol
               title="Product"
               links={[
+                { label: 'Why Chameleon', href: '/why-chameleon' },
                 { label: 'Templates', href: '/templates' },
                 { label: 'Pricing', href: '/pricing' },
                 { label: 'Agencies', href: '/agencies' },
@@ -161,18 +162,8 @@ function MarketingFooter() {
         </div>
 
         {/* Bottom bar */}
-        <div
-          style={{
-            borderTop: '1px solid rgba(255,255,255,0.06)',
-            paddingTop: '24px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            fontSize: '0.8rem',
-            color: 'var(--m-text-faint)',
-          }}
-        >
-          <span> 2026 Chameleon. South Africa </span>
+        <div className="m-footer-bottom">
+          <span>© 2026 Chameleon</span>
           <span>Built for businesses that refuse to fall behind.</span>
         </div>
       </div>
