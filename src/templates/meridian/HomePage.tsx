@@ -355,12 +355,14 @@ function AuthorityVariant({ config, services, testimonials, counters }: { config
             {headline}
           </h1>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 'var(--mer-spacing-3xl)', alignItems: 'end', marginTop: 'var(--mer-spacing-3xl)', flexWrap: 'wrap' }}>
-            <div>
-              <p className="mer-body-lg" data-reveal="up" style={{ transitionDelay: '80ms', maxWidth: '580px', opacity: 0.8 }}>
+          {/* CSS class handles the 1fr/auto grid + responsive stacking at 1024px */}
+          <div className="mer-hero-authority-body">
+            {/* data-reveal-stagger replaces broken inline transitionDelay on individual data-reveal elements */}
+            <div data-reveal-stagger>
+              <p className="mer-body-lg" style={{ maxWidth: '580px', opacity: 0.8 }}>
                 {subheadline}
               </p>
-              <div style={{ display: 'flex', gap: 'var(--mer-spacing-md)', flexWrap: 'wrap', marginTop: 'var(--mer-spacing-xl)', transitionDelay: '160ms' }} data-reveal="up">
+              <div style={{ display: 'flex', gap: 'var(--mer-spacing-md)', flexWrap: 'wrap', marginTop: 'var(--mer-spacing-xl)' }}>
                 <a href={cta1Link} className="mer-btn mer-btn-primary mer-btn-lg">{cta1Text}</a>
                 <a href={cta2Link} className="mer-btn mer-btn-ghost mer-btn-lg">{cta2Text}</a>
               </div>
@@ -368,7 +370,7 @@ function AuthorityVariant({ config, services, testimonials, counters }: { config
 
             {/* Vertical stat strip — live counters */}
             {counters.length > 0 && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--mer-spacing-xl)', paddingLeft: 'var(--mer-spacing-3xl)', borderLeft: '1px solid var(--mer-border-color)' }} data-reveal-stagger>
+              <div className="mer-hero-authority-counters" data-reveal-stagger>
                 {counters.slice(0, 3).map((m) => (
                   <div key={m.label}>
                     <div style={{ fontFamily: 'var(--font-heading, inherit)', fontSize: '2rem', fontWeight: 700, color: 'var(--brand-primary, #1a2b5e)', lineHeight: 1, letterSpacing: '-0.02em' }}>

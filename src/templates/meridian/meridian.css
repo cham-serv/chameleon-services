@@ -1462,6 +1462,39 @@
   .mer-hero-authority-inner { padding-inline: var(--mer-spacing-md); }
 }
 
+/* Authority body — subheadline column + counter strip side by side */
+.mer-hero-authority-body {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--mer-spacing-3xl);
+  align-items: end;
+  margin-top: var(--mer-spacing-3xl);
+}
+
+.mer-hero-authority-counters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mer-spacing-xl);
+  padding-left: var(--mer-spacing-3xl);
+  border-left: 1px solid var(--mer-border-color);
+}
+
+/* Stack body to single column; pivot counters to a horizontal row */
+@media (max-width: 1024px) {
+  .mer-hero-authority-body {
+    grid-template-columns: 1fr;
+  }
+  .mer-hero-authority-counters {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--mer-spacing-2xl);
+    padding-left: 0;
+    border-left: none;
+    border-top: 1px solid var(--mer-border-color);
+    padding-top: var(--mer-spacing-xl);
+  }
+}
+
 /* Metrics Hero — hero + counter strip */
 .mer-hero-metrics {
   position: relative;
