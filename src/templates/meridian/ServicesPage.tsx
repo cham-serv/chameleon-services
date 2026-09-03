@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Meridian ServicesPage
  *
  * 3 variants:
@@ -10,19 +10,20 @@
  * Falls back to demo data when no services are configured.
  */
 
-import type { PageProps } from '@/lib/types';
-import { getServices, getDepartments, type Service, type Department } from '@/lib/api';
+import type { PageProps, Service, Department } from '@/lib/types';
+import { MeridianIcon } from './MeridianIcon';
+import { getServices, getDepartments } from '@/lib/api';
 import ModalGridClient from './ServicesModalGridClient';
 
 // ─── Demo fallback ────────────────────────────────────────────────────────
 
 const DEMO_SERVICES: Service[] = [
-  { id: 1, slug: 'corporate-law',    title: 'Corporate Law',    icon: '⚖️', shortDesc: 'Expert advice on mergers, acquisitions, corporate governance, and commercial contracts.', published: true, createdAt: '', updatedAt: '' },
-  { id: 2, slug: 'litigation',       title: 'Litigation',       icon: '🏛️', shortDesc: 'Robust representation in civil, commercial, and regulatory disputes at all court levels.', published: true, createdAt: '', updatedAt: '' },
-  { id: 3, slug: 'tax-advisory',     title: 'Tax Advisory',     icon: '📋', shortDesc: 'Strategic tax planning, VAT compliance, and dispute resolution with SARS.', published: true, createdAt: '', updatedAt: '' },
-  { id: 4, slug: 'property-law',     title: 'Property Law',     icon: '🏠', shortDesc: 'Conveyancing, property development, sectional title, and real estate transactions.', published: true, createdAt: '', updatedAt: '' },
-  { id: 5, slug: 'family-law',       title: 'Family Law',       icon: '👨‍👩‍👧', shortDesc: 'Compassionate guidance on divorce, custody, maintenance, and estate planning.', published: true, createdAt: '', updatedAt: '' },
-  { id: 6, slug: 'international-law',title: 'International Law', icon: '🌐', shortDesc: 'Cross-border transactions, trade compliance, and international arbitration.', published: true, createdAt: '', updatedAt: '' },
+  { id: 1, slug: 'corporate-law',    title: 'Corporate Law',    icon: 'Scale',      shortDesc: 'Expert advice on mergers, acquisitions, corporate governance, and commercial contracts.', published: true, createdAt: '', updatedAt: '' },
+  { id: 2, slug: 'litigation',       title: 'Litigation',       icon: 'Gavel',      shortDesc: 'Robust representation in civil, commercial, and regulatory disputes at all court levels.', published: true, createdAt: '', updatedAt: '' },
+  { id: 3, slug: 'tax-advisory',     title: 'Tax Advisory',     icon: 'Receipt',    shortDesc: 'Strategic tax planning, VAT compliance, and dispute resolution with SARS.', published: true, createdAt: '', updatedAt: '' },
+  { id: 4, slug: 'property-law',     title: 'Property Law',     icon: 'Home',       shortDesc: 'Conveyancing, property development, sectional title, and real estate transactions.', published: true, createdAt: '', updatedAt: '' },
+  { id: 5, slug: 'family-law',       title: 'Family Law',       icon: 'Heart',      shortDesc: 'Compassionate guidance on divorce, custody, maintenance, and estate planning.', published: true, createdAt: '', updatedAt: '' },
+  { id: 6, slug: 'international-law',title: 'International Law', icon: 'Globe',     shortDesc: 'Cross-border transactions, trade compliance, and international arbitration.', published: true, createdAt: '', updatedAt: '' },
 ];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
@@ -35,18 +36,17 @@ function ArrowIcon() {
   );
 }
 
-function getServiceIcon(svc: Service) {
-  if (svc.icon) return svc.icon;
-  return '⚖️';
-}
-
 function ServiceCard({ svc, onClick }: { svc: Service; onClick?: (svc: Service) => void }) {
   const dept = svc.department && typeof svc.department === 'object' && 'name' in svc.department
     ? (svc.department as Department) : null;
 
   const inner = (
     <div className="mer-service-card" style={{ cursor: onClick ? 'pointer' : 'default', height: '100%' }} onClick={onClick ? () => onClick(svc) : undefined}>
-      <div className="mer-service-card-icon" aria-hidden="true">{getServiceIcon(svc)}</div>
+      {svc.icon && (
+        <div className="mer-service-card-icon" aria-hidden="true">
+          <MeridianIcon name={svc.icon} size={24} strokeWidth={1.5} />
+        </div>
+      )}
       {dept && <span className="mer-tag mer-tag-dept" style={{ marginBottom: 'var(--mer-spacing-sm)', display: 'inline-flex' }}>{dept.name}</span>}
       {svc.badge && <span className="mer-badge mer-badge-accent" style={{ marginBottom: 'var(--mer-spacing-sm)', marginLeft: dept ? 'var(--mer-spacing-xs)' : 0, display: 'inline-flex' }}>{svc.badge}</span>}
       <div className="mer-service-card-title">{svc.title}</div>

@@ -11,6 +11,7 @@
  */
 
 import type { PageProps } from '@/lib/types';
+import { MeridianIcon } from './MeridianIcon';
 import MeridianCounters from './MeridianCounters';
 import { getServices } from '@/lib/api';
 import type { Service } from '@/lib/api';
@@ -18,12 +19,12 @@ import type { Service } from '@/lib/api';
 /* ─── Demo / fallback data (replaced by live data in Phase 3) ─── */
 
 const DEMO_SERVICES = [
-  { icon: '⚖️', title: 'Corporate Law',    desc: 'Mergers, acquisitions, corporate governance, and commercial contracts.' },
-  { icon: '🏛️', title: 'Litigation',       desc: 'Expert representation in civil, commercial, and regulatory disputes.' },
-  { icon: '📋', title: 'Tax Advisory',      desc: 'Strategic tax planning, compliance, and dispute resolution.' },
-  { icon: '🏠', title: 'Property Law',      desc: 'Conveyancing, property development, and real estate transactions.' },
-  { icon: '👨‍👩‍👧', title: 'Family Law',     desc: 'Divorce, custody, maintenance, and estate planning.' },
-  { icon: '🌐', title: 'International Law', desc: 'Cross-border transactions, trade law, and international arbitration.' },
+  { icon: 'Scale',   title: 'Corporate Law',    desc: 'Mergers, acquisitions, corporate governance, and commercial contracts.' },
+  { icon: 'Gavel',   title: 'Litigation',       desc: 'Expert representation in civil, commercial, and regulatory disputes.' },
+  { icon: 'Receipt', title: 'Tax Advisory',      desc: 'Strategic tax planning, compliance, and dispute resolution.' },
+  { icon: 'Home',    title: 'Property Law',      desc: 'Conveyancing, property development, and real estate transactions.' },
+  { icon: 'Heart',   title: 'Family Law',        desc: 'Divorce, custody, maintenance, and estate planning.' },
+  { icon: 'Globe',   title: 'International Law', desc: 'Cross-border transactions, trade law, and international arbitration.' },
 ];
 
 const DEMO_TESTIMONIALS = [
@@ -96,7 +97,7 @@ function ServicesGrid({ siteName, services }: { siteName: string; services: Serv
             <div key={svc.title} className="mer-service-card">
               {svc.icon && (
                 <div className="mer-service-card-icon" aria-hidden="true">
-                  {svc.icon}
+                  <MeridianIcon name={svc.icon} size={24} strokeWidth={1.5} />
                 </div>
               )}
               <div className="mer-service-card-title">{svc.title}</div>

@@ -15,6 +15,7 @@
  */
 
 import type { PageProps } from '@/lib/types';
+import { MeridianIcon } from './MeridianIcon';
 import type { MeridianPageConfig } from '@/lib/types';
 import { getTeamMembers } from '@/lib/api';
 import type { TeamMember } from '@/lib/api';
@@ -23,12 +24,12 @@ import { RichTextRenderer } from '@/components/RichTextRenderer';
 // ─── Demo fallback data ────────────────────────────────────────────────────
 
 const DEMO_VALUES = [
-  { icon: '⚖️', title: 'Integrity',      description: 'We act with unwavering honesty and hold ourselves to the highest ethical standards in every engagement.' },
-  { icon: '🔍', title: 'Precision',       description: 'Detail matters. We research thoroughly, advise carefully, and deliver work that stands up to scrutiny.' },
-  { icon: '🤝', title: 'Partnership',     description: 'We build lasting relationships — not transactional ones. Your success is our success.' },
-  { icon: '💡', title: 'Expertise',       description: 'Decades of combined experience across practice areas, distilled into clear, actionable advice.' },
-  { icon: '🌍', title: 'Accessibility',   description: 'World-class counsel should not be a privilege. We work with clients of all sizes, from start-ups to multinationals.' },
-  { icon: '🛡️', title: 'Confidentiality', description: 'Your matter is handled with the utmost discretion. We take professional privilege seriously.' },
+  { icon: 'ShieldCheck',   title: 'Integrity',       description: 'We act with unwavering honesty and hold ourselves to the highest ethical standards in every matter.' },
+  { icon: 'Search',        title: 'Precision',        description: 'Detail matters. We research thoroughly, advise carefully, and draft with exactness.' },
+  { icon: 'Handshake',     title: 'Partnership',      description: 'We build lasting relationships — not transactional ones. Your success is our measure.' },
+  { icon: 'GraduationCap', title: 'Expertise',        description: 'Decades of combined experience across practice areas and jurisdictions.' },
+  { icon: 'DoorOpen',      title: 'Accessibility',    description: 'World-class counsel should not be a privilege. We are direct, responsive, and clear.' },
+  { icon: 'Lock',          title: 'Confidentiality',  description: 'Your matter is handled with the utmost discretion. Always.' },
 ];
 
 const DEMO_MILESTONES = [
@@ -162,10 +163,11 @@ export default async function AboutPage({ config }: PageProps) {
                         width: 48, height: 48, borderRadius: 'var(--mer-radius-md)',
                         background: 'color-mix(in srgb, var(--brand-primary, #1a2b5e) 8%, transparent)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        fontSize: '1.4rem', marginBottom: 'var(--mer-spacing-lg)',
+                        color: 'var(--brand-primary, #1a2b5e)',
+                        marginBottom: 'var(--mer-spacing-lg)',
                       }}
                     >
-                      {v.icon}
+                      <MeridianIcon name={v.icon} size={22} strokeWidth={1.5} />
                     </div>
                   )}
                   <h3 className="mer-h5" style={{ marginBottom: 'var(--mer-spacing-sm)' }}>{v.title}</h3>
