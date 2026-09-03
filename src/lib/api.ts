@@ -334,7 +334,7 @@ export async function getArticles(params: GetArticlesParams, noCache = false): P
     apiUrl('/api/public/articles', queryParams),
     noCache
       ? { noCache: true }
-      : { tags: [`tenant:${params.tenant}`, `articles:${params.tenant}`] },
+      : { tags: [`tenant:${params.tenant}`, `tenant:${params.tenant}:articles`] },
   );
 }
 
@@ -343,7 +343,7 @@ export async function getArticleBySlug(tenant: string, slug: string, noCache = f
     apiUrl(`/api/public/articles/${encodeURIComponent(slug)}`, { tenant }),
     noCache
       ? { noCache: true }
-      : { tags: [`tenant:${tenant}`, `articles:${tenant}`, `article:${slug}`] },
+      : { tags: [`tenant:${tenant}`, `tenant:${tenant}:articles`, `article:${slug}`] },
   );
 }
 
@@ -392,7 +392,7 @@ export async function getServices(tenant: string, noCache = false): Promise<Pagi
     apiUrl('/api/public/services', { tenant }),
     noCache
       ? { noCache: true }
-      : { tags: [`tenant:${tenant}`, `services:${tenant}`] },
+      : { tags: [`tenant:${tenant}`, `tenant:${tenant}:services`] },
   );
 }
 
@@ -401,7 +401,7 @@ export async function getServiceBySlug(tenant: string, slug: string, noCache = f
     apiUrl(`/api/public/services/${encodeURIComponent(slug)}`, { tenant }),
     noCache
       ? { noCache: true }
-      : { tags: [`tenant:${tenant}`, `services:${tenant}`, `service:${slug}`] },
+      : { tags: [`tenant:${tenant}`, `tenant:${tenant}:services`, `service:${slug}`] },
   );
 }
 
@@ -428,7 +428,7 @@ export async function getDepartments(tenant: string, noCache = false): Promise<P
     apiUrl('/api/public/departments', { tenant }),
     noCache
       ? { noCache: true }
-      : { tags: [`tenant:${tenant}`, `departments:${tenant}`] },
+      : { tags: [`tenant:${tenant}`, `tenant:${tenant}:departments`] },
   );
 }
 
@@ -496,7 +496,7 @@ export async function getTeamMembers(
     apiUrl('/api/public/team-members', queryParams),
     noCache
       ? { noCache: true }
-      : { tags: [`tenant:${params.tenant}`, `team:${params.tenant}`] },
+      : { tags: [`tenant:${params.tenant}`, `tenant:${params.tenant}:team`] },
   );
 }
 
@@ -509,7 +509,7 @@ export async function getTeamMemberBySlug(
     apiUrl(`/api/public/team-members/${encodeURIComponent(slug)}`, { tenant }),
     noCache
       ? { noCache: true }
-      : { tags: [`tenant:${tenant}`, `team:${tenant}`, `team-member:${slug}`] },
+      : { tags: [`tenant:${tenant}`, `tenant:${tenant}:team`, `team-member:${slug}`] },
   );
 }
 
@@ -535,7 +535,7 @@ export async function getFaqs(tenant: string, category?: string, noCache = false
     apiUrl('/api/public/faqs', params),
     noCache
       ? { noCache: true }
-      : { tags: [`tenant:${tenant}`, `faqs:${tenant}`] },
+      : { tags: [`tenant:${tenant}`, `tenant:${tenant}:faqs`] },
   );
 }
 
@@ -561,7 +561,7 @@ export async function getLegalDocs(tenant: string, noCache = false): Promise<Leg
     apiUrl('/api/public/legal', { tenant }),
     noCache
       ? { noCache: true }
-      : { tags: [`tenant:${tenant}`, `legal:${tenant}`] },
+      : { tags: [`tenant:${tenant}`, `tenant:${tenant}:legal`] },
   );
 }
 
@@ -582,7 +582,7 @@ export async function getPageSEO(tenant: string, pageSlug: string, noCache = fal
     apiUrl('/api/public/page-seo', { tenant, slug: pageSlug }),
     noCache
       ? { noCache: true }
-      : { tags: [`tenant:${tenant}`, `seo:${tenant}`] },
+      : { tags: [`tenant:${tenant}`, `tenant:${tenant}:page-seo`] },
   );
 }
 
@@ -608,7 +608,7 @@ export async function getTopics(tenant: string, noCache = false): Promise<Pagina
     apiUrl('/api/public/topics', { tenant }),
     noCache
       ? { noCache: true }
-      : { tags: [`tenant:${tenant}`, `topics:${tenant}`] },
+      : { tags: [`tenant:${tenant}`, `tenant:${tenant}:topics`] },
   );
 }
 
@@ -626,7 +626,7 @@ export async function getTopicWithArticles(
     apiUrl(`/api/public/topics/${encodeURIComponent(topicSlug)}`, { tenant }),
     noCache
       ? { noCache: true }
-      : { tags: [`tenant:${tenant}`, `topics:${tenant}`, `topic:${topicSlug}`] },
+      : { tags: [`tenant:${tenant}`, `tenant:${tenant}:topics`, `topic:${topicSlug}`] },
   );
 }
 

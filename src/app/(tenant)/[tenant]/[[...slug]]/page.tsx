@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Catch-All Page  Template Resolution + Rendering
  *
  * This is the heart of the multi-tenant rendering pipeline:
@@ -29,6 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const config = await fetchTenantConfig(tenant, { noCache: isStaging });
 
   const siteName = config?.settings?.siteName ?? config?.tenant?.name ?? 'Site';
+  const isDemoOrStaging = config?.tenant?.isDemoTenant || isStaging;
 
   return {
     title: {
@@ -36,6 +37,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       template: `%s | ${siteName}`,
     },
     description: config?.settings?.tagline ?? `Welcome to ${siteName}`,
+    // Prevent search engines from indexing demo/staging sites
+    ...(isDemoOrStaging && {
+      robots: {
+        index: false,
+        follow: false,
+      },
+    }),
   };
 }
 

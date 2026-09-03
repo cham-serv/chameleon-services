@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Meridian ContactPage
  *
  * 2 variants:
@@ -156,7 +156,7 @@ async function MinimalVariant({ config }: { config: any }) {
       {/* Form + sidebar */}
       <section className="mer-section">
         <div className="mer-container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 'var(--mer-spacing-4xl)', alignItems: 'start' }}>
+          <div className="mer-contact-grid">
             {/* Form */}
             <div className="mer-card">
               <div className="mer-card-body">
@@ -219,7 +219,7 @@ async function SplitImageVariant({ config }: { config: any }) {
   ]);
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: 'calc(100vh - var(--mer-header-h))', overflow: 'hidden' }}>
+    <div className="mer-contact-split">
       {/* Left: Form panel */}
       <div style={{ padding: 'var(--mer-spacing-4xl) var(--mer-spacing-3xl)', display: 'flex', flexDirection: 'column', justifyContent: 'center', overflowY: 'auto' }}>
         <div style={{ maxWidth: 560, margin: '0 auto', width: '100%' }}>
@@ -259,7 +259,7 @@ async function SplitImageVariant({ config }: { config: any }) {
         {/* Floating quote overlay */}
         <div style={{ position: 'absolute', bottom: 'var(--mer-spacing-3xl)', left: 'var(--mer-spacing-3xl)', right: 'var(--mer-spacing-3xl)', color: '#fff' }}>
           <p style={{ fontFamily: 'var(--font-heading, inherit)', fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)', fontWeight: 600, lineHeight: 1.3, fontStyle: 'italic', marginBottom: 'var(--mer-spacing-md)' }}>
-            &ldquo;The quality of our advice is matched only by our commitment to your outcome.&rdquo;
+            &ldquo;{config.settings?.tagline ?? `Trusted advisors. Exceptional outcomes.`}&rdquo;
           </p>
           <p style={{ fontSize: '0.875rem', opacity: 0.7 }}>— {config.settings?.siteName ?? config.tenant.name}</p>
         </div>

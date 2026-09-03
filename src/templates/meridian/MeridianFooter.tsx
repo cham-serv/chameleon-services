@@ -8,12 +8,19 @@
 
 import Link from 'next/link';
 import type { TenantConfig } from '@/lib/types';
+import { getServices } from '@/lib/api';
 
 type Props = {
   config: TenantConfig;
 };
 
-export default function MeridianFooter({ config }: Props) {
+export default async function MeridianFooter({ config }: Props) {
+  // Fetch top services for the footer links (cap at 5; fails silently)
+  const svcRes      = config.tenant.featureConfig['services']?.enabled
+    ? await getServices(config.tenant.slug)
+    : null;
+  const topServices = (svcRes?.docs ?? []).filter((s) => s.published !== false).slice(0, 5);
+
   const siteName    = config.settings?.siteName ?? config.tenant.name;
   const tagline     = config.settings?.tagline  ?? config.pageConfig?.tagline ?? null;
   const contactEmail = config.settings?.contactEmail ?? config.pageConfig?.contactEmail ?? null;
@@ -86,7 +93,7 @@ export default function MeridianFooter({ config }: Props) {
               <li><Link href="/">Home</Link></li>
               {fc.about?.enabled     && <li><Link href="/about">About Us</Link></li>}
               {fc.services?.enabled  && <li><Link href="/services">Our Services</Link></li>}
-              {fc.about?.enabled     && <li><Link href="/team">Our People</Link></li>}
+              {fc.team?.enabled      && <li><Link href="/team">Our People</Link></li>}
               {fc.blog?.enabled      && <li><Link href="/blog">Insights</Link></li>}
               {fc.resources?.enabled && <li><Link href="/resources">Resources</Link></li>}
               {fc.faqs?.enabled      && <li><Link href="/faqs">FAQs</Link></li>}
@@ -98,9 +105,13 @@ export default function MeridianFooter({ config }: Props) {
           {fc.services?.enabled && (
             <div>
               <div className="mer-footer-col-heading">Services</div>
-              {/* Static fallback — Phase 3 will populate from live service names */}
               <ul className="mer-footer-links">
-                <li><Link href="/services">All Services</Link></li>
+                {topServices.map((svc) => (
+                  <li key={svc.slug}>
+                    <Link href={`/services/${svc.slug}`}>{svc.title}</Link>
+                  </li>
+                ))}
+                <li><Link href="/services">All Services →</Link></li>
               </ul>
             </div>
           )}
@@ -148,10 +159,10 @@ export default function MeridianFooter({ config }: Props) {
           </p>
           {fc.legal?.enabled && (
             <div style={{ display: 'flex', gap: 'var(--mer-spacing-lg)' }}>
-              <Link href="/legal" style={{ fontSize: '0.8125rem', color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>
+              <Link href="/legal?tab=privacy-policy" style={{ fontSize: '0.8125rem', color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>
                 Privacy Policy
               </Link>
-              <Link href="/legal" style={{ fontSize: '0.8125rem', color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>
+              <Link href="/legal?tab=terms-conditions" style={{ fontSize: '0.8125rem', color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>
                 Terms of Use
               </Link>
             </div>

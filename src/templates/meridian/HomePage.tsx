@@ -12,6 +12,8 @@
 
 import type { PageProps } from '@/lib/types';
 import MeridianCounters from './MeridianCounters';
+import { getServices } from '@/lib/api';
+import type { Service } from '@/lib/api';
 
 /* ─── Demo / fallback data (replaced by live data in Phase 3) ─── */
 
@@ -74,7 +76,10 @@ function Stars({ count }: { count: number }) {
 
 /* ─── Shared sections ─── */
 
-function ServicesGrid({ siteName }: { siteName: string }) {
+type ServiceItem = { icon?: string; title: string; desc?: string; shortDesc?: string; slug?: string };
+type TestimonialItem = { quote: string; author: string; role?: string | null; rating?: number | null };
+
+function ServicesGrid({ siteName, services }: { siteName: string; services: ServiceItem[] }) {
   return (
     <section className="mer-section mer-surface">
       <div className="mer-container">
@@ -87,14 +92,19 @@ function ServicesGrid({ siteName }: { siteName: string }) {
         </div>
 
         <div className="mer-grid-3" data-reveal-stagger>
-          {DEMO_SERVICES.map((svc) => (
+          {services.map((svc) => (
             <div key={svc.title} className="mer-service-card">
-              <div className="mer-service-card-icon" aria-hidden="true">
-                {svc.icon}
-              </div>
+              {svc.icon && (
+                <div className="mer-service-card-icon" aria-hidden="true">
+                  {svc.icon}
+                </div>
+              )}
               <div className="mer-service-card-title">{svc.title}</div>
-              <p className="mer-service-card-desc">{svc.desc}</p>
-              <a href="/services" className="mer-arrow-link">
+              <p className="mer-service-card-desc">{svc.shortDesc ?? svc.desc}</p>
+              <a
+                href={svc.slug ? `/services/${svc.slug}` : '/services'}
+                className="mer-arrow-link"
+              >
                 Learn more
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -108,7 +118,7 @@ function ServicesGrid({ siteName }: { siteName: string }) {
   );
 }
 
-function TestimonialsSection() {
+function TestimonialsSection({ testimonials }: { testimonials: TestimonialItem[] }) {
   return (
     <section className="mer-section">
       <div className="mer-container">
@@ -118,9 +128,9 @@ function TestimonialsSection() {
         </div>
 
         <div className="mer-grid-3" data-reveal-stagger>
-          {DEMO_TESTIMONIALS.map((t) => (
+          {testimonials.map((t) => (
             <div key={t.author} className="mer-testimonial">
-              <Stars count={t.rating} />
+              <Stars count={t.rating ?? 5} />
               <p className="mer-testimonial-quote">{t.quote}</p>
               <div className="mer-testimonial-author">
                 <div className="mer-testimonial-avatar" aria-hidden="true" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem' }}>
@@ -128,7 +138,7 @@ function TestimonialsSection() {
                 </div>
                 <div>
                   <div className="mer-testimonial-name">{t.author}</div>
-                  <div className="mer-testimonial-role">{t.role}</div>
+                  {t.role && <div className="mer-testimonial-role">{t.role}</div>}
                 </div>
               </div>
             </div>
@@ -171,7 +181,7 @@ function CtaBanner({ siteName }: { siteName: string }) {
    VARIANT: split-hero
    ───────────────────────────────────────────────────────────────────────────── */
 
-function SplitHeroVariant({ config }: { config: PageProps['config'] }) {
+function SplitHeroVariant({ config, services, testimonials }: { config: PageProps['config']; services: ServiceItem[]; testimonials: TestimonialItem[] }) {
   const siteName   = config.settings?.siteName ?? config.tenant.name;
   const tagline    = config.settings?.tagline ?? config.pageConfig?.tagline ?? null;
   const pc         = config.pageConfig;
@@ -184,6 +194,8 @@ function SplitHeroVariant({ config }: { config: PageProps['config'] }) {
   const cta1Link   = pc?.homeCta1Link  ?? '/contact';
   const cta2Text   = pc?.homeCta2Text  ?? 'Our Services';
   const cta2Link   = pc?.homeCta2Link  ?? '/services';
+
+  const trustSignals = (pc as any)?.homeTrustSignals ?? DEMO_TRUST_SIGNALS;
 
   return (
     <>
@@ -207,7 +219,7 @@ function SplitHeroVariant({ config }: { config: PageProps['config'] }) {
 
             {/* Trust signals */}
             <div className="mer-trust-bar" data-reveal="fade" style={{ transitionDelay: '240ms' }}>
-              {DEMO_TRUST_SIGNALS.map((ts) => (
+              {trustSignals.map((ts: { text: string }) => (
                 <div key={ts.text} className="mer-trust-item">
                   <span className="mer-trust-icon" aria-hidden="true">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -247,8 +259,8 @@ function SplitHeroVariant({ config }: { config: PageProps['config'] }) {
         </div>
       </section>
 
-      <ServicesGrid siteName={siteName} />
-      <TestimonialsSection />
+      <ServicesGrid siteName={siteName} services={services} />
+      <TestimonialsSection testimonials={testimonials} />
       <CtaBanner siteName={siteName} />
     </>
   );
@@ -258,7 +270,7 @@ function SplitHeroVariant({ config }: { config: PageProps['config'] }) {
    VARIANT: full-hero
    ───────────────────────────────────────────────────────────────────────────── */
 
-function FullHeroVariant({ config }: { config: PageProps['config'] }) {
+function FullHeroVariant({ config, services, testimonials }: { config: PageProps['config']; services: ServiceItem[]; testimonials: TestimonialItem[] }) {
   const siteName    = config.settings?.siteName ?? config.tenant.name;
   const tagline     = config.settings?.tagline  ?? null;
   const pc          = config.pageConfig;
@@ -304,8 +316,8 @@ function FullHeroVariant({ config }: { config: PageProps['config'] }) {
         </div>
       </section>
 
-      <ServicesGrid siteName={siteName} />
-      <TestimonialsSection />
+      <ServicesGrid siteName={siteName} services={services} />
+      <TestimonialsSection testimonials={testimonials} />
       <CtaBanner siteName={siteName} />
     </>
   );
@@ -316,7 +328,7 @@ function FullHeroVariant({ config }: { config: PageProps['config'] }) {
    No image. Pure typographic authority.
    ───────────────────────────────────────────────────────────────────────────── */
 
-function AuthorityVariant({ config }: { config: PageProps['config'] }) {
+function AuthorityVariant({ config, services, testimonials, counters }: { config: PageProps['config']; services: ServiceItem[]; testimonials: TestimonialItem[]; counters: { value: string; label: string }[] }) {
   const siteName    = config.settings?.siteName ?? config.tenant.name;
   const pc          = config.pageConfig;
 
@@ -354,19 +366,21 @@ function AuthorityVariant({ config }: { config: PageProps['config'] }) {
               </div>
             </div>
 
-            {/* Vertical stat strip */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--mer-spacing-xl)', paddingLeft: 'var(--mer-spacing-3xl)', borderLeft: '1px solid var(--mer-border-color)' }} data-reveal-stagger>
-              {DEMO_METRICS.slice(0, 3).map((m) => (
-                <div key={m.label}>
-                  <div style={{ fontFamily: 'var(--font-heading, inherit)', fontSize: '2rem', fontWeight: 700, color: 'var(--brand-primary, #1a2b5e)', lineHeight: 1, letterSpacing: '-0.02em' }}>
-                    {m.value}
+            {/* Vertical stat strip — live counters */}
+            {counters.length > 0 && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--mer-spacing-xl)', paddingLeft: 'var(--mer-spacing-3xl)', borderLeft: '1px solid var(--mer-border-color)' }} data-reveal-stagger>
+                {counters.slice(0, 3).map((m) => (
+                  <div key={m.label}>
+                    <div style={{ fontFamily: 'var(--font-heading, inherit)', fontSize: '2rem', fontWeight: 700, color: 'var(--brand-primary, #1a2b5e)', lineHeight: 1, letterSpacing: '-0.02em' }}>
+                      {m.value}
+                    </div>
+                    <div style={{ fontSize: '0.8125rem', color: 'color-mix(in srgb, var(--brand-text, #444) 60%, transparent)', marginTop: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 600 }}>
+                      {m.label}
+                    </div>
                   </div>
-                  <div style={{ fontSize: '0.8125rem', color: 'color-mix(in srgb, var(--brand-text, #444) 60%, transparent)', marginTop: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 600 }}>
-                    {m.label}
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
@@ -387,8 +401,8 @@ function AuthorityVariant({ config }: { config: PageProps['config'] }) {
         </div>
       </section>
 
-      <ServicesGrid siteName={siteName} />
-      <TestimonialsSection />
+      <ServicesGrid siteName={siteName} services={services} />
+      <TestimonialsSection testimonials={testimonials} />
       <CtaBanner siteName={siteName} />
     </>
   );
@@ -399,7 +413,7 @@ function AuthorityVariant({ config }: { config: PageProps['config'] }) {
    Hero headline + animated counter strip immediately below fold.
    ───────────────────────────────────────────────────────────────────────────── */
 
-function MetricsVariant({ config }: { config: PageProps['config'] }) {
+function MetricsVariant({ config, services, testimonials, counters }: { config: PageProps['config']; services: ServiceItem[]; testimonials: TestimonialItem[]; counters: { value: string; label: string }[] }) {
   const siteName    = config.settings?.siteName ?? config.tenant.name;
   const tagline     = config.settings?.tagline  ?? null;
   const pc          = config.pageConfig;
@@ -407,7 +421,6 @@ function MetricsVariant({ config }: { config: PageProps['config'] }) {
   const headline    = (pc as any)?.homeMetricsHeadline    ?? 'A Track Record Built on Results';
   const subheadline = (pc as any)?.homeMetricsSubheadline ?? `For over three decades, ${siteName} has delivered exceptional outcomes for our clients. Our numbers speak for themselves.`;
   const heroImage   = (pc as any)?.homeMetricsHeroImage?.url ?? null;
-  const counters    = (pc as any)?.homeMetricsCounters ?? DEMO_METRICS;
 
   const cta1Text    = pc?.homeCta1Text ?? 'Schedule a Consultation';
   const cta1Link    = pc?.homeCta1Link ?? '/contact';
@@ -445,10 +458,10 @@ function MetricsVariant({ config }: { config: PageProps['config'] }) {
           </div>
         </div>
 
-        {/* Animated counter strip — the "banner row split" */}
+        {/* Animated counter strip */}
         <div className="mer-metrics-strip">
           <div className="mer-metrics-grid" data-reveal-stagger>
-            {counters.map((c: { value: string; label: string }) => (
+            {counters.map((c) => (
               <div key={c.label} className="mer-metric-item">
                 <MeridianCounters targetValue={c.value} className="mer-metric-value" />
                 <div className="mer-metric-label">{c.label}</div>
@@ -458,23 +471,44 @@ function MetricsVariant({ config }: { config: PageProps['config'] }) {
         </div>
       </section>
 
-      <ServicesGrid siteName={siteName} />
-      <TestimonialsSection />
+      <ServicesGrid siteName={siteName} services={services} />
+      <TestimonialsSection testimonials={testimonials} />
       <CtaBanner siteName={siteName} />
     </>
   );
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
-   ROOT EXPORT — variant router
+   ROOT EXPORT — async, fetches shared data once, routes to variant
    ───────────────────────────────────────────────────────────────────────────── */
 
-export default function HomePage({ config, variant }: PageProps) {
+export default async function HomePage({ config, variant }: PageProps) {
+  const tenantSlug = config.tenant.slug;
+  const pc         = config.pageConfig as any;
+
+  // Fetch live services (used in all variants' practice area grid)
+  const svcRes = await getServices(tenantSlug);
+  const services: ServiceItem[] = (svcRes?.docs ?? DEMO_SERVICES as any[])
+    .filter((s: any) => s.published !== false)
+    .slice(0, 6); // Cap at 6 for the home grid
+
+  // Testimonials come from pageConfig (MeridianSiteConfig home tab)
+  const testimonials: TestimonialItem[] =
+    (pc?.homeTestimonials && pc.homeTestimonials.length > 0)
+      ? pc.homeTestimonials
+      : DEMO_TESTIMONIALS;
+
+  // Counters for authority / metrics variants
+  const counters: { value: string; label: string }[] =
+    (pc?.homeMetricsCounters && pc.homeMetricsCounters.length > 0)
+      ? pc.homeMetricsCounters
+      : DEMO_METRICS;
+
   switch (variant) {
-    case 'full-hero':  return <FullHeroVariant  config={config} />;
-    case 'authority':  return <AuthorityVariant config={config} />;
-    case 'metrics':    return <MetricsVariant   config={config} />;
+    case 'full-hero':  return <FullHeroVariant  config={config} services={services} testimonials={testimonials} />;
+    case 'authority':  return <AuthorityVariant config={config} services={services} testimonials={testimonials} counters={counters} />;
+    case 'metrics':    return <MetricsVariant   config={config} services={services} testimonials={testimonials} counters={counters} />;
     case 'split-hero':
-    default:           return <SplitHeroVariant config={config} />;
+    default:           return <SplitHeroVariant config={config} services={services} testimonials={testimonials} />;
   }
 }

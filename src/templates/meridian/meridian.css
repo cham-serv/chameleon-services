@@ -2385,7 +2385,26 @@
   }
 }
 
+/* Responsive overrides for ContactPage minimal variant */
+.mer-contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: var(--mer-spacing-4xl);
+  align-items: start;
+}
+@media (max-width: 1024px) {
+  .mer-contact-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Responsive overrides for ContactPage split-image */
+.mer-contact-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: calc(100vh - var(--mer-header-h));
+  overflow: hidden;
+}
 @media (max-width: 1024px) {
   .mer-contact-split {
     grid-template-columns: 1fr !important;

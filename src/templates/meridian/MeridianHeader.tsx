@@ -46,13 +46,14 @@ export default function MeridianHeader({ config, transparent = false }: Props) {
   const navLinks: NavLink[] = [{ href: '/', label: 'Home' }];
   if (fc.about?.enabled)     navLinks.push({ href: '/about',     label: 'About' });
   if (fc.services?.enabled)  navLinks.push({ href: '/services',  label: 'Services' });
-  if (fc.about?.enabled)     navLinks.push({ href: '/team',      label: 'Our People' });
+  if (fc.team?.enabled)      navLinks.push({ href: '/team',      label: 'Our People' });
   if (fc.blog?.enabled)      navLinks.push({ href: '/blog',      label: 'Insights' });
   if (fc.resources?.enabled) navLinks.push({ href: '/resources', label: 'Resources' });
   if (fc.faqs?.enabled)      navLinks.push({ href: '/faqs',      label: 'FAQs' });
 
-  const logoUrl = config.pageConfig?.logo?.url ?? config.settings?.logo?.url ?? null;
-  const logoAlt = (config.pageConfig?.logo as { alt?: string } | null)?.alt ?? siteName;
+  const logoUrl    = config.pageConfig?.logo?.url ?? config.settings?.logo?.url ?? null;
+  const logoAlt    = (config.pageConfig?.logo as { alt?: string } | null)?.alt ?? siteName;
+  const ctaLabel   = (config.pageConfig as any)?.homeCta1Text ?? 'Get in Touch';
 
   const contactEnabled = fc.contact?.enabled;
 
@@ -99,7 +100,7 @@ export default function MeridianHeader({ config, transparent = false }: Props) {
                 href="/contact"
                 className="mer-btn mer-btn-primary mer-btn-sm mer-header-cta"
               >
-                Get in Touch
+                {ctaLabel}
               </Link>
             )}
 

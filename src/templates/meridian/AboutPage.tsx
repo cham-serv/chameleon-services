@@ -178,12 +178,20 @@ export default async function AboutPage({ config }: PageProps) {
       )}
 
       {/* ── 4. Milestones timeline ────────────────────────────────── */}
-      {milestones.length > 0 && (
+      {milestones.length > 0 && (() => {
+        // Derive the year range from milestone data so the heading is always accurate
+        const years    = milestones.map((m) => parseInt(m.year, 10)).filter(Boolean);
+        const minYear  = years.length ? Math.min(...years) : null;
+        const maxYear  = years.length ? Math.max(...years) : null;
+        const span     = minYear && maxYear && maxYear > minYear ? `${maxYear - minYear}+` : null;
+        const milestonesHeading = span ? `${span} Years of Practice` : 'Our Journey';
+
+        return (
         <section className="mer-section">
           <div className="mer-container">
             <div className="mer-section-header--left" data-reveal="up">
               <span className="mer-overline">Our Journey</span>
-              <h2 className="mer-h2">30 Years of Practice</h2>
+              <h2 className="mer-h2">{milestonesHeading}</h2>
             </div>
             <div
               style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 'var(--mer-spacing-lg)' }}
@@ -213,7 +221,8 @@ export default async function AboutPage({ config }: PageProps) {
             </div>
           </div>
         </section>
-      )}
+        );
+      })()}
 
       {/* ── 5. Featured team strip ────────────────────────────────── */}
       {featuredTeam.length > 0 && (
