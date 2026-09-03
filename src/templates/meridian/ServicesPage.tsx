@@ -10,9 +10,9 @@
  * Falls back to demo data when no services are configured.
  */
 
-import type { PageProps, Service, Department } from '@/lib/types';
+import type { PageProps } from '@/lib/types';
 import { MeridianIcon } from './MeridianIcon';
-import { getServices, getDepartments } from '@/lib/api';
+import { getServices, getDepartments, type Service, type Department } from '@/lib/api';
 import ModalGridClient from './ServicesModalGridClient';
 
 // ─── Demo fallback ────────────────────────────────────────────────────────
