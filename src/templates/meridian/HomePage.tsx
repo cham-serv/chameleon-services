@@ -435,23 +435,25 @@ function MetricsVariant({ config, services, testimonials, counters }: { config: 
         {/* Hero top */}
         <div className="mer-hero-metrics-top">
           <div className="mer-container">
-            <div style={{ display: 'grid', gridTemplateColumns: heroImage ? '1fr 1fr' : '1fr', gap: 'var(--mer-spacing-3xl)', alignItems: 'center', minHeight: '420px' }}>
-              <div>
-                {tagline && <span className="mer-overline" data-reveal="fade">{tagline}</span>}
-                <h1 className="mer-h1 mer-mt-md" data-reveal="up">
+            {/* CSS class handles 1fr/1fr grid + responsive stacking; --no-image collapses to single column */}
+            <div className={`mer-hero-metrics-body${heroImage ? '' : ' mer-hero-metrics-body--no-image'}`}>
+              {/* data-reveal-stagger cascades: tagline → h1 → subheadline → CTAs */}
+              <div data-reveal-stagger>
+                {tagline && <span className="mer-overline">{tagline}</span>}
+                <h1 className="mer-h1 mer-mt-md">
                   {headline}
                 </h1>
-                <p className="mer-body-lg mer-mt-lg" data-reveal="up" style={{ transitionDelay: '80ms', opacity: 0.8, maxWidth: '500px' }}>
+                <p className="mer-body-lg mer-mt-lg" style={{ opacity: 0.8, maxWidth: '500px' }}>
                   {subheadline}
                 </p>
-                <div style={{ display: 'flex', gap: 'var(--mer-spacing-md)', flexWrap: 'wrap', marginTop: 'var(--mer-spacing-xl)', transitionDelay: '160ms' }} data-reveal="up">
+                <div style={{ display: 'flex', gap: 'var(--mer-spacing-md)', flexWrap: 'wrap', marginTop: 'var(--mer-spacing-xl)' }}>
                   <a href={cta1Link} className="mer-btn mer-btn-primary mer-btn-lg">{cta1Text}</a>
                   <a href={cta2Link} className="mer-btn mer-btn-outline mer-btn-lg">{cta2Text}</a>
                 </div>
               </div>
 
               {heroImage && (
-                <div className="mer-img-zoom" style={{ borderRadius: 'var(--mer-radius-xl)', overflow: 'hidden', height: '420px' }}>
+                <div className="mer-hero-metrics-image mer-img-zoom">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={heroImage} alt="" aria-hidden="true" style={{ width: '100%', height: '100%', objectFit: 'cover' }} fetchPriority="high" />
                 </div>

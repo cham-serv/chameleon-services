@@ -1547,6 +1547,42 @@
   .mer-metrics-grid { gap: var(--mer-spacing-lg); }
 }
 
+/* Metrics body — text column + optional hero image side by side */
+.mer-hero-metrics-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--mer-spacing-3xl);
+  align-items: center;
+}
+
+.mer-hero-metrics-body--no-image {
+  grid-template-columns: 1fr;
+}
+
+/* Hero image panel */
+.mer-hero-metrics-image {
+  border-radius: var(--mer-radius-xl);
+  overflow: hidden;
+  height: 480px;
+}
+
+@media (max-width: 1024px) {
+  .mer-hero-metrics-body {
+    grid-template-columns: 1fr;
+  }
+  .mer-hero-metrics-image {
+    height: 360px;
+    order: -1; /* image above text on tablet */
+  }
+}
+
+@media (max-width: 640px) {
+  .mer-hero-metrics-image {
+    height: 260px;
+  }
+}
+
+
 /* ─────────────────────────────────────────────────────────────────────────────
    TRUST SIGNALS BAR
    ───────────────────────────────────────────────────────────────────────────── */
