@@ -51,6 +51,21 @@ export const definition: TemplateDefinition = {
           description: 'Hero, firm story, values grid, milestones timeline, featured team strip, and CTA.',
           component: () => import('./AboutPage'),
         },
+        'leadership': {
+          label: 'Leadership',
+          description: 'Hero, prominent leadership feature with photo, full team strip, compact values list, and CTA. Best for founder-led firms.',
+          component: () => import('./AboutPage'),
+        },
+        'heritage': {
+          label: 'Heritage',
+          description: 'Hero, cinematic full-width timeline, story block, scrolling client logos, and CTA. Best for established firms where longevity is the brand.',
+          component: () => import('./AboutPage'),
+        },
+        'impact': {
+          label: 'Impact',
+          description: 'Hero, animated metrics strip, values grid, scrolling client logos, compact story, and CTA. Best for firms that lead with numbers.',
+          component: () => import('./AboutPage'),
+        },
       },
     },
 
