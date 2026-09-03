@@ -110,6 +110,14 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
+  // Dark mode toggle — controls data-scheme on <html>
+  const [isDark, setIsDark] = useState(false);
+
+  // Sync data-scheme to <html> whenever isDark changes
+  useEffect(() => {
+    document.documentElement.setAttribute('data-scheme', isDark ? 'dark' : 'light');
+  }, [isDark]);
+
   // Brand preview state — initialised to safe defaults; overwritten on mount
   // from the actual CSS vars on :root so pickers always show the real tenant colours.
   const [brand, setBrand] = useState<BrandPreview>({
@@ -225,6 +233,10 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
   //   2. Auto-open if _de=1 is in the URL (persisted via navigateToPage).
   //   3. Show the hint arrow for first-time visitors; auto-clear it after 5s (matching CSS).
   useEffect(() => {
+    // 0. Sync dark mode toggle to current data-scheme on <html>
+    const currentScheme = document.documentElement.getAttribute('data-scheme');
+    if (currentScheme === 'dark') setIsDark(true);
+
     // 1. Sync brand state to real CSS vars
     const style = getComputedStyle(document.documentElement);
     const get = (v: string, fallback: string) => style.getPropertyValue(v).trim() || fallback;
@@ -504,6 +516,22 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
           {/* - Brand Tab - */}
           {activeTab === 'brand' && (
             <>
+              {/* Dark Mode Toggle */}
+              <div className="demo-explorer-scheme-row">
+                <span className="demo-explorer-scheme-label">Dark Mode</span>
+                <button
+                  className="demo-explorer-scheme-toggle"
+                  data-on={isDark}
+                  onClick={() => setIsDark((v) => !v)}
+                  role="switch"
+                  aria-checked={isDark}
+                  aria-label="Toggle dark mode"
+                >
+                  <span className="demo-explorer-scheme-thumb" />
+                </button>
+              </div>
+              <div className="demo-explorer-scheme-divider" />
+
               {/* Palette Presets */}
               <p className="demo-explorer-section-label">Colour Palette</p>
               <div className="demo-explorer-palette-grid">
