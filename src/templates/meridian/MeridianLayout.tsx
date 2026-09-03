@@ -47,7 +47,7 @@ export default function MeridianLayout({ config, children }: LayoutProps) {
       <MeridianHeader config={config} />
 
       {/* Main content */}
-      <main id="mer-main" style={{ minHeight: '60vh' }}>
+      <main id="mer-main" tabIndex={-1} style={{ minHeight: '60vh' }}>
         {children}
       </main>
 
