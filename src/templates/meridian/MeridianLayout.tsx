@@ -6,10 +6,13 @@
  *
  * The header and mobile nav are client components (scroll state,
  * drawer open/close). Everything else is server-rendered.
+ *
+ * NOTE: meridian.css and meridian-animations.css are intentionally
+ * imported in the tenant layout.tsx shell, NOT here. This ensures the
+ * stylesheets are in <head> on every client-side navigation (layout
+ * persists; dynamically-imported page components do not).
  */
 
-import './meridian.css';
-import './meridian-animations.css';
 import type { LayoutProps } from '@/lib/types';
 import MeridianHeader from './MeridianHeader';
 import MeridianFooter from './MeridianFooter';

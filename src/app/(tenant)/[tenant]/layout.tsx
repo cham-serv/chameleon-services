@@ -20,6 +20,14 @@ import { definition as atlasDefinition } from '@/templates/atlas/definition';
 import { definition as meridianDefinition } from '@/templates/meridian/definition';
 import { buildExplorerRoutes } from '@/templates/atlas/demo-explorer-utils';
 
+// ─── Template CSS ────────────────────────────────────────────────────────────
+// Imported here (stable layout shell) rather than inside the dynamically-
+// imported template Layout components. This guarantees the stylesheets are
+// in the <head> on every client-side navigation, not just on hard refresh.
+// Next.js deduplicates CSS — no double-load even if the template also imports.
+import '@/templates/meridian/meridian.css';
+import '@/templates/meridian/meridian-animations.css';
+
 type Props = {
   children: React.ReactNode;
   params: Promise<{ tenant: string }>;
