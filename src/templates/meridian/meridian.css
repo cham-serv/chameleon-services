@@ -2376,7 +2376,7 @@
 
 /* Skip to main content (accessibility) */
 .mer-skip-link {
-  position: absolute;
+  position: fixed;
   top: -100%;
   left: var(--mer-spacing-md);
   background: var(--brand-primary, #1a2b5e);
