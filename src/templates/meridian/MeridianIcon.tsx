@@ -24,7 +24,6 @@
  */
 
 import * as Icons from 'lucide-react';
-import type { LucideProps } from 'lucide-react';
 
 type Props = {
   name?: string | null;
@@ -46,7 +45,17 @@ export function MeridianIcon({
   if (!name) return null;
 
   // Lucide exports are named in PascalCase. Look up the icon dynamically.
-  const Icon = (Icons as Record<string, React.ComponentType<LucideProps>>)[name];
+  // Cast through unknown: lucide-react v1.x uses IconComponentProps internally
+  // which requires `iconNode` — our minimal render props are a safe subset.
+  type IconComponent = React.ComponentType<{
+    size?: number;
+    strokeWidth?: number;
+    className?: string;
+    style?: React.CSSProperties;
+    'aria-hidden'?: boolean | 'true' | 'false';
+  }>;
+  const IconMap = Icons as unknown as Record<string, IconComponent | undefined>;
+  const Icon = IconMap[name];
 
   if (!Icon) {
     // Graceful degradation — unknown icon name, render nothing.
