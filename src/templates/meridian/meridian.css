@@ -1334,8 +1334,8 @@
 /* Split Hero — image left or right, text on opposite side */
 .mer-hero-split {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  min-height: calc(90vh - var(--mer-header-h));
+  grid-template-columns: 5fr 7fr;
+  height: calc(100vh - var(--mer-header-h));
   overflow: hidden;
 }
 
@@ -1343,7 +1343,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: var(--mer-spacing-5xl) var(--mer-spacing-3xl);
+  padding: var(--mer-spacing-4xl) var(--mer-spacing-3xl);
 }
 
 .mer-hero-split-media {
