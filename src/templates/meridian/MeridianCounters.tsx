@@ -42,6 +42,12 @@ export default function MeridianCounters({ targetValue, duration = 1400, classNa
   const { numeric, suffix } = parseTarget(targetValue);
 
   useEffect(() => {
+    // Reset animation state so the counter re-plays if targetValue changes
+    // (e.g. switching between authority and metrics variants which both render
+    // counters — React may reuse the component instance, leaving hasAnimated=true).
+    hasAnimated.current = false;
+    setDisplay('0');
+
     const el = ref.current;
     if (!el) return;
 

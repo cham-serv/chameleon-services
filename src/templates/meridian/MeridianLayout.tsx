@@ -18,6 +18,7 @@ import MeridianHeader from './MeridianHeader';
 import MeridianFooter from './MeridianFooter';
 import { MeridianScrollReveal } from './MeridianScrollReveal';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
 export default function MeridianLayout({ config, children }: LayoutProps) {
   const pc = config.pageConfig;
@@ -57,8 +58,11 @@ export default function MeridianLayout({ config, children }: LayoutProps) {
       {/* Footer — server component */}
       <MeridianFooter config={config} />
 
-      {/* Scroll reveal observer — activates data-reveal animations */}
-      <MeridianScrollReveal />
+      {/* Scroll reveal observer — activates data-reveal animations.
+          Suspense required because MeridianScrollReveal uses useSearchParams(). */}
+      <Suspense fallback={null}>
+        <MeridianScrollReveal />
+      </Suspense>
     </>
   );
 }

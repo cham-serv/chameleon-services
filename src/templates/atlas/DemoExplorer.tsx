@@ -60,11 +60,21 @@ const PRESET_PALETTES: { label: string; primary: string; secondary: string; acce
  * In production these are never applied — real tenants use their own colours.
  */
 const VARIANT_PALETTES: Record<string, { primary: string; secondary: string; accent: string; bgColour: string; textColour: string }> = {
+  // ── Atlas variants ──────────────────────────────────────────────────────────
   storefront: { primary: '#2d6a4f', secondary: '#52b788', accent: '#f59e0b',  bgColour: '#ffffff', textColour: '#1b1b1b' },
   editorial:  { primary: '#0369a1', secondary: '#38bdf8', accent: '#f97316',  bgColour: '#fafaf9', textColour: '#1c1917' },
   modern:     { primary: '#4f46e5', secondary: '#7c3aed', accent: '#06b6d4',  bgColour: '#0a0f1e', textColour: '#e2e8f0' },
   bold:       { primary: '#1a1a2e', secondary: '#e94560', accent: '#f5a623',  bgColour: '#0d0d1a', textColour: '#f8fafc' },
   minimalist: { primary: '#1c1917', secondary: '#57534e', accent: '#16a34a',  bgColour: '#fafaf9', textColour: '#1c1917' },
+  // ── Meridian home variants ───────────────────────────────────────────────────
+  // split-hero: classic professional services — navy + gold
+  'split-hero':  { primary: '#1a2b5e', secondary: '#3b6cb7', accent: '#c9a84c', bgColour: '#ffffff', textColour: '#1b1b1b' },
+  // full-hero: cinematic full-bleed — deep slate + teal accent
+  'full-hero':   { primary: '#0f2027', secondary: '#203a43', accent: '#2c8c7c', bgColour: '#0f2027', textColour: '#e8edf2' },
+  // authority: pure typographic big-law — charcoal + bronze
+  'authority':   { primary: '#1c1c1e', secondary: '#3a3a3c', accent: '#9b7f4a', bgColour: '#fafaf8', textColour: '#1c1c1e' },
+  // metrics: modern numbers-led — midnight blue + electric teal
+  'metrics':     { primary: '#0b1f4a', secondary: '#1d4e89', accent: '#00c6b8', bgColour: '#ffffff', textColour: '#0b1f4a' },
 };
 
 // - Font Pair Presets -
