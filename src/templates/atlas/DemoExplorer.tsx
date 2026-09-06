@@ -110,11 +110,14 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // Dark mode toggle — controls data-scheme on <html>
-  const [isDark, setIsDark] = useState(false);
+  // Dark mode toggle — null = not yet synced; prevents stomping the server-rendered data-scheme
+  const [isDark, setIsDark] = useState<boolean | null>(null);
 
-  // Sync data-scheme to <html> whenever isDark changes
+  // Only write data-scheme once isDark is initialised from the DOM (D1+D2 fix)
+  // Returning early on null preserves the server-rendered data-scheme="dark" value
+  // until the mount effect below has had a chance to read and sync it.
   useEffect(() => {
+    if (isDark === null) return;
     document.documentElement.setAttribute('data-scheme', isDark ? 'dark' : 'light');
   }, [isDark]);
 
@@ -233,9 +236,11 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
   //   2. Auto-open if _de=1 is in the URL (persisted via navigateToPage).
   //   3. Show the hint arrow for first-time visitors; auto-clear it after 5s (matching CSS).
   useEffect(() => {
-    // 0. Sync dark mode toggle to current data-scheme on <html>
+    // 0. Read the server-rendered data-scheme to initialise isDark (D1+D2 fix).
+    //    This must run before the scheme-write effect can overwrite the server value.
+    //    Setting isDark here triggers the effect above which then confirms the scheme.
     const currentScheme = document.documentElement.getAttribute('data-scheme');
-    if (currentScheme === 'dark') setIsDark(true);
+    setIsDark(currentScheme === 'dark');
 
     // 1. Sync brand state to real CSS vars
     const style = getComputedStyle(document.documentElement);
@@ -521,10 +526,10 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
                 <span className="demo-explorer-scheme-label">Dark Mode</span>
                 <button
                   className="demo-explorer-scheme-toggle"
-                  data-on={isDark}
-                  onClick={() => setIsDark((v) => !v)}
+                  data-on={isDark === true}
+                  onClick={() => setIsDark((v) => !(v ?? false))}
                   role="switch"
-                  aria-checked={isDark}
+                  aria-checked={isDark ?? false}
                   aria-label="Toggle dark mode"
                 >
                   <span className="demo-explorer-scheme-thumb" />
