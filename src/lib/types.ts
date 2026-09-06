@@ -160,6 +160,7 @@ export type PageConfig = {
   colourText?: string | null;
   colourHeading?: string | null;
   buttonStyle?: 'filled' | 'outline' | 'pill' | 'soft' | null;
+  colourScheme?: 'light' | 'dark' | 'auto' | null;
   fontDisplay?: string | null;
   fontHeading?: string | null;
   fontBody?: string | null;
