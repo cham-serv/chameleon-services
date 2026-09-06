@@ -59,6 +59,42 @@ const DEMO_METRICS: MetricItem[] = [
   { value: '12',     label: 'Practice Areas' },
 ];
 
+const DEMO_STORY_PARAGRAPHS = [
+  'Founded in 1994, our firm has spent over three decades building a reputation for rigorous legal work and genuine client partnership. What began as a two-partner boutique in Cape Town has grown into a multi-disciplinary practice trusted by individuals, family businesses, and listed companies alike.',
+  'We believe the best legal counsel is not just technically correct — it is strategically sound and clearly communicated. Our attorneys combine deep specialist knowledge with the kind of commercial pragmatism that turns complex problems into workable solutions.',
+  'Independence matters to us. We remain owner-managed because we believe it makes us better advisors: faster, more decisive, and always focused on what is right for you rather than what is right for the firm.',
+].join('\n\n');
+
+// Simple plain-text story used as demo fallback when no Lexical richText is available.
+// Rendered as a paragraph block rather than through RichTextRenderer.
+const DEMO_STORY_TEXT = DEMO_STORY_PARAGRAPHS;
+
+const DEMO_TEAM: TeamMember[] = [
+  {
+    id: 1, slug: 'sarah-van-der-berg', name: 'Sarah van der Berg',
+    role: 'Managing Partner', published: true, createdAt: '', updatedAt: '',
+    bio: 'Sarah leads our corporate and M\u0026A practice with 28 years of experience advising on complex cross-border transactions. She is ranked in Chambers Africa and recognised in Who\u2019s Who Legal.',
+  },
+  {
+    id: 2, slug: 'james-oduya', name: 'James Oduya',
+    role: 'Partner — Litigation', published: true, createdAt: '', updatedAt: '',
+    bio: 'James heads our dispute resolution division. He has appeared before the Supreme Court of Appeal and the Constitutional Court, and is widely regarded as one of the foremost commercial litigators of his generation.',
+  },
+  {
+    id: 3, slug: 'priya-naidoo', name: 'Priya Naidoo',
+    role: 'Partner — Tax Advisory', published: true, createdAt: '', updatedAt: '',
+    bio: 'Priya leads our tax practice, specialising in international tax structuring, transfer pricing, and SARS dispute resolution. She previously served as Senior Counsel at the South African Revenue Service.',
+  },
+  {
+    id: 4, slug: 'michael-le-roux', name: 'Michael le Roux',
+    role: 'Senior Associate — Property Law', published: true, createdAt: '', updatedAt: '',
+  },
+  {
+    id: 5, slug: 'amara-diallo', name: 'Amara Diallo',
+    role: 'Associate — Family Law', published: true, createdAt: '', updatedAt: '',
+  },
+];
+
 // ─── Shared helpers ────────────────────────────────────────────────────────
 
 function ArrowIcon() {
@@ -270,17 +306,26 @@ function MetricsStrip({ metrics }: { metrics: MetricItem[] }) {
   );
 }
 
-function StorySection({ story, image, headline }: { story?: Record<string, unknown> | null; image?: { url: string; alt?: string } | null; headline: string }) {
-  if (!story && !image) return null;
+function StorySection({ story, storyText, image, headline }: {
+  story?: Record<string, unknown> | null;
+  storyText?: string | null;
+  image?: { url: string; alt?: string } | null;
+  headline: string;
+}) {
+  const hasContent = story || storyText || image;
+  if (!hasContent) return null;
   return (
     <section className="mer-section">
       <div className="mer-container">
         <div className={image ? 'mer-about-story' : 'mer-about-story mer-about-story--no-image'}>
-          {!!story && (
-            <div className="mer-prose" data-reveal="up">
-              <RichTextRenderer content={story} />
-            </div>
-          )}
+          <div className="mer-prose" data-reveal="up">
+            {!!story
+              ? <RichTextRenderer content={story} />
+              : storyText
+                  ? storyText.split('\n\n').map((p, i) => <p key={i}>{p}</p>)
+                  : null
+            }
+          </div>
           {image && (
             <div className="mer-img-zoom" style={{ borderRadius: 'var(--mer-radius-xl)', overflow: 'hidden' }} data-reveal="right">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -361,15 +406,16 @@ function HeritageMilestones({ milestones }: { milestones: MilestoneItem[] }) {
 
 // ─── Variant: standard ────────────────────────────────────────────────────
 
-function StandardVariant({ headline, intro, story, image, values, milestones, featuredTeam }: {
+function StandardVariant({ headline, intro, story, storyText, image, values, milestones, featuredTeam }: {
   headline: string; intro: string;
-  story?: Record<string, unknown> | null; image?: { url: string; alt?: string } | null;
+  story?: Record<string, unknown> | null; storyText?: string | null;
+  image?: { url: string; alt?: string } | null;
   values: ValueItem[]; milestones: MilestoneItem[]; featuredTeam: TeamMember[];
 }) {
   return (
     <>
       <HeroSection headline={headline} intro={intro} />
-      <StorySection story={story} image={image} headline={headline} />
+      <StorySection story={story} storyText={storyText} image={image} headline={headline} />
       <ValuesGrid values={values} />
       <StandardMilestones milestones={milestones} />
 
@@ -509,20 +555,22 @@ export default async function AboutPage({ config, variant: variantProp }: PagePr
   const settings   = config.settings;
 
   // Variant — prefer the URL/demo-explorer prop, then the CMS setting, then default
-  const variant = variantProp ?? (pc as any)?.aboutVariant ?? 'standard';
+  const variant = variantProp ?? pc?.aboutVariant ?? 'standard';
 
   const headline   = pc?.aboutHeadline ?? 'Our Firm';
   const intro      = pc?.aboutIntro    ?? `${settings?.siteName ?? 'We'} have been delivering trusted professional advice for over three decades. Built on integrity, driven by expertise.`;
-  const values     = ((pc as any)?.aboutValues     ?? DEMO_VALUES)     as ValueItem[];
-  const milestones = ((pc as any)?.aboutMilestones ?? DEMO_MILESTONES) as MilestoneItem[];
-  const metrics    = ((pc as any)?.aboutMetrics    ?? DEMO_METRICS)    as MetricItem[];
-  const logos      = ((pc as any)?.aboutClientLogos ?? [])             as LogoItem[];
+  const values     = (pc?.aboutValues     ?? DEMO_VALUES)     as ValueItem[];
+  const milestones = (pc?.aboutMilestones ?? DEMO_MILESTONES) as MilestoneItem[];
+  const metrics    = (pc?.aboutMetrics    ?? DEMO_METRICS)    as MetricItem[];
+  const logos      = (pc?.aboutClientLogos ?? [])             as LogoItem[];
   const aboutImage = pc?.aboutImage ?? null;
   const story      = pc?.aboutStory  ?? null;
 
-  // Featured team members
+  // Featured team members — fall back to demo data so leadership variant
+  // never renders as a near-empty page in the demo explorer.
   const teamRes      = await getTeamMembers({ tenant: tenantSlug, featured: true, limit: 7 });
-  const featuredTeam = (teamRes?.docs ?? []).filter((m) => m.published !== false);
+  const liveFeatured = (teamRes?.docs ?? []).filter((m) => m.published !== false);
+  const featuredTeam = liveFeatured.length > 0 ? liveFeatured : DEMO_TEAM;
 
   switch (variant) {
     case 'leadership':
@@ -541,6 +589,7 @@ export default async function AboutPage({ config, variant: variantProp }: PagePr
           headline={headline}
           intro={intro}
           story={story as Record<string, unknown> | null}
+          storyText={story ? null : DEMO_STORY_TEXT}
           image={aboutImage}
           values={values}
           milestones={milestones}

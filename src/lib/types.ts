@@ -442,12 +442,15 @@ export type MeridianPageConfig = {
   teamSeoDescription?: string | null;
 
   // About page
+  aboutVariant?: 'standard' | 'leadership' | 'heritage' | 'impact' | null;
   aboutHeadline?: string | null;
   aboutIntro?: string | null;
   aboutStory?: unknown; // Lexical richText JSON
   aboutImage?: { url: string; alt?: string } | null;
   aboutValues?: Array<{ title: string; description: string; icon?: string }> | null;
   aboutMilestones?: Array<{ year: string; event: string }> | null;
+  aboutMetrics?: Array<{ value: string; label: string }> | null;
+  aboutClientLogos?: Array<{ name: string; logo: { url: string } | null }> | null;
   aboutSeoTitle?: string | null;
   aboutSeoDescription?: string | null;
 
