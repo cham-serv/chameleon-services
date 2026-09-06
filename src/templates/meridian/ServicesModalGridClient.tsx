@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 /**
  * ServicesModalGridClient
@@ -12,6 +12,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import type { Service, Department } from '@/lib/api';
+import { MeridianIcon } from './MeridianIcon';
 import MeridianServiceModal from './MeridianServiceModal';
 
 interface Props {
@@ -30,7 +31,6 @@ function ArrowIcon() {
   );
 }
 
-function getServiceIcon(svc: Service) { return svc.icon ?? '⚖️'; }
 
 export default function ModalGridClient({ services, departments, headline, subheadline, tenantSlug }: Props) {
   const [activeDept, setActiveDept] = useState<string>('all');
@@ -124,7 +124,11 @@ export default function ModalGridClient({ services, departments, headline, subhe
                     aria-label={`View details for ${svc.title}`}
                     onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleCardClick(svc); } }}
                   >
-                    <div className="mer-service-card-icon" aria-hidden="true">{getServiceIcon(svc)}</div>
+                    {svc.icon && (
+                      <div className="mer-service-card-icon" aria-hidden="true">
+                        <MeridianIcon name={svc.icon} size={24} strokeWidth={1.5} />
+                      </div>
+                    )}
                     {dept && <span className="mer-tag mer-tag-dept" style={{ marginBottom: 'var(--mer-spacing-sm)', display: 'inline-flex' }}>{dept.name}</span>}
                     {svc.badge && <span className="mer-badge mer-badge-accent" style={{ marginBottom: 'var(--mer-spacing-sm)', display: 'inline-flex', marginLeft: dept ? 'var(--mer-spacing-xs)' : 0 }}>{svc.badge}</span>}
                     <div className="mer-service-card-title">{svc.title}</div>

@@ -14,6 +14,7 @@ import type { PageProps } from '@/lib/types';
 import { MeridianIcon } from './MeridianIcon';
 import { getServices, getDepartments, type Service, type Department } from '@/lib/api';
 import ModalGridClient from './ServicesModalGridClient';
+import StickyScrollNavClient from './StickyScrollNavClient';
 
 // ─── Demo fallback ────────────────────────────────────────────────────────
 
@@ -137,23 +138,26 @@ function StickyScrollVariant({ services, headline, subheadline }: {
 
       <section className="mer-section">
         <div className="mer-container">
+
+          {/* S3: Mobile-only horizontal tab strip — visible ≤1024px, hidden on desktop via CSS.
+              IntersectionObserver in StickyScrollNavClient drives data-active on these too. */}
+          <nav className="mer-sticky-mobile-tabs" aria-label="Jump to service">
+            {services.map((svc, i) => (
+              <a
+                key={svc.id}
+                href={`#service-${svc.slug}`}
+                className="mer-sticky-mobile-tab"
+                data-nav-slug={svc.slug}
+                data-active={i === 0 ? 'true' : 'false'}
+              >
+                {svc.title}
+              </a>
+            ))}
+          </nav>
+
           <div className="mer-sticky-scroll">
-            {/* Sticky sidebar nav */}
-            <nav className="mer-sticky-nav" aria-label="Services navigation">
-              <ul className="mer-sticky-nav-list">
-                {services.map((svc, i) => (
-                  <li key={svc.id}>
-                    <a
-                      href={`#service-${svc.slug}`}
-                      className="mer-sticky-nav-item"
-                      data-active={i === 0 ? 'true' : 'false'}
-                    >
-                      {svc.title}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
+            {/* S2: Client component replaces the static nav — wires up IntersectionObserver */}
+            <StickyScrollNavClient services={services} />
 
             {/* Scrolling detail sections */}
             <div className="mer-sticky-content">
@@ -174,7 +178,12 @@ function StickyScrollVariant({ services, headline, subheadline }: {
                       <img src={heroUrl} alt={svc.title} style={{ width: '100%', aspectRatio: '16/7', objectFit: 'cover', borderRadius: 'var(--mer-radius-lg)', marginBottom: 'var(--mer-spacing-xl)' }} />
                     )}
 
-                    {svc.shortDesc && <p className="mer-body-lg" style={{ marginBottom: 'var(--mer-spacing-xl)', opacity: 0.85 }}>{svc.shortDesc}</p>}
+                    {/* S4: fall back to shortDescription if shortDesc is absent */}
+                    {(svc.shortDesc ?? svc.shortDescription) && (
+                      <p className="mer-body-lg" style={{ marginBottom: 'var(--mer-spacing-xl)', opacity: 0.85 }}>
+                        {svc.shortDesc ?? svc.shortDescription}
+                      </p>
+                    )}
 
                     {(svc.processSteps ?? []).length > 0 && (
                       <div style={{ marginBottom: 'var(--mer-spacing-xl)' }}>

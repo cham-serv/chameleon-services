@@ -1846,7 +1846,48 @@
 
 @media (max-width: 1024px) {
   .mer-sticky-scroll { grid-template-columns: 1fr; }
-  .mer-sticky-nav    { display: none; } /* Replaced by scroll-linked tabs on mobile */
+  .mer-sticky-nav    { display: none; } /* Desktop sidebar hidden — mobile tab strip takes over */
+}
+
+/* Mobile horizontal tab strip for sticky-scroll variant
+   Rendered above the content on ≤1024px; hidden on larger screens.
+   IntersectionObserver in StickyScrollNavClient drives data-active on these. */
+.mer-sticky-mobile-tabs {
+  display: none;
+  overflow-x: auto;
+  gap: var(--mer-spacing-sm);
+  padding-bottom: var(--mer-spacing-md);
+  margin-bottom: var(--mer-spacing-xl);
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.mer-sticky-mobile-tabs::-webkit-scrollbar { display: none; }
+
+@media (max-width: 1024px) {
+  .mer-sticky-mobile-tabs { display: flex; }
+}
+
+.mer-sticky-mobile-tab {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding: 0.5em 1.25em;
+  border-radius: var(--mer-radius-full);
+  border: 1.5px solid var(--mer-border-color);
+  font-family: var(--font-body, inherit);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: color-mix(in srgb, var(--brand-text, #444) 70%, transparent);
+  text-decoration: none;
+  transition: all var(--mer-transition);
+}
+
+.mer-sticky-mobile-tab:hover,
+.mer-sticky-mobile-tab[data-active="true"] {
+  background: var(--brand-primary, #1a2b5e);
+  color: #fff;
+  border-color: var(--brand-primary, #1a2b5e);
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
