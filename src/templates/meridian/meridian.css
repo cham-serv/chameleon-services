@@ -1354,7 +1354,11 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: top center;
+  /* 50% horizontal keeps the subject centred.
+     10% vertical gives a small breathing margin so a portrait subject's
+     face/head isn't anchored hard against the very top edge of the container.
+     Adjust upward (5%) if images have lots of empty space at top. */
+  object-position: 50% 10%;
   display: block;
 }
 

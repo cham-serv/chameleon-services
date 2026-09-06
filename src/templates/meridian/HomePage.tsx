@@ -234,7 +234,7 @@ function SplitHeroVariant({ config, services, testimonials }: { config: PageProp
           </div>
         </div>
 
-        <div className="mer-hero-split-media mer-img-zoom">
+        <div className="mer-hero-split-media">
           {heroImage ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
