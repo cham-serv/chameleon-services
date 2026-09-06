@@ -185,7 +185,7 @@ function buildBrandTokens(settings: {
     `--brand-accent: ${a}`,
     `--brand-background: ${bg}`,
     `--brand-text: ${text}`,
-    `--brand-surface: color-mix(in oklch, ${bg} 95%, ${p} 5%)`,
+    `--brand-surface: color-mix(in srgb, var(--brand-background, ${bg}) 95%, var(--brand-primary, ${p}) 5%)`,
   ];
 
   // Only emit --brand-heading when the tenant has explicitly set a heading colour.

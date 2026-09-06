@@ -178,13 +178,27 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
 
   useEffect(() => {
     const root = document.documentElement;
+
+    // Brand identity — always write inline so colour pickers take immediate effect.
     root.style.setProperty('--brand-primary',    brand.primary);
     root.style.setProperty('--brand-secondary',  brand.secondary);
     root.style.setProperty('--brand-accent',     brand.accent);
-    root.style.setProperty('--brand-text',       brand.textColour);
-    root.style.setProperty('--brand-heading',    brand.headingColour);
-    root.style.setProperty('--brand-background', brand.bgColour);
     document.body.setAttribute('data-btn-style', brand.buttonStyle);
+
+    // Theme colours (background / text / heading):
+    // Inline style.setProperty has HIGHER precedence than any CSS rule, including
+    // [data-scheme="dark"] in meridian.css. In dark mode we must REMOVE these
+    // inline overrides so the CSS cascade can apply the dark mode variables.
+    // In light mode we SET them so the colour pickers work as expected.
+    if (isDark === true) {
+      root.style.removeProperty('--brand-background');
+      root.style.removeProperty('--brand-text');
+      root.style.removeProperty('--brand-heading');
+    } else {
+      root.style.setProperty('--brand-text',       brand.textColour);
+      root.style.setProperty('--brand-heading',    brand.headingColour);
+      root.style.setProperty('--brand-background', brand.bgColour);
+    }
 
     // Font preview + body-level colour overrides injected as a <style> element.
     // We use a <style> block (not just CSS vars) so that:
@@ -209,13 +223,15 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
       : hStack;
     el.textContent = [
       `:root { --font-display: ${dStack}; --font-heading: ${hStack}; --font-body: ${bStack}; }`,
-      // Cascade base: any element that inherits colour from body picks this up
+      // Cascade base: any element that inherits colour from body picks this up.
+      // Uses var() so it responds to both dark mode and inline overrides above.
       `html, body {`,
       `  background-color: var(--brand-background, #ffffff);`,
       `  color: var(--brand-text, #1b1b1b);`,
       `}`,
     ].join('\n');
-  }, [brand]);
+  // isDark in deps: effect must re-run on toggle to remove/restore inline overrides
+  }, [brand, isDark]);
 
   const updateBrand = useCallback((patch: Partial<BrandPreview>) => {
     setBrand((prev) => ({ ...prev, ...patch }));
