@@ -2589,6 +2589,120 @@
   }
 }
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   BLOG — TOPIC KNOWLEDGE GRAPH CARDS
+   Shown when "All Topics" is active on the BlogTopicFilterClient.
+   Each card is a topic entry-point — clicking activates the topic filter.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.mer-blog-topic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--mer-spacing-lg);
+  margin-bottom: var(--mer-spacing-3xl);
+}
+
+.mer-blog-topic-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: var(--mer-spacing-xl);
+  background: var(--brand-surface, #fff);
+  border: 1.5px solid var(--mer-border-color);
+  border-radius: var(--mer-radius-lg);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color var(--mer-transition), box-shadow var(--mer-transition), transform var(--mer-transition);
+  position: relative;
+  overflow: hidden;
+  /* Reset button defaults */
+  -webkit-appearance: none;
+  appearance: none;
+  font-family: inherit;
+  width: 100%;
+}
+
+/* Accent line that sweeps in on hover */
+.mer-blog-topic-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--brand-primary, #1a2b5e);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--mer-transition);
+}
+
+.mer-blog-topic-card:hover::before,
+.mer-blog-topic-card:focus-visible::before {
+  transform: scaleX(1);
+}
+
+.mer-blog-topic-card:hover,
+.mer-blog-topic-card:focus-visible {
+  border-color: color-mix(in srgb, var(--brand-primary, #1a2b5e) 40%, transparent);
+  box-shadow: var(--mer-shadow-md);
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.mer-blog-topic-card-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.375em;
+  margin-bottom: var(--mer-spacing-md);
+}
+
+.mer-blog-topic-card-count {
+  font-family: var(--font-heading, inherit);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--brand-primary, #1a2b5e);
+  line-height: 1;
+}
+
+.mer-blog-topic-card-count-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: color-mix(in srgb, var(--brand-text, #444) 55%, transparent);
+}
+
+.mer-blog-topic-card-name {
+  font-family: var(--font-heading, inherit);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--brand-heading, var(--brand-text, #111));
+  margin: 0 0 var(--mer-spacing-xl) 0;
+  line-height: 1.3;
+  flex: 1;
+}
+
+.mer-blog-topic-card-cta {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--brand-primary, #1a2b5e);
+  opacity: 0.45;
+  transition: opacity var(--mer-transition), letter-spacing var(--mer-transition);
+}
+
+.mer-blog-topic-card:hover .mer-blog-topic-card-cta,
+.mer-blog-topic-card:focus-visible .mer-blog-topic-card-cta {
+  opacity: 1;
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 640px) {
+  .mer-blog-topic-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--mer-spacing-md);
+  }
+}
+
 /* About story — text + optional side image */
 .mer-about-story {
   display: grid;
