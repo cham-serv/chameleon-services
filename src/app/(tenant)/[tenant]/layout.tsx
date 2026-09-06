@@ -75,9 +75,12 @@ export async function generateMetadata({ params }: { params: Promise<{ tenant: s
     ? { icon: faviconUrl, shortcut: faviconUrl, apple: faviconUrl }
     : { icon: '/logo-icon.webp', shortcut: '/logo-icon.webp', apple: '/logo-icon.webp' };
 
+  const isDemoTenant = config?.tenant?.isDemoTenant === true;
+
   return {
     title: { default: siteName, template: `%s | ${siteName}` },
     icons,
+    ...(isDemoTenant && { robots: { index: false, follow: false } }),
   };
 }
 
@@ -125,8 +128,9 @@ export default async function TenantLayout({ children, params }: Props) {
 
   // colourScheme — resolved server-side so <html data-scheme> is set before
   // any CSS is parsed. This is the zero-flash dark mode approach.
-  // Priority: SiteSettings.colourScheme (global) — only Meridian uses this today.
-  const colourScheme = config?.settings?.colourScheme ?? 'light';
+  // Priority: SiteSettings.colourScheme (global) → MeridianSiteConfig.colourScheme
+  // (passed through tenant-config as pageConfig.colourScheme) → 'light' default.
+  const colourScheme = config?.settings?.colourScheme ?? config?.pageConfig?.colourScheme ?? 'light';
 
   return (
     <html lang="en" className={fontClasses} data-scheme={colourScheme}>
