@@ -20,6 +20,7 @@ import type { PageProps } from '@/lib/types';
 import { getArticleBySlug, getArticles } from '@/lib/api';
 import type { Article, TeamMember, MediaItem } from '@/lib/api';
 import { ContentBlocks } from '@/components/ContentBlocks';
+import { JsonLd } from '@/components/JsonLd';
 
 // ─── Helpers ───────────────────────────────────────────────────────────────
 
@@ -112,6 +113,8 @@ export default async function ResourcePage({ config, path }: PageProps) {
 
   return (
     <>
+      {/* Resource article schema from engine (Phase 2) */}
+      {(article as any)._schema && <JsonLd data={(article as any)._schema} />}
       {/* Hero image — full-width, constrained height */}
       {heroUrl && (
         <div style={{ width: '100%', overflow: 'hidden' }}>

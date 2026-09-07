@@ -15,6 +15,7 @@
 import type { Metadata, Viewport } from 'next';
 import { getFontClasses, getFontVariables } from '@/lib/fonts';
 import { fetchTenantConfig } from '@/lib/tenant';
+import { PageSchemas } from '@/components/JsonLd';
 import { DemoExplorer } from '@/templates/atlas/DemoExplorer';
 import { definition as atlasDefinition } from '@/templates/atlas/definition';
 import { definition as meridianDefinition } from '@/templates/meridian/definition';
@@ -154,6 +155,8 @@ export default async function TenantLayout({ children, params }: Props) {
           margin: 0,
         }}
       >
+        {/* Global JSON-LD schemas — engine-computed, emitted on every page */}
+        <PageSchemas global={config?.schemas?.global} />
         {children}
         {explorerRoutes && <DemoExplorer routes={explorerRoutes} basePath="" />}
       </body>

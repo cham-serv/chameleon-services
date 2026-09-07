@@ -20,6 +20,17 @@ export type TenantConfig = {
   };
   settings: SiteSettings | null;
   pageConfig: PageConfig | null;
+  /**
+   * Pre-computed JSON-LD schemas from the engine (Phase 1+).
+   * The frontend NEVER builds these — it blindly injects them as <script> tags.
+   *
+   * schemas.global[]        — emitted on every page (business entity, etc.)
+   * schemas.pages[slug][]   — emitted only on the matching page
+   */
+  schemas?: {
+    global: Record<string, unknown>[];
+    pages: Record<string, Record<string, unknown>[]>;
+  } | null;
 };
 
 export type TemplateInfo = {
@@ -68,6 +79,14 @@ export type SiteSettings = {
   socialTwitter?: string;
   socialYoutube?: string;
   socialGoogle?: string;
+  // GEO fields (Business Identity — drives schema.org @type in engine)
+  businessType?: string;
+  serviceType?: string;
+  specializations?: Array<{ area: string }>;
+  registrationNumber?: string;
+  jurisdiction?: string;
+  foundedYear?: number;
+  priceRange?: string;
   // Brand tokens
   colourPrimary?: string;
   colourSecondary?: string;

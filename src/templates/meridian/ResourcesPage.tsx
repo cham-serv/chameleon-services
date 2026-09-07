@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Meridian ResourcesPage  (variant: grid)
  *
  * Layout:
@@ -16,6 +16,7 @@ import type { PageProps } from '@/lib/types';
 import type { MeridianPageConfig } from '@/lib/types';
 import { getTopics, getArticles } from '@/lib/api';
 import type { Article, Topic, MediaItem } from '@/lib/api';
+import { PageSchemas } from '@/components/JsonLd';
 
 // ─── Demo fallback ─────────────────────────────────────────────────────────
 
@@ -87,6 +88,7 @@ export default async function ResourcesPage({ config }: PageProps) {
 
   return (
     <>
+      <PageSchemas page={config.schemas?.pages.resources} />
       {/* Hero */}
       <section className="mer-section-sm" style={{ borderBottom: '1px solid var(--mer-border-color)' }}>
         <div className="mer-container">

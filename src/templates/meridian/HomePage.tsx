@@ -15,6 +15,7 @@ import { MeridianIcon } from './MeridianIcon';
 import MeridianCounters from './MeridianCounters';
 import { getServices } from '@/lib/api';
 import type { Service } from '@/lib/api';
+import { PageSchemas } from '@/components/JsonLd';
 
 /* ─── Demo / fallback data (replaced by live data in Phase 3) ─── */
 
@@ -509,11 +510,12 @@ export default async function HomePage({ config, variant }: PageProps) {
       ? pc.homeMetricsCounters
       : DEMO_METRICS;
 
-  switch (variant) {
-    case 'full-hero':  return <FullHeroVariant  config={config} services={services} testimonials={testimonials} />;
-    case 'authority':  return <AuthorityVariant config={config} services={services} testimonials={testimonials} counters={counters} />;
-    case 'metrics':    return <MetricsVariant   config={config} services={services} testimonials={testimonials} counters={counters} />;
+  const resolvedVariant = variant ?? config.tenant?.featureConfig?.home?.variant ?? 'split-hero';
+  switch (resolvedVariant) {
+    case 'full-hero':  return <><PageSchemas page={config.schemas?.pages.home} /><FullHeroVariant  config={config} services={services} testimonials={testimonials} /></>;
+    case 'authority':  return <><PageSchemas page={config.schemas?.pages.home} /><AuthorityVariant config={config} services={services} testimonials={testimonials} counters={counters} /></>;
+    case 'metrics':    return <><PageSchemas page={config.schemas?.pages.home} /><MetricsVariant   config={config} services={services} testimonials={testimonials} counters={counters} /></>;
     case 'split-hero':
-    default:           return <SplitHeroVariant config={config} services={services} testimonials={testimonials} />;
+    default:           return <><PageSchemas page={config.schemas?.pages.home} /><SplitHeroVariant config={config} services={services} testimonials={testimonials} /></>;
   }
 }

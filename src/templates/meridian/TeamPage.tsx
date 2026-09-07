@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Meridian TeamPage
  *
  * 4 variants driven by the CMS variant selection:
@@ -18,6 +18,7 @@ import type { PageProps } from '@/lib/types';
 import type { MeridianPageConfig } from '@/lib/types';
 import { getTeamMembers, getDepartments } from '@/lib/api';
 import type { TeamMember, Department } from '@/lib/api';
+import { PageSchemas } from '@/components/JsonLd';
 import TeamDeptFilterClient from './TeamDeptFilterClient';
 
 // ─── Demo fallback ─────────────────────────────────────────────────────────
@@ -461,12 +462,12 @@ export default async function TeamPage({ config, variant }: PageProps) {
 
   switch (variant) {
     case 'portfolio':
-      return <PortfolioVariant members={members} headline={headline} subheadline={subheadline} />;
+      return <><PageSchemas page={config.schemas?.pages.team} /><PortfolioVariant members={members} headline={headline} subheadline={subheadline} /></>;
     case 'department-sections':
-      return <DepartmentSectionsVariant members={members} departments={departments} headline={headline} subheadline={subheadline} />;
+      return <><PageSchemas page={config.schemas?.pages.team} /><DepartmentSectionsVariant members={members} departments={departments} headline={headline} subheadline={subheadline} /></>;
     case 'list':
-      return <ListVariant members={members} headline={headline} subheadline={subheadline} />;
+      return <><PageSchemas page={config.schemas?.pages.team} /><ListVariant members={members} headline={headline} subheadline={subheadline} /></>;
     default: // 'grid'
-      return <GridVariant members={members} departments={departments} headline={headline} subheadline={subheadline} />;
+      return <><PageSchemas page={config.schemas?.pages.team} /><GridVariant members={members} departments={departments} headline={headline} subheadline={subheadline} /></>;
   }
 }

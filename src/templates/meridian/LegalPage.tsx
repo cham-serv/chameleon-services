@@ -13,6 +13,7 @@ import type { PageProps } from '@/lib/types';
 import { getLegalDocs } from '@/lib/api';
 import type { LegalDocs } from '@/lib/api';
 import MeridianLegalTabsClient from './MeridianLegalTabsClient';
+import { PageSchemas } from '@/components/JsonLd';
 
 // ─── Placeholder richText when no real content ─────────────────────────────
 
@@ -61,6 +62,7 @@ export default async function LegalPage({ config, searchParams }: PageProps) {
 
   return (
     <>
+      <PageSchemas page={config.schemas?.pages.legal} />
       {/* Hero */}
       <section className="mer-section-sm" style={{ borderBottom: '1px solid var(--mer-border-color)' }}>
         <div className="mer-container">

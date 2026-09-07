@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Meridian FAQsPage
  *
  * Features:
@@ -18,6 +18,7 @@ import type { MeridianPageConfig } from '@/lib/types';
 import { getFaqs } from '@/lib/api';
 import type { FAQ } from '@/lib/api';
 import FaqAccordionClient from './FaqAccordionClient';
+import { PageSchemas } from '@/components/JsonLd';
 
 // ─── Demo fallback ─────────────────────────────────────────────────────────
 
@@ -47,6 +48,7 @@ export default async function FAQsPage({ config }: PageProps) {
 
   return (
     <>
+      <PageSchemas page={config.schemas?.pages.faqs} />
       {/* Hero */}
       <section className="mer-section-sm" style={{ borderBottom: '1px solid var(--mer-border-color)' }}>
         <div className="mer-container">

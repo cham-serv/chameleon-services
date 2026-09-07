@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Meridian ServicePage (single service detail)
  *
  * Route: /services/[slug]
@@ -16,6 +16,7 @@
 
 import type { PageProps } from '@/lib/types';
 import { getServiceBySlug, getTeamMembers, type Service, type TeamMember } from '@/lib/api';
+import { JsonLd } from '@/components/JsonLd';
 
 // ─── Arrow icon ───────────────────────────────────────────────────────────
 
@@ -170,6 +171,8 @@ export default async function ServicePage({ config, path }: PageProps) {
 
   return (
     <>
+      {/* Service entity schema from engine (Phase 2) + services breadcrumb */}
+      {(service as any)._schema && <JsonLd data={(service as any)._schema} />}
       {/* Hero */}
       <section className="mer-section-sm" style={{ borderBottom: '1px solid var(--mer-border-color)' }}>
         <div className="mer-container">

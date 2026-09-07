@@ -15,6 +15,7 @@ import { MeridianIcon } from './MeridianIcon';
 import { getServices, getDepartments, type Service, type Department } from '@/lib/api';
 import ModalGridClient from './ServicesModalGridClient';
 import StickyScrollNavClient from './StickyScrollNavClient';
+import { PageSchemas } from '@/components/JsonLd';
 
 // ─── Demo fallback ────────────────────────────────────────────────────────
 
@@ -251,14 +252,13 @@ export default async function ServicesPage({ config, variant }: PageProps) {
 
   // ── Variant routing ────────────────────────────────────────────────────
   if (variant === 'sticky-scroll') {
-    return <StickyScrollVariant services={services} headline={headline} subheadline={subheadline} />;
+    return <><PageSchemas page={config.schemas?.pages.services} /><StickyScrollVariant services={services} headline={headline} subheadline={subheadline} /></>;
   }
 
   if (variant === 'modal-grid') {
-    // Client component handles interactivity
-    return <ModalGridClient services={services} departments={departments} headline={headline} subheadline={subheadline} tenantSlug={tenantSlug} />;
+    return <><PageSchemas page={config.schemas?.pages.services} /><ModalGridClient services={services} departments={departments} headline={headline} subheadline={subheadline} tenantSlug={tenantSlug} /></>;
   }
 
   // Default: cards
-  return <CardsVariant services={services} headline={headline} subheadline={subheadline} tenantSlug={tenantSlug} />;
+  return <><PageSchemas page={config.schemas?.pages.services} /><CardsVariant services={services} headline={headline} subheadline={subheadline} tenantSlug={tenantSlug} /></>;
 }

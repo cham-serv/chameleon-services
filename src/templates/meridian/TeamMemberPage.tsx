@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Meridian TeamMemberPage
  *
  * Route: /team/[slug]
@@ -20,6 +20,7 @@ import type { PageProps } from '@/lib/types';
 import { getTeamMemberBySlug } from '@/lib/api';
 import type { TeamMember, Department, Service } from '@/lib/api';
 import { RichTextRenderer } from '@/components/RichTextRenderer';
+import { JsonLd } from '@/components/JsonLd';
 
 // ─── Inline icons ──────────────────────────────────────────────────────────
 
@@ -108,6 +109,8 @@ export default async function TeamMemberPage({ config, path }: PageProps) {
 
   return (
     <>
+      {/* Person schema from engine (Phase 2) */}
+      {(member as any)._schema && <JsonLd data={(member as any)._schema} />}
       {/* ── Breadcrumb + hero ───────────────────────────────────────────── */}
       <section className="mer-section-sm" style={{ borderBottom: '1px solid var(--mer-border-color)' }}>
         <div className="mer-container">

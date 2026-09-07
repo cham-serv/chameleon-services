@@ -17,6 +17,7 @@ import type { PageProps } from '@/lib/types';
 import { getServices, getDepartments, getTeamMembers } from '@/lib/api';
 import type { MeridianPageConfig } from '@/lib/types';
 import MeridianContactForm from './MeridianContactForm';
+import { PageSchemas } from '@/components/JsonLd';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
 
@@ -271,8 +272,12 @@ async function SplitImageVariant({ config }: { config: any }) {
 // ─── Root export ──────────────────────────────────────────────────────────
 
 export default async function ContactPage({ config, variant }: PageProps) {
-  if (variant === 'split-image') {
-    return <SplitImageVariant config={config} />;
-  }
-  return <MinimalVariant config={config} />;
+  return (
+    <>
+      <PageSchemas page={config.schemas?.pages.contact} />
+      {variant === 'split-image'
+        ? <SplitImageVariant config={config} />
+        : <MinimalVariant config={config} />}
+    </>
+  );
 }

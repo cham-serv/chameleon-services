@@ -18,6 +18,7 @@ import type { MeridianPageConfig } from '@/lib/types';
 import { getArticles } from '@/lib/api';
 import type { Article, TeamMember, MediaItem } from '@/lib/api';
 import BlogTopicFilterClient from './BlogTopicFilterClient';
+import { PageSchemas } from '@/components/JsonLd';
 
 // --- Demo fallback articles (with topic tags for the knowledge graph) --------
 
@@ -134,6 +135,7 @@ export default async function BlogPage({ config }: PageProps) {
 
   return (
     <>
+      <PageSchemas page={config.schemas?.pages.blog} />
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section
         className="mer-section-sm"

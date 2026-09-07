@@ -18,6 +18,7 @@ import type { PageProps } from '@/lib/types';
 import { getArticleBySlug, getArticles } from '@/lib/api';
 import type { Article, TeamMember, MediaItem } from '@/lib/api';
 import { ContentBlocks } from '@/components/ContentBlocks';
+import { JsonLd } from '@/components/JsonLd';
 
 // ─── Sub-components ────────────────────────────────────────────────────────
 
@@ -130,6 +131,8 @@ export default async function BlogPostPage({ config, path }: PageProps) {
 
   return (
     <>
+      {/* Article schema from engine (Phase 2) */}
+      {(article as any)._schema && <JsonLd data={(article as any)._schema} />}
       {/* Hero image */}
       {heroUrl && (
         <div style={{ width: '100%', maxHeight: '50vh', overflow: 'hidden', position: 'relative' }}>

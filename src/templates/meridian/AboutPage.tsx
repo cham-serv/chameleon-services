@@ -24,6 +24,7 @@ import { getTeamMembers } from '@/lib/api';
 import type { TeamMember } from '@/lib/api';
 import { RichTextRenderer } from '@/components/RichTextRenderer';
 import MeridianCounters from './MeridianCounters';
+import { PageSchemas } from '@/components/JsonLd';
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
@@ -574,27 +575,30 @@ export default async function AboutPage({ config, variant: variantProp }: PagePr
 
   switch (variant) {
     case 'leadership':
-      return <LeadershipVariant headline={headline} intro={intro} values={values} featuredTeam={featuredTeam} />;
+      return <><PageSchemas page={config.schemas?.pages.about} /><LeadershipVariant headline={headline} intro={intro} values={values} featuredTeam={featuredTeam} /></>;
 
     case 'heritage':
-      return <HeritageVariant headline={headline} intro={intro} story={story as Record<string, unknown> | null} milestones={milestones} logos={logos} />;
+      return <><PageSchemas page={config.schemas?.pages.about} /><HeritageVariant headline={headline} intro={intro} story={story as Record<string, unknown> | null} milestones={milestones} logos={logos} /></>;
 
     case 'impact':
-      return <ImpactVariant headline={headline} intro={intro} metrics={metrics} values={values} logos={logos} story={story as Record<string, unknown> | null} />;
+      return <><PageSchemas page={config.schemas?.pages.about} /><ImpactVariant headline={headline} intro={intro} metrics={metrics} values={values} logos={logos} story={story as Record<string, unknown> | null} /></>;
 
     case 'standard':
     default:
       return (
-        <StandardVariant
-          headline={headline}
-          intro={intro}
-          story={story as Record<string, unknown> | null}
-          storyText={story ? null : DEMO_STORY_TEXT}
-          image={aboutImage}
-          values={values}
-          milestones={milestones}
-          featuredTeam={featuredTeam}
-        />
+        <>
+          <PageSchemas page={config.schemas?.pages.about} />
+          <StandardVariant
+            headline={headline}
+            intro={intro}
+            story={story as Record<string, unknown> | null}
+            storyText={story ? null : DEMO_STORY_TEXT}
+            image={aboutImage}
+            values={values}
+            milestones={milestones}
+            featuredTeam={featuredTeam}
+          />
+        </>
       );
   }
 }
