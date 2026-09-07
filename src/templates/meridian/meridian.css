@@ -1002,7 +1002,7 @@
   height: clamp(40px, 8vw, 64px);
   width: auto;
   display: block;
-  min-width: 120px;
+  /* No min-width — logo scales from natural aspect ratio. Upload a wide logo if needed. */
 }
 
 .mer-header-nav {

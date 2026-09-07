@@ -51,8 +51,8 @@ export default function MeridianHeader({ config, transparent = false }: Props) {
   if (fc.resources?.enabled) navLinks.push({ href: '/resources', label: 'Resources' });
   if (fc.faqs?.enabled)      navLinks.push({ href: '/faqs',      label: 'FAQs' });
 
-  const logoUrl    = config.pageConfig?.logo?.url ?? config.settings?.logo?.url ?? null;
-  const logoAlt    = (config.pageConfig?.logo as { alt?: string } | null)?.alt ?? siteName;
+  const logoUrl = config.settings?.logo?.url ?? null;
+  const logoAlt = config.settings?.logo?.alt ?? siteName;
   const ctaLabel   = (config.pageConfig as any)?.homeCta1Text ?? 'Get in Touch';
 
   const contactEnabled = fc.contact?.enabled;
@@ -74,9 +74,6 @@ export default function MeridianHeader({ config, transparent = false }: Props) {
                 src={logoUrl}
                 alt={logoAlt}
                 className="mer-header-logo-img"
-                width={180}
-                height={48}
-                // eslint-disable-next-line react/no-unknown-property
                 fetchPriority="high"
               />
             ) : (
