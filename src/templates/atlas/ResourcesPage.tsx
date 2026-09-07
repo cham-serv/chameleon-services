@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Atlas ResourcesPage - Server Component
  *
  * Topic Directory page - the knowledge graph entry point.
@@ -18,7 +18,7 @@ import React from "react";
 import type { PageProps } from "@/lib/types";
 import { getTopics, getArticles, type Topic, type Article, type MediaItem } from "@/lib/api";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { JsonLd } from "@/components/JsonLd";
+import { PageSchemas } from "@/components/JsonLd";
 
 // - Helpers -
 
@@ -66,38 +66,10 @@ export default async function ResourcesPage({ config, variant, noCache }: PagePr
 
   const breadcrumbs = [{ label: "Home", href: "/" }, { label: "Resources" }];
 
-  // CollectionPage JSON-LD - all three variants share this schema
-  const collectionSchema: Record<string, unknown> = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    name: `Resource Directory - ${siteName}`,
-    description: subheadline,
-    url: `${siteUrl}/resources`,
-    speakable: {
-      "@type": "SpeakableSpecification",
-      cssSelector: [".geo-speakable"],
-    },
-    ...(topics.length > 0 && {
-      hasPart: {
-        "@type": "ItemList",
-        numberOfItems: topics.length,
-        itemListElement: topics.map((topic, i) => ({
-          "@type": "ListItem",
-          position: i + 1,
-          item: {
-            "@type": "CollectionPage",
-            name: topic.name,
-            url: `${siteUrl}/resources/${topic.slug}`,
-            ...(topic.description || topic.shortDescription
-              ? { description: topic.description || topic.shortDescription }
-              : {}),
-          },
-        })),
-      },
-    }),
-  };
+  // Engine-computed schemas — resources CollectionPage, WebPage, Breadcrumb
+  const schemasNode = <PageSchemas page={config.schemas?.pages.resources} />;
 
-  const renderProps = { topics, recentArticles, headline, subheadline, breadcrumbs, siteUrl, collectionSchema };
+  const renderProps = { topics, recentArticles, headline, subheadline, breadcrumbs, siteUrl, schemasNode };
 
   switch (variant) {
     case "grid":     return renderGrid(renderProps);
@@ -116,15 +88,15 @@ type RenderProps = {
   subheadline: string;
   breadcrumbs: { label: string; href?: string }[];
   siteUrl: string;
-  collectionSchema: Record<string, unknown>;
+  schemasNode: React.ReactNode;
 };
 
 // - Render: Directory (F&T-inspired split layout) -
 
-function renderDirectory({ topics, headline, subheadline, breadcrumbs, siteUrl, collectionSchema }: RenderProps) {
+function renderDirectory({ topics, headline, subheadline, breadcrumbs, siteUrl, schemasNode }: RenderProps) {
   return (
     <div data-variant="directory">
-      <JsonLd data={collectionSchema} />
+      {schemasNode}
       <div className="atlas-container" style={{ paddingTop: "1.5rem", paddingBottom: "4rem" }}>
         <Breadcrumbs items={breadcrumbs} baseUrl={siteUrl} />
 
@@ -212,10 +184,10 @@ function renderDirectory({ topics, headline, subheadline, breadcrumbs, siteUrl, 
 
 // - Render: Grid (Card grid) -
 
-function renderGrid({ topics, headline, subheadline, breadcrumbs, siteUrl, collectionSchema }: RenderProps) {
+function renderGrid({ topics, headline, subheadline, breadcrumbs, siteUrl, schemasNode }: RenderProps) {
   return (
     <div data-variant="grid">
-      <JsonLd data={collectionSchema} />
+      {schemasNode}
       <div className="atlas-container atlas-section-sm">
         <Breadcrumbs items={breadcrumbs} baseUrl={siteUrl} />
 
@@ -267,14 +239,14 @@ function renderGrid({ topics, headline, subheadline, breadcrumbs, siteUrl, colle
 
 // - Render: Magazine (Featured hero + article feed) -
 
-function renderMagazine({ topics, recentArticles, headline, subheadline, breadcrumbs, siteUrl, collectionSchema }: RenderProps) {
+function renderMagazine({ topics, recentArticles, headline, subheadline, breadcrumbs, siteUrl, schemasNode }: RenderProps) {
   const featuredTopic = topics[0] ?? null;
   const remainingTopics = topics.slice(1);
   const heroImage = featuredTopic ? resolveMedia(featuredTopic.headerImage as MediaItem | number | null | undefined) : null;
 
   return (
     <div data-variant="magazine">
-      <JsonLd data={collectionSchema} />
+      {schemasNode}
 
       {/* Editorial hero */}
       <div className="atlas-magazine-hero">

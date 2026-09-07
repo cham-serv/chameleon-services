@@ -19,7 +19,7 @@ import { ProductCard } from "@/components/ProductCard";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { RichTextRenderer } from "@/components/RichTextRenderer";
 import { JsonLd } from "@/components/JsonLd";
-import { buildBreadcrumbLd, buildCategoryHubLd } from "@/lib/jsonld";
+import { buildBreadcrumbLd, buildCategoryHubLd } from "@/lib/jsonld"; // buildCategoryHubLd retained — dynamic per-category runtime data
 import { AtlasSortSelect } from "./AtlasSortSelect";
 
 //  Types 
@@ -98,7 +98,7 @@ export default async function ShopPage({ config, variant, searchParams, noCache 
 
   //  Shared: JSON-LD 
 
-  // BreadcrumbList - injected on all variants
+  // BreadcrumbList - built locally (structural utility, always /shop + optional category)
   const breadcrumbSchema = buildBreadcrumbLd([
     { name: "Home", url: `${siteUrl}/` },
     { name: "Shop", url: `${siteUrl}/shop` },
@@ -106,29 +106,18 @@ export default async function ShopPage({ config, variant, searchParams, noCache 
   ]);
 
   // Category hub schemas - CollectionPage + optional FAQPage
+  // Kept as local builder because they depend on the active category filter
+  // (runtime URL param, not pre-computable at config time)
   const categoryHubSchemas = activeCategoryFull
     ? buildCategoryHubLd(activeCategoryFull, products, siteUrl, config.settings?.siteName ?? config.tenant.name)
     : [];
 
-  // Fallback CollectionPage for the main shop index
-  const shopIndexSchema: Record<string, unknown> | null = !activeCategory ? {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    name: shopHeadline,
-    description: shopSubheadline ?? undefined,
-    url: `${siteUrl}/shop`,
-    ...(products.length > 0 && {
-      mainEntity: {
-        "@type": "ItemList",
-        itemListElement: products.map((product, i) => ({
-          "@type": "ListItem",
-          position: i + 1,
-          url: `${siteUrl}/shop/${product.slug}`,
-          name: product.name,
-        })),
-      },
-    }),
-  } : null;
+  // Shop index schema - engine-computed (WebPage, CollectionPage with ItemList)
+  // Only use the engine schema when no category filter is active.
+  // When a category is active we rely on categoryHubSchemas instead.
+  const shopIndexSchema: Record<string, unknown> | null = !activeCategory
+    ? ((config.schemas?.pages.shop?.[0] ?? null) as Record<string, unknown> | null)
+    : null;
 
   const breadcrumbItems = [
     { label: "Home", href: "/" },

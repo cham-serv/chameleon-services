@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Atlas ContactPage  Server Component (wraps a client form)
  *
  * Variants:
@@ -17,9 +17,9 @@
 
 import type { PageProps } from '@/lib/types';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
-import { JsonLd } from '@/components/JsonLd';
+import { JsonLd, PageSchemas } from '@/components/JsonLd';
 import { AtlasContactForm } from './AtlasContactForm';
-import { buildBreadcrumbLd, buildLocalBusinessLd } from '@/lib/jsonld';
+import { buildBreadcrumbLd } from '@/lib/jsonld'; // structural utility — kept
 
 export default function ContactPage({ config, variant }: PageProps) {
   const tenant = config.tenant.slug;
@@ -41,32 +41,13 @@ export default function ContactPage({ config, variant }: PageProps) {
     { label: 'Contact' },
   ];
 
-  // JSON-LD schemas
+  // JSON-LD schemas:
+  //   contact page schemas — engine-computed (LocalBusiness, ContactPage, WebPage)
+  //   breadcrumb            — structural utility, built locally
   const breadcrumbSchema = buildBreadcrumbLd([
     { name: 'Home', url: `${siteUrl}/` },
     { name: 'Contact', url: `${siteUrl}/contact` },
   ]);
-
-  const localBusinessSchema = buildLocalBusinessLd(config, siteUrl);
-
-  const contactSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'ContactPage',
-    name: `Contact ${siteName}`,
-    url: `${siteUrl}/contact`,
-    ...(contactEmail && {
-      mainEntity: {
-        '@type': 'Organization',
-        name: siteName,
-        contactPoint: {
-          '@type': 'ContactPoint',
-          email: contactEmail,
-          ...(contactPhone && { telephone: contactPhone }),
-          contactType: 'customer service',
-        },
-      },
-    }),
-  };
 
   // Shared sub-elements
   const infoCard = (
@@ -152,9 +133,10 @@ export default function ContactPage({ config, variant }: PageProps) {
 
   const schemas = (
     <>
+      {/* Engine-computed contact page schemas (LocalBusiness, ContactPage, WebPage) */}
+      <PageSchemas page={config.schemas?.pages.contact} />
+      {/* Structural breadcrumb built locally */}
       <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={localBusinessSchema} />
-      <JsonLd data={contactSchema} />
     </>
   );
 

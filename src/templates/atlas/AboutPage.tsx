@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Atlas AboutPage  Server Component
  *
  * Variant dispatch pattern (same as HomePage):
@@ -12,7 +12,7 @@
  */
 
 import type { PageProps } from '@/lib/types';
-import { JsonLd } from '@/components/JsonLd';
+import { PageSchemas } from '@/components/JsonLd';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import Image from 'next/image';
 
@@ -83,23 +83,6 @@ export default function AboutPage({ config, variant }: PageProps) {
     { label: 'About' },
   ];
 
-  const orgSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: siteName,
-    url: siteUrl,
-    ...(config.settings?.logo && { logo: config.settings.logo.url }),
-    ...(contactEmail && { email: contactEmail }),
-    ...(() => {
-      const s = config.settings;
-      const sameAs = [
-        s?.socialFacebook, s?.socialInstagram, s?.socialLinkedIn,
-        s?.socialTwitter,  s?.socialYoutube,   s?.socialGoogle,
-      ].filter((v): v is string => Boolean(v));
-      return sameAs.length > 0 ? { sameAs } : {};
-    })(),
-  };
-
   //  Variant-specific content resolution 
   const defaultHeadline = `About ${siteName}`;
   const defaultIntro = tagline || `${siteName}  built on the belief that every business deserves a powerful digital presence.`;
@@ -133,7 +116,8 @@ export default function AboutPage({ config, variant }: PageProps) {
 
   return (
     <>
-      <JsonLd data={orgSchema} />
+      {/* Engine-computed about page schemas (Organization, WebPage, etc.) */}
+      <PageSchemas page={config.schemas?.pages.about} />
       {variant === 'story-split'
         ? renderStorySplit({ siteName, headline, intro, heroImageUrl, teamMembers, breadcrumbs, siteUrl })
         : variant === 'manifesto'

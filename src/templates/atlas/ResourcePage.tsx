@@ -355,11 +355,17 @@ async function renderArticle({ tenant, siteUrl, siteName, topicSlug, articleSlug
     ],
   };
 
-  // Primary article schema - use CMS-generated __jsonLd if available,
-  // fall back to a basic Article schema built locally.
-  const articleSchemas: Record<string, unknown>[] = article.__jsonLd
-    ? (Array.isArray(article.__jsonLd) ? article.__jsonLd : [article.__jsonLd])
-    : [buildFallbackArticleSchema(article, siteUrl, siteName, topicSlug, config)];
+  // Primary article schema - priority chain:
+  //   1. engine _schema (Phase 2 pre-computed - richest, includes author attribution & speakable)
+  //   2. CMS-generated __jsonLd (via Payload hook, if configured)
+  //   3. buildFallbackArticleSchema (local builder, last resort)
+  const engineSchema = (article as any)._schema;
+  const articleSchemas: Record<string, unknown>[] = engineSchema
+    ? (Array.isArray(engineSchema) ? engineSchema : [engineSchema])
+    : article.__jsonLd
+      ? (Array.isArray(article.__jsonLd) ? article.__jsonLd : [article.__jsonLd])
+      : [buildFallbackArticleSchema(article, siteUrl, siteName, topicSlug, config)];
+
 
   const headings = extractHeadings(article.content);
   const isUpdated = article.createdAt && article.updatedAt

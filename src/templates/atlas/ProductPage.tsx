@@ -19,7 +19,7 @@ import Link from 'next/link';
 import type { PageProps } from '@/lib/types';
 import { getProductBySlug, type ProductCategory, type Product, type MediaItem } from '@/lib/api';
 import { formatCurrency } from '@/lib/currency';
-import { buildProductLd, buildBreadcrumbLd } from '@/lib/jsonld';
+import { buildBreadcrumbLd } from '@/lib/jsonld'; // structural utility — kept
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { JsonLd } from '@/components/JsonLd';
 import { AddToCartButton } from '@/components/AddToCartButton';
@@ -103,6 +103,9 @@ export default async function ProductPage({ config, path, noCache }: PageProps) 
   ];
 
   // - JSON-LD -
+  // breadcrumb  — structural utility, built locally
+  // product     — engine-computed (Phase 2 entity API _schema field)
+  // faqSchema   — inline product FAQs (runtime data, not available at config time)
   const breadcrumbSchema = buildBreadcrumbLd([
     { name: 'Home', url: `${siteUrl}/` },
     { name: 'Shop', url: `${siteUrl}/shop` },
@@ -110,7 +113,8 @@ export default async function ProductPage({ config, path, noCache }: PageProps) 
     { name: product.name, url: productUrl },
   ]);
 
-  const productSchema = buildProductLd(product, config, productUrl);
+  // Engine-computed product schema (replaces the 250-line buildProductLd call)
+  const productSchema = (product as any)._schema ?? null;
 
   const faqSchema =
     product.productFaqs?.length
@@ -142,7 +146,7 @@ export default async function ProductPage({ config, path, noCache }: PageProps) 
         <meta name="llm-citation-preference" content={product.llmCitationPreference} />
       )}
       <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={productSchema} />
+      {productSchema && <JsonLd data={productSchema} />}
       {faqSchema && <JsonLd data={faqSchema} />}
 
       <div className="atlas-container" style={{ paddingTop: '1.5rem', paddingBottom: '4rem' }}>

@@ -15,10 +15,13 @@ import './atlas.css';
 import type { LayoutProps } from '@/lib/types';
 import AtlasFooter from './AtlasFooter';
 import AtlasLayoutShell from './AtlasLayoutShell';
+import { PageSchemas } from '@/components/JsonLd';
 
 export default function AtlasLayout({ config, children }: LayoutProps) {
   return (
     <>
+      {/* Global schemas: Organization, LocalBusiness, WebSite — emitted once per page load */}
+      <PageSchemas global={config.schemas?.global} />
       <AtlasLayoutShell config={config}>
         <main style={{ minHeight: '60vh' }}>
           {children}

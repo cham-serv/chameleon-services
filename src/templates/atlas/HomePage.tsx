@@ -5,7 +5,7 @@ import { getProducts, getCategories, getArticles } from '@/lib/api';
 import type { Product, ProductCategory, Article, MediaItem } from '@/lib/api';
 import { ProductCard } from '@/components/ProductCard';
 import { ArticleCard } from '@/components/ArticleCard';
-import { JsonLd } from '@/components/JsonLd';
+import { JsonLd, PageSchemas } from '@/components/JsonLd';
 import { AtlasBadge } from './AtlasBadge';
 import { AtlasMarquee } from './AtlasMarquee';
 import { AtlasCounter } from './AtlasCounter';
@@ -72,18 +72,9 @@ export default async function HomePage({ config, variant, noCache }: PageProps) 
       break;
   }
 
-  // JSON-LD - shared by all variants
-  const websiteSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: siteName,
-    url: siteUrl,
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: `${siteUrl}/shop?search={search_term_string}`,
-      'query-input': 'required name=search_term_string',
-    },
-  };
+  // JSON-LD: engine-computed home page schemas (WebSite, WebPage, SearchAction)
+  // The global schemas (Organization/LocalBusiness) are injected in layout.tsx.
+  // Nothing to build locally — engine computes all of this.
 
   // - Variant-specific data fetching -
 
@@ -148,7 +139,8 @@ export default async function HomePage({ config, variant, noCache }: PageProps) 
 
   return (
     <>
-      <JsonLd data={websiteSchema} />
+      {/* Engine-computed home page schemas (WebSite, WebPage, SearchAction) */}
+      <PageSchemas page={config.schemas?.pages.home} />
       <div data-variant={variant}>
         {variant === 'editorial'
           ? renderEditorial(hero, featuredProducts, latestArticles, currency, pc ?? undefined)
