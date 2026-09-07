@@ -999,10 +999,10 @@
 }
 
 .mer-header-logo-img {
-  height: clamp(32px, 6vw, 48px);
+  height: clamp(40px, 8vw, 64px);
   width: auto;
   display: block;
-  min-width: 80px;
+  min-width: 120px;
 }
 
 .mer-header-nav {
