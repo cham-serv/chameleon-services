@@ -52,8 +52,8 @@ export type FeatureConfig = Record<string, {
 export type SiteSettings = {
   siteName?: string;
   tagline?: string;
-  logo?: { url: string } | null;
-  logoMark?: { url: string } | null;
+  logo?: { url: string; alt?: string; filename?: string } | null;
+  logoMark?: { url: string; alt?: string; filename?: string } | null;
   // Contact
   contactEmail?: string;
   contactPhone?: string;
