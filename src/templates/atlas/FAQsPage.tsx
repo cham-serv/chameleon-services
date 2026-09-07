@@ -19,7 +19,7 @@ import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { JsonLd, PageSchemas } from '@/components/JsonLd';
 import { AtlasFaqAccordion } from './AtlasFaqAccordion';
 import { AtlasFaqSearch } from './AtlasFaqSearch';
-import { buildBreadcrumbLd } from '@/lib/jsonld'; // structural utility — kept
+import { buildBreadcrumbLd } from '@/lib/schema-utils';
 
 export default async function FAQsPage({ config, variant, noCache }: PageProps) {
   const tenant = config.tenant.slug;

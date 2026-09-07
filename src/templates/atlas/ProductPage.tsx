@@ -19,7 +19,7 @@ import Link from 'next/link';
 import type { PageProps } from '@/lib/types';
 import { getProductBySlug, type ProductCategory, type Product, type MediaItem } from '@/lib/api';
 import { formatCurrency } from '@/lib/currency';
-import { buildBreadcrumbLd } from '@/lib/jsonld'; // structural utility — kept
+import { buildBreadcrumbLd } from '@/lib/schema-utils';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { JsonLd } from '@/components/JsonLd';
 import { AddToCartButton } from '@/components/AddToCartButton';

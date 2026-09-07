@@ -19,7 +19,7 @@ import { ProductCard } from "@/components/ProductCard";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { RichTextRenderer } from "@/components/RichTextRenderer";
 import { JsonLd } from "@/components/JsonLd";
-import { buildBreadcrumbLd, buildCategoryHubLd } from "@/lib/jsonld"; // buildCategoryHubLd retained — dynamic per-category runtime data
+import { buildBreadcrumbLd, buildCategoryHubLd } from "@/lib/schema-utils";
 import { AtlasSortSelect } from "./AtlasSortSelect";
 
 //  Types 

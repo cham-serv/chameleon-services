@@ -19,7 +19,7 @@ import type { PageProps } from '@/lib/types';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { JsonLd, PageSchemas } from '@/components/JsonLd';
 import { AtlasContactForm } from './AtlasContactForm';
-import { buildBreadcrumbLd } from '@/lib/jsonld'; // structural utility — kept
+import { buildBreadcrumbLd } from '@/lib/schema-utils';
 
 export default function ContactPage({ config, variant }: PageProps) {
   const tenant = config.tenant.slug;
