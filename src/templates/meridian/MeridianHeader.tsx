@@ -11,7 +11,8 @@
  * transitions to solid on scroll.
  */
 
-import { useState, useEffect, useCallback, type ReactNode } from 'react';
+import Image from 'next/image';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import type { TenantConfig } from '@/lib/types';
 import MeridianMobileNav from './MeridianMobileNav';
@@ -51,8 +52,13 @@ export default function MeridianHeader({ config, transparent = false }: Props) {
   if (fc.resources?.enabled) navLinks.push({ href: '/resources', label: 'Resources' });
   if (fc.faqs?.enabled)      navLinks.push({ href: '/faqs',      label: 'FAQs' });
 
-  const logoUrl = config.settings?.logo?.url ?? null;
-  const logoAlt = config.settings?.logo?.alt ?? siteName;
+  const logo    = config.settings?.logo ?? null;
+  const logoUrl = logo?.url ?? null;
+  const logoAlt = logo?.alt ?? siteName;
+  // Intrinsic dimensions from Payload — used by <Image> to reserve space and prevent CLS.
+  // Falls back to 300×80 (the recommended logo spec from SiteSettings guidance).
+  const logoW   = logo?.width  || 300;
+  const logoH   = logo?.height || 80;
   const ctaLabel   = (config.pageConfig as any)?.homeCta1Text ?? 'Get in Touch';
 
   const contactEnabled = fc.contact?.enabled;
@@ -69,12 +75,14 @@ export default function MeridianHeader({ config, transparent = false }: Props) {
           {/* Logo */}
           <Link href="/" className="mer-header-logo" aria-label={siteName}>
             {logoUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+              <Image
                 src={logoUrl}
                 alt={logoAlt}
+                width={logoW}
+                height={logoH}
+                priority
                 className="mer-header-logo-img"
-                fetchPriority="high"
+                style={{ width: 'auto', height: 'clamp(40px, 8vw, 64px)' }}
               />
             ) : (
               <span className="mer-header-logo-text">{siteName}</span>

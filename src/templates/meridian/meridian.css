@@ -999,10 +999,10 @@
 }
 
 .mer-header-logo-img {
-  height: clamp(40px, 8vw, 64px);
-  width: auto;
+  /* Sizing is controlled via inline style on the Next.js Image component.
+     height: clamp(40px, 8vw, 64px) / width: auto — set there to work with
+     the intrinsic aspect ratio reservation that prevents CLS. */
   display: block;
-  /* No min-width — logo scales from natural aspect ratio. Upload a wide logo if needed. */
 }
 
 .mer-header-nav {
