@@ -9,6 +9,7 @@ type PaymentPath = 'flexible' | 'spread' | 'allInclusive';
 const businessTiers = [
   {
     name: 'Launch',
+    tierSlug: 'launch',
     monthlyFlexible: 999,
     monthlyAllInclusive: 1699,
     setupFee: 8000,
@@ -25,6 +26,7 @@ const businessTiers = [
   },
   {
     name: 'Professional',
+    tierSlug: 'professional',
     monthlyFlexible: 1999,
     monthlyAllInclusive: 2999,
     setupFee: 10000,
@@ -41,6 +43,7 @@ const businessTiers = [
   },
   {
     name: 'Storefront',
+    tierSlug: 'storefront',
     monthlyFlexible: 2999,
     monthlyAllInclusive: 4199,
     setupFee: 12000,
@@ -57,6 +60,7 @@ const businessTiers = [
   },
   {
     name: 'Commerce',
+    tierSlug: 'commerce',
     monthlyFlexible: 4500,
     monthlyAllInclusive: 5750,
     setupFee: 15000,
@@ -68,7 +72,7 @@ const businessTiers = [
       'Unlimited products',
       'Priority SLA support',
     ],
-    cta: 'Talk to us',
+    cta: 'Get Started',
     highlighted: false,
   },
 ];
@@ -331,7 +335,8 @@ export default function PricingPage() {
                   </ul>
 
                   <Link
-                    href="/contact"
+                    href={`/checkout?tier=${tier.tierSlug}&path=${activePath}`}
+                    id={`cta-${tier.tierSlug}`}
                     className={`m-btn ${tier.highlighted ? 'm-btn-primary' : 'm-btn-ghost'}`}
                     style={{ width: '100%', justifyContent: 'center', fontSize: '0.9rem' }}
                   >
