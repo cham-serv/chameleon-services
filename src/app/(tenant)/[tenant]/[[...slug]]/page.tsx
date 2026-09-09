@@ -54,6 +54,12 @@ export default async function TenantPage({ params, searchParams }: Props) {
   // 1. Fetch tenant config (no-cache on staging for instant feedback)
   const isStaging = (await headers()).get('x-is-staging') === 'true';
   const config = await fetchTenantConfig(tenant, { noCache: isStaging });
+
+  // 402: Tenant is suspended or cancelled — show unbranded page
+  if ((config as any)?.__suspended) {
+    return <SiteUnavailable />;
+  }
+
   if (!config) notFound();
 
   // 2. Check template assignment
@@ -61,6 +67,7 @@ export default async function TenantPage({ params, searchParams }: Props) {
   if (!template) {
     return <TemplateNotConfigured tenantName={config.tenant.name} />;
   }
+
 
   // 3. Load template definition (route map)
   const templateDef = await getTemplateDefinition(template.slug);
@@ -144,5 +151,58 @@ function TemplateNotConfigured({ tenantName }: { tenantName: string }) {
         </p>
       </div>
     </div>
+  );
+}
+
+/**
+ * Rendered when a tenant's accountStatus is 'suspended' or 'cancelled'.
+ *
+ * DESIGN RULES (per product decision):
+ *   - No Chameleon branding, logo, or links
+ *   - No tenant branding (their brand shouldn't appear on a broken page)
+ *   - Plain, neutral — white background, dark text, nothing else
+ *   - No external links
+ */
+function SiteUnavailable() {
+  return (
+    <html lang="en">
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Temporarily Unavailable</title>
+        <meta name="robots" content="noindex, nofollow" />
+        <style>{`
+          * { box-sizing: border-box; margin: 0; padding: 0; }
+          body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f9fafb;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 24px;
+          }
+          .wrap { text-align: center; max-width: 400px; }
+          h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #111827;
+          }
+          p {
+            font-size: 0.9rem;
+            color: #6b7280;
+            line-height: 1.6;
+          }
+        `}</style>
+      </head>
+      <body>
+        <div className="wrap">
+          <h1>This site is temporarily unavailable.</h1>
+          <p>If you are the site owner, please contact your provider.</p>
+        </div>
+      </body>
+    </html>
   );
 }
