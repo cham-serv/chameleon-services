@@ -45,6 +45,20 @@ const templates: {
     tier: 'Commerce',
   },
   {
+    id: 'meridian',
+    name: 'Meridian',
+    tagline: 'Services and consulting, built to convert.',
+    description:
+      'Meridian is designed for service-based businesses - consultants, agencies, clinics and professionals - who need a credibility-first site that generates leads and gets found by AI search.',
+    features: ['Services Showcase', 'Lead Generation', 'Articles & Blog', 'Contact with Map', 'Legal Pages', 'FAQ'],
+    industries: ['Consulting', 'Professional Services', 'Healthcare', 'Agencies'],
+    demoHref: 'https://meridian-demo.chameleon.services',
+    gradient: 'linear-gradient(135deg, #1a2642 0%, #141a2e 50%, #0d1117 100%)',
+    accentColor: '#818cf8',
+    status: 'available',
+    tier: 'Professional',
+  },
+  {
     id: 'atlas-lite',
     name: 'Atlas Lite',
     tagline: 'A powerful catalogue and quote engine, without the ecommerce overhead.',
@@ -57,20 +71,6 @@ const templates: {
     accentColor: '#fb923c',
     status: 'coming-soon',
     tier: 'Storefront',
-  },
-  {
-    id: 'meridian',
-    name: 'Meridian',
-    tagline: 'Services and consulting, built to convert.',
-    description:
-      'Meridian is designed for service-based businesses - consultants, agencies, clinics and professionals - who need a credibility-first site that generates leads and gets found by AI search.',
-    features: ['Services Showcase', 'Lead Generation', 'Articles & Blog', 'Contact with Map', 'Legal Pages', 'FAQ'],
-    industries: ['Consulting', 'Professional Services', 'Healthcare', 'Agencies'],
-    demoHref: '#',
-    gradient: 'linear-gradient(135deg, #1a2642 0%, #141a2e 50%, #0d1117 100%)',
-    accentColor: '#818cf8',
-    status: 'coming-soon',
-    tier: 'Professional',
   },
   {
     id: 'solstice',
@@ -101,6 +101,7 @@ const templates: {
     tier: 'Launch',
   },
 ];
+
 
 function TierPill({ tier }: { tier: Tier }) {
   const { color, bg, border } = tierConfig[tier];
