@@ -14,7 +14,7 @@ import './demo-explorer.css';
  * Triggered by a vertical edge tab on the right side of the screen.
  */
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import type { ExplorerRoute } from '@/lib/demo-explorer-types';
 import { getFontStack, PLATFORM_FONTS } from '@/lib/fonts';
@@ -124,6 +124,10 @@ export function DemoExplorer({ routes, basePath, initialScheme, templateSlug }: 
   const searchParams = useSearchParams();
   const router = useRouter();
 
+  // Guard: prevents the brand preview effect from stomping server-rendered CSS
+  // vars with hardcoded defaults before the mount effect reads the real values.
+  const hasMounted = useRef(false);
+
   // Dark mode toggle — null = not yet synced; prevents stomping the server-rendered data-scheme
   const [isDark, setIsDark] = useState<boolean | null>(null);
 
@@ -191,6 +195,12 @@ export function DemoExplorer({ routes, basePath, initialScheme, templateSlug }: 
   // - Brand preview: inject CSS custom properties on :root -
 
   useEffect(() => {
+    // Don't write brand values until the mount effect has synced real CSS vars.
+    // Without this guard, this effect fires first (with hardcoded defaults)
+    // and overwrites the server-rendered --brand-primary etc. before the mount
+    // effect can read them via getComputedStyle.
+    if (!hasMounted.current) return;
+
     const root = document.documentElement;
 
     // Brand identity — always write inline so colour pickers take immediate effect.
@@ -288,6 +298,9 @@ export function DemoExplorer({ routes, basePath, initialScheme, templateSlug }: 
       headingColour: get('--brand-heading',    prev.headingColour),
       bgColour:      get('--brand-background', prev.bgColour),
     }));
+
+    // Mark as mounted so the brand preview effect can now safely write values.
+    hasMounted.current = true;
 
     // 2 & 3. URL param + hint logic
     const hasDeParam = searchParams.get('_de') === '1';
