@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Atlas AboutPage  Server Component
  *
  * Variant dispatch pattern (same as HomePage):
@@ -12,9 +12,10 @@
  */
 
 import type { PageProps } from '@/lib/types';
-import { JsonLd } from '@/components/JsonLd';
+import { PageSchemas } from '@/components/JsonLd';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import Image from 'next/image';
+import Link from 'next/link';
 
 //  Types 
 
@@ -83,23 +84,6 @@ export default function AboutPage({ config, variant }: PageProps) {
     { label: 'About' },
   ];
 
-  const orgSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: siteName,
-    url: siteUrl,
-    ...(config.settings?.logo && { logo: config.settings.logo.url }),
-    ...(contactEmail && { email: contactEmail }),
-    ...(() => {
-      const s = config.settings;
-      const sameAs = [
-        s?.socialFacebook, s?.socialInstagram, s?.socialLinkedIn,
-        s?.socialTwitter,  s?.socialYoutube,   s?.socialGoogle,
-      ].filter((v): v is string => Boolean(v));
-      return sameAs.length > 0 ? { sameAs } : {};
-    })(),
-  };
-
   //  Variant-specific content resolution 
   const defaultHeadline = `About ${siteName}`;
   const defaultIntro = tagline || `${siteName}  built on the belief that every business deserves a powerful digital presence.`;
@@ -133,7 +117,8 @@ export default function AboutPage({ config, variant }: PageProps) {
 
   return (
     <>
-      <JsonLd data={orgSchema} />
+      {/* Engine-computed about page schemas (Organization, WebPage, etc.) */}
+      <PageSchemas page={config.schemas?.pages.about} />
       {variant === 'story-split'
         ? renderStorySplit({ siteName, headline, intro, heroImageUrl, teamMembers, breadcrumbs, siteUrl })
         : variant === 'manifesto'
@@ -294,9 +279,9 @@ function renderTeamGrid({ siteName, headline, intro, heroImageUrl, teamMembers, 
           <p className="atlas-body-lg" style={{ marginTop: 'var(--atlas-spacing-md)', opacity: 0.9, maxWidth: 500, margin: 'var(--atlas-spacing-md) auto 0' }}>
             Let&apos;s discuss how we can help your business establish authority and drive growth.
           </p>
-          <a href="/contact" className="atlas-btn atlas-btn-secondary" style={{ marginTop: 'var(--atlas-spacing-xl)', display: 'inline-block' }}>
+          <Link href="/contact" className="atlas-btn atlas-btn-secondary" style={{ marginTop: 'var(--atlas-spacing-xl)', display: 'inline-block' }}>
             Contact Us
-          </a>
+          </Link>
         </div>
       </section>
     </div>
@@ -505,9 +490,9 @@ function renderStorySplit({ siteName, headline, intro, heroImageUrl, teamMembers
           <p className="atlas-body-lg" style={{ marginTop: 'var(--atlas-spacing-md)', opacity: 0.9, maxWidth: 500, margin: 'var(--atlas-spacing-md) auto 0' }}>
             Explore our latest thinking on industry trends, product guides, and brand stories.
           </p>
-          <a href="/resources" className="atlas-btn atlas-btn-secondary" style={{ marginTop: 'var(--atlas-spacing-xl)', display: 'inline-block' }}>
+          <Link href="/resources" className="atlas-btn atlas-btn-secondary" style={{ marginTop: 'var(--atlas-spacing-xl)', display: 'inline-block' }}>
             Explore Resources
-          </a>
+          </Link>
         </div>
       </section>
     </div>

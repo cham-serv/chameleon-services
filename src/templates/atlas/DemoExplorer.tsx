@@ -1,4 +1,5 @@
 'use client';
+import './demo-explorer.css';
 
 /**
  * DemoExplorer - Client Component
@@ -13,10 +14,10 @@
  * Triggered by a vertical edge tab on the right side of the screen.
  */
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import type { ExplorerRoute } from '@/lib/demo-explorer-types';
-import { getFontStack } from '@/lib/fonts';
+import { getFontStack, PLATFORM_FONTS } from '@/lib/fonts';
 
 // - Types -
 
@@ -24,17 +25,24 @@ type DemoExplorerProps = {
   routes: ExplorerRoute[];
   /** The URL prefix for this tenant (e.g. '' for domain-based, '/atlas-demo' for path-based). */
   basePath: string;
+  /** Server-rendered colour scheme — used to initialise the dark mode toggle without a flash. */
+  initialScheme?: string;
+  /** Template slug (e.g. 'atlas', 'meridian') — for template-aware palette filtering. */
+  templateSlug?: string;
 };
 
 type BrandPreview = {
   primary: string;
   secondary: string;
   accent: string;
-  textColour: string;   // maps to --brand-text
-  bgColour: string;     // maps to --brand-background
+  textColour: string;    // maps to --brand-text
+  headingColour: string; // maps to --brand-heading
+  heroTextColour: string; // maps to --brand-hero-text (hero/H1 only)
+  bgColour: string;      // maps to --brand-background
   buttonStyle: 'filled' | 'outline' | 'pill' | 'soft';
-  fontHeading: string;
-  fontBody: string;
+  fontDisplay: string;   // maps to --font-display (hero/H1 only; blank = inherit fontHeading)
+  fontHeading: string;   // maps to --font-heading
+  fontBody: string;      // maps to --font-body
 };
 
 // - Preset Palettes -
@@ -47,6 +55,32 @@ const PRESET_PALETTES: { label: string; primary: string; secondary: string; acce
   { label: 'Stone',    primary: '#292524', secondary: '#78716c', accent: '#16a34a' },
   { label: 'Slate',    primary: '#0f172a', secondary: '#334155', accent: '#06b6d4' },
 ];
+
+/**
+ * Curated palettes for home page variant previews.
+ * Applied automatically in the Demo Explorer when switching variants
+ * so each demo variant looks visually intentional instead of just
+ * inheriting whatever the demo tenant's default colours happen to be.
+ *
+ * In production these are never applied — real tenants use their own colours.
+ */
+const VARIANT_PALETTES: Record<string, { primary: string; secondary: string; accent: string; bgColour: string; textColour: string; headingColour: string }> = {
+  // ── Atlas variants ──────────────────────────────────────────────────────────
+  storefront: { primary: '#2d6a4f', secondary: '#52b788', accent: '#f59e0b',  bgColour: '#ffffff', textColour: '#1b1b1b', headingColour: '#1b1b1b' },
+  editorial:  { primary: '#0369a1', secondary: '#38bdf8', accent: '#f97316',  bgColour: '#fafaf9', textColour: '#1c1917', headingColour: '#1c1917' },
+  modern:     { primary: '#4f46e5', secondary: '#7c3aed', accent: '#06b6d4',  bgColour: '#0a0f1e', textColour: '#e2e8f0', headingColour: '#f0f2f8' },
+  bold:       { primary: '#1a1a2e', secondary: '#e94560', accent: '#f5a623',  bgColour: '#0d0d1a', textColour: '#f8fafc', headingColour: '#ffffff' },
+  minimalist: { primary: '#1c1917', secondary: '#57534e', accent: '#16a34a',  bgColour: '#fafaf9', textColour: '#1c1917', headingColour: '#1c1917' },
+  // ── Meridian home variants ───────────────────────────────────────────────────
+  // split-hero: classic professional services — navy + gold
+  'split-hero':  { primary: '#1a2b5e', secondary: '#3b6cb7', accent: '#c9a84c', bgColour: '#ffffff', textColour: '#1b1b1b', headingColour: '#1a2b5e' },
+  // full-hero: cinematic full-bleed — deep slate + teal accent
+  'full-hero':   { primary: '#0f2027', secondary: '#203a43', accent: '#2c8c7c', bgColour: '#0f2027', textColour: '#e8edf2', headingColour: '#f0f2f8' },
+  // authority: pure typographic big-law — charcoal + bronze
+  'authority':   { primary: '#1c1c1e', secondary: '#3a3a3c', accent: '#9b7f4a', bgColour: '#fafaf8', textColour: '#1c1c1e', headingColour: '#1c1c1e' },
+  // metrics: modern numbers-led — midnight blue + electric teal
+  'metrics':     { primary: '#0b1f4a', secondary: '#1d4e89', accent: '#00c6b8', bgColour: '#ffffff', textColour: '#0b1f4a', headingColour: '#0b1f4a' },
+};
 
 // - Font Pair Presets -
 
@@ -72,13 +106,17 @@ const BTN_STYLES: { label: string; value: BrandPreview['buttonStyle'] }[] = [
   { label: 'Soft',    value: 'soft'    },
 ];
 
+// - Font options derived from the platform registry (same 20 fonts as the CMS) -
+
+const FONT_OPTIONS: string[] = Object.keys(PLATFORM_FONTS);
+
 // - Tab type -
 
 type ExplorerTab = 'pages' | 'brand' | 'style';
 
 // - Component -
 
-export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
+export function DemoExplorer({ routes, basePath, initialScheme, templateSlug }: DemoExplorerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<ExplorerTab>('pages');
   // Hint arrow: shown on first visit, never again after drawer is opened
@@ -87,16 +125,35 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // Brand preview state - starts from current CSS vars on :root
+  // Guard: prevents the brand preview effect from stomping server-rendered CSS
+  // vars with hardcoded defaults before the mount effect reads the real values.
+  const hasMounted = useRef(false);
+
+  // Dark mode toggle — null = not yet synced; prevents stomping the server-rendered data-scheme
+  const [isDark, setIsDark] = useState<boolean | null>(null);
+
+  // Only write data-scheme once isDark is initialised from the DOM (D1+D2 fix)
+  // Returning early on null preserves the server-rendered data-scheme="dark" value
+  // until the mount effect below has had a chance to read and sync it.
+  useEffect(() => {
+    if (isDark === null) return;
+    document.documentElement.setAttribute('data-scheme', isDark ? 'dark' : 'light');
+  }, [isDark]);
+
+  // Brand preview state — initialised to safe defaults; overwritten on mount
+  // from the actual CSS vars on :root so pickers always show the real tenant colours.
   const [brand, setBrand] = useState<BrandPreview>({
-    primary:     '#2d6a4f',
-    secondary:   '#52b788',
-    accent:      '#f59e0b',
-    textColour:  '#1b1b1b',
-    bgColour:    '#ffffff',
-    buttonStyle: 'filled',
-    fontHeading: 'Plus Jakarta Sans',
-    fontBody:    'Inter',
+    primary:       '#2d6a4f',
+    secondary:     '#52b788',
+    accent:        '#f59e0b',
+    textColour:    '#1b1b1b',
+    headingColour: '#1b1b1b',
+    heroTextColour: '',
+    bgColour:      '#ffffff',
+    buttonStyle:   'filled',
+    fontDisplay:   '',
+    fontHeading:   'Plus Jakarta Sans',
+    fontBody:      'Inter',
   });
 
   // - Derive current state from URL -
@@ -140,22 +197,46 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
   // - Brand preview: inject CSS custom properties on :root -
 
   useEffect(() => {
+    // Don't write brand values until the mount effect has synced real CSS vars.
+    if (!hasMounted.current) return;
+
     const root = document.documentElement;
+
+    // Brand identity — always write inline so colour pickers take immediate effect.
     root.style.setProperty('--brand-primary',    brand.primary);
     root.style.setProperty('--brand-secondary',  brand.secondary);
     root.style.setProperty('--brand-accent',     brand.accent);
-    root.style.setProperty('--brand-text',       brand.textColour);
-    root.style.setProperty('--brand-background', brand.bgColour);
     document.body.setAttribute('data-btn-style', brand.buttonStyle);
 
+    // Theme colours (background / text / heading):
+    //
+    // In dark mode, REMOVE inline overrides for these properties so that the
+    // stylesheet's [data-scheme="dark"] rule (e.g. meridian.css line 72) can
+    // take effect. Inline style.setProperty() has higher priority than ANY CSS
+    // rule — keeping them set would permanently block [data-scheme] changes.
+    //
+    // In light mode, SET them inline so the Explorer's colour pickers work.
+    if (isDark === true) {
+      root.style.removeProperty('--brand-background');
+      root.style.removeProperty('--brand-text');
+      root.style.removeProperty('--brand-heading');
+      root.style.removeProperty('--brand-surface');
+    } else {
+      root.style.setProperty('--brand-text',       brand.textColour);
+      root.style.setProperty('--brand-heading',    brand.headingColour);
+      root.style.setProperty('--brand-background', brand.bgColour);
+      root.style.setProperty('--brand-surface',    `color-mix(in srgb, ${brand.bgColour} 95%, ${brand.primary} 5%)`);
+    }
+
+    // Hero text colour — set when explicitly chosen, remove when blank
+    // so hero headlines fall back to --brand-heading via CSS cascade.
+    if (brand.heroTextColour) {
+      root.style.setProperty('--brand-hero-text', brand.heroTextColour);
+    } else {
+      root.style.removeProperty('--brand-hero-text');
+    }
+
     // Font preview + body-level colour overrides injected as a <style> element.
-    // We use a <style> block (not just CSS vars) so that:
-    //   a) font-family stacks are set without any network request
-    //   b) html/body get a colour/background cascade base — ensuring ALL page
-    //      content that inherits from body responds to the text/background
-    //      colour controls, not just elements that explicitly reference the var().
-    //   Dark sections (e.g. atlas-section-dark) retain their own backgrounds
-    //   because their CSS rules are more specific than a body rule.
     const styleId = 'demo-explorer-font-preview';
     let el = document.getElementById(styleId) as HTMLStyleElement | null;
     if (!el) {
@@ -165,15 +246,17 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
     }
     const hStack = getFontStack(brand.fontHeading, 'heading');
     const bStack = getFontStack(brand.fontBody, 'body');
+    const dStack = brand.fontDisplay
+      ? getFontStack(brand.fontDisplay, 'display')
+      : hStack;
     el.textContent = [
-      `:root { --font-heading: ${hStack}; --font-body: ${bStack}; }`,
-      // Cascade base: any element that inherits colour from body picks this up
+      `:root { --font-display: ${dStack}; --font-heading: ${hStack}; --font-body: ${bStack}; }`,
       `html, body {`,
       `  background-color: var(--brand-background, #ffffff);`,
       `  color: var(--brand-text, #1b1b1b);`,
       `}`,
     ].join('\n');
-  }, [brand]);
+  }, [brand, isDark]);
 
   const updateBrand = useCallback((patch: Partial<BrandPreview>) => {
     setBrand((prev) => ({ ...prev, ...patch }));
@@ -189,32 +272,126 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
 
   // - Actions -
 
-  // Check localStorage once on mount to decide whether to show the hint
+  // On mount:
+  //   1. Read actual brand CSS vars from :root so colour pickers reflect the real tenant colours.
+  //   2. Auto-open if _de=1 is in the URL (persisted via navigateToPage).
+  //   3. Show the hint arrow for first-time visitors; auto-clear it after 5s (matching CSS).
   useEffect(() => {
+    // 0. Initialise isDark from the server-rendered scheme (passed as prop).
+    const currentScheme = initialScheme ?? document.documentElement.getAttribute('data-scheme') ?? 'light';
+    const startedDark = currentScheme === 'dark';
+    setIsDark(startedDark);
+
+    // 1. Sync brand state to real CSS vars.
+    //
+    // getComputedStyle reads the RESOLVED value of each CSS variable, which
+    // in dark mode would be the dark palette (#0e1016 etc.) — not the tenant's
+    // actual light-mode brand colours. Storing those would mean the light-mode
+    // pickers show dark colours and toggling to light uses the wrong values.
+    //
+    // When starting in dark mode, we read the light-mode values from the
+    // server-rendered <style> tag instead (e.g. `:root { --brand-text: #333 }`).
+    // buildBrandTokens (layout.tsx) emits brand identity tokens in ALL modes,
+    // and emits theme tokens (--brand-text etc.) ONLY in light mode.
+    // In dark mode the <style> tag won't have them, so we fall back to safe
+    // defaults — which is correct because the CSS handles dark values.
+    const computedStyle = getComputedStyle(document.documentElement);
+    const getComputed = (v: string, fallback: string) => computedStyle.getPropertyValue(v).trim() || fallback;
+
+    // Parse light-mode values from the server-rendered <style> tag.
+    // This is needed because getComputedStyle returns the dark-resolved values
+    // when data-scheme="dark", which would poison the light-mode brand state.
+    const getFromStyleTag = (varName: string, fallback: string): string => {
+      const styleEls = document.querySelectorAll('head > style');
+      for (const styleEl of styleEls) {
+        const text = styleEl.textContent ?? '';
+        // Match e.g. --brand-text: #333333 or --brand-background: #ffffff
+        const re = new RegExp(`${varName.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')}:\\s*([^;]+)`);
+        const match = text.match(re);
+        if (match) return match[1].trim();
+      }
+      return fallback;
+    };
+
+    // Brand identity: always read from computed (available in all schemes)
+    // Theme colours: use <style> tag source when dark to get true light values
+    const getText = startedDark ? getFromStyleTag : getComputed;
+    setBrand((prev) => ({
+      ...prev,
+      primary:        getComputed('--brand-primary',    prev.primary),
+      secondary:      getComputed('--brand-secondary',  prev.secondary),
+      accent:         getComputed('--brand-accent',     prev.accent),
+      textColour:     getText('--brand-text',       prev.textColour),
+      headingColour:  getText('--brand-heading',    prev.headingColour),
+      heroTextColour: getComputed('--brand-hero-text', prev.heroTextColour),
+      bgColour:       getText('--brand-background', prev.bgColour),
+    }));
+
+    // Mark as mounted so the brand preview effect can now safely write values.
+    hasMounted.current = true;
+
+    // 2 & 3. URL param + hint logic
+    const hasDeParam = searchParams.get('_de') === '1';
     try {
-      if (!localStorage.getItem('demo-explorer-seen')) {
+      const seen = !!localStorage.getItem('demo-explorer-seen');
+      if (!seen && !hasDeParam) {
         setShowHint(true);
+        // Auto-clear hint after 5 000 ms — matches the CSS demo-hint-lifecycle animation
+        // so React state and the visual state stay in sync. Without this, any re-render
+        // after 5s would recreate the element and restart the animation.
+        const timer = window.setTimeout(() => setShowHint(false), 5000);
+        return () => window.clearTimeout(timer);
+      }
+      if (hasDeParam) {
+        setIsOpen(true);
+        localStorage.setItem('demo-explorer-seen', '1');
       }
     } catch {
-      // localStorage blocked (private browsing etc.) — show hint anyway
-      setShowHint(true);
+      if (!hasDeParam) {
+        setShowHint(true);
+        const timer = window.setTimeout(() => setShowHint(false), 5000);
+        return () => window.clearTimeout(timer);
+      }
+      if (hasDeParam) setIsOpen(true);
     }
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // intentionally only runs on mount
 
   const open = useCallback(() => {
     setIsOpen(true);
-    // Dismiss hint permanently on first open
     setShowHint(false);
     try { localStorage.setItem('demo-explorer-seen', '1'); } catch { /* ignore */ }
+    // Intentionally NOT writing _de=1 here — URL stays clean when opened manually.
+    // _de=1 is only written by navigateToPage() so that hard-refresh after a
+    // drawer-initiated navigation restores the open state on the new page.
   }, []);
-  const close = useCallback(() => setIsOpen(false), []);
+
+  const close = useCallback(() => {
+    setIsOpen(false);
+    // Only touch the URL if _de is actually present — avoids spurious history entries
+    if (searchParams.has('_de')) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete('_de');
+      const qs = params.toString();
+      router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+    }
+  }, [pathname, searchParams, router]);
 
   const navigateToPage = useCallback(
     (routeKey: string) => {
+      // No-op if already on this page
+      if (currentRoute?.routeKey === routeKey) return;
+
       const path = routeKey === '/' ? '' : routeKey;
-      router.push(`${basePath}${path}`);
+      // Fallback to '/' if basePath and path are both empty (home on a domain tenant)
+      const target = `${basePath}${path}` || '/';
+
+      // Carry _de=1 so the drawer auto-opens on the destination page
+      const params = new URLSearchParams();
+      params.set('_de', '1');
+      router.push(`${target}?${params.toString()}`);
     },
-    [basePath, router],
+    [basePath, router, currentRoute],
   );
 
   const selectVariant = useCallback(
@@ -223,7 +400,24 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
       const dvValue = `${normalizedRoute}:${variantSlug}`;
       const params = new URLSearchParams(searchParams.toString());
       params.set('_dv', dvValue);
+      params.set('_de', '1'); // Keep drawer open after variant switch
       router.push(`${pathname}?${params.toString()}`);
+
+      // Auto-apply a curated palette when switching home variants in the demo.
+      if (routeKey === '/') {
+        const curated = VARIANT_PALETTES[variantSlug];
+        if (curated) {
+          setBrand((prev) => ({
+            ...prev,
+            primary:       curated.primary,
+            secondary:     curated.secondary,
+            accent:        curated.accent,
+            bgColour:      curated.bgColour,
+            textColour:    curated.textColour,
+            headingColour: curated.headingColour,
+          }));
+        }
+      }
     },
     [pathname, searchParams, router],
   );
@@ -231,6 +425,7 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
   const resetVariant = useCallback(() => {
     const params = new URLSearchParams(searchParams.toString());
     params.delete('_dv');
+    params.set('_de', '1'); // Keep drawer open after reset
     const qs = params.toString();
     router.push(qs ? `${pathname}?${qs}` : pathname);
   }, [pathname, searchParams, router]);
@@ -269,8 +464,13 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
         onClick={open}
         aria-label="Open demo explorer"
       >
-        <span className="demo-explorer-tab-icon"></span>
-        Explore
+        <span className="demo-explorer-tab-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </span>
+        <span className="demo-explorer-tab-label">Explore</span>
       </button>
 
       {/* Backdrop */}
@@ -395,6 +595,22 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
           {/* - Brand Tab - */}
           {activeTab === 'brand' && (
             <>
+              {/* Dark Mode Toggle */}
+              <div className="demo-explorer-scheme-row">
+                <span className="demo-explorer-scheme-label">Dark Mode</span>
+                <button
+                  className="demo-explorer-scheme-toggle"
+                  data-on={isDark === true}
+                  onClick={() => setIsDark((v) => !(v ?? false))}
+                  role="switch"
+                  aria-checked={isDark ?? false}
+                  aria-label="Toggle dark mode"
+                >
+                  <span className="demo-explorer-scheme-thumb" />
+                </button>
+              </div>
+              <div className="demo-explorer-scheme-divider" />
+
               {/* Palette Presets */}
               <p className="demo-explorer-section-label">Colour Palette</p>
               <div className="demo-explorer-palette-grid">
@@ -469,7 +685,7 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
           {/* - Style Tab - */}
           {activeTab === 'style' && (
             <>
-              {/* Font Pairs */}
+              {/* Font Pairs — quick presets */}
               <p className="demo-explorer-section-label">Font Pairs</p>
               <div className="demo-explorer-font-grid">
                 {FONT_PAIRS.map((pair) => (
@@ -485,12 +701,41 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
                 ))}
               </div>
 
-              {/* Text & Background */}
+              {/* Individual Font Selectors */}
+              <p className="demo-explorer-section-label" style={{ marginTop: '1rem' }}>Individual Fonts</p>
+              <div className="demo-explorer-font-selects">
+                {([
+                  { key: 'fontDisplay', label: 'Display / Hero', hint: 'Blank = use Heading font' },
+                  { key: 'fontHeading', label: 'Heading (H2–H4)', hint: '' },
+                  { key: 'fontBody',    label: 'Body',            hint: '' },
+                ] as { key: keyof BrandPreview; label: string; hint: string }[]).map(({ key, label, hint }) => (
+                  <div key={key} className="demo-explorer-font-select-row">
+                    <label className="demo-explorer-font-select-label">{label}</label>
+                    <select
+                      className="demo-explorer-font-select"
+                      value={brand[key] as string}
+                      onChange={(e) => updateBrand({ [key]: e.target.value } as Partial<BrandPreview>)}
+                    >
+                      {key === 'fontDisplay' && (
+                        <option value="">— Same as Heading —</option>
+                      )}
+                      {FONT_OPTIONS.map((font) => (
+                        <option key={font} value={font}>{font}</option>
+                      ))}
+                    </select>
+                    {hint && <span className="demo-explorer-font-select-hint">{hint}</span>}
+                  </div>
+                ))}
+              </div>
+
+              {/* Text, Heading & Background colours */}
               <p className="demo-explorer-section-label" style={{ marginTop: '1rem' }}>Text & Background</p>
               <div className="demo-explorer-colour-inputs">
                 {[
-                  { key: 'textColour', label: 'Text'       },
-                  { key: 'bgColour',   label: 'Background' },
+                  { key: 'heroTextColour', label: 'Hero Text' },
+                  { key: 'headingColour', label: 'Headings'   },
+                  { key: 'textColour',    label: 'Body Text'  },
+                  { key: 'bgColour',      label: 'Background' },
                 ].map(({ key, label }) => (
                   <div key={key} className="demo-explorer-colour-row">
                     <input

@@ -76,8 +76,17 @@ export default function AtlasHeader({ config, onOpenMobileNav, onOpenCart, trans
               src={logoUrl}
               alt={logoAlt}
               className="atlas-header-logo-img"
+              width={180}
               height={56}
-              style={{ height: 'clamp(36px, 8vw, 56px)', width: 'auto', display: 'block' }}
+              // eslint-disable-next-line react/no-unknown-property
+              fetchPriority="high"
+              style={{
+                height: 'clamp(36px, 8vw, 56px)',
+                width: 'auto',
+                display: 'block',
+                // Reserve minimum width to prevent CLS before image loads
+                minWidth: '100px',
+              }}
             />
           ) : (
             siteName

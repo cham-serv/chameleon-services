@@ -6,7 +6,7 @@
  */
 
 import { JsonLd } from '@/components/JsonLd';
-import { buildBreadcrumbLd, type BreadcrumbItem as LdBreadcrumbItem } from '@/lib/jsonld';
+import { buildBreadcrumbLd, type BreadcrumbItem as LdBreadcrumbItem } from '@/lib/schema-utils';
 
 export type BreadcrumbItem = {
   /** Display label for this breadcrumb segment */

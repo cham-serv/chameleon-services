@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Atlas Template Layout  Server/Client Hybrid
  *
  * Server Component shell that imports atlas.css and renders the
@@ -12,29 +12,22 @@
  */
 
 import './atlas.css';
-import './demo-explorer.css';
 import type { LayoutProps } from '@/lib/types';
 import AtlasFooter from './AtlasFooter';
 import AtlasLayoutShell from './AtlasLayoutShell';
-import { DemoExplorer } from './DemoExplorer';
-import { definition } from './definition';
-import { buildExplorerRoutes } from './demo-explorer-utils';
+import { PageSchemas } from '@/components/JsonLd';
 
 export default function AtlasLayout({ config, children }: LayoutProps) {
-  // Build explorer routes only for demo tenants
-  const explorerRoutes = config.tenant.isDemoTenant
-    ? buildExplorerRoutes(definition, config.tenant.featureConfig)
-    : null;
-
   return (
     <>
+      {/* Global schemas: Organization, LocalBusiness, WebSite — emitted once per page load */}
+      <PageSchemas global={config.schemas?.global} />
       <AtlasLayoutShell config={config}>
         <main style={{ minHeight: '60vh' }}>
           {children}
         </main>
       </AtlasLayoutShell>
       <AtlasFooter config={config} />
-      {explorerRoutes && <DemoExplorer routes={explorerRoutes} basePath="" />}
     </>
   );
 }

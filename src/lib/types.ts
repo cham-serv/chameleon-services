@@ -20,6 +20,17 @@ export type TenantConfig = {
   };
   settings: SiteSettings | null;
   pageConfig: PageConfig | null;
+  /**
+   * Pre-computed JSON-LD schemas from the engine (Phase 1+).
+   * The frontend NEVER builds these — it blindly injects them as <script> tags.
+   *
+   * schemas.global[]        — emitted on every page (business entity, etc.)
+   * schemas.pages[slug][]   — emitted only on the matching page
+   */
+  schemas?: {
+    global: Record<string, unknown>[];
+    pages: Record<string, Record<string, unknown>[]>;
+  } | null;
 };
 
 export type TemplateInfo = {
@@ -41,8 +52,8 @@ export type FeatureConfig = Record<string, {
 export type SiteSettings = {
   siteName?: string;
   tagline?: string;
-  logo?: { url: string } | null;
-  logoMark?: { url: string } | null;
+  logo?: { url: string; alt?: string; filename?: string; width?: number; height?: number } | null;
+  logoMark?: { url: string; alt?: string; filename?: string; width?: number; height?: number } | null;
   // Contact
   contactEmail?: string;
   contactPhone?: string;
@@ -68,14 +79,24 @@ export type SiteSettings = {
   socialTwitter?: string;
   socialYoutube?: string;
   socialGoogle?: string;
+  // GEO fields (Business Identity — drives schema.org @type in engine)
+  businessType?: string;
+  serviceType?: string;
+  specializations?: Array<{ area: string }>;
+  registrationNumber?: string;
+  jurisdiction?: string;
+  foundedYear?: number;
+  priceRange?: string;
   // Brand tokens
   colourPrimary?: string;
   colourSecondary?: string;
   colourAccent?: string;
   colourBackground?: string;
   colourText?: string;
+  colourHeading?: string;
   /** Controls button shape. CSS applied via data-btn-style on <body>. */
   buttonStyle?: 'filled' | 'outline' | 'pill' | 'soft';
+  fontDisplay?: string;
   fontHeading?: string;
   fontBody?: string;
   // Ecommerce
@@ -109,6 +130,12 @@ export type SiteSettings = {
   defaultDeliveryRegions?: Array<{ region: string }>;
   // Turnstile (safe public-side key)
   turnstileSiteKey?: string;
+  /**
+   * Controls dark/light mode for templates that support it (e.g. Meridian).
+   * Applied server-side as data-scheme on <html> — zero flash of unstyled content.
+   * 'auto' = follows user OS preference via CSS prefers-color-scheme.
+   */
+  colourScheme?: 'light' | 'dark' | 'auto';
 };
 
 // - Page Config (from atlas-site-config via tenant-config API) -
@@ -149,7 +176,11 @@ export type PageConfig = {
   colourSecondary?: string | null;
   colourAccent?: string | null;
   colourBackground?: string | null;
+  colourText?: string | null;
+  colourHeading?: string | null;
   buttonStyle?: 'filled' | 'outline' | 'pill' | 'soft' | null;
+  colourScheme?: 'light' | 'dark' | 'auto' | null;
+  fontDisplay?: string | null;
   fontHeading?: string | null;
   fontBody?: string | null;
 
@@ -183,6 +214,45 @@ export type PageConfig = {
   homeSeoDescription?: string | null;
   homeSeoOgImage?: PageConfigMedia;
 
+  // Home page - storefront trust bar (storefront variant only).
+  // Each item has an optional icon (emoji/character) and a required text label.
+  // • null / undefined  → falls back to the built-in defaults (Free Shipping, Easy Returns, etc.)
+  // • empty array []    → hides the trust bar entirely
+  // • populated array   → renders exactly what the tenant supplies, in order
+  homeTrustSignals?: Array<{ icon?: string | null; text: string }> | null;
+
+  // Home page - shared sections (all variants)
+  homeTestimonialsHeading?: string | null;
+  homeTestimonials?: Array<{
+    quote: string;
+    author: string;
+    role?: string | null;
+    rating?: number | null;
+  }> | null;
+  homeLogosHeading?: string | null;
+  homeLogos?: Array<{
+    name: string;
+    logo: PageConfigMedia;
+    url?: string | null;
+  }> | null;
+  homeLogosBeforeTestimonials?: boolean | null;
+
+  // Home page - variant-specific sections (storefront, modern, bold, minimalist)
+  homeStoryHeadline?: string | null;
+  homeStoryBlurb?: string | null;
+  homeStoryImage?: PageConfigMedia;
+  homeStoryCtaText?: string | null;
+  homeStoryCtaLink?: string | null;
+  homeSecondRowHeading?: string | null;
+  homeSecondRowSort?: 'newest' | 'price-asc' | 'price-desc' | 'name' | null;
+  homeSecondRowLimit?: number | null;
+
+  // Global announcement strip (all pages, lives in layout)
+  announcementEnabled?: boolean | null;
+  announcementText?: string | null;
+  announcementLink?: string | null;
+  announcementLinkText?: string | null;
+  announcementStyle?: 'info' | 'promo' | 'urgent' | null;
 
   // About page content
   aboutHeadline?: string | null;
@@ -273,6 +343,13 @@ export type PageDefinition = {
   variants: Record<string, PageVariant>;
   /** Which variant slug to use if none specified */
   defaultVariant: string;
+  /**
+   * If false, the page is hidden from the Demo Explorer pages list.
+   * Useful for transactional pages (cart, checkout, order confirmation)
+   * that don't make sense as standalone demo destinations.
+   * Defaults to true.
+   */
+  navigableInDemo?: boolean;
 };
 
 export type TemplateDefinition = {
@@ -291,4 +368,139 @@ export type ResolvedPage = {
   routeKey: string;
   variant: string;
   Component: ComponentType<PageProps>;
+};
+
+// - Meridian Page Config -
+//
+// Fetched from /api/public/meridian-config?tenant=xxx and stored in
+// TenantConfig.meridianConfig (when template === 'meridian').
+// Mirrors the MeridianSiteConfig collection structure.
+
+export type MeridianPageConfig = {
+  // Identity (from Settings tab)
+  siteName?: string | null;
+  tagline?: string | null;
+  logo?: { url: string; alt?: string } | null;
+  logoMark?: { url: string; alt?: string } | null;
+  contactEmail?: string | null;
+  contactPhone?: string | null;
+  colourScheme?: 'light' | 'dark' | 'auto' | null;
+
+  // Global CTAs
+  homeCta1Text?: string | null;
+  homeCta1Link?: string | null;
+  homeCta2Text?: string | null;
+  homeCta2Link?: string | null;
+
+  // Page enablement & variants
+  pages?: {
+    home?:      { variant?: string };
+    services?:  { enabled?: boolean; variant?: string };
+    team?:      { enabled?: boolean; variant?: string };
+    about?:     { enabled?: boolean };
+    contact?:   { enabled?: boolean; variant?: string };
+    blog?:      { enabled?: boolean };
+    resources?: { enabled?: boolean };
+    faqs?:      { enabled?: boolean };
+    legal?:     { enabled?: boolean };
+  } | null;
+
+  // Announcement strip
+  announcementEnabled?: boolean | null;
+  announcementText?: string | null;
+  announcementLink?: string | null;
+  announcementLinkText?: string | null;
+  announcementStyle?: 'info' | 'promo' | 'urgent' | null;
+
+  // Home — Split Hero variant
+  homeSplitHeroHeadline?: string | null;
+  homeSplitHeroSubheadline?: string | null;
+  homeSplitHeroImage?: { url: string; alt?: string } | null;
+
+  // Home — Full Hero variant
+  homeFullHeroHeadline?: string | null;
+  homeFullHeroSubheadline?: string | null;
+  homeFullHeroImage?: { url: string; alt?: string } | null;
+
+  // Home — Authority variant
+  homeAuthorityHeadline?: string | null;
+  homeAuthoritySubheadline?: string | null;
+
+  // Home — Metrics variant
+  homeMetricsHeadline?: string | null;
+  homeMetricsSubheadline?: string | null;
+  homeMetricsHeroImage?: { url: string; alt?: string } | null;
+  homeMetricsCounters?: Array<{ value: string; label: string }> | null;
+
+  // Home — shared content
+  homeTrustSignals?: Array<{ text: string }> | null;
+  homeTestimonials?: Array<{
+    quote: string;
+    author: string;
+    role?: string | null;
+    rating?: number | null;
+  }> | null;
+  homePartnerLogos?: Array<{
+    name: string;
+    logo: { url: string; alt?: string } | null;
+    url?: string | null;
+  }> | null;
+  homeSeoTitle?: string | null;
+  homeSeoDescription?: string | null;
+
+  // Services page
+  servicesHeadline?: string | null;
+  servicesSubheadline?: string | null;
+  servicesSeoTitle?: string | null;
+  servicesSeoDescription?: string | null;
+
+  // Team page
+  teamHeadline?: string | null;
+  teamSubheadline?: string | null;
+  teamSeoTitle?: string | null;
+  teamSeoDescription?: string | null;
+
+  // About page
+  aboutVariant?: 'standard' | 'leadership' | 'heritage' | 'impact' | null;
+  aboutHeadline?: string | null;
+  aboutIntro?: string | null;
+  aboutStory?: unknown; // Lexical richText JSON
+  aboutImage?: { url: string; alt?: string } | null;
+  aboutValues?: Array<{ title: string; description: string; icon?: string }> | null;
+  aboutMilestones?: Array<{ year: string; event: string }> | null;
+  aboutMetrics?: Array<{ value: string; label: string }> | null;
+  aboutClientLogos?: Array<{ name: string; logo: { url: string } | null }> | null;
+  aboutSeoTitle?: string | null;
+  aboutSeoDescription?: string | null;
+
+  // Contact page
+  contactHeadline?: string | null;
+  contactSubheadline?: string | null;
+  contactImage?: { url: string; alt?: string } | null;
+  contactMapEmbedUrl?: string | null;
+  contactBusinessHours?: Array<{ days: string; hours: string }> | null;
+  contactSeoTitle?: string | null;
+  contactSeoDescription?: string | null;
+
+  // Blog page
+  blogHeadline?: string | null;
+  blogSubheadline?: string | null;
+  blogSeoTitle?: string | null;
+  blogSeoDescription?: string | null;
+
+  // Resources page
+  resourcesHeadline?: string | null;
+  resourcesSubheadline?: string | null;
+  resourcesSeoTitle?: string | null;
+  resourcesSeoDescription?: string | null;
+
+  // FAQs page
+  faqsHeadline?: string | null;
+  faqsSubheadline?: string | null;
+  faqsSeoTitle?: string | null;
+  faqsSeoDescription?: string | null;
+
+  // Legal page
+  legalSeoTitle?: string | null;
+  legalSeoDescription?: string | null;
 };

@@ -200,6 +200,7 @@ export const definition: TemplateDefinition = {
     '/cart': {
       label: 'Cart',
       feature: 'shop',
+      navigableInDemo: false, // Empty cart is not a useful demo destination
       defaultVariant: 'standard',
       variants: {
         'standard': {
@@ -213,6 +214,7 @@ export const definition: TemplateDefinition = {
     '/checkout': {
       label: 'Checkout',
       feature: 'shop',
+      navigableInDemo: false, // No items in cart — not a useful demo destination
       defaultVariant: 'standard',
       variants: {
         'standard': {
@@ -231,6 +233,7 @@ export const definition: TemplateDefinition = {
     '/order/confirmation/*': {
       label: 'Order Status',
       feature: 'shop',
+      navigableInDemo: false, // Requires a real order ID — not a useful demo destination
       defaultVariant: 'standard',
       variants: {
         'standard': {

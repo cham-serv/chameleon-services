@@ -55,7 +55,7 @@ export function ProductCard({
               src={image.url}
               alt={image.alt ?? product.name}
               fill
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 240px"
               style={{ objectFit: 'cover' }}
               priority={priority}
               className="atlas-product-img-primary"
@@ -65,7 +65,7 @@ export function ProductCard({
                 src={secondaryImageUrl}
                 alt={`${product.name} - alternate view`}
                 fill
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 240px"
                 style={{ objectFit: 'cover' }}
                 className="atlas-product-img-secondary"
                 aria-hidden="true"

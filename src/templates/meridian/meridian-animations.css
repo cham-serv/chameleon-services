@@ -1,0 +1,282 @@
+/**
+ * Meridian Animations
+ *
+ * Scroll-triggered reveal, hover transitions, modal/drawer enter/exit.
+ * Uses data-reveal attribute activated by MeridianScrollReveal component.
+ * Respects prefers-reduced-motion throughout.
+ */
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   SCROLL REVEAL
+   ───────────────────────────────────────────────────────────────────────────── */
+
+[data-reveal] {
+  opacity: 0;
+  transition:
+    opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-reveal="up"] {
+  transform: translateY(28px);
+}
+
+[data-reveal="fade"] {
+  transform: none;
+}
+
+[data-reveal="left"] {
+  transform: translateX(-24px);
+}
+
+[data-reveal="right"] {
+  transform: translateX(24px);
+}
+
+[data-reveal="scale"] {
+  transform: scale(0.96);
+}
+
+/* When IntersectionObserver fires, add data-revealed="true" */
+[data-revealed="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Stagger children via --delay CSS var */
+[data-reveal-stagger] > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-reveal-stagger] > *:nth-child(1)  { transition-delay: 0ms;   }
+[data-reveal-stagger] > *:nth-child(2)  { transition-delay: 60ms;  }
+[data-reveal-stagger] > *:nth-child(3)  { transition-delay: 120ms; }
+[data-reveal-stagger] > *:nth-child(4)  { transition-delay: 180ms; }
+[data-reveal-stagger] > *:nth-child(5)  { transition-delay: 240ms; }
+[data-reveal-stagger] > *:nth-child(6)  { transition-delay: 300ms; }
+[data-reveal-stagger] > *:nth-child(7)  { transition-delay: 360ms; }
+[data-reveal-stagger] > *:nth-child(8)  { transition-delay: 420ms; }
+[data-reveal-stagger] > *:nth-child(9)  { transition-delay: 480ms; }
+[data-reveal-stagger] > *:nth-child(10) { transition-delay: 540ms; }
+
+[data-reveal-stagger][data-revealed="true"] > * {
+  opacity: 1;
+  transform: none;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   COUNTER ANIMATION (metrics variant)
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@keyframes mer-count-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.mer-metric-value[data-counting] {
+  animation: mer-count-up 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   HOVER MICRO-INTERACTIONS
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Arrow indicator — used on card CTAs */
+.mer-arrow-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--brand-primary, #1a2b5e);
+  text-decoration: none;
+  transition: gap var(--mer-transition);
+}
+
+.mer-arrow-link:hover {
+  gap: 0.65em;
+}
+
+.mer-arrow-link svg {
+  transition: transform var(--mer-transition);
+}
+
+.mer-arrow-link:hover svg {
+  transform: translateX(3px);
+}
+
+/* Image zoom on card hover */
+.mer-img-zoom {
+  overflow: hidden;
+}
+
+.mer-img-zoom img {
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mer-img-zoom:hover img {
+  transform: scale(1.04);
+}
+
+/* Underline grow (nav links, text links) */
+.mer-underline-grow {
+  position: relative;
+  text-decoration: none;
+}
+
+.mer-underline-grow::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: var(--brand-primary, #1a2b5e);
+  transition: width var(--mer-transition);
+}
+
+.mer-underline-grow:hover::after {
+  width: 100%;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MOBILE NAV DRAWER ENTER / EXIT
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Handled via data-open attribute on .mer-mobile-nav-drawer in meridian.css */
+/* JS toggles the attribute; CSS handles the transform transition */
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MODAL ENTER / EXIT
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@keyframes mer-modal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes mer-modal-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.97) translateY(8px);
+  }
+}
+
+@keyframes mer-backdrop-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.mer-modal[data-entering] {
+  animation: mer-modal-in 0.25s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.mer-modal-backdrop[data-entering] {
+  animation: mer-backdrop-in 0.2s ease both;
+}
+
+/* Mobile sheet enter from bottom */
+@media (max-width: 640px) {
+  @keyframes mer-sheet-in {
+    from { transform: translateY(100%); }
+    to   { transform: none; }
+  }
+
+  .mer-modal[data-entering] {
+    animation: mer-sheet-in 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   PAGE LOAD FADE
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@keyframes mer-fade-in-page {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.mer-page-enter {
+  animation: mer-fade-in-page 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   STICKY NAV HIGHLIGHT (sticky-scroll services variant)
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@keyframes mer-nav-pulse {
+  0%   { box-shadow: none; }
+  50%  { box-shadow: inset 2px 0 0 var(--brand-primary, #1a2b5e); }
+  100% { box-shadow: none; }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   SKELETON LOADING STATES
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@keyframes mer-shimmer {
+  from { background-position: -400px 0; }
+  to   { background-position: 400px 0; }
+}
+
+.mer-skeleton {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--brand-text, #444) 6%, transparent) 25%,
+    color-mix(in srgb, var(--brand-text, #444) 12%, transparent) 50%,
+    color-mix(in srgb, var(--brand-text, #444) 6%, transparent) 75%
+  );
+  background-size: 800px 100%;
+  animation: mer-shimmer 1.6s ease-in-out infinite;
+  border-radius: var(--mer-radius-sm);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   PREFERS REDUCED MOTION — disable all animations
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  [data-reveal-stagger] > * {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .mer-modal[data-entering],
+  .mer-modal-backdrop[data-entering],
+  .mer-page-enter {
+    animation: none !important;
+  }
+
+  .mer-img-zoom:hover img {
+    transform: none;
+  }
+
+  .mer-arrow-link:hover {
+    gap: 0.35em;
+  }
+
+  .mer-arrow-link:hover svg {
+    transform: none;
+  }
+
+  .mer-skeleton {
+    animation: none;
+    background: color-mix(in srgb, var(--brand-text, #444) 8%, transparent);
+  }
+}

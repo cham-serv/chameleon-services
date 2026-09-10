@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Atlas FAQsPage  Server Component
  *
  * Variants:
@@ -16,10 +16,10 @@
 import type { PageProps } from '@/lib/types';
 import { getFaqs, type FAQ } from '@/lib/api';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
-import { JsonLd } from '@/components/JsonLd';
+import { JsonLd, PageSchemas } from '@/components/JsonLd';
 import { AtlasFaqAccordion } from './AtlasFaqAccordion';
 import { AtlasFaqSearch } from './AtlasFaqSearch';
-import { buildBreadcrumbLd, buildFAQPageLd } from '@/lib/jsonld';
+import { buildBreadcrumbLd } from '@/lib/schema-utils';
 
 export default async function FAQsPage({ config, variant, noCache }: PageProps) {
   const tenant = config.tenant.slug;
@@ -47,18 +47,23 @@ export default async function FAQsPage({ config, variant, noCache }: PageProps) 
   }
   const categories = Array.from(grouped.entries());
 
-  // JSON-LD schemas
+  // JSON-LD schemas:
+  //   breadcrumb — structural, built locally (fast, no async needed)
+  //   faqs       — engine-computed (publisher attribution, DefinedTermSet clusters)
+  //   faqsRes?._schema — FAQPage from the entity API (also engine-computed)
   const breadcrumbSchema = buildBreadcrumbLd([
     { name: 'Home', url: `${siteUrl}/` },
     { name: 'FAQs', url: `${siteUrl}/faqs` },
   ]);
 
-  const faqSchema = buildFAQPageLd(faqs, config, siteUrl);
-
   const schemas = (
     <>
+      {/* Page-level schemas from engine (WebPage, Breadcrumb, SiteLinks) */}
+      <PageSchemas page={config.schemas?.pages.faqs} />
+      {/* Structural breadcrumb built locally */}
       <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={faqSchema} />
+      {/* FAQPage schema from entity API (_schema on the faqs response) */}
+      {(res as any)?._schema && <JsonLd data={(res as any)._schema} />}
     </>
   );
 

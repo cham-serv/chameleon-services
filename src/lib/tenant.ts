@@ -178,6 +178,13 @@ export async function fetchTenantConfig(
       cacheOptions,
     );
 
+    if (res.status === 402) {
+      // Tenant is suspended or cancelled.
+      // Return a sentinel value so callers can render the correct page.
+      // Using a special marker on the return type avoids a breaking API change.
+      return { __suspended: true } as any;
+    }
+
     if (!res.ok) {
       console.warn(`[tenant] Failed to fetch config for "${tenantSlugOrDomain}": ${res.status}`);
       return null;
@@ -189,3 +196,4 @@ export async function fetchTenantConfig(
     return null;
   }
 }
+

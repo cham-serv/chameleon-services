@@ -15,6 +15,19 @@
 import type { Metadata, Viewport } from 'next';
 import { getFontClasses, getFontVariables } from '@/lib/fonts';
 import { fetchTenantConfig } from '@/lib/tenant';
+import { PageSchemas } from '@/components/JsonLd';
+import { DemoExplorer } from '@/templates/atlas/DemoExplorer';
+import { definition as atlasDefinition } from '@/templates/atlas/definition';
+import { definition as meridianDefinition } from '@/templates/meridian/definition';
+import { buildExplorerRoutes } from '@/templates/atlas/demo-explorer-utils';
+
+// ─── Template CSS ────────────────────────────────────────────────────────────
+// Imported here (stable layout shell) rather than inside the dynamically-
+// imported template Layout components. This guarantees the stylesheets are
+// in the <head> on every client-side navigation, not just on hard refresh.
+// Next.js deduplicates CSS — no double-load even if the template also imports.
+import '@/templates/meridian/meridian.css';
+import '@/templates/meridian/meridian-animations.css';
 
 type Props = {
   children: React.ReactNode;
@@ -63,9 +76,12 @@ export async function generateMetadata({ params }: { params: Promise<{ tenant: s
     ? { icon: faviconUrl, shortcut: faviconUrl, apple: faviconUrl }
     : { icon: '/logo-icon.webp', shortcut: '/logo-icon.webp', apple: '/logo-icon.webp' };
 
+  const isDemoTenant = config?.tenant?.isDemoTenant === true;
+
   return {
     title: { default: siteName, template: `%s | ${siteName}` },
     icons,
+    ...(isDemoTenant && { robots: { index: false, follow: false } }),
   };
 }
 
@@ -80,29 +96,56 @@ export default async function TenantLayout({ children, params }: Props) {
   const pc = config?.pageConfig;
   const s = config?.settings;
 
-  const fontHeading = s?.fontHeading ?? pc?.fontHeading ?? null;
-  const fontBody = s?.fontBody ?? pc?.fontBody ?? null;
-  const fontClasses = getFontClasses(fontHeading, fontBody);
+  const fontHeading  = s?.fontHeading  ?? pc?.fontHeading  ?? null;
+  const fontBody     = s?.fontBody     ?? pc?.fontBody     ?? null;
+  const fontDisplay  = s?.fontDisplay  ?? pc?.fontDisplay  ?? null;
+  const fontClasses  = getFontClasses(fontHeading, fontBody, fontDisplay);
 
-  // Brand tokens  inject as CSS custom properties
+  // colourScheme — resolved server-side so <html data-scheme> is set before
+  // any CSS is parsed. This is the zero-flash dark mode approach.
+  // Priority: SiteSettings.colourScheme (global) → MeridianSiteConfig.colourScheme
+  // (passed through tenant-config as pageConfig.colourScheme) → 'light' default.
+  const colourScheme = config?.settings?.colourScheme ?? config?.pageConfig?.colourScheme ?? 'light';
+
+  // Brand tokens — inject as CSS custom properties
+  // Pass colourScheme so dark mode skips background/text tokens (CSS handles them)
   const brandTokens = buildBrandTokens({
     colourPrimary:    s?.colourPrimary    ?? pc?.colourPrimary    ?? undefined,
     colourSecondary:  s?.colourSecondary  ?? pc?.colourSecondary  ?? undefined,
     colourAccent:     s?.colourAccent     ?? pc?.colourAccent     ?? undefined,
     colourBackground: s?.colourBackground ?? pc?.colourBackground ?? undefined,
-    colourText:       s?.colourText       ?? undefined,
-  });
+    colourText:       s?.colourText       ?? pc?.colourText       ?? undefined,
+    colourHeading:    s?.colourHeading    ?? pc?.colourHeading    ?? undefined,
+  }, colourScheme);
 
   const buttonStyle = s?.buttonStyle ?? pc?.buttonStyle ?? 'filled';
 
+  // Logo URL — preloaded in <head> to eliminate header CLS
+  const logoUrl = s?.logo?.url ?? pc?.logo?.url ?? null;
+
+  // Build demo explorer routes if this is a demo tenant.
+  // Pick the definition based on the tenant's template slug.
+  const templateSlug = config?.tenant?.template?.slug ?? 'atlas';
+  const templateDefinition =
+    templateSlug === 'meridian' ? meridianDefinition : atlasDefinition;
+
+  const explorerRoutes =
+    config?.tenant?.isDemoTenant
+      ? buildExplorerRoutes(templateDefinition, config.tenant.featureConfig)
+      : null;
+
   return (
-    <html lang="en" className={fontClasses}>
+    <html lang="en" className={fontClasses} data-scheme={colourScheme}>
       <head>
         <style
           dangerouslySetInnerHTML={{
-            __html: `:root { ${brandTokens} ${getFontVariables(fontHeading, fontBody)} }`,
+            __html: `:root { ${brandTokens} ${getFontVariables(fontHeading, fontBody, fontDisplay)} }`,
           }}
         />
+        {/* Preload the logo so it arrives before the header <img> is discovered */}
+        {logoUrl && (
+          <link rel="preload" as="image" href={logoUrl} fetchPriority="high" />
+        )}
       </head>
       <body
         data-btn-style={buttonStyle}
@@ -113,7 +156,10 @@ export default async function TenantLayout({ children, params }: Props) {
           margin: 0,
         }}
       >
+        {/* Global JSON-LD schemas — engine-computed, emitted on every page */}
+        <PageSchemas global={config?.schemas?.global} />
         {children}
+        {explorerRoutes && <DemoExplorer routes={explorerRoutes} basePath="" initialScheme={colourScheme} templateSlug={templateSlug} />}
       </body>
     </html>
   );
@@ -122,6 +168,14 @@ export default async function TenantLayout({ children, params }: Props) {
 /**
  * Builds CSS custom property declarations from site settings.
  * Falls back to sensible defaults for each token.
+ *
+ * When colourScheme is 'dark' or 'auto', background/text/heading tokens
+ * are NOT emitted — the CSS dark mode rules ([data-scheme="dark"]) set them
+ * instead. This prevents the inline <style> from overriding the stylesheet
+ * via CSS cascade (same specificity, last-in-source wins).
+ *
+ * Brand identity tokens (primary, secondary, accent) are ALWAYS emitted
+ * so the tenant's brand colours apply regardless of scheme.
  */
 function buildBrandTokens(settings: {
   colourPrimary?: string;
@@ -129,19 +183,35 @@ function buildBrandTokens(settings: {
   colourAccent?: string;
   colourBackground?: string;
   colourText?: string;
-} | null | undefined): string {
-  const p = settings?.colourPrimary ?? '#0B132B';
+  colourHeading?: string;
+} | null | undefined, colourScheme: string = 'light'): string {
+  const p = settings?.colourPrimary   ?? '#0B132B';
   const s = settings?.colourSecondary ?? '#00E5FF';
-  const a = settings?.colourAccent ?? '#f59e0b';
-  const bg = settings?.colourBackground ?? '#ffffff';
-  const text = settings?.colourText ?? '#333333';
+  const a = settings?.colourAccent    ?? '#f59e0b';
 
-  return [
+  // Brand identity tokens — always emitted
+  const tokens = [
     `--brand-primary: ${p}`,
     `--brand-secondary: ${s}`,
     `--brand-accent: ${a}`,
-    `--brand-background: ${bg}`,
-    `--brand-text: ${text}`,
-    `--brand-surface: color-mix(in oklch, ${bg} 95%, ${p} 5%)`,
-  ].join('; ');
+  ];
+
+  // Background/text tokens — only emitted in light mode.
+  // In dark/auto mode, the CSS [data-scheme="dark"] rules set these instead.
+  const isDark = colourScheme === 'dark' || colourScheme === 'auto';
+  if (!isDark) {
+    const bg   = settings?.colourBackground ?? '#ffffff';
+    const text = settings?.colourText       ?? '#333333';
+    tokens.push(
+      `--brand-background: ${bg}`,
+      `--brand-text: ${text}`,
+      `--brand-surface: color-mix(in srgb, var(--brand-background, ${bg}) 95%, var(--brand-primary, ${p}) 5%)`,
+    );
+    // Only emit --brand-heading when explicitly set; otherwise CSS :root default handles it.
+    if (settings?.colourHeading) {
+      tokens.push(`--brand-heading: ${settings.colourHeading}`);
+    }
+  }
+
+  return tokens.join('; ');
 }
