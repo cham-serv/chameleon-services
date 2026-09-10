@@ -289,14 +289,23 @@ export function DemoExplorer({ routes, basePath, initialScheme, templateSlug }: 
     // 1. Sync brand state to real CSS vars
     const style = getComputedStyle(document.documentElement);
     const get = (v: string, fallback: string) => style.getPropertyValue(v).trim() || fallback;
+
+    // Brand identity (primary / secondary / accent) — always read from :root
+    // because buildBrandTokens emits them in all colour schemes.
+    //
+    // Theme colours (background / text / heading) — ONLY read when the site is
+    // in light mode. In dark mode, those CSS vars come from the stylesheet's
+    // [data-scheme="dark"] rule (not the CMS's inline <style>), so reading them
+    // would store dark-mode values as the "light" defaults and break the toggle.
+    const startedDark = currentScheme === 'dark';
     setBrand((prev) => ({
       ...prev,
       primary:       get('--brand-primary',    prev.primary),
       secondary:     get('--brand-secondary',  prev.secondary),
       accent:        get('--brand-accent',     prev.accent),
-      textColour:    get('--brand-text',       prev.textColour),
-      headingColour: get('--brand-heading',    prev.headingColour),
-      bgColour:      get('--brand-background', prev.bgColour),
+      textColour:    startedDark ? prev.textColour    : get('--brand-text',       prev.textColour),
+      headingColour: startedDark ? prev.headingColour : get('--brand-heading',    prev.headingColour),
+      bgColour:      startedDark ? prev.bgColour      : get('--brand-background', prev.bgColour),
     }));
 
     // Mark as mounted so the brand preview effect can now safely write values.
