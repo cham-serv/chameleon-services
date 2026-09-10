@@ -46,6 +46,34 @@
   scrollbar-gutter: stable;
 }
 
+/* -- Dark Mode ---------------------------------------------------- */
+/* Parallels meridian.css [data-scheme="dark"] — provides fallback
+   dark values when inline theme vars are removed by the DemoExplorer. */
+
+[data-scheme="dark"] {
+  --brand-background: #0e1016;
+  --brand-surface:    #161a24;
+  --brand-text:       #dde1ec;
+  --brand-heading:    #f0f2f8;
+  --atlas-shadow-sm:  0 1px 2px rgba(0, 0, 0, 0.3);
+  --atlas-shadow-md:  0 4px 12px rgba(0, 0, 0, 0.35);
+  --atlas-shadow-lg:  0 8px 30px rgba(0, 0, 0, 0.4);
+  --atlas-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.45);
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-scheme="auto"] {
+    --brand-background: #0e1016;
+    --brand-surface:    #161a24;
+    --brand-text:       #dde1ec;
+    --brand-heading:    #f0f2f8;
+    --atlas-shadow-sm:  0 1px 2px rgba(0, 0, 0, 0.3);
+    --atlas-shadow-md:  0 4px 12px rgba(0, 0, 0, 0.35);
+    --atlas-shadow-lg:  0 8px 30px rgba(0, 0, 0, 0.4);
+    --atlas-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.45);
+  }
+}
+
 /* -- Typography -- */
 
 .atlas-h1 {

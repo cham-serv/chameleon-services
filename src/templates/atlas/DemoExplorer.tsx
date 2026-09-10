@@ -64,22 +64,22 @@ const PRESET_PALETTES: { label: string; primary: string; secondary: string; acce
  *
  * In production these are never applied — real tenants use their own colours.
  */
-const VARIANT_PALETTES: Record<string, { primary: string; secondary: string; accent: string; bgColour: string; textColour: string }> = {
+const VARIANT_PALETTES: Record<string, { primary: string; secondary: string; accent: string; bgColour: string; textColour: string; headingColour: string }> = {
   // ── Atlas variants ──────────────────────────────────────────────────────────
-  storefront: { primary: '#2d6a4f', secondary: '#52b788', accent: '#f59e0b',  bgColour: '#ffffff', textColour: '#1b1b1b' },
-  editorial:  { primary: '#0369a1', secondary: '#38bdf8', accent: '#f97316',  bgColour: '#fafaf9', textColour: '#1c1917' },
-  modern:     { primary: '#4f46e5', secondary: '#7c3aed', accent: '#06b6d4',  bgColour: '#0a0f1e', textColour: '#e2e8f0' },
-  bold:       { primary: '#1a1a2e', secondary: '#e94560', accent: '#f5a623',  bgColour: '#0d0d1a', textColour: '#f8fafc' },
-  minimalist: { primary: '#1c1917', secondary: '#57534e', accent: '#16a34a',  bgColour: '#fafaf9', textColour: '#1c1917' },
+  storefront: { primary: '#2d6a4f', secondary: '#52b788', accent: '#f59e0b',  bgColour: '#ffffff', textColour: '#1b1b1b', headingColour: '#1b1b1b' },
+  editorial:  { primary: '#0369a1', secondary: '#38bdf8', accent: '#f97316',  bgColour: '#fafaf9', textColour: '#1c1917', headingColour: '#1c1917' },
+  modern:     { primary: '#4f46e5', secondary: '#7c3aed', accent: '#06b6d4',  bgColour: '#0a0f1e', textColour: '#e2e8f0', headingColour: '#f0f2f8' },
+  bold:       { primary: '#1a1a2e', secondary: '#e94560', accent: '#f5a623',  bgColour: '#0d0d1a', textColour: '#f8fafc', headingColour: '#ffffff' },
+  minimalist: { primary: '#1c1917', secondary: '#57534e', accent: '#16a34a',  bgColour: '#fafaf9', textColour: '#1c1917', headingColour: '#1c1917' },
   // ── Meridian home variants ───────────────────────────────────────────────────
   // split-hero: classic professional services — navy + gold
-  'split-hero':  { primary: '#1a2b5e', secondary: '#3b6cb7', accent: '#c9a84c', bgColour: '#ffffff', textColour: '#1b1b1b' },
+  'split-hero':  { primary: '#1a2b5e', secondary: '#3b6cb7', accent: '#c9a84c', bgColour: '#ffffff', textColour: '#1b1b1b', headingColour: '#1a2b5e' },
   // full-hero: cinematic full-bleed — deep slate + teal accent
-  'full-hero':   { primary: '#0f2027', secondary: '#203a43', accent: '#2c8c7c', bgColour: '#0f2027', textColour: '#e8edf2' },
+  'full-hero':   { primary: '#0f2027', secondary: '#203a43', accent: '#2c8c7c', bgColour: '#0f2027', textColour: '#e8edf2', headingColour: '#f0f2f8' },
   // authority: pure typographic big-law — charcoal + bronze
-  'authority':   { primary: '#1c1c1e', secondary: '#3a3a3c', accent: '#9b7f4a', bgColour: '#fafaf8', textColour: '#1c1c1e' },
+  'authority':   { primary: '#1c1c1e', secondary: '#3a3a3c', accent: '#9b7f4a', bgColour: '#fafaf8', textColour: '#1c1c1e', headingColour: '#1c1c1e' },
   // metrics: modern numbers-led — midnight blue + electric teal
-  'metrics':     { primary: '#0b1f4a', secondary: '#1d4e89', accent: '#00c6b8', bgColour: '#ffffff', textColour: '#0b1f4a' },
+  'metrics':     { primary: '#0b1f4a', secondary: '#1d4e89', accent: '#00c6b8', bgColour: '#ffffff', textColour: '#0b1f4a', headingColour: '#0b1f4a' },
 };
 
 // - Font Pair Presets -
@@ -198,9 +198,6 @@ export function DemoExplorer({ routes, basePath, initialScheme, templateSlug }: 
 
   useEffect(() => {
     // Don't write brand values until the mount effect has synced real CSS vars.
-    // Without this guard, this effect fires first (with hardcoded defaults)
-    // and overwrites the server-rendered --brand-primary etc. before the mount
-    // effect can read them via getComputedStyle.
     if (!hasMounted.current) return;
 
     const root = document.documentElement;
@@ -212,18 +209,18 @@ export function DemoExplorer({ routes, basePath, initialScheme, templateSlug }: 
     document.body.setAttribute('data-btn-style', brand.buttonStyle);
 
     // Theme colours (background / text / heading):
-    // In dark mode, SET explicit dark-appropriate values instead of removing
-    // inline properties. This ensures dark mode works for BOTH templates:
-    //   - Meridian has [data-scheme="dark"] CSS rules, but inline props override them
-    //     (inline style.setProperty > any stylesheet rule regardless of specificity).
-    //   - Atlas has NO [data-scheme="dark"] rules at all, so removing inline props
-    //     would leave variables unset with light-mode `:root` fallbacks.
-    // By always setting values, both templates get correct dark mode behaviour.
+    //
+    // In dark mode, REMOVE inline overrides for these properties so that the
+    // stylesheet's [data-scheme="dark"] rule (e.g. meridian.css line 72) can
+    // take effect. Inline style.setProperty() has higher priority than ANY CSS
+    // rule — keeping them set would permanently block [data-scheme] changes.
+    //
+    // In light mode, SET them inline so the Explorer's colour pickers work.
     if (isDark === true) {
-      root.style.setProperty('--brand-background', '#0e1016');
-      root.style.setProperty('--brand-text',       '#dde1ec');
-      root.style.setProperty('--brand-heading',    '#f0f2f8');
-      root.style.setProperty('--brand-surface',    '#161a24');
+      root.style.removeProperty('--brand-background');
+      root.style.removeProperty('--brand-text');
+      root.style.removeProperty('--brand-heading');
+      root.style.removeProperty('--brand-surface');
     } else {
       root.style.setProperty('--brand-text',       brand.textColour);
       root.style.setProperty('--brand-heading',    brand.headingColour);
@@ -240,13 +237,6 @@ export function DemoExplorer({ routes, basePath, initialScheme, templateSlug }: 
     }
 
     // Font preview + body-level colour overrides injected as a <style> element.
-    // We use a <style> block (not just CSS vars) so that:
-    //   a) font-family stacks are set without any network request
-    //   b) html/body get a colour/background cascade base — ensuring ALL page
-    //      content that inherits from body responds to the text/background
-    //      colour controls, not just elements that explicitly reference the var().
-    //   Dark sections (e.g. atlas-section-dark) retain their own backgrounds
-    //   because their CSS rules are more specific than a body rule.
     const styleId = 'demo-explorer-font-preview';
     let el = document.getElementById(styleId) as HTMLStyleElement | null;
     if (!el) {
@@ -256,20 +246,16 @@ export function DemoExplorer({ routes, basePath, initialScheme, templateSlug }: 
     }
     const hStack = getFontStack(brand.fontHeading, 'heading');
     const bStack = getFontStack(brand.fontBody, 'body');
-    // Display font falls back to heading font if not explicitly set
     const dStack = brand.fontDisplay
       ? getFontStack(brand.fontDisplay, 'display')
       : hStack;
     el.textContent = [
       `:root { --font-display: ${dStack}; --font-heading: ${hStack}; --font-body: ${bStack}; }`,
-      // Cascade base: any element that inherits colour from body picks this up.
-      // Uses var() so it responds to both dark mode and inline overrides above.
       `html, body {`,
       `  background-color: var(--brand-background, #ffffff);`,
       `  color: var(--brand-text, #1b1b1b);`,
       `}`,
     ].join('\n');
-  // isDark in deps: effect must re-run on toggle to remove/restore inline overrides
   }, [brand, isDark]);
 
   const updateBrand = useCallback((patch: Partial<BrandPreview>) => {
@@ -292,31 +278,53 @@ export function DemoExplorer({ routes, basePath, initialScheme, templateSlug }: 
   //   3. Show the hint arrow for first-time visitors; auto-clear it after 5s (matching CSS).
   useEffect(() => {
     // 0. Initialise isDark from the server-rendered scheme (passed as prop).
-    //    Falls back to reading data-scheme from the DOM if prop is missing.
     const currentScheme = initialScheme ?? document.documentElement.getAttribute('data-scheme') ?? 'light';
-    setIsDark(currentScheme === 'dark');
-
-    // 1. Sync brand state to real CSS vars
-    const style = getComputedStyle(document.documentElement);
-    const get = (v: string, fallback: string) => style.getPropertyValue(v).trim() || fallback;
-
-    // Brand identity (primary / secondary / accent) — always read from :root
-    // because buildBrandTokens emits them in all colour schemes.
-    //
-    // Theme colours (background / text / heading) — ONLY read when the site is
-    // in light mode. In dark mode, those CSS vars come from the stylesheet's
-    // [data-scheme="dark"] rule (not the CMS's inline <style>), so reading them
-    // would store dark-mode values as the "light" defaults and break the toggle.
     const startedDark = currentScheme === 'dark';
+    setIsDark(startedDark);
+
+    // 1. Sync brand state to real CSS vars.
+    //
+    // getComputedStyle reads the RESOLVED value of each CSS variable, which
+    // in dark mode would be the dark palette (#0e1016 etc.) — not the tenant's
+    // actual light-mode brand colours. Storing those would mean the light-mode
+    // pickers show dark colours and toggling to light uses the wrong values.
+    //
+    // When starting in dark mode, we read the light-mode values from the
+    // server-rendered <style> tag instead (e.g. `:root { --brand-text: #333 }`).
+    // buildBrandTokens (layout.tsx) emits brand identity tokens in ALL modes,
+    // and emits theme tokens (--brand-text etc.) ONLY in light mode.
+    // In dark mode the <style> tag won't have them, so we fall back to safe
+    // defaults — which is correct because the CSS handles dark values.
+    const computedStyle = getComputedStyle(document.documentElement);
+    const getComputed = (v: string, fallback: string) => computedStyle.getPropertyValue(v).trim() || fallback;
+
+    // Parse light-mode values from the server-rendered <style> tag.
+    // This is needed because getComputedStyle returns the dark-resolved values
+    // when data-scheme="dark", which would poison the light-mode brand state.
+    const getFromStyleTag = (varName: string, fallback: string): string => {
+      const styleEls = document.querySelectorAll('head > style');
+      for (const styleEl of styleEls) {
+        const text = styleEl.textContent ?? '';
+        // Match e.g. --brand-text: #333333 or --brand-background: #ffffff
+        const re = new RegExp(`${varName.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')}:\\s*([^;]+)`);
+        const match = text.match(re);
+        if (match) return match[1].trim();
+      }
+      return fallback;
+    };
+
+    // Brand identity: always read from computed (available in all schemes)
+    // Theme colours: use <style> tag source when dark to get true light values
+    const getText = startedDark ? getFromStyleTag : getComputed;
     setBrand((prev) => ({
       ...prev,
-      primary:       get('--brand-primary',    prev.primary),
-      secondary:     get('--brand-secondary',  prev.secondary),
-      accent:        get('--brand-accent',     prev.accent),
-      textColour:    startedDark ? prev.textColour    : get('--brand-text',       prev.textColour),
-      headingColour: startedDark ? prev.headingColour : get('--brand-heading',    prev.headingColour),
-      heroTextColour: get('--brand-hero-text', prev.heroTextColour),
-      bgColour:      startedDark ? prev.bgColour      : get('--brand-background', prev.bgColour),
+      primary:        getComputed('--brand-primary',    prev.primary),
+      secondary:      getComputed('--brand-secondary',  prev.secondary),
+      accent:         getComputed('--brand-accent',     prev.accent),
+      textColour:     getText('--brand-text',       prev.textColour),
+      headingColour:  getText('--brand-heading',    prev.headingColour),
+      heroTextColour: getComputed('--brand-hero-text', prev.heroTextColour),
+      bgColour:       getText('--brand-background', prev.bgColour),
     }));
 
     // Mark as mounted so the brand preview effect can now safely write values.
@@ -396,18 +404,17 @@ export function DemoExplorer({ routes, basePath, initialScheme, templateSlug }: 
       router.push(`${pathname}?${params.toString()}`);
 
       // Auto-apply a curated palette when switching home variants in the demo.
-      // This ensures each variant looks visually intentional rather than inheriting
-      // whatever the demo tenant's default colours happen to be.
       if (routeKey === '/') {
         const curated = VARIANT_PALETTES[variantSlug];
         if (curated) {
           setBrand((prev) => ({
             ...prev,
-            primary:    curated.primary,
-            secondary:  curated.secondary,
-            accent:     curated.accent,
-            bgColour:   curated.bgColour,
-            textColour: curated.textColour,
+            primary:       curated.primary,
+            secondary:     curated.secondary,
+            accent:        curated.accent,
+            bgColour:      curated.bgColour,
+            textColour:    curated.textColour,
+            headingColour: curated.headingColour,
           }));
         }
       }
