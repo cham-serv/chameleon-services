@@ -15,6 +15,7 @@ import type { PageProps } from '@/lib/types';
 import { PageSchemas } from '@/components/JsonLd';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import Image from 'next/image';
+import Link from 'next/link';
 
 //  Types 
 
@@ -278,9 +279,9 @@ function renderTeamGrid({ siteName, headline, intro, heroImageUrl, teamMembers, 
           <p className="atlas-body-lg" style={{ marginTop: 'var(--atlas-spacing-md)', opacity: 0.9, maxWidth: 500, margin: 'var(--atlas-spacing-md) auto 0' }}>
             Let&apos;s discuss how we can help your business establish authority and drive growth.
           </p>
-          <a href="/contact" className="atlas-btn atlas-btn-secondary" style={{ marginTop: 'var(--atlas-spacing-xl)', display: 'inline-block' }}>
+          <Link href="/contact" className="atlas-btn atlas-btn-secondary" style={{ marginTop: 'var(--atlas-spacing-xl)', display: 'inline-block' }}>
             Contact Us
-          </a>
+          </Link>
         </div>
       </section>
     </div>
@@ -489,9 +490,9 @@ function renderStorySplit({ siteName, headline, intro, heroImageUrl, teamMembers
           <p className="atlas-body-lg" style={{ marginTop: 'var(--atlas-spacing-md)', opacity: 0.9, maxWidth: 500, margin: 'var(--atlas-spacing-md) auto 0' }}>
             Explore our latest thinking on industry trends, product guides, and brand stories.
           </p>
-          <a href="/resources" className="atlas-btn atlas-btn-secondary" style={{ marginTop: 'var(--atlas-spacing-xl)', display: 'inline-block' }}>
+          <Link href="/resources" className="atlas-btn atlas-btn-secondary" style={{ marginTop: 'var(--atlas-spacing-xl)', display: 'inline-block' }}>
             Explore Resources
-          </a>
+          </Link>
         </div>
       </section>
     </div>
