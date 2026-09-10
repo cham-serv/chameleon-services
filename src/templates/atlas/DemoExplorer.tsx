@@ -37,6 +37,7 @@ type BrandPreview = {
   accent: string;
   textColour: string;    // maps to --brand-text
   headingColour: string; // maps to --brand-heading
+  heroTextColour: string; // maps to --brand-hero-text (hero/H1 only)
   bgColour: string;      // maps to --brand-background
   buttonStyle: 'filled' | 'outline' | 'pill' | 'soft';
   fontDisplay: string;   // maps to --font-display (hero/H1 only; blank = inherit fontHeading)
@@ -147,6 +148,7 @@ export function DemoExplorer({ routes, basePath, initialScheme, templateSlug }: 
     accent:        '#f59e0b',
     textColour:    '#1b1b1b',
     headingColour: '#1b1b1b',
+    heroTextColour: '',
     bgColour:      '#ffffff',
     buttonStyle:   'filled',
     fontDisplay:   '',
@@ -229,6 +231,14 @@ export function DemoExplorer({ routes, basePath, initialScheme, templateSlug }: 
       root.style.setProperty('--brand-surface',    `color-mix(in srgb, ${brand.bgColour} 95%, ${brand.primary} 5%)`);
     }
 
+    // Hero text colour — set when explicitly chosen, remove when blank
+    // so hero headlines fall back to --brand-heading via CSS cascade.
+    if (brand.heroTextColour) {
+      root.style.setProperty('--brand-hero-text', brand.heroTextColour);
+    } else {
+      root.style.removeProperty('--brand-hero-text');
+    }
+
     // Font preview + body-level colour overrides injected as a <style> element.
     // We use a <style> block (not just CSS vars) so that:
     //   a) font-family stacks are set without any network request
@@ -305,6 +315,7 @@ export function DemoExplorer({ routes, basePath, initialScheme, templateSlug }: 
       accent:        get('--brand-accent',     prev.accent),
       textColour:    startedDark ? prev.textColour    : get('--brand-text',       prev.textColour),
       headingColour: startedDark ? prev.headingColour : get('--brand-heading',    prev.headingColour),
+      heroTextColour: get('--brand-hero-text', prev.heroTextColour),
       bgColour:      startedDark ? prev.bgColour      : get('--brand-background', prev.bgColour),
     }));
 
@@ -714,6 +725,7 @@ export function DemoExplorer({ routes, basePath, initialScheme, templateSlug }: 
               <p className="demo-explorer-section-label" style={{ marginTop: '1rem' }}>Text & Background</p>
               <div className="demo-explorer-colour-inputs">
                 {[
+                  { key: 'heroTextColour', label: 'Hero Text' },
                   { key: 'headingColour', label: 'Headings'   },
                   { key: 'textColour',    label: 'Body Text'  },
                   { key: 'bgColour',      label: 'Background' },

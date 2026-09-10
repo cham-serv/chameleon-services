@@ -115,12 +115,12 @@
    ───────────────────────────────────────────────────────────────────────────── */
 
 .mer-h1 {
-  font-family: var(--font-heading, inherit);
+  font-family: var(--font-display, var(--font-heading, inherit));
   font-size: clamp(2.25rem, 5.5vw, 3.75rem);
   font-weight: 700;
   line-height: 1.08;
   letter-spacing: -0.025em;
-  color: var(--brand-heading, var(--brand-text, #1b1b1b));
+  color: var(--brand-hero-text, var(--brand-heading, var(--brand-text, #1b1b1b)));
 }
 
 .mer-h2 {

@@ -1184,8 +1184,8 @@
   font-weight: 800;
   line-height: 1.1;
   margin: 0 0 1.25rem;
-  font-family: var(--font-heading, inherit);
-  color: var(--brand-heading, inherit);
+  font-family: var(--font-display, var(--font-heading, inherit));
+  color: var(--brand-hero-text, var(--brand-heading, inherit));
 }
 
 .atlas-hero-sub {
@@ -2653,11 +2653,13 @@
   }
 }
 
-/* Base home hero headline: uses --brand-heading so the Demo Explorer
- * heading colour picker works. Dark variants (modern, bold) override
- * this with hardcoded #ffffff via higher-specificity [data-variant] rules. */
+/* Base home hero headline: uses --font-display and --brand-hero-text so the
+ * Demo Explorer display font picker and hero colour picker work.
+ * Dark variants (modern, bold) override colour with hardcoded #ffffff
+ * via higher-specificity [data-variant] rules. */
 .atlas-home-hero-headline {
-  color: var(--brand-heading, var(--brand-text, #1b1b1b));
+  font-family: var(--font-display, var(--font-heading, inherit));
+  color: var(--brand-hero-text, var(--brand-heading, var(--brand-text, #1b1b1b)));
 }
 
 /* - Storefront Variant - */
@@ -2722,8 +2724,8 @@
   line-height: 1.05;
   letter-spacing: -0.03em;
   margin: 0 0 1.5rem;
-  font-family: var(--font-heading, inherit);
-  color: var(--brand-heading, var(--brand-text, #1b1b1b));
+  font-family: var(--font-display, var(--font-heading, inherit));
+  color: var(--brand-hero-text, var(--brand-heading, var(--brand-text, #1b1b1b)));
 }
 
 [data-variant="editorial"] .atlas-home-hero-media {
@@ -2850,7 +2852,7 @@
   line-height: 1.03;
   letter-spacing: -0.04em;
   margin: 0 0 1.5rem;
-  font-family: var(--font-heading, inherit);
+  font-family: var(--font-display, var(--font-heading, inherit));
   /* Text gradient for the headline */
   background: linear-gradient(
     135deg,
@@ -2945,7 +2947,7 @@
   letter-spacing: -0.02em;
   text-transform: uppercase;
   margin: 0 0 1.5rem;
-  font-family: var(--font-heading, inherit);
+  font-family: var(--font-display, var(--font-heading, inherit));
 }
 
 [data-variant="bold"] .atlas-home-hero-sub {
@@ -3009,8 +3011,8 @@
   line-height: 1.2;
   letter-spacing: -0.01em;
   margin: 0 0 1.5rem;
-  font-family: var(--font-heading, inherit);
-  color: var(--brand-heading, var(--brand-text, #1b1b1b));
+  font-family: var(--font-display, var(--font-heading, inherit));
+  color: var(--brand-hero-text, var(--brand-heading, var(--brand-text, #1b1b1b)));
 }
 
 [data-variant="minimalist"] .atlas-home-hero-sub {
