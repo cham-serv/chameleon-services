@@ -17,6 +17,7 @@
 import type { PageProps } from '@/lib/types';
 import { getServiceBySlug, getTeamMembers, type Service, type TeamMember } from '@/lib/api';
 import { JsonLd } from '@/components/JsonLd';
+import Link from 'next/link';
 
 // ─── Arrow icon ───────────────────────────────────────────────────────────
 
@@ -132,7 +133,7 @@ function ServiceNotFound({ slug }: { slug: string }) {
         <p className="mer-body" style={{ opacity: 0.7, marginBottom: 'var(--mer-spacing-xl)' }}>
           We couldn&apos;t find the service &ldquo;{slug}&rdquo;. It may have been moved or renamed.
         </p>
-        <a href="/services" className="mer-btn mer-btn-primary">View All Services</a>
+        <Link href="/services" className="mer-btn mer-btn-primary">View All Services</Link>
       </div>
     </section>
   );
@@ -180,7 +181,7 @@ export default async function ServicePage({ config, path }: PageProps) {
             <div data-reveal="up">
               {/* Breadcrumb */}
               <nav aria-label="Breadcrumb" style={{ marginBottom: 'var(--mer-spacing-lg)', display: 'flex', alignItems: 'center', gap: '0.4em', fontSize: '0.875rem' }}>
-                <a href="/services" style={{ color: 'color-mix(in srgb, var(--brand-text, #444) 60%, transparent)', textDecoration: 'none' }}>Services</a>
+                <Link href="/services" style={{ color: 'color-mix(in srgb, var(--brand-text, #444) 60%, transparent)', textDecoration: 'none' }}>Services</Link>
                 <span aria-hidden="true" style={{ opacity: 0.4 }}>/</span>
                 <span style={{ color: 'var(--brand-text, #444)', fontWeight: 500 }}>{service.title}</span>
               </nav>
@@ -208,10 +209,10 @@ export default async function ServicePage({ config, path }: PageProps) {
 
               {/* CTAs */}
               <div style={{ display: 'flex', gap: 'var(--mer-spacing-md)', flexWrap: 'wrap' }}>
-                <a href={`/contact?service=${encodeURIComponent(service.slug)}`} className="mer-btn mer-btn-primary mer-btn-lg">
+                <Link href={`/contact?service=${encodeURIComponent(service.slug)}`} className="mer-btn mer-btn-primary mer-btn-lg">
                   {service.ctaLabel ?? 'Get in Touch'} <ArrowIcon />
-                </a>
-                <a href="/services" className="mer-btn mer-btn-ghost mer-btn-lg">All Services</a>
+                </Link>
+                <Link href="/services" className="mer-btn mer-btn-ghost mer-btn-lg">All Services</Link>
               </div>
             </div>
 
@@ -250,9 +251,9 @@ export default async function ServicePage({ config, path }: PageProps) {
                 {deliveredBy.map((m) => <TeamMiniCard key={m.id} member={m} />)}
               </div>
               <div style={{ marginTop: 'var(--mer-spacing-xl)' }}>
-                <a href={`/contact?service=${encodeURIComponent(service.slug)}`} className="mer-btn mer-btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
+                <Link href={`/contact?service=${encodeURIComponent(service.slug)}`} className="mer-btn mer-btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
                   Enquire About This Service
-                </a>
+                </Link>
               </div>
             </aside>
           )}
@@ -268,9 +269,9 @@ export default async function ServicePage({ config, path }: PageProps) {
               {siteName} is here to guide you through every step of the process.
             </p>
           </div>
-          <a href={`/contact?service=${encodeURIComponent(service.slug)}`} className="mer-btn mer-btn-white" style={{ flexShrink: 0 }}>
+          <Link href={`/contact?service=${encodeURIComponent(service.slug)}`} className="mer-btn mer-btn-white" style={{ flexShrink: 0 }}>
             {service.ctaLabel ?? 'Get in Touch'}
-          </a>
+          </Link>
         </div>
       </div>
     </>

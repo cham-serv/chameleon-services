@@ -16,6 +16,7 @@ import { getServices, getDepartments, type Service, type Department } from '@/li
 import ModalGridClient from './ServicesModalGridClient';
 import StickyScrollNavClient from './StickyScrollNavClient';
 import { PageSchemas } from '@/components/JsonLd';
+import Link from 'next/link';
 
 // ─── Demo fallback ────────────────────────────────────────────────────────
 
@@ -57,9 +58,9 @@ function ServiceCard({ svc, onClick }: { svc: Service; onClick?: (svc: Service) 
         <div style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--brand-primary, #1a2b5e)', marginBottom: 'var(--mer-spacing-md)' }}>{svc.priceRange}</div>
       )}
       {!onClick && (
-        <a href={`/services/${svc.slug}`} className="mer-arrow-link" aria-label={`Learn more about ${svc.title}`}>
+        <Link href={`/services/${svc.slug}`} className="mer-arrow-link" aria-label={`Learn more about ${svc.title}`}>
           Learn more <ArrowIcon />
-        </a>
+        </Link>
       )}
       {onClick && (
         <div className="mer-arrow-link" aria-hidden="true" style={{ marginTop: 'auto' }}>
@@ -69,7 +70,7 @@ function ServiceCard({ svc, onClick }: { svc: Service; onClick?: (svc: Service) 
     </div>
   );
 
-  return onClick ? inner : <a href={`/services/${svc.slug}`} style={{ textDecoration: 'none', display: 'contents' }}>{inner}</a>;
+  return onClick ? inner : <Link href={`/services/${svc.slug}`} style={{ textDecoration: 'none', display: 'contents' }}>{inner}</Link>;
 }
 
 // ─── VARIANT: cards ───────────────────────────────────────────────────────
@@ -218,8 +219,8 @@ function StickyScrollVariant({ services, headline, subheadline }: {
                     )}
 
                     <div style={{ display: 'flex', gap: 'var(--mer-spacing-md)', flexWrap: 'wrap' }}>
-                      <a href={`/contact?service=${encodeURIComponent(svc.slug)}`} className="mer-btn mer-btn-primary">{svc.ctaLabel ?? 'Get in Touch'} <ArrowIcon /></a>
-                      <a href={`/services/${svc.slug}`} className="mer-btn mer-btn-ghost">Full Details</a>
+                      <Link href={`/contact?service=${encodeURIComponent(svc.slug)}`} className="mer-btn mer-btn-primary">{svc.ctaLabel ?? 'Get in Touch'} <ArrowIcon /></Link>
+                      <Link href={`/services/${svc.slug}`} className="mer-btn mer-btn-ghost">Full Details</Link>
                     </div>
                   </div>
                 );
