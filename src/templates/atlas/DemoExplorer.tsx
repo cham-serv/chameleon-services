@@ -25,6 +25,10 @@ type DemoExplorerProps = {
   routes: ExplorerRoute[];
   /** The URL prefix for this tenant (e.g. '' for domain-based, '/atlas-demo' for path-based). */
   basePath: string;
+  /** Server-rendered colour scheme — used to initialise the dark mode toggle without a flash. */
+  initialScheme?: string;
+  /** Template slug (e.g. 'atlas', 'meridian') — for template-aware palette filtering. */
+  templateSlug?: string;
 };
 
 type BrandPreview = {
@@ -111,7 +115,7 @@ type ExplorerTab = 'pages' | 'brand' | 'style';
 
 // - Component -
 
-export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
+export function DemoExplorer({ routes, basePath, initialScheme, templateSlug }: DemoExplorerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<ExplorerTab>('pages');
   // Hint arrow: shown on first visit, never again after drawer is opened
@@ -196,18 +200,23 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
     document.body.setAttribute('data-btn-style', brand.buttonStyle);
 
     // Theme colours (background / text / heading):
-    // Inline style.setProperty has HIGHER precedence than any CSS rule, including
-    // [data-scheme="dark"] in meridian.css. In dark mode we must REMOVE these
-    // inline overrides so the CSS cascade can apply the dark mode variables.
-    // In light mode we SET them so the colour pickers work as expected.
+    // In dark mode, SET explicit dark-appropriate values instead of removing
+    // inline properties. This ensures dark mode works for BOTH templates:
+    //   - Meridian has [data-scheme="dark"] CSS rules, but inline props override them
+    //     (inline style.setProperty > any stylesheet rule regardless of specificity).
+    //   - Atlas has NO [data-scheme="dark"] rules at all, so removing inline props
+    //     would leave variables unset with light-mode `:root` fallbacks.
+    // By always setting values, both templates get correct dark mode behaviour.
     if (isDark === true) {
-      root.style.removeProperty('--brand-background');
-      root.style.removeProperty('--brand-text');
-      root.style.removeProperty('--brand-heading');
+      root.style.setProperty('--brand-background', '#0e1016');
+      root.style.setProperty('--brand-text',       '#dde1ec');
+      root.style.setProperty('--brand-heading',    '#f0f2f8');
+      root.style.setProperty('--brand-surface',    '#161a24');
     } else {
       root.style.setProperty('--brand-text',       brand.textColour);
       root.style.setProperty('--brand-heading',    brand.headingColour);
       root.style.setProperty('--brand-background', brand.bgColour);
+      root.style.setProperty('--brand-surface',    `color-mix(in srgb, ${brand.bgColour} 95%, ${brand.primary} 5%)`);
     }
 
     // Font preview + body-level colour overrides injected as a <style> element.
@@ -262,10 +271,9 @@ export function DemoExplorer({ routes, basePath }: DemoExplorerProps) {
   //   2. Auto-open if _de=1 is in the URL (persisted via navigateToPage).
   //   3. Show the hint arrow for first-time visitors; auto-clear it after 5s (matching CSS).
   useEffect(() => {
-    // 0. Read the server-rendered data-scheme to initialise isDark (D1+D2 fix).
-    //    This must run before the scheme-write effect can overwrite the server value.
-    //    Setting isDark here triggers the effect above which then confirms the scheme.
-    const currentScheme = document.documentElement.getAttribute('data-scheme');
+    // 0. Initialise isDark from the server-rendered scheme (passed as prop).
+    //    Falls back to reading data-scheme from the DOM if prop is missing.
+    const currentScheme = initialScheme ?? document.documentElement.getAttribute('data-scheme') ?? 'light';
     setIsDark(currentScheme === 'dark');
 
     // 1. Sync brand state to real CSS vars

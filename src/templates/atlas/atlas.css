@@ -1223,7 +1223,7 @@
   font-weight: 700;
   margin: 0 0 1.5rem;
   font-family: var(--font-heading, inherit);
-  color: var(--brand-text, #1b1b1b);
+  color: var(--brand-heading, var(--brand-text, #1b1b1b));
   /* Brand accent underline */
   padding-bottom: 0.625rem;
   position: relative;
@@ -2653,6 +2653,13 @@
   }
 }
 
+/* Base home hero headline: uses --brand-heading so the Demo Explorer
+ * heading colour picker works. Dark variants (modern, bold) override
+ * this with hardcoded #ffffff via higher-specificity [data-variant] rules. */
+.atlas-home-hero-headline {
+  color: var(--brand-heading, var(--brand-text, #1b1b1b));
+}
+
 /* - Storefront Variant - */
 
 [data-variant="storefront"] .atlas-home-hero {
@@ -2716,7 +2723,7 @@
   letter-spacing: -0.03em;
   margin: 0 0 1.5rem;
   font-family: var(--font-heading, inherit);
-  color: var(--brand-text, #1b1b1b);
+  color: var(--brand-heading, var(--brand-text, #1b1b1b));
 }
 
 [data-variant="editorial"] .atlas-home-hero-media {
@@ -3003,7 +3010,7 @@
   letter-spacing: -0.01em;
   margin: 0 0 1.5rem;
   font-family: var(--font-heading, inherit);
-  color: var(--brand-text, #1b1b1b);
+  color: var(--brand-heading, var(--brand-text, #1b1b1b));
 }
 
 [data-variant="minimalist"] .atlas-home-hero-sub {
