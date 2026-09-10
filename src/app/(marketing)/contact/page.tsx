@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Turnstile } from '@/components/Turnstile';
-import { Send, CheckCircle, Mail } from 'lucide-react';
+import { Send, CheckCircle, Check } from 'lucide-react';
 
 export default function ContactPage() {
   const [form, setForm] = useState({
@@ -285,29 +285,12 @@ export default function ContactPage() {
                       marginBottom: '12px',
                     }}
                   >
-                    <span style={{ color: '#22c55e', marginTop: '2px', flexShrink: 0 }}></span>
+                    <Check size={14} style={{ color: '#22c55e', marginTop: '2px', flexShrink: 0 }} />
                     {point}
                   </li>
                 ))}
               </ul>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <a
-                  href="mailto:chris@chameleon.services"
-                  style={{
-                    display: 'flex',
-                    gap: '12px',
-                    alignItems: 'center',
-                    fontSize: '0.875rem',
-                    color: 'var(--m-text-muted)',
-                    textDecoration: 'none',
-                  }}
-                  id="contact-email-link"
-                >
-                  <Mail size={16} style={{ color: '#60a5fa' }} />
-                  chris@chameleon.services
-                </a>
-              </div>
             </div>
           </div>
         </div>

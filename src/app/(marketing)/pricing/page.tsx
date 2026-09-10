@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Check } from 'lucide-react';
+import { ArrowRight, Check, Plus } from 'lucide-react';
 
 type PaymentPath = 'flexible' | 'spread' | 'allInclusive';
 
@@ -146,6 +146,7 @@ function getPriceNote(tier: typeof businessTiers[0], path: PaymentPath) {
 
 export default function PricingPage() {
   const [activePath, setActivePath] = useState<PaymentPath>('flexible');
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
     <>
@@ -292,8 +293,10 @@ export default function PricingPage() {
                     {tier.description}
                   </p>
 
-                  {/* Single price block — changes based on toggle */}
+                  {/* Single price block — animates when path changes */}
                   <div
+                    key={activePath}
+                    className="m-price-animate"
                     style={{
                       marginBottom: '24px',
                       padding: '16px',
@@ -442,25 +445,32 @@ export default function PricingPage() {
           >
             Frequently asked questions
           </h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {faqs.map((faq) => (
-              <div
-                key={faq.q}
-                style={{
-                  padding: '24px',
-                  borderRadius: '10px',
-                  border: '1px solid rgba(255,255,255,0.08)',
-                  background: 'rgba(255,255,255,0.02)',
-                }}
-              >
-                <h3 style={{ fontWeight: 600, color: 'var(--m-text)', margin: '0 0 8px', fontSize: '0.95rem' }}>
-                  {faq.q}
-                </h3>
-                <p style={{ color: 'var(--m-text-muted)', margin: 0, fontSize: '0.875rem', lineHeight: 1.6 }}>
-                  {faq.a}
-                </p>
-              </div>
-            ))}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {faqs.map((faq, i) => {
+              const isOpen = openFaq === i;
+              return (
+                <div
+                  key={faq.q}
+                  className="m-faq-item"
+                  data-open={isOpen}
+                >
+                  <button
+                    className="m-faq-trigger"
+                    onClick={() => setOpenFaq(isOpen ? null : i)}
+                    aria-expanded={isOpen}
+                    id={`faq-trigger-${i}`}
+                  >
+                    <span>{faq.q}</span>
+                    <span className="m-faq-icon" aria-hidden="true">
+                      <Plus size={12} strokeWidth={2.5} />
+                    </span>
+                  </button>
+                  <div className="m-faq-body" role="region" aria-labelledby={`faq-trigger-${i}`}>
+                    <div className="m-faq-inner">{faq.a}</div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>

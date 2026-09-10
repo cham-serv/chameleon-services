@@ -11,9 +11,8 @@ export default function LegalPage() {
     <>
       {/* ── Hero ──────────────────────────────────────────────── */}
       <section
-        className="m-section"
+        className="m-section m-hero-pt"
         style={{
-          paddingTop: '140px',
           paddingBottom: '48px',
           borderBottom: '1px solid rgba(255,255,255,0.06)',
         }}

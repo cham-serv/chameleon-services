@@ -76,8 +76,8 @@ const orgJsonLd = {
     'Chameleon builds AI-ready, GEO-optimised storefronts and authority engines that get found by AI search and human search alike.',
   contactPoint: {
     '@type': 'ContactPoint',
-    email: 'chris@chameleon.services',
     contactType: 'customer service',
+    url: 'https://chameleon.services/contact',
   },
 };
 
@@ -198,12 +198,7 @@ function FooterCol({
           <li key={link.href} style={{ marginBottom: '8px' }}>
             <Link
               href={link.href}
-              style={{
-                fontSize: '0.875rem',
-                color: 'var(--m-text-muted)',
-                textDecoration: 'none',
-                transition: 'color 0.15s',
-              }}
+              className="m-footer-link"
             >
               {link.label}
             </Link>

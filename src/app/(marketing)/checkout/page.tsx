@@ -68,7 +68,30 @@ function CheckoutForm() {
   const rawTier = searchParams.get('tier') as Tier | null;
   const rawPath = searchParams.get('path') as PaymentPath | null;
 
-  const tier: Tier = rawTier && PLAN_DISPLAY[rawTier] ? rawTier : 'professional';
+  // If no valid tier is provided, redirect to pricing so the user
+  // can consciously choose their plan rather than silently landing
+  // on a pre-selected Professional tier.
+  const hasValidTier = rawTier && PLAN_DISPLAY[rawTier];
+  if (!hasValidTier) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+        <div style={{ textAlign: 'center', maxWidth: '420px' }}>
+          <h2 style={{ fontFamily: 'var(--m-font-display)', fontSize: '1.8rem', fontWeight: 700, color: 'var(--m-text)', margin: '0 0 12px' }}>
+            Choose your plan first
+          </h2>
+          <p style={{ fontSize: '0.95rem', color: 'var(--m-text-muted)', lineHeight: 1.7, marginBottom: '28px' }}>
+            Head over to our pricing page to select the tier and payment path that fits your business.
+          </p>
+          <Link href="/pricing" className="m-btn m-btn-primary m-btn-lg">
+            View Pricing
+            <ArrowLeft size={16} style={{ transform: 'rotate(180deg)' }} />
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const tier: Tier = rawTier as Tier;
   const path: PaymentPath = rawPath && PATH_DISPLAY[rawPath] ? rawPath : 'flexible';
 
   const plan = PLAN_DISPLAY[tier];

@@ -183,28 +183,6 @@ export default function AgenciesPage() {
         </div>
       </section>
 
-      {/* The Math */}
-      <section className="m-section" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-        <div className="m-container-sm">
-          <div className="m-card m-cta-callout" style={{
-            background: 'linear-gradient(135deg, rgba(59,130,246,0.05) 0%, rgba(13,17,23,1) 100%)',
-            border: '1px solid rgba(59,130,246,0.2)',
-            textAlign: 'center'
-          }}>
-            <h2 style={{ fontFamily: 'var(--m-font-display)', fontSize: '2rem', fontWeight: 700, color: 'white', margin: '0 0 24px' }}>
-              The Math at Scale
-            </h2>
-            <div style={{ fontSize: '1.1rem', color: 'var(--m-text)', lineHeight: 1.8, maxWidth: '500px', margin: '0 auto' }}>
-              <p><strong>5 clients</strong> on your books.</p>
-              <p><strong>R75,000/mo</strong> in combined retainer revenue.</p>
-              <p>Your dashboard costs: <strong>R2,500/mo</strong>.</p>
-              <div style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.1)', color: '#60a5fa', fontWeight: 600 }}>
-                That&apos;s a 3.3% overhead. Whether you have 2 clients or 20.
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Partner Tiers */}
       <section className="m-section" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
