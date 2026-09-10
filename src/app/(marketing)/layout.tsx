@@ -156,6 +156,7 @@ function MarketingFooter() {
               title="Company"
               links={[
                 { label: 'Contact', href: '/contact' },
+                { label: 'Legal & Disclaimers', href: '/legal' },
               ]}
             />
           </div>
@@ -163,7 +164,7 @@ function MarketingFooter() {
 
         {/* Bottom bar */}
         <div className="m-footer-bottom">
-          <span>© 2026 Chameleon</span>
+          <span>© 2026 Chameleon Image Consultants CC. All rights reserved.</span>
           <span>Built for businesses that refuse to fall behind.</span>
         </div>
       </div>
