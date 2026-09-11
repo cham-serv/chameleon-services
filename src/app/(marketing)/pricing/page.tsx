@@ -147,6 +147,7 @@ function getPriceNote(tier: typeof businessTiers[0], path: PaymentPath) {
 export default function PricingPage() {
   const [activePath, setActivePath] = useState<PaymentPath>('flexible');
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [selectedTier, setSelectedTier] = useState<string>('professional');
 
   return (
     <>
@@ -259,19 +260,22 @@ export default function PricingPage() {
             {businessTiers.map((tier) => {
               const price = getPrice(tier, activePath);
               const note = getPriceNote(tier, activePath);
+              const isSelected = selectedTier === tier.tierSlug;
               return (
                 <div
                   key={tier.name}
-                  className={`m-card ${tier.highlighted ? 'm-card-highlighted' : ''}`}
+                  className={`m-card ${isSelected ? 'm-card-highlighted' : ''}`}
+                  onClick={() => setSelectedTier(tier.tierSlug)}
                   style={{
                     padding: '28px',
                     display: 'flex',
                     flexDirection: 'column',
                     position: 'relative',
                     transition: 'transform 0.2s ease',
+                    cursor: 'pointer',
                   }}
                 >
-                  {tier.highlighted && (
+                  {isSelected && (
                     <div
                       style={{
                         position: 'absolute',
@@ -300,9 +304,10 @@ export default function PricingPage() {
                     style={{
                       marginBottom: '24px',
                       padding: '16px',
-                      background: tier.highlighted ? 'rgba(59,130,246,0.08)' : 'rgba(0,0,0,0.2)',
+                      background: isSelected ? 'rgba(59,130,246,0.08)' : 'rgba(0,0,0,0.2)',
                       borderRadius: '10px',
-                      border: tier.highlighted ? '1px solid rgba(59,130,246,0.25)' : '1px solid rgba(255,255,255,0.05)',
+                      border: isSelected ? '1px solid rgba(59,130,246,0.25)' : '1px solid rgba(255,255,255,0.05)',
+                      transition: 'background 0.2s, border-color 0.2s',
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '6px' }}>
@@ -328,7 +333,7 @@ export default function PricingPage() {
                       <li key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '10px' }}>
                         <Check
                           size={14}
-                          style={{ color: tier.highlighted ? '#60a5fa' : 'var(--m-text-muted)', marginTop: '3px', flexShrink: 0 }}
+                          style={{ color: isSelected ? '#60a5fa' : 'var(--m-text-muted)', marginTop: '3px', flexShrink: 0, transition: 'color 0.2s' }}
                         />
                         <span style={{ fontSize: '0.85rem', color: 'var(--m-text-muted)', lineHeight: 1.5 }}>
                           {f}
@@ -340,8 +345,9 @@ export default function PricingPage() {
                   <Link
                     href={`/checkout?tier=${tier.tierSlug}&path=${activePath}`}
                     id={`cta-${tier.tierSlug}`}
-                    className={`m-btn ${tier.highlighted ? 'm-btn-primary' : 'm-btn-ghost'}`}
-                    style={{ width: '100%', justifyContent: 'center', fontSize: '0.9rem' }}
+                    className={`m-btn ${isSelected ? 'm-btn-primary' : 'm-btn-ghost'}`}
+                    style={{ width: '100%', justifyContent: 'center', fontSize: '0.9rem', transition: 'all 0.2s' }}
+                    onClick={(e) => e.stopPropagation()}
                   >
                     {tier.cta}
                   </Link>
