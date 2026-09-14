@@ -25,19 +25,17 @@ export default function NovaLayout({ config, children }: LayoutProps) {
   const pc = config.pageConfig as any;
 
   // Build nav links from feature config
-  // The engine's featureConfig derivation may produce keys as either:
-  //   { about: { enabled: true } }       ← direct feature key
-  //   { aboutEnabled: { enabled: true } } ← from NovaSiteConfig.pages group field names
-  //   { aboutEnabled: true }              ← raw boolean from Payload
-  // We normalise here to handle all shapes safely.
+  // featureConfig is derived by the engine from pageConfig.pages and arrives as:
+  //   { about: { enabled: true }, offerings: { enabled: true }, ... }
+  // The isEnabled helper also handles the legacy raw-boolean shape as a safety net.
   const rawFc = config.tenant.featureConfig;
   const isEnabled = (key: string): boolean => {
-    // Try direct key first (e.g. 'about')
+    // Try direct key first (e.g. 'about' → { enabled: true })
     const direct = rawFc[key];
     if (direct !== undefined) {
       return typeof direct === 'object' ? !!direct.enabled : !!direct;
     }
-    // Try suffixed key (e.g. 'aboutEnabled')
+    // Legacy fallback: suffixed key (e.g. 'aboutEnabled')
     const suffixed = rawFc[`${key}Enabled`];
     if (suffixed !== undefined) {
       return typeof suffixed === 'object' ? !!suffixed.enabled : !!suffixed;
