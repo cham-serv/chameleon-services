@@ -20,7 +20,27 @@ export default function NovaLayout({ config, children }: LayoutProps) {
   const pc = config.pageConfig as any;
 
   // Build nav links from feature config
-  const fc = config.tenant.featureConfig;
+  // The engine's featureConfig derivation may produce keys as either:
+  //   { about: { enabled: true } }       ← direct feature key
+  //   { aboutEnabled: { enabled: true } } ← from NovaSiteConfig.pages group field names
+  //   { aboutEnabled: true }              ← raw boolean from Payload
+  // We normalise here to handle all shapes safely.
+  const rawFc = config.tenant.featureConfig;
+  const isEnabled = (key: string): boolean => {
+    // Try direct key first (e.g. 'about')
+    const direct = rawFc[key];
+    if (direct !== undefined) {
+      return typeof direct === 'object' ? !!direct.enabled : !!direct;
+    }
+    // Try suffixed key (e.g. 'aboutEnabled')
+    const suffixed = rawFc[`${key}Enabled`];
+    if (suffixed !== undefined) {
+      return typeof suffixed === 'object' ? !!suffixed.enabled : !!suffixed;
+    }
+    // Default: enabled (graceful degradation — show pages unless explicitly disabled)
+    return true;
+  };
+
   const offeringsSlug = pc?.offeringsSlug ?? 'services';
   const offeringsLabel = pc?.offeringsLabel ?? 'Services';
   const colourScheme = pc?.colourScheme ?? 'light';
@@ -29,10 +49,10 @@ export default function NovaLayout({ config, children }: LayoutProps) {
     { href: '/', label: 'Home' },
   ];
 
-  if (fc.about?.enabled) navLinks.push({ href: '/about', label: 'About' });
-  if (fc.offerings?.enabled) navLinks.push({ href: `/${offeringsSlug}`, label: offeringsLabel });
-  if (fc.faqs?.enabled) navLinks.push({ href: '/faqs', label: 'FAQs' });
-  if (fc.contact?.enabled) navLinks.push({ href: '/contact', label: 'Contact' });
+  if (isEnabled('about')) navLinks.push({ href: '/about', label: 'About' });
+  if (isEnabled('offerings')) navLinks.push({ href: `/${offeringsSlug}`, label: offeringsLabel });
+  if (isEnabled('faqs')) navLinks.push({ href: '/faqs', label: 'FAQs' });
+  if (isEnabled('contact')) navLinks.push({ href: '/contact', label: 'Contact' });
 
   // Social links
   const socials: { platform: string; url: string }[] = [];

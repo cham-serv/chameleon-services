@@ -134,11 +134,11 @@ export default async function OfferingDetailPage({ config, path, noCache }: Page
           )}
 
           {/* ── Full Description (richtext) ───────────────── */}
-          {service.description && (
+          {service.description ? (
             <div className="nova-richtext" style={{ marginBottom: '3rem' }}>
               <RichTextRenderer content={service.description} />
             </div>
-          )}
+          ) : null}
 
           {/* ── Per-Offering FAQs ─────────────────────────── */}
           {faqs.length > 0 && (

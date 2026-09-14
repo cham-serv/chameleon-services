@@ -18,6 +18,11 @@ export default async function OfferingsPage({ config, variant, noCache }: PagePr
   const offeringsSlug = pc?.offeringsSlug ?? 'services';
   const offeringsLabel = pc?.offeringsLabel ?? 'Services';
 
+  // The CMS-configured variant overrides the route-resolved variant.
+  // This is needed because the featureConfig derivation for Nova doesn't
+  // carry a variant for offerings, so the route resolver always defaults to 'cards'.
+  const effectiveVariant = pc?.offeringsVariant ?? variant;
+
   const headline = pc?.offeringsHeadline ?? `Our ${offeringsLabel}`;
   const subheadline = pc?.offeringsSubheadline ?? null;
 
@@ -75,7 +80,7 @@ export default async function OfferingsPage({ config, variant, noCache }: PagePr
               No {offeringsLabel.toLowerCase()} available yet. Check back soon!
             </p>
           ) : (
-            <div className={`nova-grid ${variant === 'list' ? '' : 'nova-grid--2'}`}>
+            <div className={`nova-grid ${effectiveVariant === 'list' ? '' : 'nova-grid--2'}`}>
               {services.map((service) => (
                 <a
                   key={service.id}
@@ -83,7 +88,7 @@ export default async function OfferingsPage({ config, variant, noCache }: PagePr
                   className="nova-card"
                   style={{
                     textDecoration: 'none',
-                    ...(variant === 'list' ? { display: 'flex', gap: '1.5rem', alignItems: 'center' } : {}),
+                    ...(effectiveVariant === 'list' ? { display: 'flex', gap: '1.5rem', alignItems: 'center' } : {}),
                   }}
                 >
                   {service.image && typeof service.image === 'object' && 'url' in service.image && (
@@ -91,7 +96,7 @@ export default async function OfferingsPage({ config, variant, noCache }: PagePr
                       src={service.image.url}
                       alt={service.name}
                       className="nova-card__image"
-                      style={variant === 'list' ? {
+                      style={effectiveVariant === 'list' ? {
                         width: 160,
                         height: 100,
                         flexShrink: 0,

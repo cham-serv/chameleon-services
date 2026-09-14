@@ -10,6 +10,7 @@
 
 import type { PageProps } from '@/lib/types';
 import { getServices } from '@/lib/api';
+import { JsonLd } from '@/components/JsonLd';
 
 export default async function HomePage({ config, variant, noCache }: PageProps) {
   const siteName = config.settings?.siteName ?? config.tenant.name;
@@ -39,8 +40,65 @@ export default async function HomePage({ config, variant, noCache }: PageProps) 
 
   const isHeroImage = variant === 'hero-image' && heroImage;
 
+  // Build site URL for JSON-LD
+  const siteUrl = config.tenant.slug.includes('.')
+    ? `https://${config.tenant.slug}`
+    : `https://${config.tenant.slug}.chameleon.services`;
+
+  const s = config.settings;
+
+  // LocalBusiness JSON-LD — the core GEO schema for the home page
+  const localBusinessLd: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': s?.businessType ?? 'LocalBusiness',
+    '@id': `${siteUrl}/#business`,
+    name: siteName,
+    url: siteUrl,
+  };
+  if (s?.tagline) localBusinessLd.description = s.tagline;
+  if (s?.contactEmail) localBusinessLd.email = s.contactEmail;
+  if (s?.contactPhone) localBusinessLd.telephone = s.contactPhone;
+  if (s?.priceRange) localBusinessLd.priceRange = s.priceRange;
+  if (s?.logo?.url) localBusinessLd.logo = s.logo.url;
+  if (s?.addressStreet || s?.addressCity) {
+    localBusinessLd.address = {
+      '@type': 'PostalAddress',
+      ...(s.addressStreet ? { streetAddress: s.addressStreet } : {}),
+      ...(s.addressCity ? { addressLocality: s.addressCity } : {}),
+      ...(s.addressProvince ? { addressRegion: s.addressProvince } : {}),
+      ...(s.addressPostalCode ? { postalCode: s.addressPostalCode } : {}),
+      ...(s.addressCountry ? { addressCountry: s.addressCountry } : {}),
+    };
+  }
+  if (s?.geoLat && s?.geoLng) {
+    localBusinessLd.geo = {
+      '@type': 'GeoCoordinates',
+      latitude: s.geoLat,
+      longitude: s.geoLng,
+    };
+  }
+  // sameAs links
+  const sameAs = [
+    s?.socialFacebook, s?.socialInstagram, s?.socialLinkedIn,
+    s?.socialTwitter, s?.socialYoutube, s?.socialGoogle,
+  ].filter(Boolean);
+  if (sameAs.length > 0) localBusinessLd.sameAs = sameAs;
+
+  // WebSite JSON-LD
+  const websiteLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: siteName,
+    url: siteUrl,
+    publisher: { '@id': `${siteUrl}/#business` },
+  };
+
   return (
     <>
+      {/* ── Schema ────────────────────────────────────── */}
+      <JsonLd data={localBusinessLd} />
+      <JsonLd data={websiteLd} />
+
       {/* ── Hero ──────────────────────────────────────── */}
       <section className={`nova-hero${isHeroImage ? ' nova-hero--image' : ''}`}>
         {isHeroImage && (

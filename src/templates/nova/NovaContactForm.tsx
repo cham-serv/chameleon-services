@@ -31,15 +31,15 @@ export function NovaContactForm({ tenantSlug, turnstileSiteKey }: Props) {
       'https://chameleon-engine-production.up.railway.app';
 
     try {
-      const res = await fetch(`${engineUrl}/api/public/contact`, {
+      const res = await fetch(`${engineUrl}/api/public/inquiry?tenant=${encodeURIComponent(tenantSlug)}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          tenant: tenantSlug,
           name: data.get('name'),
           email: data.get('email'),
           phone: data.get('phone') || undefined,
           message: data.get('message'),
+          source: 'nova-contact-form',
         }),
       });
 

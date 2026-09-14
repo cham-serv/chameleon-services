@@ -7,6 +7,7 @@
 
 import type { PageProps } from '@/lib/types';
 import { RichTextRenderer } from '@/components/RichTextRenderer';
+import { JsonLd } from '@/components/JsonLd';
 
 export default function AboutPage({ config }: PageProps) {
   const siteName = config.settings?.siteName ?? config.tenant.name;
@@ -23,8 +24,46 @@ export default function AboutPage({ config }: PageProps) {
     bio?: string;
   }> = pc?.aboutTeamMembers ?? [];
 
+  // Build site URL for JSON-LD
+  const siteUrl = config.tenant.slug.includes('.')
+    ? `https://${config.tenant.slug}`
+    : `https://${config.tenant.slug}.chameleon.services`;
+
+  // BreadcrumbList JSON-LD
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
+      { '@type': 'ListItem', position: 2, name: 'About', item: `${siteUrl}/about` },
+    ],
+  };
+
+  // Organization JSON-LD
+  const orgLd: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: siteName,
+    url: siteUrl,
+    ...(config.settings?.logo?.url ? { logo: config.settings.logo.url } : {}),
+    ...(intro ? { description: intro } : {}),
+    ...(config.settings?.foundedYear ? { foundingDate: String(config.settings.foundedYear) } : {}),
+  };
+  if (teamMembers.length > 0) {
+    orgLd.member = teamMembers.map((m) => ({
+      '@type': 'Person',
+      name: m.name,
+      ...(m.role ? { jobTitle: m.role } : {}),
+      ...(m.photo?.url ? { image: m.photo.url } : {}),
+    }));
+  }
+
   return (
     <>
+      {/* ── Schema ────────────────────────────────────── */}
+      <JsonLd data={breadcrumbLd} />
+      <JsonLd data={orgLd} />
+
       {/* ── Page Header ───────────────────────────────── */}
       <div className="nova-page-header">
         <div className="nova-container">
