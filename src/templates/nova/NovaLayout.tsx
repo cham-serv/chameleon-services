@@ -7,11 +7,16 @@
  * - Dynamic offerings label in navigation
  * - Mobile hamburger menu (client component)
  * - Social links in footer
+ * - DemoExplorer drawer for demo tenants
  */
 
 import './nova.css';
+import '../atlas/demo-explorer.css';
 import type { LayoutProps } from '@/lib/types';
 import { NovaNavClient } from './NovaNavClient';
+import { DemoExplorer } from '../atlas/DemoExplorer';
+import { definition } from './definition';
+import { buildExplorerRoutes } from '../atlas/demo-explorer-utils';
 
 export default function NovaLayout({ config, children }: LayoutProps) {
   const siteName = config.settings?.siteName ?? config.tenant.name;
@@ -40,6 +45,22 @@ export default function NovaLayout({ config, children }: LayoutProps) {
     // Default: enabled (graceful degradation — show pages unless explicitly disabled)
     return true;
   };
+
+  // Build a normalised featureConfig for buildExplorerRoutes.
+  // The util checks featureConfig[key]?.enabled, so we must use the canonical
+  // key names (without the 'Enabled' suffix that NovaSiteConfig produces).
+  const normalisedFc = {
+    about:     { enabled: isEnabled('about') },
+    offerings: { enabled: isEnabled('offerings') },
+    faqs:      { enabled: isEnabled('faqs') },
+    contact:   { enabled: isEnabled('contact') },
+    legal:     { enabled: isEnabled('legal') },
+  };
+
+  // Build explorer routes only for demo tenants
+  const explorerRoutes = config.tenant.isDemoTenant
+    ? buildExplorerRoutes(definition, normalisedFc)
+    : null;
 
   const offeringsSlug = pc?.offeringsSlug ?? 'services';
   const offeringsLabel = pc?.offeringsLabel ?? 'Services';
@@ -128,6 +149,9 @@ export default function NovaLayout({ config, children }: LayoutProps) {
           </div>
         </div>
       </footer>
+
+      {/* DemoExplorer — only rendered for demo tenants */}
+      {explorerRoutes && <DemoExplorer routes={explorerRoutes} basePath="" />}
     </div>
   );
 }
