@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Catch-All Page  Template Resolution + Rendering
  *
  * This is the heart of the multi-tenant rendering pipeline:
@@ -72,6 +72,7 @@ export default async function TenantPage({ params, searchParams }: Props) {
     templateDef,
     config.tenant.featureConfig,
     devOverride,
+    config.pageConfig,
   );
 
   if (!resolved) notFound();
