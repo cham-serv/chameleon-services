@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Catch-All Page  Template Resolution + Rendering
  *
  * This is the heart of the multi-tenant rendering pipeline:
@@ -24,18 +24,43 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { tenant } = await params;
+  const { tenant, slug = [] } = await params;
   const isStaging = (await headers()).get('x-is-staging') === 'true';
   const config = await fetchTenantConfig(tenant, { noCache: isStaging });
 
   const siteName = config?.settings?.siteName ?? config?.tenant?.name ?? 'Site';
+  const pc = config?.pageConfig as any;
+
+  // Try to resolve page-specific SEO from pageConfig
+  // Maps slug → pageConfig field prefix (e.g. 'about' → aboutSeoTitle / aboutSeoDescription)
+  let pageTitle: string | null = null;
+  let pageDescription: string | null = null;
+
+  if (pc && slug.length > 0) {
+    const pageKey = slug[0]; // 'about', 'faqs', 'contact', etc.
+    const seoFieldMap: Record<string, string> = {
+      about: 'about',
+      services: 'offerings',
+      products: 'offerings',
+      programmes: 'offerings',
+      faqs: 'faqs',
+      contact: 'contact',
+      legal: 'legal',
+    };
+    const prefix = seoFieldMap[pageKey] ?? pageKey;
+    pageTitle = pc[`${prefix}SeoTitle`] ?? null;
+    pageDescription = pc[`${prefix}SeoDescription`] ?? null;
+  } else if (pc && slug.length === 0) {
+    // Home page
+    pageTitle = pc.homeSeoTitle ?? null;
+    pageDescription = pc.homeSeoDescription ?? null;
+  }
 
   return {
-    title: {
-      default: siteName,
-      template: `%s | ${siteName}`,
-    },
-    description: config?.settings?.tagline ?? `Welcome to ${siteName}`,
+    title: pageTitle
+      ? { absolute: `${pageTitle} | ${siteName}` }
+      : { default: siteName, template: `%s | ${siteName}` },
+    description: pageDescription ?? config?.settings?.tagline ?? `Welcome to ${siteName}`,
   };
 }
 
@@ -72,6 +97,7 @@ export default async function TenantPage({ params, searchParams }: Props) {
     templateDef,
     config.tenant.featureConfig,
     devOverride,
+    config.pageConfig,
   );
 
   if (!resolved) notFound();

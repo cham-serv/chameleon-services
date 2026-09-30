@@ -68,12 +68,22 @@ export type SiteSettings = {
   socialTwitter?: string;
   socialYoutube?: string;
   socialGoogle?: string;
+  socialTiktok?: string;
+  // GEO fields (Business Identity — from SiteSettings collection)
+  businessType?: string;
+  serviceType?: string;
+  specializations?: string;
+  registrationNumber?: string;
+  jurisdiction?: string;
+  foundedYear?: number;
+  priceRange?: string;
   // Brand tokens
   colourPrimary?: string;
   colourSecondary?: string;
   colourAccent?: string;
   colourBackground?: string;
   colourText?: string;
+  colourScheme?: string;
   /** Controls button shape. CSS applied via data-btn-style on <body>. */
   buttonStyle?: 'filled' | 'outline' | 'pill' | 'soft';
   fontHeading?: string;

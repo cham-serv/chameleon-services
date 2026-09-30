@@ -13,6 +13,7 @@ import type {
   FeatureConfig,
   PageDefinition,
   ResolvedPage,
+  PageConfig,
 } from './types';
 
 // - Template Registry -
@@ -21,6 +22,7 @@ import type {
 const TEMPLATE_REGISTRY: Record<string, () => Promise<{ definition: TemplateDefinition }>> = {
   'atlas': () => import('@/templates/atlas'),
   'meridian': () => import('@/templates/meridian'),
+  'nova': () => import('@/templates/nova'),
 };
 
 /**
@@ -57,9 +59,12 @@ export async function resolvePage(
   templateDef: TemplateDefinition,
   featureConfig: FeatureConfig,
   devOverride?: string | null,
+  pageConfig?: PageConfig | null,
 ): Promise<ResolvedPage | null> {
   // 1. Match path to route key
-  const routeKey = matchRoute(pathSegments, templateDef.routes);
+  //    For Nova, we need to check dynamic offerings slug
+  const offeringsSlug = (pageConfig as any)?.offeringsSlug ?? null;
+  const routeKey = matchRoute(pathSegments, templateDef.routes, offeringsSlug);
   if (!routeKey) return null;
 
   const page = templateDef.routes[routeKey];
@@ -70,7 +75,7 @@ export async function resolvePage(
     if (!featureEntry?.enabled) return null;
   }
 
-  // 3. Resolve variant (default  featureConfig  dev override)
+  // 3. Resolve variant (default → featureConfig → dev override)
   let variant = page.defaultVariant;
 
   // Check featureConfig for tenant's preferred variant
@@ -118,6 +123,7 @@ export async function resolvePage(
 function matchRoute(
   segments: string[],
   routes: Record<string, PageDefinition>,
+  offeringsSlug?: string | null,
 ): string | null {
   // Home page
   if (segments.length === 0) {
@@ -127,6 +133,13 @@ function matchRoute(
   // Exact match
   const exactPath = '/' + segments.join('/');
   if (routes[exactPath]) return exactPath;
+
+  // Dynamic offerings slug: if the first segment matches the tenant's
+  // offeringsSlug (e.g. "products"), map it to the canonical "/services" route key
+  if (offeringsSlug && segments[0] === offeringsSlug && offeringsSlug !== 'services') {
+    if (segments.length === 1 && routes['/services']) return '/services';
+    if (segments.length >= 2 && routes['/services/*']) return '/services/*';
+  }
 
   // Wildcard match (for detail pages like /shop/product-slug)
   if (segments.length >= 2) {

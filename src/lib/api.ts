@@ -390,6 +390,10 @@ export type FAQ = {
   linkedTopic?: { id: number; name: string; slug: string } | number | null;
   order?: number;
   published: boolean;
+  /** AI Summary — BLUF answer in 1-2 sentences. Powers FAQPage JSON-LD. */
+  executiveSummary?: string;
+  /** Auto-generated slug for deep-linkable #faq-{slug} anchors. */
+  slug?: string;
   createdAt: string;
   updatedAt: string;
 };
