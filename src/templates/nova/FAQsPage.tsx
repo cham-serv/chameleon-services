@@ -21,6 +21,7 @@ import type { PageProps } from '@/lib/types';
 import { getFaqs } from '@/lib/api';
 import { JsonLd } from '@/components/JsonLd';
 import { NovaFaqEnhancer } from './NovaFaqEnhancer';
+import { buildSiteUrl } from '@/lib/url';
 
 export default async function FAQsPage({ config, noCache }: PageProps) {
   const siteName = config.settings?.siteName ?? config.tenant.name;
@@ -33,9 +34,7 @@ export default async function FAQsPage({ config, noCache }: PageProps) {
   const faqs = faqsData?.docs ?? [];
 
   // Build site URL
-  const siteUrl = config.tenant.slug.includes('.')
-    ? `https://${config.tenant.slug}`
-    : `https://${config.tenant.slug}.chameleon.services`;
+  const siteUrl = buildSiteUrl(config.tenant.slug);
 
   // BreadcrumbList JSON-LD
   const breadcrumbLd = {
@@ -128,7 +127,11 @@ export default async function FAQsPage({ config, noCache }: PageProps) {
                     </p>
                   )}
                   {/* Full answer */}
-                  <p>{typeof faq.answer === 'string' ? faq.answer : ''}</p>
+                  <p>
+                    {typeof faq.answer === 'string'
+                      ? faq.answer
+                      : (process.env.NODE_ENV === 'development' && console.warn(`[Nova/FAQs] FAQ "${faq.question}" has non-string answer — rendering empty`), '')}
+                  </p>
                 </div>
               </details>
             ))

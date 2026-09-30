@@ -8,6 +8,7 @@
 import type { PageProps } from '@/lib/types';
 import { RichTextRenderer } from '@/components/RichTextRenderer';
 import { JsonLd } from '@/components/JsonLd';
+import { buildSiteUrl } from '@/lib/url';
 
 export default function AboutPage({ config }: PageProps) {
   const siteName = config.settings?.siteName ?? config.tenant.name;
@@ -25,9 +26,7 @@ export default function AboutPage({ config }: PageProps) {
   }> = pc?.aboutTeamMembers ?? [];
 
   // Build site URL for JSON-LD
-  const siteUrl = config.tenant.slug.includes('.')
-    ? `https://${config.tenant.slug}`
-    : `https://${config.tenant.slug}.chameleon.services`;
+  const siteUrl = buildSiteUrl(config.tenant.slug);
 
   // BreadcrumbList JSON-LD
   const breadcrumbLd = {
@@ -50,7 +49,8 @@ export default function AboutPage({ config }: PageProps) {
     ...(config.settings?.foundedYear ? { foundingDate: String(config.settings.foundedYear) } : {}),
   };
   if (teamMembers.length > 0) {
-    orgLd.member = teamMembers.map((m) => ({
+    // Slice to 3 to match what's rendered visually (line 127)
+    orgLd.member = teamMembers.slice(0, 3).map((m) => ({
       '@type': 'Person',
       name: m.name,
       ...(m.role ? { jobTitle: m.role } : {}),

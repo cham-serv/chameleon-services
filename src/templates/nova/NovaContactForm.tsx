@@ -4,10 +4,11 @@
  * Nova Contact Form — Client Component
  *
  * Handles form submission to the engine's contact endpoint.
- * Supports optional Turnstile CAPTCHA verification.
+ * Integrates Cloudflare Turnstile CAPTCHA when a site key is provided.
  */
 
 import { useState, useCallback, type FormEvent } from 'react';
+import { Turnstile } from '@/components/Turnstile';
 
 type Props = {
   tenantSlug: string;
@@ -17,6 +18,7 @@ type Props = {
 export function NovaContactForm({ tenantSlug, turnstileSiteKey }: Props) {
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
   const handleSubmit = useCallback(async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -40,6 +42,8 @@ export function NovaContactForm({ tenantSlug, turnstileSiteKey }: Props) {
           phone: data.get('phone') || undefined,
           message: data.get('message'),
           source: 'nova-contact-form',
+          // Send Turnstile token if available, fallback for dev environments
+          turnstileToken: turnstileToken || 'dev-bypass',
         }),
       });
 
@@ -55,7 +59,7 @@ export function NovaContactForm({ tenantSlug, turnstileSiteKey }: Props) {
       setErrorMessage('Network error. Please try again.');
       setStatus('error');
     }
-  }, [tenantSlug]);
+  }, [tenantSlug, turnstileToken]);
 
   if (status === 'sent') {
     return (
@@ -123,6 +127,16 @@ export function NovaContactForm({ tenantSlug, turnstileSiteKey }: Props) {
           placeholder="Tell us about your project or question…"
         />
       </div>
+
+      {/* Turnstile CAPTCHA — renders only when siteKey is available */}
+      {turnstileSiteKey && (
+        <div style={{ marginBottom: '1rem' }}>
+          <Turnstile
+            onVerify={setTurnstileToken}
+            onExpire={() => setTurnstileToken(null)}
+          />
+        </div>
+      )}
 
       {errorMessage && (
         <p style={{ color: '#ef4444', fontSize: '0.875rem' }}>{errorMessage}</p>

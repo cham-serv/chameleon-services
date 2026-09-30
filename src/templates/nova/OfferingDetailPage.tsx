@@ -17,6 +17,7 @@ import type { PageProps } from '@/lib/types';
 import { getServiceBySlug, getFaqs } from '@/lib/api';
 import { RichTextRenderer } from '@/components/RichTextRenderer';
 import { JsonLd } from '@/components/JsonLd';
+import { buildSiteUrl } from '@/lib/url';
 
 export default async function OfferingDetailPage({ config, path, noCache }: PageProps) {
   const siteName = config.settings?.siteName ?? config.tenant.name;
@@ -36,9 +37,7 @@ export default async function OfferingDetailPage({ config, path, noCache }: Page
   const faqs = faqsData?.docs ?? [];
 
   // Build site URL
-  const siteUrl = config.tenant.slug.includes('.')
-    ? `https://${config.tenant.slug}`
-    : `https://${config.tenant.slug}.chameleon.services`;
+  const siteUrl = buildSiteUrl(config.tenant.slug);
 
   const pageUrl = `${siteUrl}/${offeringsSlug}/${service.slug}`;
 
@@ -157,7 +156,11 @@ export default async function OfferingDetailPage({ config, path, noCache }: Page
                     {faq.executiveSummary && (
                       <p className="nova-faq__bluf" data-speakable>{faq.executiveSummary}</p>
                     )}
-                    <p>{typeof faq.answer === 'string' ? faq.answer : ''}</p>
+                    <p>
+                      {typeof faq.answer === 'string'
+                        ? faq.answer
+                        : (process.env.NODE_ENV === 'development' && console.warn(`[Nova/OfferingDetail] FAQ "${faq.question}" has non-string answer — rendering empty`), '')}
+                    </p>
                   </div>
                 </details>
               ))}

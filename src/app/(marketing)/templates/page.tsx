@@ -49,6 +49,19 @@ const templates = [
     status: 'available',
   },
   {
+    id: 'nova',
+    name: 'Nova',
+    tagline: 'Simple, fast presence for sole traders and artisans.',
+    description:
+      'Nova is Chameleon\'s Launch-tier template — a minimal, high-performance business site built for sole traders, freelancers, and artisans. Zero complexity, world-class GEO. Every offering gets its own schema-rich page that AI engines can cite independently.',
+    features: ['Services / Offerings', 'About & Team', 'GEO-Optimised FAQs', 'Contact Form', 'Legal Pages'],
+    industries: ['Trades & Artisans', 'Freelancers', 'Sole Traders', 'Local Services'],
+    demoHref: 'https://nova-demo.chameleon.services',
+    gradient: 'linear-gradient(135deg, #052e16 0%, #064e3b 50%, #0d2b20 100%)',
+    accentColor: '#34d399',
+    status: 'available',
+  },
+  {
     id: 'solstice',
     name: 'Solstice',
     tagline: 'Hospitality & experiences, warm and inviting.',

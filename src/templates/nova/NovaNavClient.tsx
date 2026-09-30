@@ -5,9 +5,14 @@
  *
  * Renders the hamburger button (visible on mobile via CSS) and
  * the full-screen slide-out mobile menu.
+ *
+ * Also handles:
+ * - Body scroll lock when mobile nav is open
+ * - aria-current="page" on active nav links (desktop + mobile)
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 type Props = {
   navLinks: { href: string; label: string }[];
@@ -15,9 +20,41 @@ type Props = {
 
 export function NovaNavClient({ navLinks }: Props) {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   const toggle = useCallback(() => setOpen((v) => !v), []);
   const close = useCallback(() => setOpen(false), []);
+
+  // Lock body scroll when mobile nav is open
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [open]);
+
+  // Set aria-current on desktop nav links (server-rendered in NovaLayout)
+  useEffect(() => {
+    const desktopLinks = document.querySelectorAll('.nova-header__link');
+    desktopLinks.forEach((link) => {
+      const href = link.getAttribute('href');
+      if (href === pathname || (pathname === '/' && href === '/')) {
+        link.setAttribute('aria-current', 'page');
+      } else {
+        link.removeAttribute('aria-current');
+      }
+    });
+  }, [pathname]);
+
+  // Check if a link matches the current path
+  const isActive = (href: string) => {
+    if (href === '/') return pathname === '/';
+    return pathname.startsWith(href);
+  };
 
   return (
     <>
@@ -52,6 +89,7 @@ export function NovaNavClient({ navLinks }: Props) {
             href={link.href}
             className="nova-mobile-nav__link"
             onClick={close}
+            aria-current={isActive(link.href) ? 'page' : undefined}
           >
             {link.label}
           </a>

@@ -1080,3 +1080,42 @@
     justify-content: center;
   }
 }
+
+/* ── Legal Tabs ────────────────────────────────────────── */
+
+/* SSR default: hide all panels except the first to prevent flash-of-all-content
+   before the NovaLegalTabs client component hydrates and takes over. */
+.nova-legal-content ~ .nova-legal-content {
+  display: none;
+}
+
+.nova-legal-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--nova-border);
+  margin-bottom: 2rem;
+}
+
+.nova-legal-tab {
+  padding: 0.75rem 1.25rem;
+  border: none;
+  background: none;
+  color: var(--nova-text-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: var(--nova-font-body);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: color var(--nova-duration) var(--nova-ease),
+              border-color var(--nova-duration) var(--nova-ease);
+}
+
+.nova-legal-tab:hover {
+  color: var(--nova-text);
+}
+
+.nova-legal-tab--active {
+  color: var(--nova-primary);
+  border-bottom-color: var(--nova-primary);
+}

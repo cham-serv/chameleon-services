@@ -11,6 +11,7 @@
 import type { PageProps } from '@/lib/types';
 import { getServices } from '@/lib/api';
 import { JsonLd } from '@/components/JsonLd';
+import { buildSiteUrl } from '@/lib/url';
 
 export default async function OfferingsPage({ config, variant, noCache }: PageProps) {
   const siteName = config.settings?.siteName ?? config.tenant.name;
@@ -30,9 +31,7 @@ export default async function OfferingsPage({ config, variant, noCache }: PagePr
   const services = servicesData?.docs ?? [];
 
   // CollectionPage + ItemList JSON-LD
-  const siteUrl = config.tenant.slug.includes('.')
-    ? `https://${config.tenant.slug}`
-    : `https://${config.tenant.slug}.chameleon.services`;
+  const siteUrl = buildSiteUrl(config.tenant.slug);
 
   const jsonLd = {
     '@context': 'https://schema.org',

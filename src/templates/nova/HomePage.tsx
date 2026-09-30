@@ -11,6 +11,7 @@
 import type { PageProps } from '@/lib/types';
 import { getServices } from '@/lib/api';
 import { JsonLd } from '@/components/JsonLd';
+import { buildSiteUrl } from '@/lib/url';
 
 export default async function HomePage({ config, variant, noCache }: PageProps) {
   const siteName = config.settings?.siteName ?? config.tenant.name;
@@ -36,14 +37,15 @@ export default async function HomePage({ config, variant, noCache }: PageProps) 
 
   // Fetch services for preview section
   const servicesData = await getServices(config.tenant.slug, noCache);
+  if (!servicesData && process.env.NODE_ENV === 'development') {
+    console.warn('[Nova/HomePage] getServices returned null — services preview will be hidden');
+  }
   const services = servicesData?.docs?.slice(0, 4) ?? [];
 
   const isHeroImage = variant === 'hero-image' && heroImage;
 
   // Build site URL for JSON-LD
-  const siteUrl = config.tenant.slug.includes('.')
-    ? `https://${config.tenant.slug}`
-    : `https://${config.tenant.slug}.chameleon.services`;
+  const siteUrl = buildSiteUrl(config.tenant.slug);
 
   const s = config.settings;
 
@@ -190,7 +192,7 @@ export default async function HomePage({ config, variant, noCache }: PageProps) 
                 <div key={i} className="nova-testimonial">
                   {t.rating && (
                     <div className="nova-testimonial__stars">
-                      {'★'.repeat(t.rating)}{'☆'.repeat(5 - t.rating)}
+                      {'★'.repeat(Math.round(t.rating))}{'☆'.repeat(5 - Math.round(t.rating))}
                     </div>
                   )}
                   <p className="nova-testimonial__quote">{t.quote}</p>
