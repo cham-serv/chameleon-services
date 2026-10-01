@@ -33,6 +33,8 @@ export function NovaContactForm({ tenantSlug, turnstileSiteKey }: Props) {
       'https://chameleon-engine-production.up.railway.app';
 
     try {
+      const params = new URLSearchParams(window.location.search);
+
       const res = await fetch(`${engineUrl}/api/public/inquiry?tenant=${encodeURIComponent(tenantSlug)}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -42,6 +44,14 @@ export function NovaContactForm({ tenantSlug, turnstileSiteKey }: Props) {
           phone: data.get('phone') || undefined,
           message: data.get('message'),
           source: 'nova-contact-form',
+          // Source attribution — captured automatically, not visible to user
+          pageUrl: window.location.href,
+          referrer: document.referrer || undefined,
+          utmSource: params.get('utm_source') || undefined,
+          utmMedium: params.get('utm_medium') || undefined,
+          utmCampaign: params.get('utm_campaign') || undefined,
+          utmTerm: params.get('utm_term') || undefined,
+          utmContent: params.get('utm_content') || undefined,
           // Send Turnstile token if available, fallback for dev environments
           turnstileToken: turnstileToken || 'dev-bypass',
         }),

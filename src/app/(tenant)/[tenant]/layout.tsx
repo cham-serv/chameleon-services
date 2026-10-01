@@ -13,6 +13,7 @@
  */
 
 import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 import { getFontClasses, getFontVariables } from '@/lib/fonts';
 import { fetchTenantConfig } from '@/lib/tenant';
 
@@ -95,6 +96,8 @@ export default async function TenantLayout({ children, params }: Props) {
 
   const buttonStyle = s?.buttonStyle ?? pc?.buttonStyle ?? 'filled';
 
+  const ga4Id = s?.googleAnalyticsId ?? null;
+
   return (
     <html lang="en" className={fontClasses}>
       <head>
@@ -103,6 +106,18 @@ export default async function TenantLayout({ children, params }: Props) {
             __html: `:root { ${brandTokens} ${getFontVariables(fontHeading, fontBody)} }`,
           }}
         />
+        {/* GA4 — only injected when a valid measurement ID is configured */}
+        {ga4Id && ga4Id.startsWith('G-') && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga4-init" strategy="afterInteractive">
+              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${ga4Id}');`}
+            </Script>
+          </>
+        )}
       </head>
       <body
         data-btn-style={buttonStyle}

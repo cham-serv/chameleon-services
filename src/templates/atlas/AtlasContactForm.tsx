@@ -25,6 +25,8 @@ export function AtlasContactForm({ tenant }: AtlasContactFormProps) {
     const form = e.currentTarget;
     const data = new FormData(form);
 
+    const params = new URLSearchParams(window.location.search);
+
     const body = {
       tenant,
       name: data.get('name') as string,
@@ -32,6 +34,14 @@ export function AtlasContactForm({ tenant }: AtlasContactFormProps) {
       phone: (data.get('phone') as string) || undefined,
       subject: (data.get('subject') as string) || undefined,
       message: data.get('message') as string,
+      // Source attribution — captured automatically, not visible to user
+      pageUrl: window.location.href,
+      referrer: document.referrer || undefined,
+      utmSource: params.get('utm_source') || undefined,
+      utmMedium: params.get('utm_medium') || undefined,
+      utmCampaign: params.get('utm_campaign') || undefined,
+      utmTerm: params.get('utm_term') || undefined,
+      utmContent: params.get('utm_content') || undefined,
       // turnstileToken: data.get('cf-turnstile-response') as string,
     };
 

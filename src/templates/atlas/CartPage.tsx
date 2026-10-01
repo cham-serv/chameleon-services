@@ -43,20 +43,31 @@ export default function CartPage({ config }: PageProps) {
   const removeItem = useCartStore((s) => s.removeItem);
 
   const currency = config.settings?.currency ?? 'ZAR';
-  const flatShippingRate = config.settings?.flatShippingRate ?? 0;
-  const freeShippingThreshold = config.settings?.freeShippingThreshold ?? 0;
+  const rates = config.settings?.shippingRates ?? [];
+  const activeRates = rates.filter((r) => r.isDefault !== false); // all active by default
+  // Use the default rate for cart preview (same fallback logic as the engine)
+  const defaultRate =
+    rates.find((r) => r.isDefault) ??
+    rates[0] ??
+    null;
   const hasGateway = !!config.settings?.paymentGateway;
 
-  // Calculate shipping estimate
-  const shippingEstimate =
-    freeShippingThreshold > 0 && totalPrice >= freeShippingThreshold
-      ? 0
-      : flatShippingRate;
+  // Calculate shipping estimate from the default rate
+  const shippingEstimate = (() => {
+    if (!defaultRate) return 0;
+    if (defaultRate.type === 'free' || defaultRate.type === 'local_pickup') return 0;
+    if (defaultRate.type === 'free_over_threshold') {
+      const threshold = defaultRate.freeOverThreshold ?? 0;
+      return threshold > 0 && totalPrice >= threshold ? 0 : (defaultRate.cost ?? 0);
+    }
+    return defaultRate.cost ?? 0;
+  })();
 
-  const remainingForFreeShipping =
-    freeShippingThreshold > 0 && totalPrice < freeShippingThreshold
-      ? freeShippingThreshold - totalPrice
-      : 0;
+  const remainingForFreeShipping = (() => {
+    if (!defaultRate || defaultRate.type !== 'free_over_threshold') return 0;
+    const threshold = defaultRate.freeOverThreshold ?? 0;
+    return threshold > 0 && totalPrice < threshold ? threshold - totalPrice : 0;
+  })();
 
   const estimatedTotal = totalPrice + shippingEstimate;
 
@@ -130,7 +141,7 @@ export default function CartPage({ config }: PageProps) {
         </h1>
 
         {/* Free shipping progress banner */}
-        {freeShippingThreshold > 0 && (
+        {defaultRate?.type === 'free_over_threshold' && (defaultRate.freeOverThreshold ?? 0) > 0 && (
           <div className="atlas-cart-shipping-banner" style={{ marginBottom: 'var(--atlas-spacing-lg)' }}>
             {remainingForFreeShipping > 0 ? (
               <>
@@ -145,7 +156,7 @@ export default function CartPage({ config }: PageProps) {
                   <div
                     className="atlas-shipping-progress-fill"
                     style={{
-                      width: `${Math.min(100, (totalPrice / freeShippingThreshold) * 100)}%`,
+                      width: `${Math.min(100, (totalPrice / (defaultRate.freeOverThreshold ?? 1)) * 100)}%`,
                     }}
                   />
                 </div>
@@ -317,7 +328,7 @@ export default function CartPage({ config }: PageProps) {
               <div className="atlas-cart-summary-row">
                 <span className="atlas-body">Shipping</span>
                 <span>
-                  {shippingEstimate === 0 && freeShippingThreshold > 0 ? (
+                  {shippingEstimate === 0 && defaultRate?.type === 'free_over_threshold' ? (
                     <span style={{ color: 'var(--brand-secondary, #52b788)', fontWeight: 600 }}>
                       Free
                     </span>
