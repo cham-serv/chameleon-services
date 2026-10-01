@@ -536,6 +536,8 @@ export type CheckoutPayload = {
   billingCountry?: string;
   // Order items
   lineItems: CheckoutLineItem[];
+  /** Payload array item id of the chosen shipping rate. Engine falls back to default if omitted. */
+  selectedRateId?: string;
   turnstileToken: string;
 };
 

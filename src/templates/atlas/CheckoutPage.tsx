@@ -69,17 +69,26 @@ export default function CheckoutPage({ config, variant }: PageProps) {
   const turnstileSiteKey = config.settings?.turnstileSiteKey;
 
 
-  const flatShippingRate = config.settings?.flatShippingRate ?? 0;
-  const freeShippingThreshold = config.settings?.freeShippingThreshold ?? 0;
+  const rates = config.settings?.shippingRates ?? [];
+  // Use the default rate for the order summary estimate (engine calculates authoritative total)
+  const defaultRate =
+    rates.find((r) => r.isDefault) ??
+    rates[0] ??
+    null;
 
   const isExpress = variant === 'express';
 
-  // Shipping estimate (for display in summary)
-  const shippingEstimate = isExpress
+  // Shipping estimate (for display in summary — engine authoritative on submit)
+  const shippingEstimate = isExpress || !defaultRate
     ? 0
-    : freeShippingThreshold > 0 && totalPrice >= freeShippingThreshold
-    ? 0
-    : flatShippingRate;
+    : (() => {
+        if (defaultRate.type === 'free' || defaultRate.type === 'local_pickup') return 0;
+        if (defaultRate.type === 'free_over_threshold') {
+          const threshold = defaultRate.freeOverThreshold ?? 0;
+          return threshold > 0 && totalPrice >= threshold ? 0 : (defaultRate.cost ?? 0);
+        }
+        return defaultRate.cost ?? 0;
+      })();
 
   const estimatedTotal = totalPrice + shippingEstimate;
 
@@ -166,6 +175,9 @@ export default function CheckoutPage({ config, variant }: PageProps) {
         productId: item.productId,
         qty: item.quantity,
       })),
+      // Pass the default rate id so the engine uses the correct shipping rate.
+      // When multiple rates exist, this can be replaced with the customer's choice.
+      selectedRateId: defaultRate?.id ?? undefined,
       turnstileToken: (data.get('cf-turnstile-response') as string) || 'dev-bypass',
     };
 
@@ -659,7 +671,7 @@ export default function CheckoutPage({ config, variant }: PageProps) {
                   <div className="atlas-checkout-summary-row">
                     <span className="atlas-body">Shipping</span>
                     <span>
-                      {shippingEstimate === 0 && freeShippingThreshold > 0 ? (
+                      {shippingEstimate === 0 && defaultRate?.type === 'free_over_threshold' ? (
                         <span style={{ color: 'var(--brand-secondary, #52b788)', fontWeight: 600 }}>
                           Free
                         </span>

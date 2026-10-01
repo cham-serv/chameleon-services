@@ -69,6 +69,8 @@ export type SiteSettings = {
   socialYoutube?: string;
   socialGoogle?: string;
   socialTiktok?: string;
+  // Integrations
+  googleAnalyticsId?: string;
   // GEO fields (Business Identity — from SiteSettings collection)
   businessType?: string;
   serviceType?: string;
@@ -100,8 +102,17 @@ export type SiteSettings = {
   currency?: string;
   currencySymbol?: string;
   paymentGateway?: string;
-  flatShippingRate?: number;
-  freeShippingThreshold?: number;
+  /** Replaces old flatShippingRate/freeShippingThreshold — array of named shipping options */
+  shippingRates?: Array<{
+    id: string;
+    name: string;
+    type: 'flat' | 'free' | 'free_over_threshold' | 'local_pickup';
+    cost?: number;
+    freeOverThreshold?: number;
+    estimatedDays?: string | null;
+    courierName?: string | null;
+    isDefault?: boolean;
+  }>;
   // Feature flags
   enableReviews?: boolean;
   enableSubscriptions?: boolean;
